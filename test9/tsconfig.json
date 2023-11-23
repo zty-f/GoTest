@@ -1,0 +1,12 @@
+
+{
+    "stat": 1,
+    "code": 0,
+    "msg": "succ",
+    "data":{
+        "backgroundList":[
+
+        ]
+    },
+    "trace_id": ""
+}

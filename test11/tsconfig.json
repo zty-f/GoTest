@@ -1,0 +1,13 @@
+{
+    "stat": 1,
+    "code": 0,
+    "message": "succ",
+    "data":{
+        "levelInfo": {
+            "type":"degrade",
+            "levelName":"LV3",
+            "rightsList":[]
+        },
+    },
+    "trace_id": ""
+}
