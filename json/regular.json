@@ -1,0 +1,13 @@
+{
+  "message_type": "4001200",
+  "stu_id": "2100051684",
+  "stu_course_id": "1111",
+  "action": "1",
+  "year_id": "1",
+  "term_id": "1",
+  "subject_id": "1",
+  "course_id": "1",
+  "growth_value": "7",
+  "is_first": "1",
+  "create_time": "1700721357"
+}
