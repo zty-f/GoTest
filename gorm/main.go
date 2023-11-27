@@ -36,8 +36,8 @@ func testUpdate() {
 		IsDeleted:  0,
 		Extra:      "",
 	}
-
-	t := DB.Debug().Model(&usertask).Where("unique_id = ?", "11111").Updates(&usertask)
+	// gorm更新不存在的记录不会报错，只是RowsAffected:0
+	t := DB.Debug().Table("user_task").Where("unique_id = ?", "22222222333").Updates(&usertask)
 
 	fmt.Printf("%+v\n", t)
 	fmt.Printf("%+v\n", usertask)
