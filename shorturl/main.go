@@ -12,18 +12,19 @@ import (
 
 func main() {
 	//shortUrl := "OWJdbu"
-	sourceUrl := "www.baidu.com"
-	getSign(sourceUrl)
+	//sourceUrl := "www.baidu.com"
+	//getSign(sourceUrl)
 	//hashValue := DecodeStr(shortUrl)
 	//newTable := getTable(uint(hashValue))
 	//fmt.Println(newTable)
-	url1, _ := url.QueryUnescape("%09https%3A%2F%2Fac.xiwang.com%2Fstudent-activity%2F%23%2FoutCampus%3Fuuid%3D104790d90e824b818950da4b208af498")
+	url1, _ := url.QueryUnescape("%09https%3A%2F%2Fac.xiwang.com%2Fcampus-activity%2F%23%2F%3Fuuid%3D42a0a066718542809cb74a1ccfa0ab56")
 	fmt.Println(url1)
-	url1 = strings.TrimSpace(url1)
+	//url1 = strings.TrimSpace(url1)
 	fmt.Println(url1)
 	parsedURL, err := url.Parse(url1)
 	if err != nil {
 		fmt.Println(err)
+		return
 	}
 	fmt.Println(parsedURL)
 }
