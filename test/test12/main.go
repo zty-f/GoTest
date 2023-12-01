@@ -3,36 +3,36 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"time"
 )
 
 type User struct {
-	Name int  `json:"name,string"`
-	Age  bool `json:"age,string"`
+	Name int  `json:"name,int:string"`
+	Age  bool `json:"age,int:string"`
 }
 
 func main() {
-	t := time.Now().Unix() * 100000000000
-	fmt.Println(time.Now().Unix() * 1000)
-	user := User{
-		Name: int(t),
-		Age:  true,
-	}
+	//t := time.Now().Unix() * 100000000000
+	//fmt.Println(time.Now().Unix() * 1000)
+	//user := User{
+	//	Name: int(t),
+	//	Age:  true,
+	//}
+	//
+	//jsonStr, _ := json.Marshal(user)
+	jsonS := "{\"name\":\"4119396136614035456\",\"age\":\"true\"}" //"{"name":"4119396136614035456","age":"true"}
 
-	jsonStr, _ := json.Marshal(user)
-
-	fmt.Println(string(jsonStr))
+	fmt.Println(string(jsonS))
 
 	var user2 User
-	json.Unmarshal(jsonStr, &user2)
+	json.Unmarshal([]byte(jsonS), &user2)
 
 	fmt.Println(user2)
 
 	fmt.Printf("%T\n", user2.Name)
 	fmt.Printf("%T\n", user2.Age)
 
-	var x int = -1
-
-	fmt.Println(-1)
-	fmt.Println(x)
+	//var x int = -1
+	//
+	//fmt.Println(-1)
+	//fmt.Println(x)
 }
