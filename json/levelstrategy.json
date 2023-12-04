@@ -1,0 +1,483 @@
+{
+  "stat": 1,
+  "code": 0,
+  "message": "Success",
+  "data": {
+    "growthTask": {
+      "info": [
+        {
+          "id": 1,
+          "name": "课堂任务",
+          "icon": "https://m.xiwang.com/resource/NT3yp6F0Ff79kevHAeguR-1697436483509.png",
+          "rank": 10,
+          "taskList": [
+            {
+              "id": 0,
+              "taskId": 2001000,
+              "taskType": 1,
+              "taskName": "完成课前预习",
+              "taskDesc": "每节课完成一次",
+              "growthValue": 10,
+              "taskIcon": "https://static-inc.xiwang.com/mall/09ad85e3df96e8ff660e98220116585e.png",
+              "rank": 9
+            },
+            {
+              "id": 0,
+              "taskId": 2001100,
+              "taskType": 1,
+              "taskName": "准时到课",
+              "taskDesc": "每节课完成一次",
+              "growthValue": 10,
+              "taskIcon": "https://static-inc.xiwang.com/mall/b2064a2c2c1c3cb42908d91128df1ec4.png",
+              "rank": 7
+            },
+            {
+              "id": 0,
+              "taskId": 2001200,
+              "taskType": 1,
+              "taskName": "互动答题",
+              "taskDesc": "每节课完成一次",
+              "growthValue": 10,
+              "taskIcon": "https://static-inc.xiwang.com/mall/d1a45e6269b9bc476ba5d4c4992edf0e.png",
+              "rank": 6
+            },
+            {
+              "id": 0,
+              "taskId": 2001400,
+              "taskType": 1,
+              "taskName": "累计直播时长",
+              "taskDesc": "上课时完成",
+              "growthValue": 10,
+              "taskIcon": "https://static-inc.xiwang.com/mall/64305405997f9c0c6fc2a2036e96d96a.png",
+              "rank": 5
+            },
+            {
+              "id": 0,
+              "taskId": 2001500,
+              "taskType": 1,
+              "taskName": "完成课后巩固",
+              "taskDesc": "上课时完成",
+              "growthValue": 10,
+              "taskIcon": "https://static-inc.xiwang.com/mall/6c35d3818d2ae8ef09ed6954ec167833.png",
+              "rank": 4
+            },
+            {
+              "id": 0,
+              "taskId": 2001300,
+              "taskType": 1,
+              "taskName": "观看完整课程",
+              "taskDesc": "每节课完成一次",
+              "growthValue": 10,
+              "taskIcon": "https://static-inc.xiwang.com/mall/f48f59fb47013a0bdf588296ef61b5d0.png",
+              "rank": 3
+            },
+            {
+              "id": 0,
+              "taskId": 1111112,
+              "taskType": 1,
+              "taskName": "学习任务1",
+              "taskDesc": "这是一个学习任务",
+              "growthValue": 100,
+              "taskIcon": "https://static-inc.xiwang.com/mall/fa9ce2703c2d7a2cc99e1b1ed2d2063a.png",
+              "rank": 2
+            },
+            {
+              "id": 0,
+              "taskId": 1111101,
+              "taskType": 1,
+              "taskName": "任务mm",
+              "taskDesc": "2",
+              "growthValue": 2,
+              "taskIcon": "2",
+              "rank": 0
+            },
+            {
+              "id": 0,
+              "taskId": 1112,
+              "taskType": 1,
+              "taskName": "taskmm",
+              "taskDesc": "2",
+              "growthValue": 2,
+              "taskIcon": "2",
+              "rank": 0
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "name": "日常任务",
+          "icon": "https://m.xiwang.com/resource/46UtRfJyAVCR_1kmA9pjx-1697535955682.png",
+          "rank": 9,
+          "taskList": [
+            {
+              "id": 0,
+              "taskId": 3001000,
+              "taskType": 2,
+              "taskName": "使用错题本",
+              "taskDesc": "使用错题本",
+              "growthValue": 3,
+              "taskIcon": "https://static-inc.xiwang.com/mall/de78ea89fbe422dbd36fff833a8c6d82.png",
+              "rank": 9
+            },
+            {
+              "id": 0,
+              "taskId": 3001100,
+              "taskType": 2,
+              "taskName": "加微-长期班",
+              "taskDesc": "加微-长期班",
+              "growthValue": 2,
+              "taskIcon": "https://static-inc.xiwang.com/mall/b9dc17a5c3038ce2c0e878a003a12dbf.png",
+              "rank": 8
+            },
+            {
+              "id": 0,
+              "taskId": 3001200,
+              "taskType": 2,
+              "taskName": "加微-导流班",
+              "taskDesc": "加微-导流班",
+              "growthValue": 4,
+              "taskIcon": "https://static-inc.xiwang.com/mall/161d995e7f38b7e945852fe53fb3fdcf.png",
+              "rank": 7
+            },
+            {
+              "id": 0,
+              "taskId": 1111,
+              "taskType": 2,
+              "taskName": "任务标题",
+              "taskDesc": "说明文案",
+              "growthValue": 0,
+              "taskIcon": "https://static-inc.xiwang.com/mall/b3bf2e6eab9b6ed3908725257a2e0d6b.png",
+              "rank": 0
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "name": "限时任务",
+          "icon": "https://m.xiwang.com/resource/RWPaUNkY9NxE3Llm-suvL-1697535915597.png",
+          "rank": 8,
+          "taskList": [
+            {
+              "id": 0,
+              "taskId": 4001000,
+              "taskType": 3,
+              "taskName": "续报",
+              "taskDesc": "续报任务",
+              "growthValue": 7,
+              "taskIcon": "https://static-inc.xiwang.com/mall/43e0890750c8149bf9eca3790664e00e.png",
+              "rank": 9
+            },
+            {
+              "id": 0,
+              "taskId": 4001100,
+              "taskType": 3,
+              "taskName": "扩科",
+              "taskDesc": "扩科任务",
+              "growthValue": 6,
+              "taskIcon": "https://static-inc.xiwang.com/mall/d16f17a0e6c3876af041993746a292d4.png",
+              "rank": 8
+            },
+            {
+              "id": 0,
+              "taskId": 4001200,
+              "taskType": 3,
+              "taskName": "购买正价课",
+              "taskDesc": "购买正价课任务",
+              "growthValue": 8,
+              "taskIcon": "https://static-inc.xiwang.com/mall/3945e61a4155add523629d744076c419.png",
+              "rank": 7
+            },
+            {
+              "id": 0,
+              "taskId": 9990909,
+              "taskType": 3,
+              "taskName": "xcxcxc",
+              "taskDesc": "这是一个说明文案",
+              "growthValue": 20,
+              "taskIcon": "https://static-inc.xiwang.com/mall/ba02fdcfd19b22995bd323e428314675.png",
+              "rank": 1
+            }
+          ]
+        }
+      ],
+      "tips": [
+        {
+          "rank": 1,
+          "tip": "学员年级、状态的不同则学习任务不同，成长中心会给学员推送与年级、状态匹配的任务，因此不同用户会看到不同的任务推荐。"
+        },
+        {
+          "rank": 2,
+          "tip": "部分任务仅面向有正价课直播、伴学、 爆品课、特训班的用户，成长中心每条推送的任务都可以点击任务任务旁边的❗️查看详细说明。"
+        },
+        {
+          "rank": 3,
+          "tip": "每个账号每天的成长值累积上限为6000。"
+        }
+      ]
+    },
+    "growthPlan": {
+      "info": [
+        {
+          "level": 1,
+          "levelName": "初级童生",
+          "levelSign": "https://static-inc.xiwang.com/mall/217abc87409474cd022b87cab90a4f94.png",
+          "levelValueRange": {
+            "begin": 0,
+            "end": 10000
+          }
+        },
+        {
+          "level": 2,
+          "levelName": "潜力秀才",
+          "levelSign": "https://static-inc.xiwang.com/mall/217abc87409474cd022b87cab90a4f94.png",
+          "levelValueRange": {
+            "begin": 10000,
+            "end": 22000
+          }
+        },
+        {
+          "level": 3,
+          "levelName": "好学举人",
+          "levelSign": "https://static-inc.xiwang.com/mall/217abc87409474cd022b87cab90a4f94.png",
+          "levelValueRange": {
+            "begin": 22000,
+            "end": 35000
+          }
+        },
+        {
+          "level": 4,
+          "levelName": "进阶贡士",
+          "levelSign": "https://static-inc.xiwang.com/mall/217abc87409474cd022b87cab90a4f94.png",
+          "levelValueRange": {
+            "begin": 35000,
+            "end": 50000
+          }
+        },
+        {
+          "level": 5,
+          "levelName": "飞跃进士",
+          "levelSign": "https://static-inc.xiwang.com/mall/217abc87409474cd022b87cab90a4f94.png",
+          "levelValueRange": {
+            "begin": 50000,
+            "end": 80000
+          }
+        },
+        {
+          "level": 6,
+          "levelName": "探花及第",
+          "levelSign": "https://static-inc.xiwang.com/mall/217abc87409474cd022b87cab90a4f94.png",
+          "levelValueRange": {
+            "begin": 80000,
+            "end": 120000
+          }
+        },
+        {
+          "level": 7,
+          "levelName": "超凡榜眼",
+          "levelSign": "https://static-inc.xiwang.com/mall/217abc87409474cd022b87cab90a4f94.png",
+          "levelValueRange": {
+            "begin": 120000,
+            "end": 200000
+          }
+        },
+        {
+          "level": 8,
+          "levelName": "天选状元",
+          "levelSign": "https://static-inc.xiwang.com/mall/217abc87409474cd022b87cab90a4f94.png",
+          "levelValueRange": {
+            "begin": 200000,
+            "end": 300000
+          }
+        }
+      ],
+      "tips": []
+    },
+    "levelRights": {
+      "info": [
+        {
+          "level": 1,
+          "rightsList": [
+            {
+              "type": "金币权益",
+              "name": "金币抵现"
+            },
+            {
+              "type": "金币权益",
+              "name": "金币系数",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "level": 2,
+          "rightsList": [
+            {
+              "type": "金币权益",
+              "name": "金币抵现"
+            },
+            {
+              "type": "金币权益",
+              "name": "金币系数",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "level": 3,
+          "rightsList": [
+            {
+              "type": "金币权益",
+              "name": "金币抵现"
+            },
+            {
+              "type": "金币权益",
+              "name": "金币系数",
+              "value": 1.04
+            }
+          ]
+        },
+        {
+          "level": 4,
+          "rightsList": [
+            {
+              "type": "金币权益",
+              "name": "金币抵现"
+            },
+            {
+              "type": "金币权益",
+              "name": "金币系数",
+              "value": 1.08
+            }
+          ]
+        },
+        {
+          "level": 5,
+          "rightsList": [
+            {
+              "type": "金币权益",
+              "name": "金币抵现"
+            },
+            {
+              "type": "金币权益",
+              "name": "金币系数",
+              "value": 1.12
+            }
+          ]
+        },
+        {
+          "level": 6,
+          "rightsList": [
+            {
+              "type": "金币权益",
+              "name": "金币抵现"
+            },
+            {
+              "type": "金币权益",
+              "name": "金币系数",
+              "value": 1.16
+            }
+          ]
+        },
+        {
+          "level": 7,
+          "rightsList": [
+            {
+              "type": "金币权益",
+              "name": "金币抵现"
+            },
+            {
+              "type": "金币权益",
+              "name": "金币系数",
+              "value": 1.2
+            },
+            {
+              "type": "专属实物兑换",
+              "name": "L7礼品"
+            }
+          ]
+        },
+        {
+          "level": 8,
+          "rightsList": [
+            {
+              "type": "金币权益",
+              "name": "金币抵现"
+            },
+            {
+              "type": "金币权益",
+              "name": "金币系数",
+              "value": 1.3
+            },
+            {
+              "type": "专属实物兑换",
+              "name": "L8礼品"
+            }
+          ]
+        }
+      ],
+      "tips": []
+    },
+    "levelRuleExplain": [
+      {
+        "rank": 1,
+        "question": "等级的升级",
+        "answer": "当学员达到下一个等级所需要的成长值门槛，第二天即完成等级变更与对应权益生效。"
+      },
+      {
+        "rank": 2,
+        "question": "等级的降级",
+        "answer": "基于用户成长值判定用户等级，如用户的成长值降低至下一等级的区间中，则等级对应下降。"
+      }
+    ],
+    "growthValueExplain": [
+      {
+        "rank": 1,
+        "question": "什么是成长值？",
+        "answer": "成长值是希望学成长体系中，用来判断等级的数值。学员通过在成长中心内完成任务获取对应的成长值，得到的成长值满足一定数额可以升级等级，获取对应等级的权益。"
+      },
+      {
+        "rank": 2,
+        "question": "成长值获取是否有上限？",
+        "answer": "每个账号每日获取成长值上限为6000，当超出上限后将不再发放成长值。"
+      },
+      {
+        "rank": 3,
+        "question": "成长值的回收",
+        "answer": "完成续报、扩课、购买正价课的任务后，发生退费行为，则成长值在T+1天后扣除该任务获得的成长值。"
+      },
+      {
+        "rank": 4,
+        "question": "成长值的计算周期",
+        "answer": "用户的成长值只计算最近2年（24个月）获得的成长值，24个月之前获得的成长值不计入计算，视为过期的成长值。"
+      },
+      {
+        "rank": 5,
+        "question": "成长值和金币的关系是什么？",
+        "answer": "成长值是用来判断学员成长体系等级的数值，通过成长值累积升级等级可以获得对应的权益。金币是希望学的虚拟货币，获得的金币可以在金币中心兑换商品或在购买课程中使用金币抵现。"
+      }
+    ],
+    "tips": [
+      {
+        "rank": 1,
+        "tip": "希望学成长体系的等级权益仅限学员本人使用，不可转赠他人;不可为他人付款。"
+      },
+      {
+        "rank": 2,
+        "tip": "同一学员仅限使用一个账号享有等级权益。同一登录账号、同一手机号、同一终端设备、同一支付学员、同一IP或其他合理显示为同一用户的情形，均视为同一学员。"
+      },
+      {
+        "rank": 3,
+        "tip": "如果学员/家长以任何不正当手段或舞弊方式获取成长权益，一经发现，希望学有权对该学员的账号进行异常标记。对于账号异常的奖励发放，希望学有权收回用户可领取的奖励，追回已发放的奖励，并保留追究该用户责任的权利。"
+      },
+      {
+        "rank": 4,
+        "tip": "如果任务行为发生回溯，如退费行为，希望学会回收已发放对应的成长值。"
+      },
+      {
+        "rank": 5,
+        "tip": "希望学可根据成长体系运营的实际情况，在法律允许的范围内，对规则进行变动或者调整，相关变动或者调整将公布在相应页面上。"
+      }
+    ]
+  },
+  "trace_id": "a2d813295c9cf4f7b1b53470726e3289"
+}
