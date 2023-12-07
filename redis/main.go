@@ -4,14 +4,16 @@ import (
 	"context"
 	"fmt"
 	"github.com/go-redis/redis/v8"
+	"time"
 )
 
 var rd *redis.Client
 var ctx = context.Background()
 
 func main() {
-	testSetNx()
-	testSet()
+	//testSetNx()
+	//testSet()
+	testExpireNx()
 }
 
 func init() {
@@ -41,6 +43,17 @@ func testSet() {
 	result, err := rd.Set(ctx, "bbbb", "11111", 86400*2).Result()
 	if err != nil {
 		fmt.Println(err)
+	}
+	println(result)
+}
+
+func testExpireNx() {
+	fmt.Println("-------------------")
+	// redis 7版本才会支持expireNx，低版本不支持这个命令
+	result, err := rd.Expire(ctx, "set", 100*time.Second).Result()
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
 	println(result)
 }
