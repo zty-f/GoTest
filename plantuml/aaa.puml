@@ -1,0 +1,36 @@
+@startuml
+class BaseHandleTemplate << (S,Aquamarine) >> {
+        + TaskConsumer *consumer.KafkaConsumer
+        + Handler Handler
+        + RedisCache biz.CacheRepo
+
+        + HandlePanic(ctx context.Context, rawMessagePtr *kafka-go.Message)
+        + FetchMessage(ctx context.Context) (queue.ReadMessage, bool)
+        + UnMarshalMessage(ctx context.Context, message queue.ReadMessage, result <font color=blue>interface</font>{}) bool
+        + CheckData(ctx context.Context, message message.Message) bool
+        + CommitMessage(ctx context.Context, message kafka-go.Message) bool
+
+    }
+    interface HandleTemplate  {
+        + DoHandle(ctx context.Context, messageGenerator message.MessageGenerator)
+
+    }
+
+        class NoCacheHandleTemplate << (S,Aquamarine) >> {
+            + DoHandle(ctx context.Context, messageGenerator message.MessageGenerator)
+
+        }
+        class WithCacheHandleTemplate << (S,Aquamarine) >> {
+            + DoHandle(ctx context.Context, messageGenerator message.MessageGenerator)
+            + HaveProcessed(ctx context.Context, message message.Message) (bool, error)
+            + SaveMessageStatus(ctx context.Context, message message.Message) bool
+            + SaveMessageFinishedStatus(ctx context.Context, message message.Message) bool
+
+        }
+
+        "BaseHandleTemplate" *-- "NoCacheHandleTemplate"
+        "BaseHandleTemplate" *-- "WithCacheHandleTemplate"
+
+        "HandleTemplate" <|-- "NoCacheHandleTemplate"
+        "HandleTemplate" <|-- "WithCacheHandleTemplate"
+@enduml

@@ -1,0 +1,102 @@
+@startuml
+namespace task {
+    class StateCalculateCenter << (S,Aquamarine) >> {
+        - cacheRepo biz.CacheRepo
+        - sequelCourseRepo biz.SequelCourseRepo
+        - growthValueRepo biz.GrowthValueRepo
+        - userBiz *biz.UserBiz
+        - taskBiz *biz.TaskBiz
+        - levelBiz *biz.LevelBiz
+        - growthValueBiz *biz.GrowthValueBiz
+        - taskTypeBiz *biz.TaskTypeBiz
+        - userLearningCourseInfoBiz *biz.UserLearningCourseInfoBiz
+        - userMistakeBookBiz *biz.UserMistakeBookBiz
+        - userAddWechatInfo *biz.UserAddWechatBiz
+        - stateCalculatorMap <font color=blue>map</font>[int]StateCalculator
+
+        - registerTaskStateHandler(handler StateCalculator)
+
+        + InitTaskData(ctx context.Context, stuId int64) (*UserData, error)
+        + CalculateTaskState(ctx context.Context, userData *UserData) *response.UserTaskResponse
+
+    }
+    interface StateCalculator  {
+        + SetUserData(data *UserData)
+        + SetCacheRepo(cacheRepo biz.CacheRepo)
+        + GetTaskId() int
+        + NeedShow() bool
+        + CalculateState() int
+        + After(task *response.TaskInfo)
+
+    }
+    class UserData << (S,Aquamarine) >> {
+        - ctx context.Context
+        + StuId int64
+        + UserType int
+        + UserLevel int
+        + TaskList []*model.Task
+        + TaskTypeList []*model.TaskType
+        + UserLearningCourseInfo *biz.UserLearningCourseInfo
+        + UserMistakeAnsNum int
+        + UserCntStatus int
+        + IsAddWechatLongClass bool
+        + IsAddWechatShortClass bool
+        + ReachSingleDayGrowthLimit bool
+        + LongClassTeacherId int
+        + ShortClassTeacherId int
+
+        - haveInLearningCourse() bool
+        - planHavePrepare() bool
+        - planHaveAfterSchoolConsolidation() bool
+
+        + IsLongTermUser() bool
+        + IsShortTermUser() bool
+        + GetPlanByEndTimeRange(start time.Time, end time.Time) []*biz.PlanInfo
+        + GetPlanByStartTimeRange(start time.Time, end time.Time) []*biz.PlanInfo
+        + GetUnfinishedPlans() []*biz.PlanInfo
+
+    }
+    class BaseTask << (S,Aquamarine) >> {
+        - cacheRepo biz.CacheRepo
+
+        + UserData *UserData
+
+        + SetUserData(data *UserData) 
+        + SetCacheRepo(cacheRepo biz.CacheRepo) 
+
+    }
+    class BuyRegularCourseCalculator << (S,Aquamarine) >> {
+        + After(task *response.TaskInfo) 
+        + GetTaskId() int
+        + NeedShow() bool
+        + CalculateState() int
+
+    }
+    class ExpandSubjectCalculator << (S,Aquamarine) >> {
+        + After(task *response.TaskInfo) 
+        + GetTaskId() int
+        + NeedShow() bool
+        + CalculateState() int
+
+    }
+    class SequelCourseCalculator << (S,Aquamarine) >> {
+        + After(task *response.TaskInfo) 
+        + GetTaskId() int
+        + NeedShow() bool
+        + CalculateState() int
+
+    }
+     class OtherTaskCalculator << (S,Aquamarine) >> {
+            + After(task *response.TaskInfo)
+            + GetTaskId() int
+            + NeedShow() bool
+            + CalculateState() int
+
+     }
+}
+"task.BaseTask" *-- "task.BuyRegularCourseCalculator"
+"task.BaseTask" *-- "task.ExpandSubjectCalculator"
+"task.BaseTask" *-- "task.SequelCourseCalculator"
+"task.BaseTask" *-- "task.OtherTaskCalculator"
+"task.StateCalculator"<|--"task.BaseTask"
+@enduml

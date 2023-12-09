@@ -1,0 +1,109 @@
+@startuml
+namespace message {
+    class BuyRegularCourseMessage << (S,Aquamarine) >> {
+        + MessageType int
+        + StuId int64
+        + StuCourseId int
+        + Action int
+        + YearId int
+        + TermId int
+        + CourseId int
+        + SubjectId int
+        + GrowthValue int
+        + IsFirst int
+        + CreateTime int64
+
+        + GetStuId() int64
+        + IsValid() bool
+        + IsOnlineMessage() bool
+        + UniqueIdentification() string
+        + FinishedUid() string
+        + ExpiredDuration() (time.Duration, error)
+
+    }
+
+    class ExpandSubjectMessage << (S,Aquamarine) >> {
+        + MessageType int
+        + StuId int64
+        + Action int
+        + YearId int
+        + TermId int
+        + SubjectId int
+        + GrowthValue int
+        + CreateTime int64
+
+        + GetStuId() int64
+        + IsValid() bool
+        + IsOnlineMessage() bool
+        + UniqueIdentification() string
+        + FinishedUid() string
+        + ExpiredDuration() (time.Duration, error)
+
+    }
+    class InitTransCycleUserMessage << (S,Aquamarine) >> {
+        + MessageType int
+        + StuId int64
+        + TransEndTime string
+        + CreateTime int64
+
+        + GetStuId() int64
+        + IsValid() bool
+        + IsOnlineMessage() bool
+        + UniqueIdentification() string
+        + FinishedUid() string
+        + ExpiredDuration() (time.Duration, error)
+
+    }
+    class InitUserGrowthValueMessage << (S,Aquamarine) >> {
+        + MessageType int
+        + StuId int64
+        + GrowthValue int
+        + CreateTime int64
+
+        + GetStuId() int64
+        + IsValid() bool
+        + IsOnlineMessage() bool
+        + UniqueIdentification() string
+        + FinishedUid() string
+        + ExpiredDuration() (time.Duration, error)
+
+    }
+    interface Message  {
+        + GetStuId() int64
+        + IsValid() bool
+        + IsOnlineMessage() bool
+        + UniqueIdentification() string
+        + FinishedUid() string
+        + ExpiredDuration() (time.Duration, error)
+
+    }
+    class SequelCourseMessage << (S,Aquamarine) >> {
+        + MessageType int
+        + StuId int64
+        + Action int
+        + YearId int
+        + TermId int
+        + SubjectId int
+        + GrowthValue int
+        + CreateTime int64
+
+        + GetStuId() int64
+        + IsValid() bool
+        + IsOnlineMessage() bool
+        + UniqueIdentification() string
+        + FinishedUid() string
+        + ExpiredDuration() (time.Duration, error)
+
+    }
+    class message.MessageGenerator << (T, #FF7700) >>  {
+    }
+}
+
+"message.Message" <|-- "message.BuyRegularCourseMessage"
+"message.Message" <|-- "message.ExpandSubjectMessage"
+"message.Message" <|-- "message.InitTransCycleUserMessage"
+"message.Message" <|-- "message.InitUserGrowthValueMessage"
+"message.Message" <|-- "message.SequelCourseMessage"
+
+"message.<font color=blue>func</font>() Message" #.. "message.MessageGenerator"
+@enduml

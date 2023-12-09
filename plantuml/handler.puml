@@ -1,0 +1,49 @@
+@startuml
+
+
+namespace handler {
+    interface Handler  {
+        + GetName() string
+        + Handle(ctx context.Context, result message.Message) bool
+    }
+}
+
+
+namespace other {
+    class InitUserGrowthValueHandler << (S,Aquamarine) >> {
+        - growthValue *biz.GrowthValueBiz
+        - userBiz *biz.UserBiz
+
+        + GetName() string
+        + Handle(ctx context.Context, result message.Message) bool
+
+    }
+}
+"handler.Handler" <|-- "other.InitUserGrowthValueHandler"
+
+namespace task {
+    class BuyRegularCourseHandler << (S,Aquamarine) >> {
+        - cacheRepo biz.CacheRepo
+        - userTaskBiz *biz.UserTaskBiz
+        - userTaskValueJointBiz *biz.UserTaskValueJointBiz
+
+        + GetName() string
+        + MessageHasProcessed(ctx context.Context, msg message.Message, messageUid string) bool
+        + Handle(ctx context.Context, result message.Message) bool
+
+    }
+    class SequelCourseHandler << (S,Aquamarine) >> {
+        - cacheRepo biz.CacheRepo
+        - userTaskBiz *biz.UserTaskBiz
+        - userTaskValueJointBiz *biz.UserTaskValueJointBiz
+
+        + GetName() string
+        + MessageHasProcessed(ctx context.Context, msg message.Message, messageUid string) bool
+        + Handle(ctx context.Context, result message.Message) bool
+
+    }
+}
+"handler.Handler" <|-- "task.BuyRegularCourseHandler"
+"handler.Handler" <|-- "task.SequelCourseHandler"
+
+@enduml
