@@ -1,10 +1,14 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"github.com/spf13/cast"
 	"github.com/xuri/excelize/v2"
+	"io"
+	"io/ioutil"
 	"log"
+	"net/http"
 	"strconv"
 	"testing"
 	"time"
@@ -13,7 +17,7 @@ import (
 func TestExcelProcessStream(t *testing.T) {
 	var list []OperationLog
 
-	for i := 1; i <= 500000; i++ {
+	for i := 1; i <= 10; i++ {
 		list = append(list, OperationLog{
 			Id:       i,
 			UserName: "xxx" + cast.ToString(i),
@@ -86,4 +90,84 @@ func TestExcelProcess(t *testing.T) {
 	}
 	end := time.Now().Unix()
 	fmt.Println("表格生成耗费时长：", end-begin, "s")
+}
+
+func TestAppendExcel(t *testing.T) {
+	f, _ := excelize.OpenFile("demo.xlsx")
+	index, _ := f.NewSheet("Sheet1")
+	f.SetCellValue("Sheet1", "B1", 100)
+	f.SetCellValue("Sheet1", "B2", 100)
+	f.SetActiveSheet(index)
+	if err := f.SaveAs("demo.xlsx"); err != nil {
+		fmt.Println(err)
+	}
+}
+
+func TestReadExcel(t *testing.T) {
+	f, _ := excelize.OpenFile("demo.xlsx")
+	rows, _ := f.GetRows("Sheet1")
+	for _, row := range rows {
+		for _, colCell := range row {
+			fmt.Print(colCell, "\t")
+		}
+		fmt.Println()
+	}
+}
+
+func HttpReadExcel() {
+	f := func(read io.Reader) {
+		file, err := excelize.OpenReader(read)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		for _, item := range file.GetSheetList() {
+			rows, _ := file.GetRows(item)
+			// rows是一个二维数组
+			for i := range rows {
+				strs := rows[i]
+				for j := range strs {
+					str := rows[i][j]
+					fmt.Println(str)
+				}
+			}
+		}
+	}
+	http.HandleFunc("/excel", func(w http.ResponseWriter, r *http.Request) {
+		file, _, err := r.FormFile("file")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fileBytes, err := ioutil.ReadAll(file)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		reader := bytes.NewReader(fileBytes)
+		f(reader)
+		w.Write([]byte("Hello Http Get!"))
+	})
+	http.ListenAndServe(":8080", nil)
+}
+
+func HttpDownloadExcel() {
+	fun := func(fileName string) *bytes.Reader {
+		f := excelize.NewFile()
+		f.SetCellValue("Sheet1", "B1", 100)
+		err := f.SaveAs(fileName)
+		if err != nil {
+			fmt.Println(err)
+		}
+		var buffer bytes.Buffer
+		_ = f.Write(&buffer)
+		return bytes.NewReader(buffer.Bytes())
+	}
+	http.HandleFunc("/downloadExcel", func(w http.ResponseWriter, r *http.Request) {
+		reader := fun("demo.xlsx")
+		// 重新设置文件名称
+		w.Header().Set("Content-Disposition", "attachment; filename="+"Book2.xlsx")
+		io.Copy(w, reader)
+	})
+	http.ListenAndServe(":8080", nil)
 }
