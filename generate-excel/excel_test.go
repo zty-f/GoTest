@@ -28,7 +28,7 @@ func TestExcelProcessStream(t *testing.T) {
 	begin := time.Now().Unix()
 	err := ExcelProcessStream(list).
 		Headers("序号", "用户名", "登录IP", "用户类型", "操作模块", "操作结果", "操作时间", "描述").
-		Columns("Id", "Username", "IP", "TypeStr", "Module", "Res", "Time", "Des").
+		Columns("Id", "UserName", "IP", "TypeStr", "Module", "Res", "Time", "Des").
 		SavePath("demo.xlsx").SetColWidth(2, 7, 25).SetColWidth(8, 8, 80).
 		NewStyle(KeyStyle{
 			Key:   "style1",
@@ -47,6 +47,40 @@ func TestExcelProcessStream(t *testing.T) {
 			return styleMap["style1"], nil
 		}
 	}).ToExcel().Error
+	if err != nil {
+		log.Println("err:", err)
+	}
+	end := time.Now().Unix()
+	fmt.Println("表格生成耗费时长：", end-begin, "s")
+}
+
+func TestExcelProcess(t *testing.T) {
+	var list []OperationLog
+	for i := 1; i <= 500000; i++ {
+		list = append(list, OperationLog{
+			Id:       i,
+			UserName: "xxx" + cast.ToString(i),
+			IP:       "127.0.0.1" + cast.ToString(i),
+			TypeStr:  "xxx" + cast.ToString(i),
+			Module:   "xxx" + cast.ToString(i),
+			Res:      "xxx" + cast.ToString(i),
+			Time:     strconv.FormatInt(time.Now().Unix(), 10),
+			Des:      "xxx" + cast.ToString(i),
+		})
+	}
+	begin := time.Now().Unix()
+	err := ExcelProcess(list).
+		Headers("序号", "用户名", "登录IP", "用户类型", "操作模块", "操作结果", "操作时间", "描述").
+		Columns("Id", "UserName", "IP", "TypeStr", "Module", "Res", "Time", "Des").
+		Sheet("test").
+		Style(func(currentSheet string, f *excelize.File) error {
+			styleId, err := f.NewStyle(&excelize.Style{Font: &excelize.Font{Family: "Microsoft YaHei UI", Size: 20}})
+			if err != nil {
+				return err
+			}
+			return f.SetCellStyle(currentSheet, "A1", "H1", styleId)
+		}).
+		SavePath("demo.xlsx").ToExcel().Error
 	if err != nil {
 		log.Println("err:", err)
 	}

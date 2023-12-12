@@ -10,6 +10,8 @@ import (
 	"reflect"
 )
 
+// 普通版本
+
 type ProcessCmd struct {
 	headers          []string
 	columns          []string
@@ -176,6 +178,8 @@ func (p *ProcessCmd) ToExcel() *ProcessCmd {
 	}
 	return p
 }
+
+// 流式版本
 
 type ProcessCmdStream struct {
 	headers          []string
