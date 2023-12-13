@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"test/gorm/model"
 )
 
 var DB *gorm.DB
@@ -23,22 +22,4 @@ func init() {
 		fmt.Println(err)
 	}
 	DB = db
-}
-
-func main() {
-	testUpdate()
-}
-
-func testUpdate() {
-	var usertask = model.UserTask{
-		CreateTime: 11111122,
-		UpdateTime: 0,
-		IsDeleted:  0,
-		Extra:      "",
-	}
-	// gorm更新不存在的记录不会报错，只是RowsAffected:0
-	t := DB.Debug().Table("user_task").Where("unique_id = ?", "22222222333").Updates(&usertask)
-
-	fmt.Printf("%+v\n", t)
-	fmt.Printf("%+v\n", usertask)
 }
