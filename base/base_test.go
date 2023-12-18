@@ -31,6 +31,8 @@ func Test1(t *testing.T) {
 		fmt.Println("p is nil")
 	} else {
 		fmt.Println("p is not nil")
+		fmt.Println(p)
+		fmt.Printf("%T\n", p)
+		p.Show()
 	}
-	p.Show()
 }
