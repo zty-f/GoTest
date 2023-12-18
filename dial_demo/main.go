@@ -48,6 +48,7 @@ func startServer() {
 	if err != nil {
 		log.Fatal("Failed to start server:", err)
 	}
+	defer ln.Close()
 	accept, err := ln.Accept()
 	if err != nil {
 		log.Fatal("Failed to accept connection:", err)
