@@ -69,3 +69,82 @@ func TestMake(t *testing.T) {
 	b := new(int)
 	fmt.Printf("%T\n", b)
 }
+
+func deferFuncReturn1() int {
+	i := 1
+	defer func() {
+		i++
+		fmt.Println(i)
+	}()
+	i = 2
+	return i
+}
+
+func deferFuncReturn2() (j int) {
+	i := 1
+	defer func() {
+		j++
+		fmt.Println(i)
+		fmt.Println(j)
+	}()
+
+	return i
+}
+
+func TestDefer(t *testing.T) {
+	fmt.Println(deferFuncReturn1())
+	fmt.Println("-------------")
+	fmt.Println(deferFuncReturn2())
+}
+
+func f(x int, y int) int {
+	fmt.Println("x:", x)
+	return x
+}
+
+// defer里面有嵌套函数会先执行
+func TestDefer2(t *testing.T) {
+	defer f(1, f(3, 0))
+	defer f(2, f(4, 0))
+	time.Sleep(2 * time.Second)
+}
+
+func defer_fun1(x int) (res int) {
+	res = x
+	defer func() {
+		res += 3
+	}()
+	return res
+}
+
+func defer_fun2(x int) int {
+	res := x
+	defer func() {
+		res += 3
+	}()
+	return res
+}
+
+func defer_fun3(x int) (res int) {
+	defer func() {
+		res += x
+	}()
+	return 2
+}
+
+func defer_fun4() (res int) {
+	t := 1
+	defer func(x int) {
+		fmt.Println("x:", x)
+		fmt.Println("res:", res)
+	}(t)
+	t = 2
+	return 4
+}
+
+func TestDefer3(t *testing.T) {
+	fmt.Println(defer_fun1(1)) // 4
+	fmt.Println(defer_fun2(1)) // 1
+	fmt.Println(defer_fun3(1)) // 3
+	fmt.Println(defer_fun4())  // 1 4 4
+}
