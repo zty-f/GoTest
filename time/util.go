@@ -78,8 +78,8 @@ func GetOperatorInfo(c context.Context) string {
 	return operator
 }
 
-// 用户类型、用户等级真实值转成二进制的十进制值保存
-func DataTransDatabase(nums []int) int {
+// GetNumberWithBitsSet 将指定位数变为1
+func getNumberWithBitsSet1(nums []int) int {
 	num := 0
 	for _, i := range nums {
 		if i <= 0 {
@@ -91,8 +91,16 @@ func DataTransDatabase(nums []int) int {
 	return num
 }
 
-// 用户类型、用户等级的数据库保存值转成真实值
-func DatabaseTransData(num int) ([]int, error) {
+func getNumberWithBitsSet2(positions ...int) int {
+	var result int
+	for _, position := range positions {
+		result |= 1 << (position - 1)
+	}
+	return result
+}
+
+// 取一个十进制数对应的二进制数哪些位等于1
+func getBinaryBits1(num int) ([]int, error) {
 	number := strconv.FormatInt(int64(num), 2)
 	res, err := strconv.ParseUint(number, 2, 64)
 	if err != nil {
@@ -108,4 +116,17 @@ func DatabaseTransData(num int) ([]int, error) {
 		res = res >> 1
 	}
 	return result, nil
+}
+
+func getBinaryBits2(num int) []int {
+	var bits []int
+	position := 1
+	for num > 0 {
+		if num&1 == 1 {
+			bits = append(bits, position)
+		}
+		num >>= 1
+		position++
+	}
+	return bits
 }
