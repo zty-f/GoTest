@@ -34,13 +34,25 @@ func TestTransFer2(t *testing.T) {
 
 func BenchmarkGetBinaryBits1(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		getBinaryBits2(888)
+		getBinaryBits1(888)
 	}
 }
 
 func BenchmarkGetBinaryBits2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		getBinaryBits2(888)
+	}
+}
+
+func BenchmarkGetNumberWithBitsSet1(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		getNumberWithBitsSet1([]int{1, 2, 3, 4, 5, 6, 7, 8})
+	}
+}
+
+func BenchmarkGetNumberWithBitsSet2(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		getNumberWithBitsSet2([]int{1, 2, 3, 4, 5, 6, 7, 8}...)
 	}
 }
 

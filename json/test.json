@@ -1,0 +1,23 @@
+{
+  "stat": 1,
+  "code": 0,
+  "message": "Success",
+  "data": {
+    "list": [
+      {
+        "id": 1,
+        "type": 1,
+        "name": "幸运光环",
+        "image": "图片链接",
+        "rank": 1,
+        "level": [1,2,3,4],
+        "status": 1,
+        "create_uname": "创建人",
+        "create_time": 1703235908,
+        "update_uname": "更新人",
+        "update_time": 1703235908
+      }
+    ]
+  },
+  "trace_id": "1651771a34ffe2d7d8622365f871adc0"
+}
