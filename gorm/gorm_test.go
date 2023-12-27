@@ -67,6 +67,7 @@ type UserAvatarDecoration struct {
 	Status         int   `json:"status" gorm:"status"`
 }
 
+// 1.通过ON DUPLICATE KEY来实现创建或更新 需要有唯一主键或者唯一索引才能支持，一条sql
 func TestUpsert(t *testing.T) {
 	var x = &UserAvatarDecoration{
 		StuId:          2100051684,
@@ -81,4 +82,17 @@ func TestUpsert(t *testing.T) {
 		fmt.Println(err)
 	}
 	fmt.Printf("%+v\n", x)
+}
+
+// 2.通过FirstOrCreate 来实现创建或更新 先查询 然后再根据情况创建或更新，两条sql
+func TestUpsert1(t *testing.T) {
+	var x = &UserAvatarDecoration{
+		StuId:          2100051684,
+		DecorationId:   44,
+		DecorationType: 1,
+	}
+	err := DB.Table("user_avatar_decoration").Where("stu_id = ? and type = ?", 111, 1).Assign(&x).FirstOrCreate(&x).Error
+	if err != nil {
+		fmt.Println(err)
+	}
 }
