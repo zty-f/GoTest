@@ -91,7 +91,8 @@ func TestUpsert1(t *testing.T) {
 		DecorationId:   44,
 		DecorationType: 1,
 	}
-	err := DB.Table("user_avatar_decoration").Where("stu_id = ? and type = ?", 111, 1).Assign(&x).FirstOrCreate(&x).Error
+	var create = x
+	err := DB.Table("user_avatar_decoration").Where("stu_id = ? and type = ?", 111, 1).Assign(&create).FirstOrCreate(&x).Error
 	if err != nil {
 		fmt.Println(err)
 	}
