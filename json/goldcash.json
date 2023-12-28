@@ -1,0 +1,26 @@
+{
+  "stat": 1,
+  "code": 0,
+  "message": "Success",
+  "data": {
+    "list": [
+      {
+        "level": 1,
+        "goldCash": 50
+      },
+      {
+        "level": 2,
+        "goldCash": 100
+      },
+      {
+        "level": 3,
+        "goldCash": 100
+      }
+    ]
+  },
+  "trace_id": "7c373875-acdd-4f4d-81d3-e753e0961a08"
+}
+
+
+
+

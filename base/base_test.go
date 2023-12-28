@@ -59,3 +59,33 @@ func Test2(t *testing.T) {
 	}
 	fmt.Printf("%+v\n", arr2)
 }
+
+func Test3(t *testing.T) {
+	var user = &User{
+		Name: "zhangsan",
+		Age:  18,
+	}
+	fmt.Println(user.Age)
+	fmt.Println((*user).Age)
+	fmt.Printf("%T\n", user)
+	fmt.Printf("%T\n", *user)
+	fmt.Printf("%+v\n", user)
+	fmt.Printf("%+v\n", *user)
+}
+
+func (u *User) A() {
+	fmt.Println("A")
+}
+
+func (u User) B() {
+	fmt.Println("B")
+}
+
+func Test4(t *testing.T) {
+	var user1 = &User{}
+	user1.A()
+	user1.B()
+	var user2 = User{}
+	user2.A()
+	user2.B()
+}
