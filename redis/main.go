@@ -8,7 +8,6 @@ import (
 )
 
 var rd *redis.Client
-var ctx = context.Background()
 
 func main() {
 	//testSetNx()
@@ -28,6 +27,7 @@ func init() {
 }
 
 func testSetNx() {
+	var ctx = context.Background()
 	fmt.Println("-------------------")
 	// 过期时间不能这么设置，会报错，但是插入正常，1ms过期
 	result, err := rd.SetNX(ctx, "aaaaa", "11111", 86400*2).Result()
@@ -38,6 +38,7 @@ func testSetNx() {
 }
 
 func testSet() {
+	var ctx = context.Background()
 	fmt.Println("-------------------")
 	// 过期时间不能这么设置，会报错，但是插入正常，1ms过期
 	result, err := rd.Set(ctx, "bbbb", "11111", 86400*2).Result()
@@ -48,6 +49,7 @@ func testSet() {
 }
 
 func testExpireNx() {
+	var ctx = context.Background()
 	fmt.Println("-------------------")
 	// redis 7版本才会支持expireNx，低版本不支持这个命令
 	result, err := rd.Expire(ctx, "set", 100*time.Second).Result()
