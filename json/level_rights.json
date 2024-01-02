@@ -1,0 +1,272 @@
+{
+  "stat": 1,
+  "code": 0,
+  "message": "Success",
+  "data": {
+    "sceneList": [
+      {
+        "level": 1,
+        "levelName": "初级童生",
+        "pngLink": "https://static-inc.xiwang.com/mall/610f47a078241efef1353db4d47f7673.png",
+        "webpLink": "https://static-inc.xiwang.com/mall/610f47a078241efef1353db4d47f7673.png",
+        "unLockIcon": "https://static-inc.xiwang.com/mall/5414f84ba10915bd83f800e212d6dc91.png",
+        "lockIcon": "https://static-inc.xiwang.com/mall/e2358d9d7dcac00cc78f4c3164409cad.png",
+        "iconType": 1
+      },
+      {
+        "level": 2,
+        "levelName": "潜力秀才",
+        "pngLink": "https://static-inc.xiwang.com/mall/dee8416cf4b1abca96615604103cb3f2.png",
+        "webpLink": "https://static-inc.xiwang.com/mall/dee8416cf4b1abca96615604103cb3f2.png",
+        "unLockIcon": "https://static-inc.xiwang.com/mall/5414f84ba10915bd83f800e212d6dc91.png",
+        "lockIcon": "https://static-inc.xiwang.com/mall/e2358d9d7dcac00cc78f4c3164409cad.png",
+        "iconType": 1
+      },
+      {
+        "level": 3,
+        "levelName": "好学举人",
+        "pngLink": "https://static-inc.xiwang.com/mall/cf7f40f29d858e2f748e33d8300601be.png",
+        "webpLink": "https://static-inc.xiwang.com/mall/cf7f40f29d858e2f748e33d8300601be.png",
+        "unLockIcon": "https://static-inc.xiwang.com/mall/5414f84ba10915bd83f800e212d6dc91.png",
+        "lockIcon": "https://static-inc.xiwang.com/mall/e2358d9d7dcac00cc78f4c3164409cad.png",
+        "iconType": 1
+      },
+      {
+        "level": 4,
+        "levelName": "进阶贡士",
+        "pngLink": "https://static-inc.xiwang.com/mall/76a6428cb1bea49de3e12caf095871b3.png",
+        "webpLink": "https://static-inc.xiwang.com/mall/beb59f5c6fa8b9625249ffeb6a407db8.webp",
+        "unLockIcon": "https://static-inc.xiwang.com/mall/5414f84ba10915bd83f800e212d6dc91.png",
+        "lockIcon": "https://static-inc.xiwang.com/mall/e2358d9d7dcac00cc78f4c3164409cad.png",
+        "iconType": 2
+      },
+      {
+        "level": 5,
+        "levelName": "飞跃进士",
+        "pngLink": "https://static-inc.xiwang.com/mall/cf4d88bbf60baf208f3ec34f57fb2255.png",
+        "webpLink": "https://static-inc.xiwang.com/mall/cf4d88bbf60baf208f3ec34f57fb2255.png",
+        "unLockIcon": "https://static-inc.xiwang.com/mall/5414f84ba10915bd83f800e212d6dc91.png",
+        "lockIcon": "https://static-inc.xiwang.com/mall/e2358d9d7dcac00cc78f4c3164409cad.png",
+        "iconType": 1
+      },
+      {
+        "level": 6,
+        "levelName": "探花及第",
+        "pngLink": "https://static-inc.xiwang.com/mall/76a6428cb1bea49de3e12caf095871b3.png",
+        "webpLink": "https://static-inc.xiwang.com/mall/beb59f5c6fa8b9625249ffeb6a407db8.webp",
+        "unLockIcon": "https://static-inc.xiwang.com/mall/5414f84ba10915bd83f800e212d6dc91.png",
+        "lockIcon": "https://static-inc.xiwang.com/mall/e2358d9d7dcac00cc78f4c3164409cad.png",
+        "iconType": 1
+      },
+      {
+        "level": 7,
+        "levelName": "超凡榜眼",
+        "pngLink": "https://static-inc.xiwang.com/mall/76a6428cb1bea49de3e12caf095871b3.png",
+        "webpLink": "https://static-inc.xiwang.com/mall/beb59f5c6fa8b9625249ffeb6a407db8.webp",
+        "unLockIcon": "https://static-inc.xiwang.com/mall/5414f84ba10915bd83f800e212d6dc91.png",
+        "lockIcon": "https://static-inc.xiwang.com/mall/e2358d9d7dcac00cc78f4c3164409cad.png",
+        "iconType": 1
+      },
+      {
+        "level": 8,
+        "levelName": "天选状元",
+        "pngLink": "https://static-inc.xiwang.com/mall/76a6428cb1bea49de3e12caf095871b3.png",
+        "webpLink": "https://static-inc.xiwang.com/mall/beb59f5c6fa8b9625249ffeb6a407db8.webp",
+        "unLockIcon": "https://static-inc.xiwang.com/mall/5414f84ba10915bd83f800e212d6dc91.png",
+        "lockIcon": "https://static-inc.xiwang.com/mall/e2358d9d7dcac00cc78f4c3164409cad.png",
+        "iconType": 2
+      }
+    ],
+    "rightsInfo": [
+      {
+        "level": 1,
+        "rightsList": [
+          {
+            "name": "直达专席",
+            "type": 5,
+            "lockIcon": "图标链接",
+            "unlockIcon": "图标链接",
+            "jumpUrl": "跳转链接",
+            "rank": 5,
+            "include": false,
+            "value": 0
+          },
+          {
+            "name": "头像装扮",
+            "type": 4,
+            "lockIcon": "图标链接",
+            "unlockIcon": "图标链接",
+            "jumpUrl": "跳转链接",
+            "rank": 4,
+            "include": true,
+            "value": 0
+          },
+          {
+            "name": "金币抵现",
+            "type": 1,
+            "lockIcon": "图标链接",
+            "unlockIcon": "图标链接",
+            "jumpUrl": "跳转链接",
+            "rank": 3,
+            "include": true,
+            "value": 0
+          },
+          {
+            "name": "金币加速",
+            "type": 2,
+            "lockIcon": "图标链接",
+            "unlockIcon": "图标链接",
+            "jumpUrl": "跳转链接",
+            "rank": 2,
+            "include": false,
+            "value": 0
+          },
+          {
+            "name": "专属礼品",
+            "type": 3,
+            "lockIcon": "图标链接",
+            "unlockIcon": "图标链接",
+            "jumpUrl": "跳转链接",
+            "rank": 1,
+            "include": false,
+            "value": 0
+          }
+        ]
+      },
+      {
+        "level": 2,
+        "rightsList": [
+          {
+            "name": "直达专席",
+            "type": 5,
+            "lockIcon": "图标链接",
+            "unlockIcon": "图标链接",
+            "jumpUrl": "跳转链接",
+            "rank": 5,
+            "include": false,
+            "value": 0
+          },
+          {
+            "name": "头像装扮",
+            "type": 4,
+            "lockIcon": "图标链接",
+            "unlockIcon": "图标链接",
+            "jumpUrl": "跳转链接",
+            "rank": 4,
+            "include": true,
+            "value": 0
+          },
+          {
+            "name": "金币抵现",
+            "type": 1,
+            "lockIcon": "图标链接",
+            "unlockIcon": "图标链接",
+            "jumpUrl": "跳转链接",
+            "rank": 3,
+            "include": true,
+            "value": 0
+          },
+          {
+            "name": "金币加速",
+            "type": 2,
+            "lockIcon": "图标链接",
+            "unlockIcon": "图标链接",
+            "jumpUrl": "跳转链接",
+            "rank": 2,
+            "include": false,
+            "value": 0
+          },
+          {
+            "name": "专属礼品",
+            "type": 3,
+            "lockIcon": "图标链接",
+            "unlockIcon": "图标链接",
+            "jumpUrl": "跳转链接",
+            "rank": 1,
+            "include": false,
+            "value": 0
+          }
+        ]
+      },
+      {
+        "level": 3,
+        "rightsList": [
+          {
+            "name": "直达专席",
+            "type": 5,
+            "lockIcon": "图标链接",
+            "unlockIcon": "图标链接",
+            "jumpUrl": "跳转链接",
+            "rank": 5,
+            "include": false,
+            "value": 0
+          },
+          {
+            "name": "头像装扮",
+            "type": 4,
+            "lockIcon": "图标链接",
+            "unlockIcon": "图标链接",
+            "jumpUrl": "跳转链接",
+            "rank": 4,
+            "include": true,
+            "value": 0
+          },
+          {
+            "name": "金币抵现",
+            "type": 1,
+            "lockIcon": "图标链接",
+            "unlockIcon": "图标链接",
+            "jumpUrl": "跳转链接",
+            "rank": 3,
+            "include": true,
+            "value": 50
+          },
+          {
+            "name": "金币加速",
+            "type": 2,
+            "lockIcon": "图标链接",
+            "unlockIcon": "图标链接",
+            "jumpUrl": "跳转链接",
+            "rank": 2,
+            "include": true,
+            "value": 4
+          },
+          {
+            "name": "专属礼品",
+            "type": 3,
+            "lockIcon": "图标链接",
+            "unlockIcon": "图标链接",
+            "jumpUrl": "跳转链接",
+            "rank": 1,
+            "include": false,
+            "value": 0
+          }
+        ]
+      }
+    ],
+    "levelRangeInfo": [
+      {
+        "level": 1,
+        "levelValueRange": {
+          "begin": 0,
+          "end": 10000
+        }
+      },
+      {
+        "level": 2,
+        "levelValueRange": {
+          "begin": 10000,
+          "end": 22000
+        }
+      },
+      {
+        "level": 3,
+        "levelValueRange": {
+          "begin": 22000,
+          "end": 35000
+        }
+      }
+    ]
+  },
+  "trace_id": "a792edbc-125f-4184-a7ca-2aa1123394ed"
+}

@@ -89,3 +89,23 @@ func Test4(t *testing.T) {
 	user2.A()
 	user2.B()
 }
+
+type Person struct {
+	Name string
+}
+
+var list map[string]Person
+
+func Test5(t *testing.T) {
+
+	list = make(map[string]Person) //不需要指定大小和容量，会自动扩容
+
+	student := Person{"Aceld"}
+
+	list["student"] = student
+	// 下列代码不能直接进行赋值操作，是值引用，只读
+	//list["student"].Name = "Aceld2"
+
+	fmt.Println(list["student"])
+	fmt.Println(len(list))
+}
