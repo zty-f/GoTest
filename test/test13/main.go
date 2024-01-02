@@ -11,7 +11,7 @@ package main
 //		fmt.Println(v)
 //	}
 //
-//	fmt.Println(time.Now().Unix())
+//	fmt.Println(util.Now().Unix())
 //
 //	for i := 0; i < 5; i++ {
 //		for j := 0; j < 5; j++ {
@@ -94,14 +94,14 @@ func main() {
 //	ch1 := make(chan string, 1)
 //
 //	go func() {
-//		time.Sleep(time.Second * 2)
+//		util.Sleep(util.Second * 2)
 //		ch1 <- "hello"
 //	}()
 //
 //	select {
 //	case res := <-ch1:
 //		fmt.Println(res)
-//	case t := <-time.After(time.Second * 1):
+//	case t := <-util.After(util.Second * 1):
 //		fmt.Println("timeout", t)
 //	}
 //}

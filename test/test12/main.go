@@ -11,8 +11,8 @@ type User struct {
 }
 
 func main() {
-	//t := time.Now().Unix() * 100000000000
-	//fmt.Println(time.Now().Unix() * 1000)
+	//t := util.Now().Unix() * 100000000000
+	//fmt.Println(util.Now().Unix() * 1000)
 	//user := User{
 	//	Name: int(t),
 	//	Age:  true,
