@@ -130,3 +130,30 @@ func getBinaryBits2(num int) []int {
 	}
 	return bits
 }
+
+// GetMonthStartTime 获取某个月的开始时间戳 dateStr：2023-10
+func GetMonthStartTime(dateStr string) (int64, error) {
+	layout := "2006-01"
+	date, err := time.Parse(layout, dateStr)
+	if err != nil {
+		return 0, err
+	}
+	year, month, _ := date.Date()
+	loc, _ := time.LoadLocation("Local")
+	startOfMonth := time.Date(year, month, 1, 0, 0, 0, 0, loc)
+	return startOfMonth.Unix(), nil
+}
+
+// GetMonthEndTime 获取某个月的结束时间戳 dateStr：2023-10
+func GetMonthEndTime(dateStr string) (int64, error) {
+	layout := "2006-01"
+	date, err := time.Parse(layout, dateStr)
+	if err != nil {
+		return 0, err
+	}
+	year, month, _ := date.Date()
+	loc, _ := time.LoadLocation("Local")
+	nextMonth := time.Date(year, month+1, 1, 0, 0, 0, 0, loc)
+	endOfMonth := nextMonth.Add(-time.Second)
+	return endOfMonth.Unix(), nil
+}

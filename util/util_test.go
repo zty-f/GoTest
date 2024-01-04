@@ -25,3 +25,11 @@ func Test1(t *testing.T) {
 	}
 	fmt.Println(res1)
 }
+
+func TestGetMonthStartTime(t *testing.T) {
+	dateStr := "2024-01"
+	time, _ := GetMonthStartTime(dateStr)
+	fmt.Println(time)
+	time, _ = GetMonthEndTime(dateStr)
+	fmt.Println(time)
+}
