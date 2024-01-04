@@ -2,6 +2,7 @@ package base
 
 import (
 	"fmt"
+	"math"
 	"testing"
 )
 
@@ -108,4 +109,9 @@ func Test5(t *testing.T) {
 
 	fmt.Println(list["student"])
 	fmt.Println(len(list))
+}
+
+func Test6(t *testing.T) {
+	fmt.Println(math.MaxInt64)
+	fmt.Println(math.MaxInt32)
 }
