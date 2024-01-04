@@ -115,3 +115,14 @@ func Test6(t *testing.T) {
 	fmt.Println(math.MaxInt64)
 	fmt.Println(math.MaxInt32)
 }
+
+func Test7(t *testing.T) {
+	var m = make(map[int]interface{})
+	m[1] = "1"
+	fmt.Println(m[1])
+	//获取不存在的map键值不会报错,会返回零值
+	fmt.Println(m[2])
+	fmt.Println(m[3])
+	m[3] = "3"
+	fmt.Println(m[3])
+}
