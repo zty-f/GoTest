@@ -125,4 +125,16 @@ func Test7(t *testing.T) {
 	fmt.Println(m[3])
 	m[3] = "3"
 	fmt.Println(m[3])
+
+	fmt.Println(&m)
+	fmt.Printf("%p\n", m)
+	fmt.Printf("%p\n", &m)
+	testMap(m)
+}
+
+// 引用地址的传递只会生成一个引用副本，指向的数据区域的内存地址不会发生变化
+func testMap(m map[int]interface{}) {
+	fmt.Println(&m)
+	fmt.Printf("%p\n", m)
+	fmt.Printf("%p\n", &m)
 }
