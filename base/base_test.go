@@ -138,3 +138,10 @@ func testMap(m map[int]interface{}) {
 	fmt.Printf("%p\n", m)
 	fmt.Printf("%p\n", &m)
 }
+
+func TestBinary(t *testing.T) {
+	fmt.Printf("%b\n", 1)
+	fmt.Printf("%b\n", int64(-5))
+	fmt.Printf("%b\n", 1<<4)
+	fmt.Printf("%b\n", 1<<4-1)
+}
