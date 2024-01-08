@@ -3,6 +3,7 @@ package base
 import (
 	"fmt"
 	"math"
+	"sort"
 	"testing"
 )
 
@@ -144,4 +145,43 @@ func TestBinary(t *testing.T) {
 	fmt.Printf("%b\n", int64(-5))
 	fmt.Printf("%b\n", 1<<4)
 	fmt.Printf("%b\n", 1<<4-1)
+}
+
+type R struct {
+	Include bool
+	Value   int
+}
+
+// 数值排序测试
+func TestRank(t *testing.T) {
+	arr := []R{
+		{
+			Include: true,
+			Value:   1,
+		},
+		{
+			Include: false,
+			Value:   2,
+		},
+		{
+			Include: true,
+			Value:   3,
+		},
+		{
+			Include: false,
+			Value:   4,
+		},
+		{
+			Include: true,
+			Value:   5,
+		},
+	}
+	// 排序 现根据Include进行排序，Include为true的在前面，false的在后面，Include值相同的按照Value大小进行排序
+	sort.Slice(arr, func(i, j int) bool {
+		if arr[i].Include == arr[j].Include {
+			return arr[i].Value > arr[j].Value // 大于表示从大到小排序
+		}
+		return arr[i].Include
+	})
+	fmt.Println(arr)
 }
