@@ -185,3 +185,15 @@ func TestRank(t *testing.T) {
 	})
 	fmt.Println(arr)
 }
+
+func TestFormat(t *testing.T) {
+	jumpInfo := "1、购买系统课/续报时，金币可以作为现金使用\n2、250金币抵现1元\n3、每个订单最多能抵扣%d元\n4、抵扣现时，可以使用的金币数量是250的整数倍。"
+	s := fmt.Sprintf(jumpInfo, 200)
+	fmt.Println(s)
+
+	b := false
+	if !b {
+		fmt.Println("true")
+	}
+	fmt.Println(b)
+}
