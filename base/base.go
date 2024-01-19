@@ -20,7 +20,7 @@ type People interface {
 
 type Student struct{}
 
-func (stu *Student) Speak(think string) (talk string) {
+func (stu Student) Speak(think string) (talk string) {
 	if think == "speak" {
 		talk = "speak"
 	} else {

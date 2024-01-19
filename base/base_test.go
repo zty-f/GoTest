@@ -217,5 +217,27 @@ func f(n int) (r int) {
 	return n + 1
 }
 func TestDefer(t *testing.T) {
-	fmt.Println(f(3))
+	//fmt.Println(f(3))
+	//var m map[int]int
+	//fmt.Println(m[1])
+	//fmt.Println(m[2])
+	s1 := []int{1, 2, 3}
+	s2 := s1[1:]
+	s2[1] = 4
+	fmt.Println(s1)
+	s2 = append(s2, 5, 6, 7)
+	s1 = append(s1, 8, 9, 10)
+	fmt.Println(s1)
+	fmt.Println(s2)
+	if a := 1; false {
+	} else if b := 2; false {
+	} else {
+		println(a, b)
+	}
+}
+
+func TestA(t *testing.T) {
+	var peo People = &Student{}
+	think := "speak"
+	fmt.Println(peo.Speak(think))
 }
