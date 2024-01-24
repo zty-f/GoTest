@@ -248,3 +248,10 @@ func TestExtendInterface(t *testing.T) {
 	fmt.Println(peo.Speak(think))
 	fmt.Println(math.MaxInt64)
 }
+
+func TestEqual(t *testing.T) {
+	a := [2]int{5, 6}
+	b := [3]int{5, 6}
+	fmt.Println(a) // [5 6]
+	fmt.Println(b) // [5 6 0]
+}
