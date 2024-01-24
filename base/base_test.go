@@ -241,3 +241,10 @@ func TestA(t *testing.T) {
 	think := "speak"
 	fmt.Println(peo.Speak(think))
 }
+
+func TestExtendInterface(t *testing.T) {
+	var peo People = &Student{}
+	think := "speak"
+	fmt.Println(peo.Speak(think))
+	fmt.Println(math.MaxInt64)
+}
