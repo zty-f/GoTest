@@ -265,6 +265,7 @@ func TestContext(t *testing.T) {
 	key := logger.ContextKey("x_trace_id")
 	i := 0
 	for {
+		// 当ctx这样嵌套赋值的时候，假如要获取最开始的赋值的那个key，耗时就会越来越高，解决办法就是每次新建一个变量：ctx := context.WithValue(ctx, key, i)
 		ctx = context.WithValue(ctx, key, i)
 		nano := time.Now().UnixMicro()
 		fmt.Println(ctx.Value("key"), time.Now().UnixMicro()-nano)
