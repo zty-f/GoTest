@@ -1,10 +1,13 @@
 package base
 
 import (
+	"codeup.aliyun.com/61e54b0e0bb300d827e1ae27/backend/golib/logger"
+	"context"
 	"fmt"
 	"math"
 	"sort"
 	"testing"
+	"time"
 )
 
 func Test_m1(t *testing.T) {
@@ -254,4 +257,17 @@ func TestEqual(t *testing.T) {
 	b := [3]int{5, 6}
 	fmt.Println(a) // [5 6]
 	fmt.Println(b) // [5 6 0]
+}
+
+func TestContext(t *testing.T) {
+	var ctx = context.Background()
+	ctx = context.WithValue(ctx, "key", "value")
+	key := logger.ContextKey("x_trace_id")
+	i := 0
+	for {
+		ctx = context.WithValue(ctx, key, i)
+		nano := time.Now().UnixMicro()
+		fmt.Println(ctx.Value("key"), time.Now().UnixMicro()-nano)
+		i++
+	}
 }
