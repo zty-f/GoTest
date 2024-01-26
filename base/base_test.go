@@ -277,3 +277,18 @@ func TestDb(t *testing.T) {
 	x := 2100060321
 	fmt.Println(x % 100)
 }
+
+func TestSlice(t *testing.T) {
+	s := make([]int, 0)
+	for i := 0; i < 25; i++ {
+		s = append(s, i)
+	}
+	length := len(s)
+	for i := 0; i < length; i += 20 {
+		end := i + 20
+		if end > length {
+			end = length
+		}
+		fmt.Println(s[i:end])
+	}
+}
