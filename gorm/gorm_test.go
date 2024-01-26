@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"gorm.io/gorm/clause"
+	"strings"
 	"test/gorm/model"
 	"testing"
 	"time"
@@ -13,7 +14,6 @@ func TestUpdates(t *testing.T) {
 		CreateTime: 11111122,
 		UpdateTime: 0,
 		IsDeleted:  0,
-		Extra:      "",
 	}
 	// gorm更新不存在的记录不会报错，只是RowsAffected:0
 	res := DB.Debug().Table("user_task").Where("unique_id = ?", "22222222333").Updates(&usertask)
@@ -95,5 +95,34 @@ func TestUpsert1(t *testing.T) {
 	err := DB.Table("user_avatar_decoration").Where("stu_id = ? and type = ?", 111, 1).Assign(&create).FirstOrCreate(&x).Error
 	if err != nil {
 		fmt.Println(err)
+	}
+}
+
+// ErrorsIsDuplicate 判断错误是否是数据重复错误
+func ErrorsIsDuplicate(err error) bool {
+	if err == nil {
+		return false
+	}
+
+	if strings.Index(err.Error(), "Duplicate") != -1 {
+		return true
+	}
+
+	return false
+}
+
+func TestDuplicateErr(t *testing.T) {
+	var x = &model.UserTask{
+		TaskId:     2001000,
+		StuId:      2100051764,
+		CreateTime: 0,
+		UpdateTime: 0,
+		UniqueId:   "2100051764-2001000-1-7",
+		IsDeleted:  0,
+	}
+	err := DB.Table("user_task_0").Create(&x).Error
+	fmt.Println(err)
+	if ErrorsIsDuplicate(err) {
+		fmt.Println("true")
 	}
 }

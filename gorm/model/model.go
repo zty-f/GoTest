@@ -9,7 +9,7 @@ type UserTask struct {
 	UpdateTime int    `gorm:"update_time" json:"updateTime"`
 	UniqueId   string `gorm:"unique_id" json:"uniqueId"`
 	IsDeleted  int    `gorm:"is_deleted" json:"isDeleted"`
-	Extra      string `gorm:"extra" json:"extra"`
+	ExtData    string `gorm:"ext_data" json:"ext_data"`
 }
 
 type UserMedal struct {

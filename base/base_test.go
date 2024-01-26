@@ -272,3 +272,8 @@ func TestContext(t *testing.T) {
 		i++
 	}
 }
+
+func TestDb(t *testing.T) {
+	x := 2100060321
+	fmt.Println(x % 100)
+}
