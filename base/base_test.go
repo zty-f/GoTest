@@ -3,6 +3,7 @@ package base
 import (
 	"codeup.aliyun.com/61e54b0e0bb300d827e1ae27/backend/golib/logger"
 	"context"
+	"errors"
 	"fmt"
 	"math"
 	"sort"
@@ -297,4 +298,18 @@ func TestSlice(t *testing.T) {
 func TestSplit(t *testing.T) {
 	stuCourseId := strings.Split("2100051764-2001400-15801423-1419403-100", "-")[2]
 	fmt.Println(stuCourseId)
+}
+
+var DataExistErr = errors.New("data exists")
+
+func TestErrEqual(t *testing.T) {
+	if errors.Is(getErr(), DataExistErr) {
+		fmt.Println("data exists")
+	} else {
+		fmt.Println("data not exists")
+	}
+}
+
+func getErr() error {
+	return DataExistErr
 }
