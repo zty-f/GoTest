@@ -126,3 +126,48 @@ func TestDuplicateErr(t *testing.T) {
 		fmt.Println("true")
 	}
 }
+
+type User struct {
+	Id   int
+	Name string
+}
+
+func TestSelectIn1(t *testing.T) {
+	ids1 := []int{2, 3}
+	users1 := make([]User, 0)
+	err := DB.Table("user_1").Find(&users1, ids1).Error
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("users:%+v\n", users1)
+
+	var ids2 []int
+	users2 := make([]User, 0)
+	err = DB.Table("user_1").Find(&users2, ids2).Error
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("users:%+v\n", users2)
+}
+
+func TestSelectIn2(t *testing.T) {
+	ids1 := []int{2, 3}
+	users1 := make([]User, 0)
+	err := DB.Table("user_1").Find(&users1, "id in (?)", ids1).Error
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("users:%+v\n", users1)
+
+	var ids2 []int
+	users2 := make([]User, 0)
+	err = DB.Table("user_1").Find(&users2, "id in (?)", ids2).Error
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("users:%+v\n", users2)
+}
