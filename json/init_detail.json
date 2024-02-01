@@ -1,0 +1,52 @@
+{
+  "message_type": "9001001",
+  "stu_id": "2100051671",
+  "stu_course_id": "16311663",
+  "action": "1",
+  "year_id": "23",
+  "term_id": "54",
+  "subject_id": "649",
+  "course_id": "2001309",
+  "growth_value": "10",
+  "order_type": "1",
+  "create_time": "1706671393000"
+}
+{
+  "message_type": "9001001",
+  "stu_id": "2100051671",
+  "stu_course_id": "15903634",
+  "action": "1",
+  "year_id": "23",
+  "term_id": "54",
+  "subject_id": "649",
+  "course_id": "2000564",
+  "growth_value": "10",
+  "order_type": "2",
+  "create_time": "1706671394000"
+}
+{
+  "message_type": "9001001",
+  "stu_id": "2100051671",
+  "stu_course_id": "15801790",
+  "action": "1",
+  "year_id": "23",
+  "term_id": "57",
+  "subject_id": "2064",
+  "course_id": "2000401",
+  "growth_value": "10",
+  "order_type": "3",
+  "create_time": "1706671395000"
+}
+{
+  "message_type": "9001001",
+  "stu_id": "2100051671",
+  "stu_course_id": "15801423",
+  "action": "1",
+  "year_id": "23",
+  "term_id": "54",
+  "subject_id": "649",
+  "course_id": "2000216",
+  "growth_value": "10",
+  "order_type": "4",
+  "create_time": "1706671396000"
+}

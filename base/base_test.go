@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"math"
 	"sort"
+	"strings"
 	"testing"
 	"time"
 )
@@ -291,4 +292,9 @@ func TestSlice(t *testing.T) {
 		}
 		fmt.Println(s[i:end])
 	}
+}
+
+func TestSplit(t *testing.T) {
+	stuCourseId := strings.Split("2100051764-2001400-15801423-1419403-100", "-")[2]
+	fmt.Println(stuCourseId)
 }
