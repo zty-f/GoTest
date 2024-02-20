@@ -171,3 +171,21 @@ func TestSelectIn2(t *testing.T) {
 	}
 	fmt.Printf("users:%+v\n", users2)
 }
+
+func TestSort(t *testing.T) {
+	users1 := make([]User, 0)
+	// 如下语句的排序字段等同于name asc,id desc，不写值会默认升序
+	err := DB.Debug().Table("user_1").Order("name,id desc").Find(&users1).Error
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("users1:%+v\n", users1)
+	users2 := make([]User, 0)
+	err = DB.Debug().Table("user_1").Order("name desc,id desc").Find(&users2).Error
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("users2:%+v\n", users2)
+}

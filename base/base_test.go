@@ -313,3 +313,8 @@ func TestErrEqual(t *testing.T) {
 func getErr() error {
 	return DataExistErr
 }
+
+func TestHappyNewYear(t *testing.T) {
+	fmt.Println("工作顺利~")
+	fmt.Println("happy new year")
+}
