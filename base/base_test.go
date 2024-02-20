@@ -318,3 +318,20 @@ func TestHappyNewYear(t *testing.T) {
 	fmt.Println("工作顺利~")
 	fmt.Println("happy new year")
 }
+
+func app() func(string) string {
+	t := "Hi"
+	c := func(b string) string {
+		t = t + " " + b
+		return t
+	}
+	return c
+}
+
+func TestClosure(t *testing.T) {
+	a := app()
+	b := app()
+	a("go")
+	fmt.Println(b("All"))
+	fmt.Println(a("All"))
+}
