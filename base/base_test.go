@@ -335,3 +335,28 @@ func TestClosure(t *testing.T) {
 	fmt.Println(b("All"))
 	fmt.Println(a("All"))
 }
+
+type S struct {
+	A int
+	B int
+}
+
+func TestStableSort(t *testing.T) {
+	arr := []S{
+		{A: 1, B: 1},
+		{A: 2, B: 2},
+		{A: 3, B: 1},
+		{A: 4, B: 3},
+		{A: 5, B: 1},
+		{A: 6, B: 2},
+		{A: 7, B: 3},
+		{A: 8, B: 1},
+		{A: 9, B: 3},
+	}
+	// 稳定排序，假如数组原本就根据A有序，后续根据B字段进行排序不会打乱原有的排序
+	fmt.Println(arr)
+	sort.Slice(arr, func(i, j int) bool {
+		return arr[i].B < arr[j].B
+	})
+	fmt.Println(arr)
+}
