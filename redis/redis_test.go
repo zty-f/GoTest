@@ -1,6 +1,7 @@
 package main
 
 import (
+	"codeup.aliyun.com/61e54b0e0bb300d827e1ae27/backend/golib/logger"
 	"context"
 	"errors"
 	"fmt"
@@ -38,4 +39,18 @@ func TestRedisContextDeadlineExceeded(t *testing.T) {
 	} else if err != nil {
 		fmt.Println("error:", err)
 	}
+}
+
+func TestHGet(t *testing.T) {
+	ctx := context.Background()
+	v, err := rd.HGet(ctx, "a", "b").Result()
+	if err != nil {
+		if err != redis.Nil {
+			logger.Ex(ctx, "redisHGetFailed", "%s", err.Error())
+		}
+		fmt.Println(err, v)
+		return
+	}
+	fmt.Println("-------")
+	fmt.Println(v)
 }
