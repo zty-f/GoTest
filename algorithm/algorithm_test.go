@@ -48,3 +48,48 @@ func lengthOfLongestSubstring(s string) int {
 	}
 	return res
 }
+
+// 2. [5]最长回文子串
+func TestLongestPalindrome(t *testing.T) {
+	fmt.Println(longestPalindrome("tattarrattat"))
+}
+
+func longestPalindrome(s string) string {
+	size := 1
+	l := len(s)
+	if l < 2 {
+		return s
+	}
+	res := s[0:1]
+	for i := 0; i < l; i++ {
+		m := i
+		n := i + 1
+		for m >= 0 && n < l {
+			if s[m] == s[n] {
+				if n-m+1 > size {
+					res = s[m : n+1]
+					size = n - m + 1
+				}
+				m--
+				n++
+			} else {
+				break
+			}
+		}
+		m = i - 1
+		n = i + 1
+		for m >= 0 && n < l {
+			if s[m] == s[n] {
+				if n-m+1 > size {
+					res = s[m : n+1]
+					size = n - m + 1
+				}
+				m--
+				n++
+			} else {
+				break
+			}
+		}
+	}
+	return res
+}
