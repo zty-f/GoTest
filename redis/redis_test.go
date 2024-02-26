@@ -54,3 +54,14 @@ func TestHGet(t *testing.T) {
 	fmt.Println("-------")
 	fmt.Println(v)
 }
+
+func TestHSetNx(t *testing.T) {
+	ctx := context.Background()
+	v, err := rd.HSetNX(ctx, "a", "c", "2").Result()
+	if err != nil {
+		fmt.Println(err, v)
+		return
+	}
+	fmt.Println("-------")
+	fmt.Println(v)
+}
