@@ -360,3 +360,8 @@ func TestStableSort(t *testing.T) {
 	})
 	fmt.Println(arr)
 }
+
+func TestFmt(t *testing.T) {
+	n, err := fmt.Printf("a %s", 1)
+	fmt.Println(n, err)
+}
