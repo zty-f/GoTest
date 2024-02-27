@@ -65,3 +65,14 @@ func TestHSetNx(t *testing.T) {
 	fmt.Println("-------")
 	fmt.Println(v)
 }
+
+func TestHLen(t *testing.T) {
+	ctx := context.Background()
+	v, err := rd.HLen(ctx, "4444444").Result()
+	if err != nil {
+		fmt.Println(err, v)
+		return
+	}
+	fmt.Println("-------")
+	fmt.Println(v)
+}
