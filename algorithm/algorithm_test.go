@@ -93,3 +93,36 @@ func longestPalindrome(s string) string {
 	}
 	return res
 }
+
+// 3. [2673]使二叉树所有路径值相等的最小代价
+/*
+      1
+  5		  2
+2	3	3	1
+*/
+func TestMinIncrements(t *testing.T) {
+	fmt.Println(minIncrements(7, []int{1, 5, 2, 2, 3, 3, 1}))
+}
+
+func minIncrements(n int, cost []int) int {
+	res := 0
+	for i := n - 2; i >= 0; i -= 2 {
+		res += abs(cost[i] - cost[i+1])
+		cost[i/2] += max(cost[i], cost[i+1])
+	}
+	return res
+}
+
+func abs(x int) int {
+	if x > 0 {
+		return x
+	}
+	return -x
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
