@@ -55,7 +55,7 @@ func GetRandomString1(l int) string {
 func GetRandomString2(l int) string {
 	bytes := []byte{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'}
 	var result = make([]byte, l)
-	for i := 0; i < l; i++ {
+	for i := range result {
 		result[i] = bytes[r.Intn(len(bytes))]
 	}
 	return string(result)

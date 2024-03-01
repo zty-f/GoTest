@@ -379,3 +379,39 @@ func TestSliceSite(t *testing.T) {
 	fmt.Println(s1)
 	fmt.Println(s2)
 }
+
+func TestForRange(t *testing.T) {
+	arr := []int{1, 2, 3, 4, 5}
+	for i, v := range arr {
+		fmt.Println(i, v)
+	}
+	for i := range arr {
+		fmt.Println(i)
+	}
+}
+
+func ForRange() {
+	arr := []int{1, 2, 3, 4, 5}
+	for i, _ := range arr {
+		_ = i
+	}
+}
+
+func ForI() {
+	arr := []int{1, 2, 3, 4, 5}
+	for i := 0; i < len(arr); i++ {
+		_ = i
+	}
+}
+
+func BenchmarkForRange(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		ForRange()
+	}
+}
+
+func BenchmarkForI(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		ForI()
+	}
+}
