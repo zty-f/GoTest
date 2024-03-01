@@ -362,6 +362,20 @@ func TestStableSort(t *testing.T) {
 }
 
 func TestFmt(t *testing.T) {
-	n, err := fmt.Printf("a %s", 1)
+	n, err := fmt.Printf("a %d", 1)
 	fmt.Println(n, err)
+}
+
+func TestSliceSite(t *testing.T) {
+	s1 := []int{1, 2, 3}
+	s2 := s1[1:]
+	s2[1] = 4
+	fmt.Println(s1)
+	fmt.Printf("%p\n", &s1[2]) // 0x1400001e340
+	fmt.Printf("%p\n", &s2[1]) // 0x1400001e340
+	s2 = append(s2, 5, 6, 7)   // 切片扩容底层会生成新的数组，不会影响原数组的切片
+	fmt.Printf("%p\n", &s1[2]) // 0x1400001e340
+	fmt.Printf("%p\n", &s2[1]) // 0x1400001a578
+	fmt.Println(s1)
+	fmt.Println(s2)
 }
