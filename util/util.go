@@ -1,7 +1,13 @@
 package util
 
 import (
+	"bytes"
 	"context"
+	"crypto/aes"
+	"crypto/cipher"
+	"encoding/base64"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"math"
 	"reflect"
@@ -157,3 +163,85 @@ func GetMonthEndTime(dateStr string) (int64, error) {
 	endOfMonth := nextMonth.Add(-time.Second)
 	return endOfMonth.Unix(), nil
 }
+
+// 转换类型为string
+func Strval(value interface{}) string {
+	var res string
+	if value == nil {
+		return res
+	}
+
+	switch temp := value.(type) {
+	case float64:
+		res = strconv.FormatFloat(temp, 'f', -1, 64)
+	case float32:
+		res = strconv.FormatFloat(float64(temp), 'f', -1, 64)
+	case int:
+		res = strconv.Itoa(temp)
+	case uint:
+		res = strconv.Itoa(int(temp))
+	case int8:
+		res = strconv.Itoa(int(temp))
+	case uint8:
+		res = strconv.Itoa(int(temp))
+	case int16:
+		res = strconv.Itoa(int(temp))
+	case uint16:
+		res = strconv.Itoa(int(temp))
+	case int32:
+		res = strconv.Itoa(int(temp))
+	case uint32:
+		res = strconv.Itoa(int(temp))
+	case int64:
+		res = strconv.FormatInt(temp, 10)
+	case uint64:
+		res = strconv.FormatUint(temp, 10)
+	case string:
+		res = temp
+	case []byte:
+		res = string(temp)
+	default:
+		newValue, _ := json.Marshal(value)
+		res = string(newValue)
+	}
+
+	return res
+}
+
+// cbc解密
+func CbcDecode(data, key, iv string) (string, error) {
+	_data, err := base64.StdEncoding.DecodeString(data)
+	if err != nil {
+		return "", err
+	}
+	_key := []byte(key)
+	_iv := []byte(iv)
+
+	block, err := aes.NewCipher(_key)
+	if err != nil {
+		return "", err
+	}
+	mode := cipher.NewCBCDecrypter(block, _iv)
+	mode.CryptBlocks(_data, _data)
+	_data = PKCS7UnPadding(_data)
+
+	return string(_data), nil
+}
+
+func PKCS7Padding(data []byte) []byte {
+	padding := aes.BlockSize - len(data)%aes.BlockSize
+	padtext := bytes.Repeat([]byte{byte(padding)}, padding)
+	return append(data, padtext...)
+}
+
+func PKCS7UnPadding(data []byte) []byte {
+	length := len(data)
+	unpadding := int(data[length-1])
+	return data[:(length - unpadding)]
+}
+
+func CheckStringForUnmarshal(checkStr string) (err error) {
+	return nil
+}
+
+var EmptyErrMsg = errors.New("empty resp")
