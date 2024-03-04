@@ -93,6 +93,8 @@ func (p *Proxy) Do(c context.Context) (*proxyRes, error) {
 		return proxyRes, err
 	}
 
+	fmt.Println(u)
+
 	// 如果是指定域名的服务直接切走，替换域名直接请求，不走代理
 	//if isSyhService, _ := SyhService[u.Host]; isSyhService {
 	//	p.Url = strings.ReplaceAll(p.Url, "xxx.xxx", "xxx.xxx")
