@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"math"
+	"math/rand"
 	"sort"
 	"strings"
 	"testing"
@@ -435,4 +436,19 @@ func calc(index string, a, b int) int {
 	ret := a + b
 	fmt.Println(index, a, b, ret)
 	return ret
+}
+
+// 生成一个可以指定长度的随机字符串包含大小写字母以及阿拉伯数字
+func GetRandomString(l int) string {
+	bytes := make([]byte, l)
+	for i := 0; i < l; i++ {
+		bytes[i] = byte(65 + rand.Intn(25)) //A=65
+	}
+	return string(bytes)
+}
+
+func TestGetRandomString(t *testing.T) {
+	for i := 0; i < 10; i++ {
+		fmt.Println(GetRandomString(10))
+	}
 }
