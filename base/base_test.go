@@ -452,3 +452,19 @@ func TestGetRandomString(t *testing.T) {
 		fmt.Println(GetRandomString(10))
 	}
 }
+
+func TestMap(t *testing.T) {
+	m := map[int]int{1: 2, 2: 3}
+	fmt.Println(m[1])
+	fmt.Println(m[2])
+	fmt.Println(m[3])
+	fmt.Println(m[0]) // 不存在的key默认值为0
+}
+
+func Test取余(t *testing.T) {
+	fmt.Println(5 % 2)
+	fmt.Println(6 % 2)
+	fmt.Println(7 % 2)
+	fmt.Println(8 % 2)
+	fmt.Println(9 % 2)
+}
