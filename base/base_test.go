@@ -468,3 +468,19 @@ func Test取余(t *testing.T) {
 	fmt.Println(8 % 2)
 	fmt.Println(9 % 2)
 }
+
+func TestTime(t *testing.T) {
+	// 使用 AddDate 的时候需要格外注意  只要把进行增减的这个时间设置为一号就可以避免如下的问题
+	date := time.Date(2024, 1, 31, 0, 0, 0, 0, time.Local)
+	format := date.Format("2006-01-02-15-04-05")
+	fmt.Println(format)
+	date = date.AddDate(0, 1, 0)
+	format = date.Format("2006-01-02-15-04-05")
+	fmt.Println(date)
+	date = time.Date(2024, 3, 31, 0, 0, 0, 0, time.Local)
+	format = date.Format("2006-01-02-15-04-05")
+	fmt.Println(format)
+	date = date.AddDate(0, -1, 0)
+	format = date.Format("2006-01-02-15-04-05")
+	fmt.Println(date)
+}

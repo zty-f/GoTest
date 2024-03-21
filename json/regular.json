@@ -1,13 +1,27 @@
 {
   "message_type": "4001200",
   "stu_id": "2100051684",
-  "stu_course_id": "89898989",
+  "stu_course_id": "444433344",
   "action": "1",
   "year_id": "1",
   "term_id": "1",
   "subject_id": "1",
   "course_id": "1",
-  "growth_value": "7",
-  "is_first": "1",
-  "create_time": "1702192249000"
+  "growth_value": "6",
+  "is_first": "0",
+  "create_time": "1646292717000"
+}
+
+{
+  "message_type": "4001200",
+  "stu_id": "2100051684",
+  "stu_course_id": "3444444",
+  "action": "0",
+  "year_id": "1",
+  "term_id": "1",
+  "subject_id": "1",
+  "course_id": "1",
+  "growth_value": "6",
+  "is_first": "0",
+  "create_time": "1644737517000"
 }

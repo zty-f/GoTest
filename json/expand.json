@@ -2,9 +2,9 @@
   "message_type": "4001100",
   "stu_id": "2100051684",
   "action": "1",
-  "year_id": "1",
-  "term_id": "1",
-  "subject_id": "1",
+  "year_id": "12",
+  "term_id": "13",
+  "subject_id": "31",
   "growth_value": "8",
-  "create_time": "1700721357000"
+  "create_time": "1646292717000"
 }
