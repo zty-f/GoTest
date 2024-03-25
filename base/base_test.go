@@ -484,3 +484,14 @@ func TestTime(t *testing.T) {
 	format = date.Format("2006-01-02-15-04-05")
 	fmt.Println(date)
 }
+
+func TestMap2(t *testing.T) {
+	m := map[int]int{1: 2, 2: 3}
+	fmt.Println(m[1])
+	fmt.Println(m[2])
+	fmt.Println(m[3])
+	fmt.Println(m[0]) // 不存在的key默认值为0
+	if v, ok := m[1]; ok {
+		fmt.Println(v, ok)
+	}
+}
