@@ -12,19 +12,12 @@ import (
 
 // 私钥生成
 var privateKey = []byte(`
------BEGIN RSA PRIVATE KEY-----
-MIGrAgEAAiEA4AAWS8HpsopKRXgoIgH59GrftgCBmtbTKVqcRe5b8KkCAwEAAQIh
-AKgz6IoippYG+haIT7qZuVLDsYg2Y2NP9KkIUU2QU8jxAhEA4CXa61AGOlpVkVqT
-9nwWWwIRAP/U3W87T02sJ8MLMH4pbEsCEAkJPaQS281qatyrPB/JrNUCEQCPPUn2
-O4j9fkSNCjjOirbdAhB4QSuToYz78eTgSo1KqL++
------END RSA PRIVATE KEY-----
+
 `)
 
 // 公钥: 根据私钥生成
 var publicKey = []byte(`
------BEGIN RSA PUBLIC KEY-----
-MCgCIQDgABZLwemyikpFeCgiAfn0at+2AIGa1tMpWpxF7lvwqQIDAQAB
------END RSA PUBLIC KEY-----
+
 `)
 
 // 生成密钥
@@ -73,7 +66,7 @@ func RsaDecrypt(ciphertext []byte) ([]byte, error) {
 	return rsa.DecryptPKCS1v15(rand.Reader, priv, ciphertext)
 }
 func main() {
-	//private, public, err := GenerateKey(256)
+	//private, public, err := GenerateKey(190)
 	//if err != nil {
 	//	fmt.Println(err)
 	//	return
