@@ -12,12 +12,10 @@ import (
 
 // 私钥生成
 var privateKey = []byte(`
-
 `)
 
 // 公钥: 根据私钥生成
 var publicKey = []byte(`
-
 `)
 
 // 生成密钥
@@ -77,6 +75,15 @@ func main() {
 	//fmt.Println(string(public))
 	data, _ := RsaEncryptPublic([]byte("2100051684"))
 	fmt.Println(base64.StdEncoding.EncodeToString(data))
-	origData, _ := RsaDecrypt(data)
+	str := base64.StdEncoding.EncodeToString(data)
+	decodeString, _ := base64.StdEncoding.DecodeString(str)
+	origData, err := RsaDecrypt(decodeString)
+	fmt.Println("-----------------")
+	fmt.Println(err)
 	fmt.Println(string(origData))
+	fmt.Println("-----------------")
+	origData, err = RsaDecrypt([]byte(str))
+	fmt.Println(err)
+	fmt.Println(string(origData))
+	fmt.Print("-------------------")
 }
