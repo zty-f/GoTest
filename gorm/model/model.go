@@ -12,6 +12,8 @@ type UserTask struct {
 	ExtData    string `gorm:"ext_data" json:"ext_data"`
 }
 
+const TableNameUserMedal = "user_medal"
+
 type UserMedal struct {
 	Id         int    `gorm:"id" json:"id"`
 	StuId      int64  `gorm:"stu_id" json:"stuId"`
@@ -23,4 +25,15 @@ type UserMedal struct {
 	CreateTime int64  `gorm:"create_time" json:"createTime"`
 	NoticeTime int64  `gorm:"notice_time" json:"noticeTime"`
 	UpdateTime int64  `gorm:"update_time" json:"updateTime"`
+}
+
+type UserMedalMini struct {
+	Id         int   `gorm:"id" json:"id"`
+	MedalId    int   `gorm:"medal_id" json:"medalId"`
+	Year       int   `gorm:"year" json:"year"`
+	CreateTime int64 `gorm:"create_time" json:"createTime"`
+}
+
+func (UserMedal) TabName() string {
+	return TableNameUserMedal
 }
