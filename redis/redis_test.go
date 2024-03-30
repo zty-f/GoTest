@@ -76,3 +76,14 @@ func TestHLen(t *testing.T) {
 	fmt.Println("-------")
 	fmt.Println(v)
 }
+
+func TestExists(t *testing.T) {
+	ctx := context.Background()
+	v, err := rd.Exists(ctx, "zset").Result()
+	if err != nil {
+		fmt.Println(err, v)
+		return
+	}
+	fmt.Println("-------")
+	fmt.Println(v)
+}
