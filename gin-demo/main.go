@@ -6,6 +6,7 @@ import "github.com/gin-gonic/gin"
 func main() {
 	engine := gin.New()
 	engine.GET("/", Get)
+	engine.POST("/testShouldBind", TestShouldBind)
 	err := engine.Run(":8080")
 	if err != nil {
 		return
