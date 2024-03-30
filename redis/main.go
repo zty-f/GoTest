@@ -1,4 +1,4 @@
-package main
+package cache
 
 import (
 	"context"
@@ -6,6 +6,26 @@ import (
 	"github.com/go-redis/redis/v8"
 	"time"
 )
+
+type UserMedalMini struct {
+	Id         int   `gorm:"id" json:"id"`
+	MedalId    int   `gorm:"medal_id" json:"medalId"`
+	Year       int   `gorm:"year" json:"year"`
+	CreateTime int64 `gorm:"create_time" json:"createTime"`
+}
+
+type UserMedal struct {
+	Id         int    `gorm:"id" json:"id"`
+	StuId      int64  `gorm:"stu_id" json:"stuId"`
+	MedalId    int    `gorm:"medal_id" json:"medalId"`
+	Year       int    `gorm:"year" json:"year"`
+	IsWear     int    `gorm:"is_wear" json:"isWear"`
+	ExtData    string `gorm:"ext_data" json:"extData"`
+	WearTime   int64  `gorm:"wear_time" json:"wearTime"`
+	CreateTime int64  `gorm:"create_time" json:"createTime"`
+	NoticeTime int64  `gorm:"notice_time" json:"noticeTime"`
+	UpdateTime int64  `gorm:"update_time" json:"updateTime"`
+}
 
 var rd *redis.Client
 

@@ -1,8 +1,9 @@
-package main
+package cache
 
 import (
 	"context"
 	"fmt"
+	"github.com/bytedance/sonic"
 	"testing"
 )
 
@@ -64,4 +65,50 @@ func TestLGetAll(t *testing.T) {
 		return
 	}
 	fmt.Println(list)
+}
+
+func UserMedalsToStrings(userMedals []UserMedalMini) ([]string, error) {
+	result := make([]string, 0)
+	for _, v := range userMedals {
+		str, err := sonic.Marshal(v)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, string(str))
+	}
+	return result, nil
+}
+
+func TestStructListCache(t *testing.T) {
+	userMedalMinis := []UserMedalMini{
+		{Id: 1, MedalId: 1, Year: 2021},
+		{Id: 2, MedalId: 2, Year: 2022},
+		{Id: 3, MedalId: 3, Year: 2023},
+	}
+	strings, err := UserMedalsToStrings(userMedalMinis)
+	if err != nil {
+		return
+	}
+	err, count := LPush("user1", strings...)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(count)
+	err, res := LGetAll("user1")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	userMedals := make([]UserMedal, 0)
+	for _, v := range res {
+		userMedal := UserMedal{}
+		err = sonic.Unmarshal([]byte(v), &userMedal)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		userMedals = append(userMedals, userMedal)
+	}
+	fmt.Printf("%+v\n", userMedals)
 }
