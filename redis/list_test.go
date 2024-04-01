@@ -112,3 +112,14 @@ func TestStructListCache(t *testing.T) {
 	}
 	fmt.Printf("%+v\n", userMedals)
 }
+
+func TestAppend(t *testing.T) {
+	tmp := make([]UserMedalMini, 0)
+	userMedalMinis := []UserMedalMini{
+		{Id: 1, MedalId: 1, Year: 2021},
+		{Id: 2, MedalId: 2, Year: 2022},
+		{Id: 3, MedalId: 3, Year: 2023},
+	}
+	tmp = append(tmp, userMedalMinis...)
+	fmt.Printf("%+v\n", tmp)
+}
