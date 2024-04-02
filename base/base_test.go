@@ -495,3 +495,8 @@ func TestMap2(t *testing.T) {
 		fmt.Println(v, ok)
 	}
 }
+
+func TestSlice11(t *testing.T) {
+	s := []int{1, 2, 3, 4, 5, 6}
+	fmt.Println(s[0:4])
+}
