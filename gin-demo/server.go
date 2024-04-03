@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 )
 
 func Get(c *gin.Context) {
@@ -25,12 +26,12 @@ type Test1 struct {
 
 func TestShouldBind(c *gin.Context) {
 	test := &Test{}
-	err := c.ShouldBind(test)
+	err := c.ShouldBindWith(test, binding.Form) //这个不会影响bind次数
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	test2 := &Test1{}
+	test2 := &Test{}
 	err2 := c.ShouldBind(test2)
 	if err2 != nil {
 		fmt.Println(err2)
