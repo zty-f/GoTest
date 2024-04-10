@@ -87,3 +87,14 @@ func TestExists(t *testing.T) {
 	fmt.Println("-------")
 	fmt.Println(v)
 }
+
+func TestSetNx(t *testing.T) {
+	ctx := context.Background()
+	v, err := rd.SetNX(ctx, "t", "c", 10*time.Second).Result()
+	if err != nil {
+		fmt.Println(err, v)
+		return
+	}
+	fmt.Println("-------")
+	fmt.Println(v)
+}
