@@ -16,6 +16,26 @@
         "create_time": 1703235908,
         "update_uname": "更新人",
         "update_time": 1703235908
+      },
+      {
+        "id": 0,
+        "taskId": 2001300,
+        "taskType": 1,
+        "taskName": "完成课程",
+        "taskDesc": "每上完成一节课",
+        "growthValue": 50,
+        "taskIcon": "https://static-inc.xiwang.com/mall/148e6716788b7f71e5747fc9de7e5fc4.png",
+        "taskRuleDesc": "【完成条件】\n当一节课的观看进度为100%时，且任务完成时间距离这节课结束不超过30天，即算完成该任务。\n注意：每节课完课只计算1次。对于同一节课参与了直播又回看课程，只算一次完课。\n完课获得50成长值。\n\n【课程类型】\n可以完成该任务的包含正价课直播（含伴学）、 体验课及特训班。",
+        "taskState": 20,
+        "skipType": 3,
+        "skipLink": "xeswxsubject://xrsApp?m=apphome&d={\"p\":{\"index\":2,\"subIndex\":1}}",
+        "buttonText": "去上课",
+        "grayTips": "新课未解锁",
+        "rank": 40,
+        "taskProgress": {
+          "finishNum": 0,
+          "totalNum": 0
+        }
       }
     ]
   },

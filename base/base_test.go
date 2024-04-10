@@ -480,7 +480,10 @@ func TestTime(t *testing.T) {
 	date = time.Date(2024, 3, 31, 0, 0, 0, 0, time.Local)
 	format = date.Format("2006-01-02-15-04-05")
 	fmt.Println(format)
-	date = date.AddDate(0, -1, 0)
+	//date = date.AddDate(0, -1, 0)
+	//format = date.Format("2006-01-02-15-04-05")
+	//fmt.Println(date)
+	date = time.Now().Add(-time.Hour * 24 * 30)
 	format = date.Format("2006-01-02-15-04-05")
 	fmt.Println(date)
 }
