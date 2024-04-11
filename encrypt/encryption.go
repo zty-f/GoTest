@@ -8,14 +8,23 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
+	"time"
 )
 
 // 私钥生成
 var privateKey = []byte(`
+-----BEGIN RSA PRIVATE KEY-----
+MIGCAgEAAhg9XZlJScmq35D60n+C+cNZUUsbVE0jq0ECAwEAAQIYMugVxH2I5c6n
+N9wtCabsiejwkFG29AC9Agx9Bh4VzHwG1GxdCFcCDH2nG9vbvUoLxfwKJwIMYIXp
+kkDV/Fvh8Y1vAgwI/29yRgD/DWrHCp8CDG0r2zc4jgl4BN0+dg==
+-----END RSA PRIVATE KEY-----
 `)
 
 // 公钥: 根据私钥生成
 var publicKey = []byte(`
+-----BEGIN RSA PUBLIC KEY-----
+MB8CGD1dmUlJyarfkPrSf4L5w1lRSxtUTSOrQQIDAQAB
+-----END RSA PUBLIC KEY-----
 `)
 
 // 生成密钥
@@ -51,6 +60,7 @@ func RsaEncryptPublic(origData []byte) ([]byte, error) {
 // 解密
 func RsaDecrypt(ciphertext []byte) ([]byte, error) {
 	//解密
+	t := time.Now()
 	block, _ := pem.Decode(privateKey)
 	if block == nil {
 		return nil, errors.New("private key error!")
@@ -61,6 +71,7 @@ func RsaDecrypt(ciphertext []byte) ([]byte, error) {
 		return nil, err
 	}
 	// 解密
+	fmt.Println("耗时：", time.Since(t).Microseconds())
 	return rsa.DecryptPKCS1v15(rand.Reader, priv, ciphertext)
 }
 func main() {
@@ -82,8 +93,8 @@ func main() {
 	fmt.Println(err)
 	fmt.Println(string(origData))
 	fmt.Println("-----------------")
-	origData, err = RsaDecrypt([]byte(str))
-	fmt.Println(err)
-	fmt.Println(string(origData))
-	fmt.Print("-------------------")
+	//origData, err = RsaDecrypt([]byte(str))
+	//fmt.Println(err)
+	//fmt.Println(string(origData))
+	//fmt.Print("-------------------")
 }
