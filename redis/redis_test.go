@@ -129,3 +129,15 @@ func TestExpireNX(t *testing.T) {
 func Test取余(t *testing.T) {
 	fmt.Println(2100051684 / 8 % 3)
 }
+
+// GetDayEndTime 获取一天的结束
+func GetDayEndTime(t time.Time) time.Time {
+	return time.Date(t.Year(), t.Month(), t.Day(), 23, 59, 59, 0, t.Location())
+}
+
+func TestRand(t *testing.T) {
+	rand.Seed(time.Now().UnixNano())
+	randSec := rand.Intn(10)
+	fmt.Println(randSec)
+	fmt.Println(GetDayEndTime(time.Now()).Add(time.Duration(randSec) * time.Second).Sub(time.Now()))
+}
