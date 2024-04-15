@@ -5,6 +5,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"math/rand"
 	"testing"
 	"time"
 
@@ -43,7 +44,7 @@ func TestRedisContextDeadlineExceeded(t *testing.T) {
 
 func TestHGet(t *testing.T) {
 	ctx := context.Background()
-	v, err := rd.HGet(ctx, "a", "b").Result()
+	v, err := rd.HGet(ctx, "yyy", "t").Result()
 	if err != nil {
 		if err != redis.Nil {
 			logger.Ex(ctx, "redisHGetFailed", "%s", err.Error())
@@ -91,6 +92,32 @@ func TestExists(t *testing.T) {
 func TestSetNx(t *testing.T) {
 	ctx := context.Background()
 	v, err := rd.SetNX(ctx, "t", "c", 10*time.Second).Result()
+	if err != nil {
+		fmt.Println(err, v)
+		return
+	}
+	fmt.Println("-------")
+	fmt.Println(v)
+}
+
+func TestExpireAt(t *testing.T) {
+	ctx := context.Background()
+	rand.Seed(time.Now().UnixNano())
+	fmt.Println(rand.Intn(100))
+	x := rand.Int63()
+	v, err := rd.ExpireAt(ctx, "zset", time.Now().Add(time.Duration(x)*time.Second)).Result()
+	if err != nil {
+		fmt.Println(err, v)
+		return
+	}
+	fmt.Println("-------")
+	fmt.Println(v)
+}
+
+func TestExpireNX(t *testing.T) {
+	ctx := context.Background()
+	// redis 7.0以上版本才支持
+	v, err := rd.ExpireNX(ctx, "list2", 120*time.Second).Result()
 	if err != nil {
 		fmt.Println(err, v)
 		return
