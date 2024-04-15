@@ -125,3 +125,7 @@ func TestExpireNX(t *testing.T) {
 	fmt.Println("-------")
 	fmt.Println(v)
 }
+
+func Test取余(t *testing.T) {
+	fmt.Println(2100051684 / 8 % 3)
+}
