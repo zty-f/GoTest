@@ -141,3 +141,31 @@ func TestRand(t *testing.T) {
 	fmt.Println(randSec)
 	fmt.Println(GetDayEndTime(time.Now()).Add(time.Duration(randSec) * time.Second).Sub(time.Now()))
 }
+
+func TestTime(t *testing.T) {
+	fmt.Println(time.Now().Add(-6 * time.Second).Before(time.Now()))
+	fmt.Println(time.Now().Add(-6 * time.Second).After(time.Now()))
+
+	lastFinishTime, _ := time.ParseInLocation("2006-01-02", "2024-04-09", time.Local)
+	fmt.Println(lastFinishTime)
+	fmt.Println(time.Now().Sub(lastFinishTime) < 7*24*time.Hour)
+}
+
+type User struct {
+	m map[int]string
+}
+
+func TestMap(t *testing.T) {
+	u := &User{}
+	fmt.Println(u.m)        // map[]
+	fmt.Println(u.m == nil) // true
+	s, ok := u.m[1]
+	fmt.Println(s, ok) // false
+	u.m[1] = "1"       // 空指针异常
+	var m map[int]string
+	fmt.Println(m) // map[]
+	s, ok = m[1]
+	fmt.Println(s, ok) // false
+	m[1] = "1"         // 空指针异常
+	// 总结 当map为nil的时候，取值会返回零值，不出错，赋值会报空指针异常
+}
