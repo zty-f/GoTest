@@ -503,3 +503,13 @@ func TestSlice11(t *testing.T) {
 	s := []int{1, 2, 3, 4, 5, 6}
 	fmt.Println(s[0:4])
 }
+
+func TestIndex(t *testing.T) {
+	sourceData := "{112233gold_price:1}"
+	if strings.Index(sourceData, "gold_price") == -1 {
+		fmt.Println("不存在")
+		return
+	}
+	fmt.Println("存在")
+	fmt.Println(sourceData)
+}
