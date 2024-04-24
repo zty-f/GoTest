@@ -7,7 +7,7 @@ import (
 
 // 根据过期剩余时间秒数获取具体截止日期
 func main() {
-	ttl := int64(273083)
+	ttl := int64(1840081)
 	dateTime := time.Now().Unix() + ttl
 
 	fmt.Println("时间戳：", dateTime)
