@@ -7,6 +7,7 @@ func main() {
 	engine := gin.New()
 	engine.GET("/", Get)
 	engine.POST("/testShouldBind", TestShouldBind)
+	engine.GET("/testRetry", TestRetry)
 	err := engine.Run(":8080")
 	if err != nil {
 		return
