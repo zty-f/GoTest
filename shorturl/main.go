@@ -4,7 +4,6 @@ import (
 	"crypto/md5"
 	"fmt"
 	"math"
-	"net/url"
 	"strconv"
 	"strings"
 	"time"
@@ -12,21 +11,21 @@ import (
 
 func main() {
 	//shortUrl := "OWJdbu"
-	//sourceUrl := "www.baidu.com"
-	//getSign(sourceUrl)
+	sourceUrl := "https://www.baidu.com/s?ie=UTF-8&wd=%E7%BE%8E%E5%A5%B3"
+	getSign(sourceUrl)
 	//hashValue := DecodeStr(shortUrl)
 	//newTable := getTable(uint(hashValue))
 	//fmt.Println(newTable)
-	url1, _ := url.QueryUnescape("%09https%3A%2F%2Fac.xiwang.com%2Fcampus-activity%2F%23%2F%3Fuuid%3D42a0a066718542809cb74a1ccfa0ab56")
-	fmt.Println(url1)
-	//url1 = strings.TrimSpace(url1)
-	fmt.Println(url1)
-	parsedURL, err := url.Parse(url1)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	fmt.Println(parsedURL)
+	//url1, _ := url.QueryUnescape("%09https%3A%2F%2Fac.xiwang.com%2Fcampus-activity%2F%23%2F%3Fuuid%3D42a0a066718542809cb74a1ccfa0ab56")
+	//fmt.Println(url1)
+	////url1 = strings.TrimSpace(url1)
+	//fmt.Println(url1)
+	//parsedURL, err := url.Parse(url1)
+	//if err != nil {
+	//	fmt.Println(err)
+	//	return
+	//}
+	//fmt.Println(parsedURL)
 }
 
 // DecodeStr 62进制到int进制
