@@ -169,3 +169,9 @@ func TestMap(t *testing.T) {
 	m[1] = "1"         // 空指针异常
 	// 总结 当map为nil的时候，取值会返回零值，不出错，赋值会报空指针异常
 }
+
+func TestGet(t *testing.T) {
+	result, err := rd.Get(context.Background(), "key").Result()
+	fmt.Println(result)
+	fmt.Println(err)
+}

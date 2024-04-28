@@ -3,6 +3,7 @@ package base
 import (
 	"codeup.aliyun.com/61e54b0e0bb300d827e1ae27/backend/golib/logger"
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"math"
@@ -512,4 +513,16 @@ func TestIndex(t *testing.T) {
 	}
 	fmt.Println("存在")
 	fmt.Println(sourceData)
+}
+
+func TestStringSlice(t *testing.T) {
+	var res []string
+	c := []string{"3vjzP3", "CqSr40", "VfI63P"}
+	b, _ := json.Marshal(c)
+	str := string(b)
+	err := json.Unmarshal([]byte(str), &res)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(res)
 }
