@@ -126,3 +126,42 @@ func max(a, b int) int {
 	}
 	return b
 }
+
+// 4. [27]移除元素
+func TestRemoveElement(t *testing.T) {
+	nums := []int{0, 1, 2, 2, 3, 0, 4, 2}
+	fmt.Println(removeElement1(nums, 2))
+	fmt.Println(nums)
+	nums = []int{3, 2, 2, 3}
+	fmt.Println(removeElement2(nums, 3))
+	fmt.Println(nums)
+	nums = []int{4}
+	fmt.Println(removeElement1(nums, 4))
+	fmt.Println(nums)
+}
+
+// 这样的方法两个指针在最坏的情况下合起来只遍历了数组一次。与方法一不同的是，方法二避免了需要保留的元素的重复赋值操作。
+func removeElement1(nums []int, val int) int {
+	i, j := 0, len(nums)
+	for i < j {
+		if nums[i] == val {
+			nums[i], nums[j-1] = nums[j-1], nums[i]
+			j--
+		} else {
+			i++
+		}
+	}
+	return i
+}
+
+// 这样的算法在最坏情况下（输入数组中没有元素等于 val），左右指针各遍历了数组一次。
+func removeElement2(nums []int, val int) int {
+	i := 0
+	for j := 0; j < len(nums); j++ {
+		if nums[j] != val {
+			nums[i] = nums[j]
+			i++
+		}
+	}
+	return i
+}
