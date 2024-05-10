@@ -526,3 +526,9 @@ func TestStringSlice(t *testing.T) {
 	}
 	fmt.Println(res)
 }
+
+// 数组转换为字符串
+func TestStrings2String(t *testing.T) {
+	c := []string{"3vjzP3", "CqSr40", "VfI63P"}
+	fmt.Println(strings.Join(c, ","))
+}
