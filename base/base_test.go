@@ -532,3 +532,13 @@ func TestStrings2String(t *testing.T) {
 	c := []string{"3vjzP3", "CqSr40", "VfI63P"}
 	fmt.Println(strings.Join(c, ","))
 }
+
+func TestSplit11(t *testing.T) {
+	res := make([]string, 0)
+	x := "1,2,3,4,5"
+	res = append(res, strings.Split(x, ",")...)
+	y := ""
+	res = append(res, strings.Split(y, ",")...) //为空的也会生成一个append，需要特殊处理才行
+	fmt.Println(res)                            // [1 2 3 4 5 ]
+	fmt.Println(len(res))                       // 6
+}
