@@ -10,6 +10,7 @@ import (
 	"math/rand"
 	"sort"
 	"strings"
+	"test/util"
 	"testing"
 	"time"
 )
@@ -541,4 +542,12 @@ func TestSplit11(t *testing.T) {
 	res = append(res, strings.Split(y, ",")...) //为空的也会生成一个append，需要特殊处理才行
 	fmt.Println(res)                            // [1 2 3 4 5 ]
 	fmt.Println(len(res))                       // 6
+}
+
+func TestTimeRange(t *testing.T) {
+	planStartTime, _ := util.StrToTime("2024-05-31 19:00:00")
+	dayTime := util.GetDayStartTime(planStartTime)
+	fmt.Println(dayTime)
+	before7DayTime := dayTime.Add(-1 * 7 * 24 * time.Hour)
+	fmt.Println(before7DayTime)
 }

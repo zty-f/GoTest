@@ -15,27 +15,6 @@ import (
 	"time"
 )
 
-// StrToUnixTime 字符串转时间戳
-func StrToUnixTime(str string) (int64, error) {
-	layout := "2006-01-02 15:04:05"
-	t, err := time.ParseInLocation(layout, str, time.Local)
-	if err != nil {
-		return 0, err
-	}
-	return t.Unix(), nil
-}
-
-func StrToTime(str string) (time.Time, error) {
-	layout := "2006-01-02 15:04:05"
-	return time.ParseInLocation(layout, str, time.Local)
-}
-
-// TimeToStr 时间戳转字符串
-func TimeToStr(timer int64) string {
-	tm := time.Unix(timer, 0)
-	return tm.Format("2006-01-02 15:04:05")
-}
-
 // IsNil IsNil判断一个值是否为nil，特定类型已经声明但未赋值也会返回true
 func IsNil(expr interface{}) bool {
 	if nil == expr {
