@@ -3,9 +3,12 @@ package base
 import (
 	"codeup.aliyun.com/61e54b0e0bb300d827e1ae27/backend/golib/logger"
 	"context"
+	"crypto/md5"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/spf13/cast"
 	"math"
 	"math/rand"
 	"sort"
@@ -550,4 +553,17 @@ func TestTimeRange(t *testing.T) {
 	fmt.Println(dayTime)
 	before7DayTime := dayTime.Add(-1 * 7 * 24 * time.Hour)
 	fmt.Println(before7DayTime)
+}
+
+func TestMd5(t *testing.T) {
+	str := cast.ToString(76232298) + "edc_exam_token_string"
+	token := md5.Sum([]byte(str))
+	fmt.Printf("%x\n", token)
+	fmt.Println(hex.EncodeToString(token[:]))
+}
+
+func Test修改用户类型(t *testing.T) {
+	stuId := 2100051684
+	fmt.Println((stuId / 8) % 3)
+	fmt.Println(stuId % 8)
 }
