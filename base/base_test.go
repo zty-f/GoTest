@@ -567,3 +567,51 @@ func Test修改用户类型(t *testing.T) {
 	fmt.Println((stuId / 8) % 3)
 	fmt.Println(stuId % 8)
 }
+
+func NumberIntegralMultipleCountInRange(number int, start int, end int) int {
+	if number <= 0 {
+		return 0
+	}
+
+	if end <= start {
+		return 0
+	}
+
+	if end < number {
+		return 0
+	}
+
+	counts := 0
+	cursor := start
+	for {
+		if cursor > start && cursor <= end {
+			counts = counts + 1
+		}
+		if cursor >= end {
+			break
+		}
+
+		cursor = cursor + number
+	}
+
+	return counts
+}
+
+func TestNumberIntegralMultipleCountInRange(t *testing.T) {
+	fmt.Println(NumberIntegralMultipleCountInRange(10, 40, 60))
+}
+
+func TestRoundDown(t *testing.T) {
+	fmt.Println(RoundDown(11))
+	fmt.Println(RoundDown(20))
+	fmt.Println(RoundDown(34))
+	fmt.Println(RoundDown(45))
+	fmt.Println(RoundDown(56))
+	fmt.Println(RoundDown(101))
+	fmt.Println(RoundDown(100))
+	fmt.Println(RoundDown(203))
+}
+
+func RoundDown(number int) int {
+	return number - number%10
+}
