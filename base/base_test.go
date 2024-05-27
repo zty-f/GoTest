@@ -615,3 +615,31 @@ func TestRoundDown(t *testing.T) {
 func RoundDown(number int) int {
 	return number - number%10
 }
+
+// 错题代码实例，极其不推荐
+func WrongExample() {
+	result := make([]string, 0)
+	for i := 0; i < 10; i++ {
+		res := "通过rpc或者http的方式请求到数据" // 平均一次请求100ms，10次请求就是1s，假如需要循环100次，那就是10s，这样就会导致接口严重超时
+		result = append(result, res)
+	}
+	fmt.Println(result)
+	/*
+		解决办法：
+		 1. 通过批量请求的方式来减低每次网络请求造成的耗时问题，一次性把数据全部请求出来进行处理
+		 2. 通过并发的方式来减少每次网络请求造成的耗时问题，一次性把数据全部请求出来进行处理
+		 3. 如果对于列表信息请求接口返回中不是用户这次请求需要展示的数据，而是类似于模块的跳转链接的这类情况，可以不用在列表接口里
+			提前把数据构造好，除非数据都是很好构造的情况，不需要额外请求数据，其余情况都可以在用户真实点击的时候再去请求接口获取跳转链接，把过程拆分成多个阶段。
+	*/
+}
+
+func TestRandom(t *testing.T) {
+	rand.Seed(time.Now().UnixNano())
+	fmt.Println(rand.Intn(10))
+	fmt.Println(rand.Intn(10))
+	fmt.Println(rand.Intn(10))
+	fmt.Println(rand.Intn(10))
+	fmt.Println(rand.Intn(10))
+	fmt.Println(rand.Intn(10))
+	fmt.Println(rand.Intn(10))
+}
