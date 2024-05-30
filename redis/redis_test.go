@@ -175,3 +175,69 @@ func TestGet(t *testing.T) {
 	fmt.Println(result)
 	fmt.Println(err)
 }
+
+func TestMultiSet(t *testing.T) {
+	ctx := context.Background()
+	keys := []string{"key1", "key2", "key3", "key4"}
+	result := make(map[string]string)
+
+	pipeline := rd.Pipeline()
+
+	redisResultMap := make(map[string]*redis.StatusCmd)
+	for _, key := range keys {
+		redisResultMap[key] = pipeline.Set(ctx, key, 1, 10*time.Minute)
+	}
+
+	_, err := pipeline.Exec(ctx)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	for key, redisResult := range redisResultMap {
+		result[key] = redisResult.Val()
+		fmt.Println(key, result[key])
+		fmt.Println(redisResult.Result())
+	}
+
+	err = pipeline.Close()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println(result)
+}
+
+func TestMultiGet(t *testing.T) {
+	ctx := context.Background()
+	keys := []string{"key1", "key2", "key3", "key4", "key5"}
+	result := make(map[string]string)
+
+	pipeline := rd.Pipeline()
+
+	redisResultMap := make(map[string]*redis.StringCmd)
+	for _, key := range keys {
+		redisResultMap[key] = pipeline.Get(ctx, key)
+	}
+
+	_, err := pipeline.Exec(ctx)
+	if err != nil && !errors.Is(err, redis.Nil) {
+		fmt.Println(err)
+		return
+	}
+
+	for key, redisResult := range redisResultMap {
+		result[key] = redisResult.Val()
+		fmt.Println(redisResult.Val())
+		fmt.Println(redisResult.Result())
+	}
+
+	err = pipeline.Close()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println(result)
+}

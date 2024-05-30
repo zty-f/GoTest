@@ -3,5 +3,35 @@
   "stu_id": "2100051684",
   "trans_end_time": "2023-11-29 15:10:00",
   "create_time": "1700721357000",
-  "1":
+  "1":{
+    "message_type":"2001300",
+    "is_online":"1",
+    "stu_id":"2100051684",
+    "stu_course_id":"17850239",
+    "catalog_id":"1444047",
+    "course_id":"2003753",
+    "plan_id":"10038822",
+    "create_time":"1717059659000"
+  },
+  "2": {
+    "message_type":"2001300",
+    "is_online":"1",
+    "stu_id":"2100051684",
+    "stu_course_id":"17896043",
+    "catalog_id":"1444179",
+    "course_id":"2003767",
+    "plan_id":"10038926",
+    "create_time":"1717059699000"
+  },
+  "3":{
+    "message_type":"2001400",
+    "stu_id":"2100051684",
+    "stu_course_id":"17896043",
+    "catalog_id":"1444179",
+    "course_id":"2003767",
+    "plan_id":"10038926",
+    "ratio":"35",
+    "create_time":"1717059689000",
+    "part": "xwx"
+  }
 }
