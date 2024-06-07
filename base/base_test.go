@@ -642,4 +642,6 @@ func TestRandom(t *testing.T) {
 	fmt.Println(rand.Intn(10))
 	fmt.Println(rand.Intn(10))
 	fmt.Println(rand.Intn(10))
+	// 生成一个随机数 范围在1 - 100
+	fmt.Println(rand.Intn(100) + 1)
 }
