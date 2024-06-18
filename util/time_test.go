@@ -160,3 +160,21 @@ func TestDefer3(t *testing.T) {
 	fmt.Println(defer_fun3(1)) // 3
 	fmt.Println(defer_fun4())  // 1 4 4
 }
+
+func TestGetWeekStartAndEnd(t *testing.T) {
+	start, end := GetWeekStartAndEnd()
+	fmt.Println(start, end)
+	fmt.Println(time.Now().Weekday())
+}
+
+func TestGetMonday(t *testing.T) {
+	monday := GetMonday("0102")
+	fmt.Println(monday)
+}
+
+// Truncate方法只支持标准时区
+func TestTimeTruncate(t *testing.T) {
+	now := time.Now().UTC()
+	fmt.Println(now)
+	fmt.Println(now.Truncate(24 * time.Hour))
+}

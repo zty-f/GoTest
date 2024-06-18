@@ -305,3 +305,29 @@ func GetIntervalTime(t time.Time) time.Duration {
 	}
 	return interval
 }
+
+// GetWeekStartAndEnd 获取本周的开始时间和结束时间
+func GetWeekStartAndEnd() (time.Time, time.Time) {
+	now := time.Now()
+	offset := int(time.Monday - now.Weekday())
+	if offset > 0 {
+		offset = -6
+	}
+	monday := now.AddDate(0, 0, offset)
+	weekStart := time.Date(monday.Year(), monday.Month(), monday.Day(), 0, 0, 0, 0, time.Local)
+	// 本周结束时间（周日）
+	weekEnd := weekStart.AddDate(0, 0, 6).Add(time.Hour*23 + time.Minute*59 + time.Second*59)
+
+	return weekStart, weekEnd
+}
+
+// GetMonday 获取周一，想要什么格式自己传
+func GetMonday(layout string) string {
+	weekStart, _ := GetWeekStartAndEnd()
+
+	if layout == "" {
+		layout = "2006-01-02"
+	}
+
+	return weekStart.Format(layout)
+}
