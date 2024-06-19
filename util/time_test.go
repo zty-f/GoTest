@@ -173,8 +173,14 @@ func TestGetMonday(t *testing.T) {
 }
 
 // Truncate方法只支持标准时区
-func TestTimeTruncate(t *testing.T) {
+func TestTimeTruncate1(t *testing.T) {
 	now := time.Now().UTC()
+	fmt.Println(now)
+	fmt.Println(now.Truncate(24 * time.Hour))
+}
+
+func TestTimeTruncate2(t *testing.T) {
+	now := time.Now()
 	fmt.Println(now)
 	fmt.Println(now.Truncate(24 * time.Hour))
 }
