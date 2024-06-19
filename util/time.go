@@ -331,3 +331,8 @@ func GetMonday(layout string) string {
 
 	return weekStart.Format(layout)
 }
+
+// GetTwoDateIntervalDuration 获取开始时间到结束时间的时间间隔
+func GetTwoDateIntervalDuration(startTime time.Time, endTime time.Time) time.Duration {
+	return endTime.Sub(startTime)
+}

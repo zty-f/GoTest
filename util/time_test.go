@@ -2,6 +2,7 @@ package util
 
 import (
 	"fmt"
+	"test/constant"
 	"testing"
 	"time"
 )
@@ -183,4 +184,20 @@ func TestTimeTruncate2(t *testing.T) {
 	now := time.Now()
 	fmt.Println(now)
 	fmt.Println(now.Truncate(24 * time.Hour))
+}
+
+func TestTimeDuration(t *testing.T) {
+	start := time.Now()
+	end := start.Add(constant.SevenDay)
+	duration := GetTwoDateIntervalDuration(start, end)
+	fmt.Println(duration)
+	if duration > constant.SevenDay {
+		fmt.Println(">大于")
+	}
+	if duration < constant.SevenDay {
+		fmt.Println("<小于")
+	}
+	if duration == constant.SevenDay {
+		fmt.Println("=等于")
+	}
 }
