@@ -645,3 +645,34 @@ func TestRandom(t *testing.T) {
 	// 生成一个随机数 范围在1 - 100
 	fmt.Println(rand.Intn(100) + 1)
 }
+
+func trimPrefix0(str string) string {
+	return strings.TrimPrefix(str, "0")
+}
+
+func TestString1(t *testing.T) {
+	fmt.Println(trimPrefix0("01"))
+	fmt.Println(trimPrefix0("08"))
+	fmt.Println(trimPrefix0("09"))
+	fmt.Println(trimPrefix0("10"))
+	fmt.Println(trimPrefix0("11"))
+	fmt.Println(trimPrefix0("12"))
+}
+
+func AddPrefix0(str string) string {
+	if cast.ToInt(str) < 10 {
+		return "0" + str
+	}
+	return str
+}
+
+func TestString2(t *testing.T) {
+	fmt.Println(AddPrefix0("1"))
+	fmt.Println(AddPrefix0("2"))
+	fmt.Println(AddPrefix0("3"))
+	fmt.Println(AddPrefix0("6"))
+	fmt.Println(AddPrefix0("9"))
+	fmt.Println(AddPrefix0("10"))
+	fmt.Println(AddPrefix0("11"))
+	fmt.Println(AddPrefix0("12"))
+}
