@@ -660,6 +660,9 @@ func TestString1(t *testing.T) {
 }
 
 func AddPrefix0(str string) string {
+	if strings.HasPrefix(str, "0") {
+		return str
+	}
 	if cast.ToInt(str) < 10 {
 		return "0" + str
 	}
@@ -675,4 +678,12 @@ func TestString2(t *testing.T) {
 	fmt.Println(AddPrefix0("10"))
 	fmt.Println(AddPrefix0("11"))
 	fmt.Println(AddPrefix0("12"))
+}
+
+func TestString3(t *testing.T) {
+	str := "06"
+	str = AddPrefix0(str)
+	fmt.Println(str)
+	fmt.Println(trimPrefix0(str))
+	fmt.Println(str)
 }

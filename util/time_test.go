@@ -2,6 +2,7 @@ package util
 
 import (
 	"fmt"
+	"github.com/spf13/cast"
 	"test/constant"
 	"testing"
 	"time"
@@ -200,4 +201,9 @@ func TestTimeDuration(t *testing.T) {
 	if duration == constant.SevenDay {
 		fmt.Println("=等于")
 	}
+}
+
+func TestNOW(t *testing.T) {
+	fmt.Println(time.Now().Year())
+	fmt.Println(cast.ToString(cast.ToInt(time.Now().Month())))
 }
