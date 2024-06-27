@@ -189,3 +189,21 @@ func TestSort(t *testing.T) {
 	}
 	fmt.Printf("users2:%+v\n", users2)
 }
+
+func TestCreate2(t *testing.T) {
+	userss := make([]User, 0)
+	//user1 := User{
+	//	Name: "test",
+	//}
+	//user2 := User{
+	//	Name: "test2",
+	//}
+	//userss = append(userss, user1, user2)
+	// 如下语句的排序字段等同于name asc,id desc，不写值会默认升序
+	err := DB.Debug().Table("user").Create(&userss).Error
+	if err != nil {
+		fmt.Printf("err:%v\n", err)
+		return
+	}
+	fmt.Printf("users:%#v\n", userss)
+}
