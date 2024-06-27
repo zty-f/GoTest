@@ -207,3 +207,17 @@ func TestCreate2(t *testing.T) {
 	}
 	fmt.Printf("users:%#v\n", userss)
 }
+
+func TestFind(t *testing.T) {
+	var userks []*model.UserTask
+	// 如下语句的排序字段等同于name asc,id desc，不写值会默认升序
+	err := DB.Debug().Table("user").Where("name", "eerr").Find(&userks).Error
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	for i := range userks {
+		fmt.Printf("userks:%+v\n", userks[i])
+	}
+	fmt.Printf("userks:%+v\n", userks)
+}
