@@ -31,6 +31,10 @@ func StrToTime(str string) (time.Time, error) {
 	layout := "2006-01-02 15:04:05"
 	return time.ParseInLocation(layout, str, time.Local)
 }
+func StrToTime1(str string) (time.Time, error) {
+	layout := "2006-01-02"
+	return time.ParseInLocation(layout, str, time.Local)
+}
 
 // TimeToStr 时间戳转字符串
 func TimeToStr(timer int64) string {

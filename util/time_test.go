@@ -188,8 +188,8 @@ func TestTimeTruncate2(t *testing.T) {
 }
 
 func TestTimeDuration(t *testing.T) {
-	start := time.Now()
-	end := start.Add(constant.SevenDay)
+	start, _ := StrToTime1("2024-07-01")
+	end, _ := StrToTime1("2024-07-08")
 	duration := GetTwoDateIntervalDuration(start, end)
 	fmt.Println(duration)
 	if duration > constant.SevenDay {
@@ -206,4 +206,11 @@ func TestTimeDuration(t *testing.T) {
 func TestNOW(t *testing.T) {
 	fmt.Println(time.Now().Year())
 	fmt.Println(cast.ToString(cast.ToInt(time.Now().Month())))
+}
+
+func TestTimeDuration1(t *testing.T) {
+	start, _ := StrToTime("2024-07-01 00:00:00")
+	fmt.Println(start)
+	start = start.Add(constant.SevenDay)
+	fmt.Println(start)
 }
