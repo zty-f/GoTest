@@ -3,6 +3,7 @@ package util
 import (
 	"fmt"
 	"github.com/spf13/cast"
+	"strings"
 	"test/constant"
 	"testing"
 	"time"
@@ -213,4 +214,11 @@ func TestTimeDuration1(t *testing.T) {
 	fmt.Println(start)
 	start = start.Add(constant.SevenDay)
 	fmt.Println(start)
+}
+
+func TestStringCut(t *testing.T) {
+	str := "【完成条件】\n1.单讲出勤：单节课直播观看时长大于0即视为完成出勤。注意，每节课出勤仅计算一次。若同一节课中，主讲或伴学有任意一方完成出勤行为，即算该讲次出勤。单讲按时出勤可获得10成长值。\n2.全部出勤：当同一学科课程的全部讲次均完成出勤，即每节课的直播观看时长均大于0时，即视为完成全部出勤。全部按时出勤可获得40成长值。\n\n【课程类型】\n可完成该任务的课程类型包括系统直播课（含伴学）、体验课及特训班。\n\n【限时奖励】\n课程当天完成出勤，将额外+5成长值。"
+	// 截断【限时奖励】之后的字符串
+	str = str[0:strings.Index(str, "【限时奖励】")]
+	fmt.Println(str)
 }
