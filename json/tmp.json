@@ -1,0 +1,238 @@
+{
+  "stat": 1,
+  "code": 0,
+  "message": "Success",
+  "msg": "Success",
+  "data": {
+    "isVisitor": false,
+    "list": [
+      {
+        "type": 4,
+        "typeName": "限定奖牌",
+        "list": [
+          {
+            "seriesType": 0,
+            "seriesName": "",
+            "seriesProgress":"",
+            "medalId": 50001,
+            "name": "钱包守卫者",
+            "buttonText":"点击获取",
+            "buttonType": 1,
+            "ruleDesc":"https://static-inc.xiwang.com/",
+            "type": 4,
+            "unlockIcon": "https://static-inc.xiwang.com/mall/c0b05eea49ac55a0c7728a04d11474c8.png",
+            "lockIcon": "https://static-inc.xiwang.com/mall/3a36b88054d108788a2db51cceebcfcb.png",
+            "shareIcon": "https://static-inc.xiwang.com/mall/fc69ef81b996dc28f41f8fccb49d9d5d.png",
+            "model3D": "",
+            "isGot": true,
+            "gotTime": 1715053282,
+            "desc": "已使用【金币抵现】",
+            "isShowProgress": false,
+            "yearId": 0,
+            "getType": {
+              "type": "",
+              "data": {
+                "level": 0,
+                "days": 0,
+                "term_id": 0,
+                "subject_id": 0
+              }
+            },
+            "childList": []
+          },
+          {
+            "seriesType": 1,
+            "seriesName": "赛季系列奖牌",
+            "seriesProgress":"你太厉害了，今天的<font color=#FAED69>金币</font>已被你<font color=#FAED69>拿光</font>~",
+            "name": "Lv3：好学举人",
+            "type": 3,
+            "unlockIcon": "https://static-inc.xiwang.com/mall/604e51701fccc79851348ebbca7c6210.png",
+            "lockIcon": "https://static-inc.xiwang.com/mall/d1766c6342292dcabb06431260336eeb.png",
+            "shareIcon": "https://static-inc.xiwang.com/mall/516523351d2aa17e39955f3cd1169f45.png",
+            "model3D": "",
+            "isGot": true,
+            "gotTime": 1706757342,
+            "ruleDesc": "达到Lv3可获得该奖牌。",
+            "desc": "达到Lv3获得该奖牌。",
+            "isShowProgress": false,
+            "yearId": 0,
+            "getType": {
+              "type": "level_change",
+              "data": {
+                "level": 3,
+                "days": 0,
+                "term_id": 0,
+                "subject_id": 0
+              }
+            },
+            "childList": [
+              {
+                "medalId": 30003,
+                "name": "Lv3：好学举人",
+                "type": 3,
+                "unlockIcon": "https://static-inc.xiwang.com/mall/604e51701fccc79851348ebbca7c6210.png",
+                "lockIcon": "https://static-inc.xiwang.com/mall/d1766c6342292dcabb06431260336eeb.png",
+                "shareIcon": "https://static-inc.xiwang.com/mall/516523351d2aa17e39955f3cd1169f45.png",
+                "model3D": "",
+                "isGot": true,
+                "gotTime": 1706757342,
+                "ruleDesc": "达到Lv3可获得该奖牌。",
+                "desc": "达到Lv3获得该奖牌。",
+                "isShowProgress": false,
+                "yearId": 0,
+                "getType": {
+                  "type": "level_change",
+                  "data": {
+                    "level": 3,
+                    "days": 0,
+                    "term_id": 0,
+                    "subject_id": 0
+                  }
+                }
+              },
+              {
+                "medalId": 30002,
+                "name": "Lv2：潜力秀才",
+                "type": 3,
+                "unlockIcon": "https://static-inc.xiwang.com/mall/672dcad2dd79a1de7d5497606647016d.png",
+                "lockIcon": "https://static-inc.xiwang.com/mall/94745bca3af25a821bce7b5717d549b9.png",
+                "shareIcon": "https://static-inc.xiwang.com/mall/f5290b4288738846f10b78a8553478e5.png",
+                "model3D": "",
+                "isGot": true,
+                "gotTime": 1706757342,
+                "ruleDesc": "达到Lv2可获得该奖牌。",
+                "desc": "达到Lv2获得该奖牌。",
+                "isShowProgress": false,
+                "yearId": 0,
+                "getType": {
+                  "type": "level_change",
+                  "data": {
+                    "level": 2,
+                    "days": 0,
+                    "term_id": 0,
+                    "subject_id": 0
+                  }
+                }
+              },
+              {
+                "medalId": 30001,
+                "name": "Lv1：初级童生",
+                "type": 3,
+                "unlockIcon": "https://static-inc.xiwang.com/mall/5a895d46c909d518d59b123131e30ba1.png",
+                "lockIcon": "https://static-inc.xiwang.com/mall/c740662a2efb61003ce997e0cfee666e.png",
+                "shareIcon": "https://static-inc.xiwang.com/mall/66e672146b6c0309ed8372591566efc4.png",
+                "model3D": "",
+                "isGot": true,
+                "gotTime": 1706757156,
+                "ruleDesc": "Lv1可获得该奖牌。",
+                "desc": "达到Lv1获得该奖牌。",
+                "isShowProgress": false,
+                "yearId": 0,
+                "getType": {
+                  "type": "level_change",
+                  "data": {
+                    "level": 1,
+                    "days": 0,
+                    "term_id": 0,
+                    "subject_id": 0
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": 1,
+        "typeName": "课程奖牌",
+        "list": [
+          {
+            "medalId": 10067,
+            "name": "毕业成就\n(24秋下·数学)",
+            "type": 1,
+            "unlockIcon": "https://static-inc.xiwang.com/mall/bfefae3072058f2af9fbfb280e5b6c94.png",
+            "lockIcon": "https://static-inc.xiwang.com/mall/ae5c3f1679bae49168ff2f04ec3de2c6.png",
+            "shareIcon": "https://static-inc.xiwang.com/mall/64701960432600e6cd6ee9cd6f62f9dd.png",
+            "model3D": "",
+            "isGot": true,
+            "gotTime": 1719645740,
+            "ruleDesc": "结课30天内，完成【秋下】全部的数学课程可获得该奖牌。",
+            "desc": "完成了【秋下】全部数学课",
+            "isShowProgress": false,
+            "yearId": 24,
+            "getType": {
+              "type": "course_study_end",
+              "data": {
+                "level": 0,
+                "days": 0,
+                "term_id": 57,
+                "subject_id": 2
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": 2,
+        "typeName": "学习天数奖牌",
+        "list": [
+          {
+            "medalId": 20001,
+            "name": "初来乍到",
+            "type": 2,
+            "unlockIcon": "https://static-inc.xiwang.com/mall/4faa92d2fa8c96efac88a696d19e13b7.png",
+            "lockIcon": "https://static-inc.xiwang.com/mall/174eeaec6191ee22f78d30ba41a91c94.png",
+            "shareIcon": "https://static-inc.xiwang.com/mall/d4a8baafd65943b39a684dbb11e3f73c.png",
+            "model3D": "",
+            "isGot": true,
+            "gotTime": 1719310650,
+            "ruleDesc": "成为希望学付费系统课用户可获得此奖牌。",
+            "desc": "成为系统课学员第1天获得该奖牌",
+            "isShowProgress": false,
+            "yearId": 0,
+            "getType": {
+              "type": "study_days",
+              "data": {
+                "level": 0,
+                "days": 1,
+                "term_id": 0,
+                "subject_id": 0
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": 3,
+        "typeName": "等级奖牌",
+        "list": [
+          {
+            "medalId": 30001,
+            "name": "Lv1：初级童生",
+            "type": 3,
+            "unlockIcon": "https://static-inc.xiwang.com/mall/5a895d46c909d518d59b123131e30ba1.png",
+            "lockIcon": "https://static-inc.xiwang.com/mall/c740662a2efb61003ce997e0cfee666e.png",
+            "shareIcon": "https://static-inc.xiwang.com/mall/66e672146b6c0309ed8372591566efc4.png",
+            "model3D": "",
+            "isGot": true,
+            "gotTime": 1706757156,
+            "ruleDesc": "Lv1可获得该奖牌。",
+            "desc": "达到Lv1获得该奖牌。",
+            "isShowProgress": false,
+            "yearId": 0,
+            "getType": {
+              "type": "level_change",
+              "data": {
+                "level": 1,
+                "days": 0,
+                "term_id": 0,
+                "subject_id": 0
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "trace_id": "cc00db23-0828-4b50-8482-d35edbbad7e2"
+}

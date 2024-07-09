@@ -12,6 +12,7 @@ import (
 	"math"
 	"math/rand"
 	"sort"
+	"strconv"
 	"strings"
 	"test/util"
 	"testing"
@@ -111,13 +112,13 @@ var list map[string]Person
 
 func Test5(t *testing.T) {
 
-	list = make(map[string]Person) //不需要指定大小和容量，会自动扩容
+	list = make(map[string]Person) // 不需要指定大小和容量，会自动扩容
 
 	student := Person{"Aceld"}
 
 	list["student"] = student
 	// 下列代码不能直接进行赋值操作，是值引用，只读
-	//list["student"].Name = "Aceld2"
+	// list["student"].Name = "Aceld2"
 
 	fmt.Println(list["student"])
 	fmt.Println(len(list))
@@ -132,7 +133,7 @@ func Test7(t *testing.T) {
 	var m = make(map[int]interface{})
 	m[1] = "1"
 	fmt.Println(m[1])
-	//获取不存在的map键值不会报错,会返回零值
+	// 获取不存在的map键值不会报错,会返回零值
 	fmt.Println(m[2])
 	fmt.Println(m[3])
 	m[3] = "3"
@@ -228,10 +229,10 @@ func f(n int) (r int) {
 	return n + 1
 }
 func TestDefer(t *testing.T) {
-	//fmt.Println(f(3))
-	//var m map[int]int
-	//fmt.Println(m[1])
-	//fmt.Println(m[2])
+	// fmt.Println(f(3))
+	// var m map[int]int
+	// fmt.Println(m[1])
+	// fmt.Println(m[2])
 	s1 := []int{1, 2, 3}
 	s2 := s1[1:]
 	s2[1] = 4
@@ -447,7 +448,7 @@ func calc(index string, a, b int) int {
 func GetRandomString(l int) string {
 	bytes := make([]byte, l)
 	for i := 0; i < l; i++ {
-		bytes[i] = byte(65 + rand.Intn(25)) //A=65
+		bytes[i] = byte(65 + rand.Intn(25)) // A=65
 	}
 	return string(bytes)
 }
@@ -485,9 +486,9 @@ func TestTime(t *testing.T) {
 	date = time.Date(2024, 3, 31, 0, 0, 0, 0, time.Local)
 	format = date.Format("2006-01-02-15-04-05")
 	fmt.Println(format)
-	//date = date.AddDate(0, -1, 0)
-	//format = date.Format("2006-01-02-15-04-05")
-	//fmt.Println(date)
+	// date = date.AddDate(0, -1, 0)
+	// format = date.Format("2006-01-02-15-04-05")
+	// fmt.Println(date)
 	date = time.Now().Add(-time.Hour * 24 * 30)
 	format = date.Format("2006-01-02-15-04-05")
 	fmt.Println(date)
@@ -542,7 +543,7 @@ func TestSplit11(t *testing.T) {
 	x := "1,2,3,4,5"
 	res = append(res, strings.Split(x, ",")...)
 	y := ""
-	res = append(res, strings.Split(y, ",")...) //为空的也会生成一个append，需要特殊处理才行
+	res = append(res, strings.Split(y, ",")...) // 为空的也会生成一个append，需要特殊处理才行
 	fmt.Println(res)                            // [1 2 3 4 5 ]
 	fmt.Println(len(res))                       // 6
 }
@@ -686,4 +687,18 @@ func TestString3(t *testing.T) {
 	fmt.Println(str)
 	fmt.Println(trimPrefix0(str))
 	fmt.Println(str)
+}
+
+func convertToDecimal1(num int) float64 {
+	numStr := strconv.Itoa(num)
+	decimalStr := "0." + numStr
+	decimal, _ := strconv.ParseFloat(decimalStr, 64)
+	return decimal
+}
+
+func Test转换小数4(t *testing.T) {
+	fmt.Println(convertToDecimal1(1))
+	fmt.Println(convertToDecimal1(34))
+	fmt.Println(convertToDecimal1(73664))
+	fmt.Println(convertToDecimal1(0))
 }
