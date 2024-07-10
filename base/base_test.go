@@ -696,9 +696,18 @@ func convertToDecimal1(num int) float64 {
 	return decimal
 }
 
-func Test转换小数4(t *testing.T) {
+func convertToDecimal2(num int) string {
+	return cast.ToString(float64(num) / 100000000000)
+}
+
+func Test转换小数(t *testing.T) {
 	fmt.Println(convertToDecimal1(1))
 	fmt.Println(convertToDecimal1(34))
 	fmt.Println(convertToDecimal1(73664))
 	fmt.Println(convertToDecimal1(0))
+
+	fmt.Println(convertToDecimal2(1334))
+	fmt.Println(convertToDecimal2(34))
+	fmt.Println(convertToDecimal2(73664))
+	fmt.Println(convertToDecimal2(34433244))
 }

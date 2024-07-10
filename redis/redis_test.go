@@ -92,12 +92,9 @@ func TestExists(t *testing.T) {
 func TestSetNx(t *testing.T) {
 	ctx := context.Background()
 	v, err := rd.SetNX(ctx, "t", "c", 30*time.Second).Result()
-	if err != nil {
-		fmt.Println(err, v)
-		return
-	}
 	fmt.Println("-------")
 	fmt.Println(v)
+	fmt.Println(err)
 }
 
 func TestExpireAt(t *testing.T) {
