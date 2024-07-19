@@ -70,7 +70,7 @@ func TestNew(t *testing.T) {
 	m := new(map[int]int)
 	fmt.Printf("%T\n", m)
 	fmt.Println(m)
-	(*m)[0] = 1 //为空的，不能直接赋值
+	(*m)[0] = 1 // 为空的，不能直接赋值
 	fmt.Println(m)
 }
 
@@ -164,8 +164,20 @@ func TestDefer3(t *testing.T) {
 	fmt.Println(defer_fun4())  // 1 4 4
 }
 
-func TestGetWeekStartAndEnd(t *testing.T) {
+func TestGetWeekStartAndEnd1(t *testing.T) {
+	start, end := GetWeekStartAndEnd1()
+	fmt.Println(start, end)
+	fmt.Println(time.Now().Weekday())
+}
+
+func TestGetWeekStartAndEnd2(t *testing.T) {
 	start, end := GetWeekStartAndEnd()
+	fmt.Println(start, end)
+	fmt.Println(time.Now().Weekday())
+}
+
+func TestGetWeekStartAndEnd3(t *testing.T) {
+	start, end := GetStartAndEndTimeOfCurrentWeek()
 	fmt.Println(start, end)
 	fmt.Println(time.Now().Weekday())
 }

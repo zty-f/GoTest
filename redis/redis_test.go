@@ -5,6 +5,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/spf13/cast"
 	"math/rand"
 	"testing"
 	"time"
@@ -237,4 +238,17 @@ func TestMultiGet(t *testing.T) {
 	}
 
 	fmt.Println(result)
+}
+
+func TestHMGet(t *testing.T) {
+	ctx := context.Background()
+	rd.HSet(ctx, "hash", "key1", "value1", "key2", "value2", "key3", "value3", "key4", "value4", "key5", "value5")
+	keys := []string{"key1111"}
+	result, err := rd.HMGet(ctx, "hash", keys...).Result()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(result[0])
+	fmt.Println(cast.ToInt(result[0]))
 }

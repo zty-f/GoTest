@@ -310,6 +310,22 @@ func GetIntervalTime(t time.Time) time.Duration {
 	return interval
 }
 
+// GetWeekStartAndEnd1 获取本周的开始时间和结束时间
+func GetWeekStartAndEnd1() (time.Time, time.Time) {
+	now := time.Now() // 当前时间
+	offset := int(time.Monday - now.Weekday())
+	if offset > 0 {
+		offset = -6
+	}
+
+	// 本周开始时间（周一）
+	weekStart := now.AddDate(0, 0, offset).Truncate(24 * time.Hour)
+	// 本周结束时间（周日）
+	weekEnd := weekStart.AddDate(0, 0, 6).Add(time.Hour*23 + time.Minute*59 + time.Second*59)
+
+	return weekStart, weekEnd
+}
+
 // GetWeekStartAndEnd 获取本周的开始时间和结束时间
 func GetWeekStartAndEnd() (time.Time, time.Time) {
 	now := time.Now()
@@ -323,6 +339,20 @@ func GetWeekStartAndEnd() (time.Time, time.Time) {
 	weekEnd := weekStart.AddDate(0, 0, 6).Add(time.Hour*23 + time.Minute*59 + time.Second*59)
 
 	return weekStart, weekEnd
+}
+
+func GetStartAndEndTimeOfCurrentWeek() (time.Time, time.Time) {
+	now := time.Now().Add(time.Hour * 45)
+	weekday := int(now.Weekday()) - 1
+
+	// 计算本周的开始时间
+	startOfWeek := now.AddDate(0, 0, -weekday)
+	startOfWeek = time.Date(startOfWeek.Year(), startOfWeek.Month(), startOfWeek.Day(), 0, 0, 0, 0, time.Local)
+
+	// 计算本周的结束时间
+	endOfWeek := startOfWeek.AddDate(0, 0, 7)
+	endOfWeek = endOfWeek.Add(-time.Second)
+	return startOfWeek, endOfWeek
 }
 
 // GetMonday 获取周一，想要什么格式自己传

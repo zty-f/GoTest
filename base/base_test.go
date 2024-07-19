@@ -711,3 +711,17 @@ func Test转换小数(t *testing.T) {
 	fmt.Println(convertToDecimal2(73664))
 	fmt.Println(convertToDecimal2(34433244))
 }
+
+func TestTrimSpace(t *testing.T) {
+	fmt.Print(strings.TrimSpace("  0 12 "))
+	fmt.Print("-")
+	fmt.Println(strings.TrimSpace("  1"))
+	fmt.Println(strings.TrimSpace("  2"))
+	fmt.Println(strings.TrimSpace("  3"))
+	fmt.Println(strings.TrimSpace("  4"))
+	fmt.Println(strings.TrimSpace("  5"))
+	fmt.Println(strings.TrimSpace("  6"))
+	fmt.Println(strings.TrimSpace("  7"))
+	fmt.Println(strings.TrimSpace("  8"))
+	fmt.Println(strings.TrimSpace("  9"))
+}
