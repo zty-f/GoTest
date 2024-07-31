@@ -2,42 +2,61 @@
   "stat": 1,
   "code": 0,
   "message": "Success",
+  "msg": "Success",
   "data": {
+    "userAvatarDecoration": {
+      "id": 7,
+      "name": "发火",
+      "image": "https://static-inc.xiwang.com/mall/838c19b139c3ae824483123f54e99430.gif"
+    },
     "list": [
       {
-        "id": 1,
         "type": 1,
-        "name": "幸运光环",
-        "image": "图片链接",
-        "rank": 1,
-        "level": [1,2,3,4],
-        "status": 1,
-        "create_uname": "创建人",
-        "create_time": 1703235908,
-        "update_uname": "更新人",
-        "update_time": 1703235908
+        "columnList" : [
+          {
+            "id": 0,
+            "name": "全部",
+            "decorationList": [
+              {
+                "id": 24,
+                "name": "赢麻了",
+                "image": "https://static-inc.xiwang.com/mall/6b8650d92f9456a6d396f48a2febd284.png",
+                "status": 3,
+                "unlockMsg": "Lv8解锁",
+                "unlockToast": "Lv8等级及以上可使用"
+              },
+              {
+                "id": 34,
+                "name": "头盔",
+                "image": "https://static-inc.xiwang.com/mall/944e3e495633a3d67ddce644611aa999.gif",
+                "status": 3,
+                "unlockMsg": "Lv8解锁",
+                "unlockToast": "Lv8等级及以上可使用"
+              }
+            ]
+          }
+        ]
       },
       {
-        "id": 0,
-        "taskId": 2001300,
-        "taskType": 1,
-        "taskName": "完成课程",
-        "taskDesc": "每上完成一节课",
-        "growthValue": 50,
-        "taskIcon": "https://static-inc.xiwang.com/mall/148e6716788b7f71e5747fc9de7e5fc4.png",
-        "taskRuleDesc": "【完成条件】\n当一节课的观看进度为100%时，且任务完成时间距离这节课结束不超过30天，即算完成该任务。\n注意：每节课完课只计算1次。对于同一节课参与了直播又回看课程，只算一次完课。\n完课获得50成长值。\n\n【课程类型】\n可以完成该任务的包含正价课直播（含伴学）、 体验课及特训班。",
-        "taskState": 20,
-        "skipType": 3,
-        "skipLink": "xeswxsubject://xrsApp?m=apphome&d={\"p\":{\"index\":2,\"subIndex\":1}}",
-        "buttonText": "去上课",
-        "grayTips": "新课未解锁",
-        "rank": 40,
-        "taskProgress": {
-          "finishNum": 0,
-          "totalNum": 0
-        }
+        "type": 2,
+        "columnList" : [
+          {
+            "id": 0,
+            "name": "全部",
+            "decorationList": [
+              {
+                "id": 34,
+                "name": "头盔",
+                "image": "https://static-inc.xiwang.com/mall/944e3e495633a3d67ddce644611aa999.gif",
+                "status": 3,
+                "unlockMsg": "Lv8解锁",
+                "unlockToast": "Lv8等级及以上可使用"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
-  "trace_id": "1651771a34ffe2d7d8622365f871adc0"
+  "trace_id": "847e2792-58ca-4971-a87b-94a4b0f97d4d"
 }
