@@ -40,6 +40,25 @@ type CheckinQuestion struct {
 	UpdatedAt   time.Time `gorm:"column:updated_at" json:"updated_at"`
 }
 
+type Question struct {
+	Subject       string `gorm:"column:subject" json:"subject"`
+	Grade         string `gorm:"column:grade" json:"grade"`
+	Source        string `gorm:"column:source" json:"source"`
+	Content       string `gorm:"column:content" json:"content"`
+	CandidateList string `gorm:"column:candidate_list" json:"candidate_list"`
+	RightIdx      string `gorm:"column:right_idx" json:"right_idx"`
+}
+
+type Content struct {
+	Content string   `json:"content"`
+	Images  []string `json:"images"`
+}
+
+type Candidate struct {
+	Content []string `json:"content"`
+	Images  []string `json:"images"`
+}
+
 type CheckinQuestionOption struct {
 	Label   string `json:"label"`
 	Content string `json:"content"`

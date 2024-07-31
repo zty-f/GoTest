@@ -8,7 +8,7 @@ func main() {
 	engine.GET("/", Get)
 	engine.POST("/testShouldBind", TestShouldBind)
 	engine.GET("/testRetry", TestRetry)
-	engine.GET("/importCheckinQuestion", ImportCheckinQuestion)
+	engine.POST("/importData", ImportCheckinQuestion)
 	err := engine.Run(":8080")
 	if err != nil {
 		return

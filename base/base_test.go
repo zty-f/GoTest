@@ -725,3 +725,8 @@ func TestTrimSpace(t *testing.T) {
 	fmt.Println(strings.TrimSpace("  8"))
 	fmt.Println(strings.TrimSpace("  9"))
 }
+
+func TestStringx(t *testing.T) {
+	x := "[[1]]"
+	fmt.Println(string(x[2]))
+}

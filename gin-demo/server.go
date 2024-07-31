@@ -7,14 +7,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/360EntSecGroup-Skylar/excelize"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	"github.com/tidwall/gjson"
+	"github.com/xuri/excelize/v2"
+	"io"
 	"log"
 	"math/rand"
 	"strings"
-	"test/gin-demo/constant"
+	excel "test/generate-excel"
 	"test/gin-demo/model"
 	"time"
 )
@@ -118,13 +118,29 @@ func TestRetry(c *gin.Context) {
 	})
 }
 
+/*
+ subject STRING COMMENT '学科',
+ grade STRING COMMENT '年级',
+ source STRING COMMENT '来源（语文是古诗名）',
+ content STRING COMMENT '题目',
+ candidate_list STRING COMMENT '4个选项信息',
+ right_idx STRING COMMENT '正确答案位置')
+*/
+
 func ImportCheckinQuestion(ctx *gin.Context) {
-	fileName := ctx.Query("file")
-	if fileName == "" {
-		resp.WriteErrJSON(ctx, fmt.Errorf("文件名为空"))
+	file, err := ctx.FormFile("file")
+	if err != nil {
+		resp.WriteErrJSON(ctx, xerr.ErrorInternalError(fmt.Sprintf("get form err: %s", err.Error())))
 		return
 	}
-	res, err := importCheckinQuestion(ctx.Request.Context(), fileName)
+	// 读取文件
+	fileBytes, err := file.Open()
+	if err != nil {
+		resp.WriteErrJSON(ctx, xerr.ErrorInternalError(fmt.Sprintf("read file err: %s", err.Error())))
+		return
+	}
+	defer fileBytes.Close()
+	res, err := importCheckinQuestion(ctx.Request.Context(), fileBytes, file.Filename)
 	if err != nil {
 		resp.WriteErrJSON(ctx, xerr.ErrorInternalError(""))
 		return
@@ -133,150 +149,192 @@ func ImportCheckinQuestion(ctx *gin.Context) {
 }
 
 // ImportCheckinQuestion 导入签到题目
-func importCheckinQuestion(ctx context.Context, fileName string) (*model.ImportCheckinQuestionResp, error) {
-	f, err := excelize.OpenFile(fileName)
+func importCheckinQuestion(ctx context.Context, file io.Reader, fileName string) (*model.ImportCheckinQuestionResp, error) {
+	f, err := excelize.OpenReader(file)
 	if err != nil {
 		return nil, fmt.Errorf("文件【%s】打开失败，error: %v", fileName, err)
 	}
 	resp := &model.ImportCheckinQuestionResp{
 		Filename: fileName,
 	}
-	for _, sheetName := range constant.CheckinQuestionSheetNameArr {
-		// 获取 Sheet 上所有单元格数据
-		rows := f.GetRows(sheetName)
-		if len(rows) == 0 {
-			log.Println(fmt.Sprintf("Sheet【%s】没有数据", sheetName))
+	datas := make([]*model.Question, 0)
+	// 获取 Sheet 上所有单元格数据
+	sheetName := f.GetSheetName(0)
+	rows, _ := f.GetRows(sheetName)
+	if len(rows) == 0 {
+		log.Println(fmt.Sprintf("Sheet【%s】没有数据", sheetName))
+		return nil, nil
+	}
+	total := len(rows) - 1
+	log.Println(fmt.Sprintf("Sheet【%s】总共有【%d】行数据", sheetName, total))
+	succNum := 0
+	for j, row := range rows {
+		j++
+		// 第一行是标题，不处理
+		if j == 1 {
 			continue
 		}
-		total := len(rows) - 1
-		log.Println(fmt.Sprintf("Sheet【%s】总共有【%d】行数据", sheetName, total))
-		succNum := 0
-		for j, row := range rows {
-			j++
-			// 第一行是标题，不处理
-			if j == 1 {
-				continue
-			}
-			data, err := ParseQuestionData(ctx, sheetName, row)
-			if err != nil {
-				log.Println(fmt.Sprintf("Sheet【%s】第【%d】行 %s", sheetName, j, err.Error()))
-				continue
-			}
-			err = AddCheckinQuestion(ctx, data)
-			if err != nil {
-				log.Println(fmt.Sprintf("Sheet【%s】第【%d】行 数据插入失败, error: %s", sheetName, j, err.Error()))
-				continue
-			}
-			succNum++
+		data, err := ParseQuestionData(ctx, sheetName, row)
+		if err != nil {
+			log.Println(fmt.Sprintf("Sheet【%s】第【%d】行 %s", sheetName, j, err.Error()))
+			continue
 		}
-		sheet := model.ImportCheckinQuestionSheet{
-			SheetName: sheetName,
-			ImportCommonItem: model.ImportCommonItem{
-				TotalNum:   total,
-				SuccessNum: succNum,
-				FailNum:    total - succNum,
-			},
-		}
-		resp.Sheets = append(resp.Sheets, sheet)
+		datas = append(datas, data)
+		succNum++
 	}
+	// 生成表格
+	ExcelProcess(datas)
+	sheet := model.ImportCheckinQuestionSheet{
+		SheetName: sheetName,
+		ImportCommonItem: model.ImportCommonItem{
+			TotalNum:   total,
+			SuccessNum: succNum,
+			FailNum:    total - succNum,
+		},
+	}
+	resp.Sheets = append(resp.Sheets, sheet)
 	return resp, nil
 }
 
-func ParseQuestionData(ctx context.Context, sheetName string, row []string) (*model.CheckinQuestion, error) {
-	if sheetName == constant.CheckinQuestionIdiom {
-		if len(row) < 4 {
-			return nil, fmt.Errorf("数据不完整")
-		}
-		options, err := GetQuestionOption(ctx, row[2])
-		if err != nil {
-			return nil, err
-		}
-		data := &model.CheckinQuestion{
-			Type:    constant.CheckinQuestionTypeIdiom,
-			Content: row[1],
-			Options: options,
-			Answer:  row[3],
-			Status:  constant.CheckinQuestionStatusEnable,
-		}
-		return data, nil
+func ExcelProcess(list []*model.Question) {
+	begin := time.Now().Unix()
+	err := excel.ExcelProcess(list).
+		Headers("subject", "grade", "source", "content", "candidate_list", "right_idx").
+		Columns("subject", "grade", "source", "content", "candidate_list", "right_idx").
+		Sheet("Sheet1").
+		// Style(func(currentSheet string, f *excelize.File) error {
+		// 	styleId, err := f.NewStyle(&excelize.Style{Font: &excelize.Font{Family: "Microsoft YaHei UI", Size: 20}})
+		// 	if err != nil {
+		// 		return err
+		// 	}
+		// 	return f.SetCellStyle(currentSheet, "A1", "H1", styleId)
+		// }).
+		SavePath("demo.xlsx").ToExcel().Error
+	if err != nil {
+		log.Println("err:", err)
 	}
-	if sheetName == constant.CheckinQuestionArithmetic {
-		if len(row) < 3 {
-			return nil, fmt.Errorf("数据不完整")
-		}
-		options, err := GetQuestionOption(ctx, row[1])
-		if err != nil {
-			return nil, err
-		}
-		data := &model.CheckinQuestion{
-			Type:    constant.CheckinQuestionTypeArithmetic,
-			Content: row[0],
-			Options: options,
-			Answer:  row[2],
-			Status:  constant.CheckinQuestionStatusEnable,
-		}
-		return data, nil
+	end := time.Now().Unix()
+	fmt.Println("表格生成耗费时长：", end-begin, "s")
+}
+
+func ParseQuestionData(ctx context.Context, sheetName string, row []string) (*model.Question, error) {
+	if len(row) < 4 {
+		return nil, fmt.Errorf("数据不完整")
 	}
-	if sheetName == constant.CheckinQuestionEnglish {
-		if len(row) < 6 {
-			return nil, fmt.Errorf("数据不完整")
-		}
-		content := gjson.Get(row[0], "content").String()
-		if content == "" {
-			return nil, fmt.Errorf("英语题目content为空")
-		}
-		optionObjArr := make([]model.CheckinQuestionOption, 0)
-		optionObjArr = append(optionObjArr,
-			model.CheckinQuestionOption{
-				Label:   "A",
-				Content: row[1],
-			},
-			model.CheckinQuestionOption{
-				Label:   "B",
-				Content: row[2],
-			},
-			model.CheckinQuestionOption{
-				Label:   "C",
-				Content: row[3],
-			},
-			model.CheckinQuestionOption{
-				Label:   "D",
-				Content: row[4],
-			},
-		)
-		options, err := json.Marshal(optionObjArr)
-		if err != nil {
-			return nil, err
-		}
-		if _, ok := constant.CheckinQuestionOptionMap[row[5]]; !ok {
-			return nil, fmt.Errorf("答案不正确")
-		}
-		data := &model.CheckinQuestion{
-			Type:    constant.CheckinQuestionTypeEnglish,
-			Content: content,
-			Options: options,
-			Answer:  constant.CheckinQuestionOptionMap[row[5]],
-			Status:  constant.CheckinQuestionStatusEnable,
-		}
-		return data, nil
+	content := &model.Content{}
+	err := json.Unmarshal([]byte(row[3]), content)
+	if err != nil {
+		return nil, err
 	}
-	if sheetName == constant.CheckinQuestionFun {
-		if len(row) < 3 {
-			return nil, fmt.Errorf("数据不完整")
-		}
-		options, err := GetQuestionOption(ctx, row[1])
-		if err != nil {
-			return nil, err
-		}
-		data := &model.CheckinQuestion{
-			Type:    constant.CheckinQuestionTypeFun,
-			Content: row[0],
-			Options: options,
-			Answer:  row[2],
-			Status:  constant.CheckinQuestionStatusEnable,
-		}
-		return data, nil
+	candidate := &model.Candidate{}
+	err = json.Unmarshal([]byte(row[4]), candidate)
+	if err != nil {
+		return nil, err
 	}
+	rightIdx := string(row[5][2])
+	data := &model.Question{
+		Subject:       row[0],
+		Grade:         row[1],
+		Source:        row[2],
+		Content:       content.Content,
+		CandidateList: strings.Join(candidate.Content, ","),
+		RightIdx:      rightIdx,
+	}
+	return data, nil
+	// if sheetName == constant.CheckinQuestionIdiom {
+	// 	if len(row) < 4 {
+	// 		return nil, fmt.Errorf("数据不完整")
+	// 	}
+	// 	options, err := GetQuestionOption(ctx, row[2])
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
+	// 	data := &model.CheckinQuestion{
+	// 		Type:    constant.CheckinQuestionTypeIdiom,
+	// 		Content: row[1],
+	// 		Options: options,
+	// 		Answer:  row[3],
+	// 		Status:  constant.CheckinQuestionStatusEnable,
+	// 	}
+	// 	return data, nil
+	// }
+	// if sheetName == constant.CheckinQuestionArithmetic {
+	// 	if len(row) < 3 {
+	// 		return nil, fmt.Errorf("数据不完整")
+	// 	}
+	// 	options, err := GetQuestionOption(ctx, row[1])
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
+	// 	data := &model.CheckinQuestion{
+	// 		Type:    constant.CheckinQuestionTypeArithmetic,
+	// 		Content: row[0],
+	// 		Options: options,
+	// 		Answer:  row[2],
+	// 		Status:  constant.CheckinQuestionStatusEnable,
+	// 	}
+	// 	return data, nil
+	// }
+	// if sheetName == constant.CheckinQuestionEnglish {
+	// 	if len(row) < 6 {
+	// 		return nil, fmt.Errorf("数据不完整")
+	// 	}
+	// 	content := gjson.Get(row[0], "content").String()
+	// 	if content == "" {
+	// 		return nil, fmt.Errorf("英语题目content为空")
+	// 	}
+	// 	optionObjArr := make([]model.CheckinQuestionOption, 0)
+	// 	optionObjArr = append(optionObjArr,
+	// 		model.CheckinQuestionOption{
+	// 			Label:   "A",
+	// 			Content: row[1],
+	// 		},
+	// 		model.CheckinQuestionOption{
+	// 			Label:   "B",
+	// 			Content: row[2],
+	// 		},
+	// 		model.CheckinQuestionOption{
+	// 			Label:   "C",
+	// 			Content: row[3],
+	// 		},
+	// 		model.CheckinQuestionOption{
+	// 			Label:   "D",
+	// 			Content: row[4],
+	// 		},
+	// 	)
+	// 	options, err := json.Marshal(optionObjArr)
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
+	// 	if _, ok := constant.CheckinQuestionOptionMap[row[5]]; !ok {
+	// 		return nil, fmt.Errorf("答案不正确")
+	// 	}
+	// 	data := &model.CheckinQuestion{
+	// 		Type:    constant.CheckinQuestionTypeEnglish,
+	// 		Content: content,
+	// 		Options: options,
+	// 		Answer:  constant.CheckinQuestionOptionMap[row[5]],
+	// 		Status:  constant.CheckinQuestionStatusEnable,
+	// 	}
+	// 	return data, nil
+	// }
+	// if sheetName == constant.CheckinQuestionFun {
+	// 	if len(row) < 3 {
+	// 		return nil, fmt.Errorf("数据不完整")
+	// 	}
+	// 	options, err := GetQuestionOption(ctx, row[1])
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
+	// 	data := &model.CheckinQuestion{
+	// 		Type:    constant.CheckinQuestionTypeFun,
+	// 		Content: row[0],
+	// 		Options: options,
+	// 		Answer:  row[2],
+	// 		Status:  constant.CheckinQuestionStatusEnable,
+	// 	}
+	// 	return data, nil
+	// }
 	return nil, fmt.Errorf("未知的sheet名")
 }
 func GetQuestionOption(ctx context.Context, option string) ([]byte, error) {

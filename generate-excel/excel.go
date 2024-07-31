@@ -1,4 +1,4 @@
-package main
+package excel
 
 import (
 	"encoding/json"
