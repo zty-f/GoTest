@@ -237,7 +237,7 @@ func ParseQuestionData(ctx context.Context, sheetName string, row []string) (*mo
 		Grade:         row[1],
 		Source:        row[2],
 		Content:       content.Content,
-		CandidateList: strings.Join(candidate.Content, ","),
+		CandidateList: strings.Join(candidate.Content, "||"),
 		RightIdx:      rightIdx,
 	}
 	return data, nil
