@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/cast"
 	"math"
 	"math/rand"
+	"net/url"
 	"sort"
 	"strconv"
 	"strings"
@@ -729,4 +730,28 @@ func TestTrimSpace(t *testing.T) {
 func TestStringx(t *testing.T) {
 	x := "[[1]]"
 	fmt.Println(string(x[2]))
+}
+
+func TestCutUrl(t *testing.T) {
+	// 给定的URL
+	rawURL := "https://static-inc.xiwang.com/xwx-user-avatar/test/1b25e2f50c7024f2be29be34b6fe4718.png"
+
+	// 解析URL
+	parsedURL, err := url.Parse(rawURL)
+	if err != nil {
+		fmt.Println("Error parsing URL:", err)
+		return
+	}
+
+	// 获取路径部分
+	path := parsedURL.Path
+	path = strings.TrimPrefix(parsedURL.Path, "/")
+
+	fmt.Println("提取的路径部分为:", path)
+}
+
+func TestAppend(t *testing.T) {
+	a := []int{1, 2, 3}
+	b := []int{4, 5, 6}
+	fmt.Println(append(a, b...))
 }
