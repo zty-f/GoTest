@@ -243,7 +243,7 @@ func TestMultiGet(t *testing.T) {
 func TestHMGet(t *testing.T) {
 	ctx := context.Background()
 	rd.HSet(ctx, "hash", "key1", "value1", "key2", "value2", "key3", "value3", "key4", "value4", "key5", "value5")
-	keys := []string{"key1111"}
+	keys := []string{"key1", "key2", "key223"}
 	result, err := rd.HMGet(ctx, "hash", keys...).Result()
 	if err != nil {
 		fmt.Println(err)
@@ -251,4 +251,5 @@ func TestHMGet(t *testing.T) {
 	}
 	fmt.Println(result[0])
 	fmt.Println(cast.ToInt(result[0]))
+	fmt.Printf("%+v\n", result)
 }

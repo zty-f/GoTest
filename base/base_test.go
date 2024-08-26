@@ -755,3 +755,12 @@ func TestAppend(t *testing.T) {
 	b := []int{4, 5, 6}
 	fmt.Println(append(a, b...))
 }
+
+func TestMapFmt(t *testing.T) {
+	m := map[string]int{
+		"a": 1,
+		"b": 2,
+		"c": 3,
+	}
+	fmt.Printf("%+v\n", m)
+}
