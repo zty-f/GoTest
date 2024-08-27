@@ -85,7 +85,7 @@ func TestUpsert(t *testing.T) {
 }
 
 // 2.通过FirstOrCreate 来实现创建或更新 先查询 然后再根据情况创建或更新，两条sql
-func TestUpsert1(t *testing.T) {
+func TestUpsert3(t *testing.T) {
 	var x = &UserAvatarDecoration{
 		StuId:          2100051684,
 		DecorationId:   44,
@@ -192,13 +192,13 @@ func TestSort(t *testing.T) {
 
 func TestCreate2(t *testing.T) {
 	userss := make([]User, 0)
-	//user1 := User{
+	// user1 := User{
 	//	Name: "test",
-	//}
-	//user2 := User{
+	// }
+	// user2 := User{
 	//	Name: "test2",
-	//}
-	//userss = append(userss, user1, user2)
+	// }
+	// userss = append(userss, user1, user2)
 	// 如下语句的排序字段等同于name asc,id desc，不写值会默认升序
 	err := DB.Debug().Table("user").Create(&userss).Error
 	if err != nil {

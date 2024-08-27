@@ -110,11 +110,11 @@ func TestAdd(t *testing.T) {
 		return
 	}
 	bytes, _ := json.Marshal(data)
-	report := model.MonthlyReport{
+	report := model.UserMonthlyReport{
 		StuId:      data.StuId,
 		YearMonth:  data.Year + AddPrefix0(data.Month),
 		Version:    "v0.0.1",
-		Data:       string(bytes),
+		Data:       []byte(string(bytes)),
 		CreateTime: time.Now().Unix(),
 		UpdateTime: time.Now().Unix(),
 	}
@@ -127,7 +127,7 @@ func TestAdd(t *testing.T) {
 }
 
 func TestGet(t *testing.T) {
-	var report model.MonthlyReport
+	var report model.UserMonthlyReport
 	err := DB.Table("user_month_report").Where("stu_id = ? and `year_month` = ?", 2100051684, "202402").First(&report).Error
 	if err != nil {
 		fmt.Println(err)

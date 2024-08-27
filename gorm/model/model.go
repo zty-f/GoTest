@@ -38,12 +38,14 @@ func (UserMedal) TabName() string {
 	return TableNameUserMedal
 }
 
-type MonthlyReport struct {
+// UserMonthlyReport 用户月报表
+type UserMonthlyReport struct {
 	Id         int    `gorm:"id" json:"id"`
 	StuId      int64  `gorm:"stu_id" json:"stuId"`
 	YearMonth  string `gorm:"year_month" json:"yearMonth"`
 	Version    string `gorm:"version" json:"version"`
-	Data       string `gorm:"data" json:"data"`
+	ReadStatus int    `gorm:"read_status" json:"readStatus"`
+	Data       []byte `gorm:"data" json:"data"`
 	CreateTime int64  `gorm:"create_time" json:"createTime"`
 	UpdateTime int64  `gorm:"update_time" json:"updateTime"`
 }

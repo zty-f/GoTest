@@ -21,5 +21,6 @@ func init() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	DB = db
+
+	DB = db.Debug()
 }
