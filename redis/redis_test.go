@@ -253,3 +253,19 @@ func TestHMGet(t *testing.T) {
 	fmt.Println(cast.ToInt(result[0]))
 	fmt.Printf("%+v\n", result)
 }
+
+func TestDel(t *testing.T) {
+	ctx := context.Background()
+	res, err := rd.Del(ctx, "key11223").Result()
+	if err != nil {
+		fmt.Println(res, err)
+		return
+	}
+	fmt.Println("----------")
+	fmt.Println(res, err)
+}
+
+func TestCast(t *testing.T) {
+	fmt.Println(cast.ToInt("07")) // 7
+	fmt.Println(cast.ToInt("08")) // 0
+}
