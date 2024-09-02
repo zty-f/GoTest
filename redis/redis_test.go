@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/spf13/cast"
 	"math/rand"
+	"strconv"
 	"testing"
 	"time"
 
@@ -266,6 +267,13 @@ func TestDel(t *testing.T) {
 }
 
 func TestCast(t *testing.T) {
-	fmt.Println(cast.ToInt("07")) // 7
-	fmt.Println(cast.ToInt("08")) // 0
+	fmt.Println(cast.ToInt("07"))    // 7
+	fmt.Println(cast.ToInt("08"))    // 0
+	fmt.Println(cast.ToInt("012"))   // 10
+	fmt.Println(cast.ToInt("027"))   // 23
+	fmt.Println("--------------")    // 推荐使用如下转换
+	fmt.Println(strconv.Atoi("07"))  // 7
+	fmt.Println(strconv.Atoi("08"))  // 8
+	fmt.Println(strconv.Atoi("012")) // 12
+	fmt.Println(strconv.Atoi("027")) // 27
 }
