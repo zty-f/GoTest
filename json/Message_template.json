@@ -1,0 +1,45 @@
+{
+  "message_type": "2001000-课前预习，2001100-按时出勤，2001500-随堂练习,2001300-观看完整课程",
+  "test": [
+    {
+      "message_type":"2001000",
+      "stu_id":"2100052932",
+      "stu_course_id":"19315532",
+      "catalog_id":"1423466",
+      "course_id":"20025303",
+      "plan_id":"10052186",
+      "is_online":"1",
+      "create_time":"1725967582000"
+    },
+    {
+      "message_type":"2001200",
+      "is_online":"1",
+      "stu_id":"2100052932",
+      "stu_course_id":"19154512",
+      "catalog_id":"1465456",
+      "course_id":"200303",
+      "plan_id":"10052176",
+      "create_time":"1724826655000"
+    },
+    {
+      "message_type":"2001500",
+      "is_online":"1",
+      "stu_id":"2100052932",
+      "stu_course_id":"19315532",
+      "catalog_id":"1463463",
+      "course_id":"2005303",
+      "plan_id":"10052183",
+      "create_time":"1725967582000"
+    },
+    {
+      "message_type":"2001300",
+      "is_online":"1",
+      "stu_id":"2100052932",
+      "stu_course_id":"19315532",
+      "catalog_id":"1463463",
+      "course_id":"2005303",
+      "plan_id":"10052183",
+      "create_time":"1725967582000"
+    }
+  ]
+}
