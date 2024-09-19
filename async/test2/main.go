@@ -37,10 +37,10 @@ func main() {
 	rand.Seed(time.Now().UnixNano())
 
 	// 启动异步任务，最多重试3次，每次重试间隔1秒
-	asyncTaskWithRetry(3, 10*time.Second)
+	asyncTaskWithRetry(5, 1*time.Second)
 
 	// 主流程继续执行其他任务
 	fmt.Println("主流程继续执行...")
-	time.Sleep(1 * time.Second) // 假设主流程有其他耗时任务
+	time.Sleep(5 * time.Second) // 假设主流程有其他耗时任务
 	fmt.Println("主流程结束")
 }
