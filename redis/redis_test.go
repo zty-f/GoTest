@@ -243,7 +243,7 @@ func TestMultiGet(t *testing.T) {
 
 func TestHMGet(t *testing.T) {
 	ctx := context.Background()
-	rd.HSet(ctx, "hash", "key1", "value1", "key2", "value2", "key3", "value3", "key4", "value4", "key5", "value5")
+	// rd.HSet(ctx, "hash", "key1", "value1", "key2", "value2", "key3", "value3", "key4", "value4", "key5", "value5")
 	keys := []string{"key1", "key2", "key223"}
 	result, err := rd.HMGet(ctx, "hash", keys...).Result()
 	if err != nil {
@@ -251,6 +251,8 @@ func TestHMGet(t *testing.T) {
 		return
 	}
 	fmt.Println(result[0])
+	fmt.Println(result[1])
+	fmt.Println(result[2])
 	fmt.Println(cast.ToInt(result[0]))
 	fmt.Printf("%+v\n", result)
 }
@@ -276,4 +278,15 @@ func TestCast(t *testing.T) {
 	fmt.Println(strconv.Atoi("08"))  // 8
 	fmt.Println(strconv.Atoi("012")) // 12
 	fmt.Println(strconv.Atoi("027")) // 27
+}
+
+func TestSet(t *testing.T) {
+	var ctx = context.Background()
+	fmt.Println("-------------------")
+	// 过期时间不能这么设置   expiration的为0就是永不过期。-1表示保持当前过期时间
+	result, err := rd.Set(ctx, "bbbb", "11111", -1).Result()
+	if err != nil {
+		fmt.Println(err)
+	}
+	println(result)
 }

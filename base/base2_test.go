@@ -1,7 +1,9 @@
 package base
 
 import (
+	"encoding/json"
 	"fmt"
+	"github.com/spf13/cast"
 	"testing"
 	"time"
 )
@@ -23,4 +25,54 @@ func Test_1(t *testing.T) {
 
 func hasOverlap(time1, time2, beginTime, endTime time.Time) bool {
 	return (time1.Before(endTime) || time1.Equal(endTime)) && (time2.After(beginTime) || time2.Equal(beginTime))
+}
+
+func TestCast(t *testing.T) {
+	// cast 方法如果不是数值使用cast.ToInt会返回0
+	str1 := "20019_finish"
+	str2 := "2001000"
+	str3 := "finishNum"
+	fmt.Println(cast.ToInt(str1)) // 0
+	fmt.Println(cast.ToInt(str2)) // 2001000
+	fmt.Println(cast.ToInt(str3)) // 0
+}
+
+type MapData struct {
+	Map  map[string]string
+	Name string
+	Id   int
+}
+
+func TestMapNil(t *testing.T) {
+	m := &MapData{}
+	m.Map["1"] = "1"
+	fmt.Println(m.Map)
+}
+
+type Prize struct {
+	PrizeId    string `json:"prizeId"`
+	PrizeName  string `json:"prizeName"`
+	PrizeType  int    `json:"prizeType"`
+	PrizeCount int    `json:"prizeCount"`
+	PrizeImage string `json:"prizeImage"`
+}
+
+func TestModelStr(t *testing.T) {
+	prizes := make([]Prize, 0)
+	prizes = append(prizes, Prize{
+		PrizeId:    "86",
+		PrizeName:  "蝙蝠侠",
+		PrizeType:  4,
+		PrizeCount: 1,
+		PrizeImage: "https://static-inc.xiwang.com/mall/caa9c21cb0d27b62365d996753cacb88.png",
+	})
+	prizes = append(prizes, Prize{
+		PrizeId:    "xxx",
+		PrizeName:  "抽奖次数",
+		PrizeType:  5,
+		PrizeCount: 3,
+		PrizeImage: "https://static-inc.xiwang.com/mall/b4f35c39ee47240a2db91f579056933d.png",
+	})
+	marshal, _ := json.Marshal(prizes)
+	fmt.Println(string(marshal))
 }

@@ -101,5 +101,21 @@
         "prizeImage": "https://static-inc.xiwang.com/mall/704f105456998422a45e3ef225798a9f.png"
       }
     ]
+  ],
+  "t": [
+    {
+      "prizeId": "77",
+      "prizeName": "限定头像",
+      "prizeType": 4,
+      "prizeCount": 1,
+      "prizeImage": "https://static-inc.xiwang.com/xwx-user-avatar/test/6d75995e582ac9004ae5252925b91bff.png"
+    },
+    {
+      "prizeId": "xxx",
+      "prizeName": "抽奖次数",
+      "prizeType": 5,
+      "prizeCount": 1,
+      "prizeImage": "https://m.xiwang.com/resource/__private__/3650cd180bd6e0042977f35ed53a696d/yasuo/pengke/%E5%B8%BD%E5%AD%90.png"
+    }
   ]
 }
