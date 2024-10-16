@@ -283,10 +283,31 @@ func TestCast(t *testing.T) {
 func TestSet(t *testing.T) {
 	var ctx = context.Background()
 	fmt.Println("-------------------")
-	// 过期时间不能这么设置   expiration的为0就是永不过期。-1表示保持当前过期时间
+	// 过期时间不能这么设置   expiration的为0就是永不过期。-1表示保持当前过期时间----需要redis版本大于6.0才能使用
 	result, err := rd.Set(ctx, "bbbb", "11111", -1).Result()
 	if err != nil {
 		fmt.Println(err)
 	}
 	println(result)
+}
+
+func TestMGet(t *testing.T) {
+	var ctx = context.Background()
+	// rd.HSet(ctx, "hash", "key1", "value1", "key2", "value2", "key3", "value3", "key4", "value4", "key5", "value5")
+	rd.Set(ctx, "key1", "value1", 100*time.Second)
+	keys := []string{"key1", "key2", "key223"}
+	result, err := rd.MGet(ctx, keys...).Result()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	for i, v := range result {
+		if v == nil {
+			fmt.Println(i, v)
+		} else {
+			fmt.Println(i, v.(string))
+		}
+	}
+	s, err := rd.Get(ctx, "key4").Result()
+	fmt.Println(s, err)
 }

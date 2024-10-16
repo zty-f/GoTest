@@ -57,6 +57,7 @@ func TestUpsert2(t *testing.T) {
 		CreateTime: time.Now().Unix(),
 		UpdateTime: time.Now().Unix(),
 	}
+	// 更新对象需要单独定义，因为FirstOrCreate会将查询到的数据赋值给report这个对象
 	update := model.UserMonthlyReport{
 		Data:       report.Data,
 		UpdateTime: report.UpdateTime,

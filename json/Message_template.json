@@ -32,6 +32,17 @@
       "create_time": "1725967582000"
     },
     {
+      "message_type": "2001700",
+      "stu_id": "2100051684",
+      "stu_course_id": "19513468",
+      "catalog_id": "1468982",
+      "course_id": "2005822",
+      "plan_id": "10055299",
+      "create_time": "1727404443000",
+      "part": "xwx",
+      "brand": "100"
+    },
+    {
       "message_type": "2001300",
       "is_online": "1",
       "stu_id": "2100052932",
@@ -117,5 +128,31 @@
       "prizeCount": 1,
       "prizeImage": "https://m.xiwang.com/resource/__private__/3650cd180bd6e0042977f35ed53a696d/yasuo/pengke/%E5%B8%BD%E5%AD%90.png"
     }
-  ]
+  ],
+  "prize":
+  {
+    "prizeId": "C2024090901Kwop",
+    "prizeName": "如意金箍棒",
+    "prizeType": 2,
+    "prizeCount": 1,
+    "prizeImage": "https://m.xiwang.com/resource/__private__/3650cd180bd6e0042977f35ed53a696d/yasuo/wukong/%E6%89%8B%E6%8C%81.png"
+  },
+  "prizeType": {
+    "stat": 1,
+    "code": 0,
+    "message": "success",
+    "data": {
+      "total": 1,
+      "followList": [
+        {
+          "userId": 2100052257,
+          "nickName": "用户昵称最长十个字符",
+          "avatar": "https://static-inc.xiwang.com/xwx-user-avatar/test/4626e051b931c60c63d7391ecffe2b0b.png",
+          "likeNum": 1
+        }
+      ]
+    },
+    "trace_id": "7b1c41dd356874ae05de35cfc2666cbc",
+    "metadata": {}
+  }
 }
