@@ -17,4 +17,11 @@ func TestZScore(t *testing.T) {
 
 	x, err := rd.ZRank(ctx, "zset234", "two").Result()
 	fmt.Println(x, "---", err) // 0 --- redis: nil
+	fmt.Println("===============")
+	i, err := rd.ZCount(ctx, "zset345555", "-inf", "+inf").Result()
+	fmt.Println(i, "---", err) // 2 --- <nil>
+
+	fmt.Println("===============")
+	strings, err := rd.ZRevRangeByScore(ctx, "zset45332", &redis.ZRangeBy{Max: "+inf", Min: "-inf"}).Result()
+	fmt.Println(strings, "---", err)
 }
