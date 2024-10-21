@@ -342,7 +342,7 @@ func GetWeekStartAndEnd() (time.Time, time.Time) {
 }
 
 func GetStartAndEndTimeOfCurrentWeek() (time.Time, time.Time) {
-	now := time.Now().Add(time.Hour * 45)
+	now := time.Now()
 	weekday := int(now.Weekday()) - 1
 
 	// 计算本周的开始时间
