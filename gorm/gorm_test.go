@@ -221,3 +221,16 @@ func TestFind(t *testing.T) {
 	}
 	fmt.Printf("userks:%+v\n", userks)
 }
+
+func TestSelectWhere(t *testing.T) {
+	userMedels := make([]model.UserMedal, 0)
+	err := DB.Debug().Table("user_medal").Where("year = ?", 24).Where("is_wear = ? or notice_time = ?", 1, 0).Find(&userMedels).Error
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	/*
+		SQL: SELECT * FROM `user_medal` WHERE `year` = 24 AND (`is_wear` = 1 OR `notice_time` = 0)
+	*/
+	fmt.Printf("userMedels:%+v\n", userMedels)
+}

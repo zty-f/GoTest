@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/spf13/cast"
+	"strings"
 	"testing"
 	"time"
 )
@@ -75,4 +76,14 @@ func TestModelStr(t *testing.T) {
 	})
 	marshal, _ := json.Marshal(prizes)
 	fmt.Println(string(marshal))
+}
+
+func TestSprintf(t *testing.T) {
+	println(fmt.Sprintf("user%d init roundNo%d", 1, 2))
+	planName := "kskksksks"
+	planName2 := "2222【真题易错】222"
+	println(strings.Contains(planName, "真题易错"))
+	println(strings.Contains(planName2, "真题易错"))
+
+	println(strings.Contains("47,48,67", "48"))
 }
