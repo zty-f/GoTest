@@ -55,18 +55,11 @@
   ],
   "水星": [
     {
-      "prizeId": "C2024092601XuhW",
-      "prizeName": "超精密头盔",
+      "prizeId": "C2024080701GAVi",
+      "prizeName": "西部风沙",
       "prizeType": 2,
       "prizeCount": 1,
-      "prizeImage": "https://m.xiwang.com/resource/__private__/3650cd180bd6e0042977f35ed53a696d/yasuo/xingji/mao1.png"
-    },
-    {
-      "prizeId": "xxx",
-      "prizeName": "抽奖",
-      "prizeType": 5,
-      "prizeCount": 1,
-      "prizeImage": "https://static-inc.xiwang.com/mall/fd753ffaeecc0faad472cdface3f3f9e.png"
+      "prizeImage": "https://m.xiwang.com/resource/__private__/3650cd180bd6e0042977f35ed53a696d/%E7%89%9B%E4%BB%94%E5%BE%88%E5%BF%99/%E5%B8%BD%E5%AD%90%20%20.png"
     },
     {
       "prizeId": "84",
@@ -85,13 +78,6 @@
   ],
   "金星": [
     {
-      "prizeId": "C2024080701GAVi",
-      "prizeName": "西部风沙",
-      "prizeType": 2,
-      "prizeCount": 1,
-      "prizeImage": "https://m.xiwang.com/resource/__private__/3650cd180bd6e0042977f35ed53a696d/%E7%89%9B%E4%BB%94%E5%BE%88%E5%BF%99/%E5%B8%BD%E5%AD%90%20%20.png"
-    },
-    {
       "prizeId": "xxx",
       "prizeName": "抽奖",
       "prizeType": 5,
@@ -99,11 +85,11 @@
       "prizeImage": "https://static-inc.xiwang.com/mall/fd753ffaeecc0faad472cdface3f3f9e.png"
     },
     {
-      "prizeId": "85",
-      "prizeName": "金星头像",
-      "prizeType": 4,
+      "prizeId": "79",
+      "prizeName": "金星头像框",
+      "prizeType": 3,
       "prizeCount": 1,
-      "prizeImage": "https://static-inc.xiwang.com/mall/e76a3325a460f5a6b7e79fb4abf2e82a.png"
+      "prizeImage": "https://static-inc.xiwang.com/mall/76ce1ecbb4c9dbc5f9182269b5ca08c6.gif"
     },
     {
       "prizeId": "60011",
@@ -122,13 +108,6 @@
       "prizeImage": "https://m.xiwang.com/resource/__private__/3650cd180bd6e0042977f35ed53a696d/%E7%89%9B%E4%BB%94%E5%BE%88%E5%BF%99/%E6%89%8B%E6%8C%81.png"
     },
     {
-      "prizeId": "xxx",
-      "prizeName": "抽奖",
-      "prizeType": 5,
-      "prizeCount": 2,
-      "prizeImage": "https://static-inc.xiwang.com/mall/fd753ffaeecc0faad472cdface3f3f9e.png"
-    },
-    {
       "prizeId": "86",
       "prizeName": "火星头像",
       "prizeType": 4,
@@ -145,17 +124,10 @@
   ],
   "木星": [
     {
-      "prizeId": "C2024091801OOJ3",
-      "prizeName": "斗志昂扬拍",
-      "prizeType": 2,
-      "prizeCount": 1,
-      "prizeImage": "https://m.xiwang.com/resource/__private__/3650cd180bd6e0042977f35ed53a696d/yasuo/wangqiu/pai.png"
-    },
-    {
       "prizeId": "xxx",
       "prizeName": "抽奖",
       "prizeType": 5,
-      "prizeCount": 3,
+      "prizeCount": 2,
       "prizeImage": "https://static-inc.xiwang.com/mall/fd753ffaeecc0faad472cdface3f3f9e.png"
     },
     {
@@ -175,25 +147,18 @@
   ],
   "土星": [
     {
-      "prizeId": "C2024080701yLCX",
-      "prizeName": "小小镖客",
+      "prizeId": "C2024092601XuhW",
+      "prizeName": "超精密头盔",
       "prizeType": 2,
       "prizeCount": 1,
-      "prizeImage": "https://m.xiwang.com/resource/__private__/3650cd180bd6e0042977f35ed53a696d/yasuo/gai/%E5%85%A8%E8%BA%AB2.png"
+      "prizeImage": "https://m.xiwang.com/resource/__private__/3650cd180bd6e0042977f35ed53a696d/yasuo/xingji/mao1.png"
     },
     {
-      "prizeId": "xxx",
-      "prizeName": "抽奖",
-      "prizeType": 5,
-      "prizeCount": 3,
-      "prizeImage": "https://static-inc.xiwang.com/mall/fd753ffaeecc0faad472cdface3f3f9e.png"
-    },
-    {
-      "prizeId": "79",
-      "prizeName": "土星头像框",
+      "prizeId": "85",
+      "prizeName": "金星头像",
       "prizeType": 4,
       "prizeCount": 1,
-      "prizeImage": "https://static-inc.xiwang.com/mall/76ce1ecbb4c9dbc5f9182269b5ca08c6.gif"
+      "prizeImage": "https://static-inc.xiwang.com/mall/e76a3325a460f5a6b7e79fb4abf2e82a.png"
     },
     {
       "prizeId": "60014",
@@ -201,6 +166,15 @@
       "prizeType": 1,
       "prizeCount": 1,
       "prizeImage": "https://static-inc.xiwang.com/mall/f7844e0e4b1afb269b0507a071e7461a.png"
+    }
+  ],
+  "终极大奖": [
+    {
+      "prizeId": "xxx",
+      "prizeName": "抽奖",
+      "prizeType": 6,
+      "prizeCount": 3,
+      "prizeImage": "https://static-inc.xiwang.com/mall/fd753ffaeecc0faad472cdface3f3f9e.png"
     }
   ]
 }

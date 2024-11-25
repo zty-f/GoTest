@@ -1,9 +1,15 @@
 package base
 
 import (
+	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/bytedance/sonic"
 	"github.com/spf13/cast"
+	"io/ioutil"
+	"net/http"
+	"net/url"
 	"strings"
 	"testing"
 	"time"
@@ -86,4 +92,111 @@ func TestSprintf(t *testing.T) {
 	println(strings.Contains(planName2, "真题易错"))
 
 	println(strings.Contains("47,48,67", "48"))
+}
+
+type UserInfoModReq struct {
+	UserId         string     `json:"user_id"`
+	BusinesslineId string     `json:"businessline_id"`
+	ModInfo        ModInfo    `json:"mod_info"`
+	PersonInfo     PersonInfo `json:"person_info"`
+}
+
+type ModInfo struct {
+	Status   int    `json:"status"` // 1 正常  2 冻结 3 注销
+	PersonId string `json:"person_id"`
+}
+
+type PersonInfo struct {
+	LastPersonId   string                    `json:"last_person_id"`
+	ModPersonId    string                    `json:"mod_person_id"`
+	LastPersonInfo map[string]map[string]int `json:"last_person_info"`
+	ModPersonInfo  map[string]map[string]int `json:"mod_person_info"`
+}
+
+func TestModInfo(t *testing.T) {
+	modeInfoStr := `{"user_id":"2100053581","businessline_id":"30","mod_info":{"person_id":"100002222"},"person_info":{"last_person_id":"2100053581","mod_person_id":"100002222","last_person_info":{"2100053581":{"30":2100053581},"100002222":{"40":2100053582}},"mod_person_info":{"2100053581":{},"100002222":{"30":2100053581,"40":2100053582}}}}`
+
+	var userInfoModReq UserInfoModReq
+	err := json.Unmarshal([]byte(modeInfoStr), &userInfoModReq)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(userInfoModReq)
+	fmt.Println(userInfoModReq.PersonInfo)
+
+	var userInfoModReq1 UserInfoModReq
+	err1 := sonic.Unmarshal([]byte(modeInfoStr), &userInfoModReq1)
+	if err1 != nil {
+		fmt.Println(err1)
+	}
+	fmt.Println(userInfoModReq1)
+	fmt.Println(userInfoModReq1.PersonInfo)
+	for _, v := range userInfoModReq1.PersonInfo.ModPersonInfo {
+		fmt.Println(len(v))
+	}
+	var x map[string]string
+	fmt.Println(len(x))
+}
+
+func TestContext1(t *testing.T) {
+	ctx := context.Background()
+	ctx = context.WithValue(ctx, "key", "value")
+	fmt.Println(ctx.Value("key"))
+
+	ctx = context.WithValue(ctx, "key", "value1")
+	fmt.Println(ctx.Value("key"))
+
+	ctx1 := context.WithValue(ctx, "key", "value2")
+	fmt.Println(ctx1.Value("key"))
+
+	ctx2 := context.WithValue(ctx1, "key1", "value3")
+	fmt.Println(ctx2.Value("key"))
+	fmt.Println(ctx2.Value("key1"))
+
+}
+
+func TestCurlUserModify(t *testing.T) {
+	// 设置请求 URL
+	urlStr := "http://userapi.inner.xiwang.com/UserCenter/Users/getUserPersonInfo"
+
+	// 设置请求头
+	headers := map[string]string{
+		"Content-Type": "application/x-www-form-urlencoded",
+	}
+
+	// 设置请求体
+	data := url.Values{
+		"user_id":         {"2100053558"},
+		"filter_status[]": {"2", "3"},
+	}
+
+	// 构建请求
+	req, err := http.NewRequest("POST", urlStr, bytes.NewBufferString(data.Encode()))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// 设置请求头
+	for key, value := range headers {
+		req.Header.Set(key, value)
+	}
+
+	// 发送请求
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer resp.Body.Close()
+
+	// 读取响应体
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println(string(body))
 }

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -66,4 +67,16 @@ func main() {
 	http.HandleFunc("/download", downloadFile)
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
+}
+
+func readFile() {
+	// 读取文件内容
+	data, err := ioutil.ReadFile("example.txt")
+	if err != nil {
+		fmt.Println("Error reading file:", err)
+		return
+	}
+
+	fmt.Println("File content:")
+	fmt.Println(string(data))
 }
