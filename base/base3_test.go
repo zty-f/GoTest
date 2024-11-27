@@ -39,3 +39,34 @@ func TestPtr(t *testing.T) {
 	   make只适用于slice、map以及channel的初始化
 	*/
 }
+
+type student struct {
+	name string
+	age  int
+}
+
+func TestStruct(t *testing.T) {
+	m := make(map[string]*student)
+	stus := []student{
+		{name: "pprof.cn", age: 18},
+		{name: "测试", age: 23},
+		{name: "博客", age: 28},
+	}
+
+	for _, stu := range stus { // For range循环的本质是将每个stu对应的内存地址赋值给循环体
+		fmt.Printf("%p\n", &stu) // 0x1400001a578 每次都是同一个地址，循环将每个值复制到这个地址
+		fmt.Println(&stu)
+		m[stu.name] = &stu // 此处是浅拷贝，每次都是将对应的内存地址赋值
+	}
+	// 循环结束stu地址存储的数据就是最后一次循环的数据
+	fmt.Printf("%+v\n", m)
+	for k, v := range m {
+		fmt.Println(k, "=>", v.name) // 此次打印的都是最后一次循环的数据
+	}
+	fmt.Println("------------")
+	mm := make(map[string]student)
+	for _, stu := range stus {
+		fmt.Printf("%p\n", &stu)
+		mm[stu.name] = stu // 这种方式是深拷贝，每次生成一个新的内存地址赋值
+	}
+}
