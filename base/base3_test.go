@@ -70,3 +70,28 @@ func TestStruct(t *testing.T) {
 		mm[stu.name] = stu // 这种方式是深拷贝，每次生成一个新的内存地址赋值
 	}
 }
+
+func TestSliceAndMapInit(t *testing.T) {
+	// 切片为初始化可以进行操作，加值，但是不能取值，会报错
+	var s []int
+	// fmt.Println(s[0])  // panic: runtime error: index out of range
+	s = append(s, 1)
+	fmt.Println(s)
+	fmt.Println("------------")
+	// make 切片会给每个元素设置0值，append是往后面加值
+	s1 := make([]int, 5)
+	s1 = append(s1, 99)
+	fmt.Println(s1) // [0 0 0 0 0 99]
+	fmt.Println("------------")
+
+	var m map[int]int
+	// m[1] = 2 // panic: assignment to entry in nil map  map为nil时不能进行操作 需要初始化分配空间
+	fmt.Println(m)
+	// 未初始化的数组可以进行取值操作，默认为字段零值
+	fmt.Println(m[1]) // 0
+
+	m = nil
+
+	fmt.Println(m)
+	fmt.Println(m[1])
+}
