@@ -1,7 +1,9 @@
 package base
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"testing"
 )
 
@@ -145,4 +147,55 @@ func TestSwitch(t *testing.T) {
 	fmt.Println(isChar(' '))
 	fmt.Println("------------")
 	fmt.Println(isChar('\t'))
+}
+
+func TestMarshalInt(t *testing.T) {
+	var data = []byte(`{"status": 200}`)
+	var result map[string]interface{}
+
+	if err := json.Unmarshal(data, &result); err != nil {
+		log.Fatalln(err)
+	}
+	// 在 encode/decode JSON 数据时，Go 默认会将数值当做 float64 处理。
+	fmt.Printf("%T\n", result["status"])
+	fmt.Println("------------")
+	var res1 map[string]int
+	if err := json.Unmarshal(data, &res1); err != nil {
+		log.Fatalln(err)
+	}
+	fmt.Printf("%T\n", res1["status"])
+}
+
+func TestPanicRecover1(t *testing.T) {
+	// 错误的 recover 调用示例
+	recover()         // 什么都不会捕捉
+	panic("not good") // 发生 panic，主程序退出
+	recover()         // 不会被执行
+	println("ok")
+}
+
+func TestPanicRecover2(t *testing.T) {
+	// 错误的 recover 调用示例
+	defer recover()
+	panic("not good")
+	fmt.Println("ok")
+}
+
+func TestPanicRecover3(t *testing.T) {
+	// defer 调用时多层嵌套依然无效。
+	defer func() {
+		func() {
+			recover()
+		}()
+	}()
+	panic(1)
+}
+
+func TestPanicRecover4(t *testing.T) {
+	// 正确的 recover 调用示例 必须在 defer 函数中直接调用才有效。
+	defer func() {
+		fmt.Println("recovered: ", recover())
+	}()
+	panic("not good")
+	fmt.Println("ok")
 }
