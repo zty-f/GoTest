@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"testing"
+	"time"
 )
 
 func TestPtr(t *testing.T) {
@@ -221,4 +222,32 @@ func TestDefer(t *testing.T) {
 			defer f.Close()
 		}()
 	}
+}
+
+func TestSelectFor(t *testing.T) {
+	chExit := make(chan bool)
+	go testSelectFor(chExit)
+	chExit <- true
+	chExit <- false
+	close(chExit)
+	time.Sleep(2 * time.Second)
+}
+
+// 怎么退出for Select break 并不能跳出循环
+func testSelectFor(chExit chan bool) {
+EXIT:
+	for {
+		select {
+		case v, ok := <-chExit:
+			if !ok {
+				fmt.Println("close channel 2", v)
+				break EXIT
+				// goto EXIT2
+			}
+
+			fmt.Println("ch2 val =", v)
+		}
+	}
+	// EXIT2:
+	fmt.Println("exit testSelectFor2")
 }
