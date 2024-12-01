@@ -95,3 +95,31 @@ func TestSliceAndMapInit(t *testing.T) {
 	fmt.Println(m)
 	fmt.Println(m[1])
 }
+
+func TestStringAndRune(t *testing.T) {
+	s := "abcdefg"
+	fmt.Println(string(s[0]))
+	fmt.Println(s)
+	sb := []byte(s)
+	fmt.Println(string(sb[0]))
+	fmt.Println(sb)
+
+	fmt.Println("------------")
+
+	// 中文字符的时候转换成byte数组的时候字符不能一一对应，string的底层默认是不可修改的[]byte
+	s = "你好呀我是谁"
+	fmt.Println(string(s[8]))
+	fmt.Println(s)
+	sb = []byte(s)
+	fmt.Println(string(sb[8]))
+	fmt.Println(sb)
+
+	fmt.Println("------------")
+	s = "你好呀我是谁"
+	fmt.Println(string(s[8]))
+	fmt.Println(s[0:2])
+	// rune是int32的别名,使用这个数组转换能够是中文字符一一对应
+	sru := []rune(s)
+	fmt.Println(string(sru[5]))
+	fmt.Println(sru[0:2])
+}
