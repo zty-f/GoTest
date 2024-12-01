@@ -123,3 +123,26 @@ func TestStringAndRune(t *testing.T) {
 	fmt.Println(string(sru[5]))
 	fmt.Println(sru[0:2])
 }
+
+func isChar(x byte) bool {
+	// switch 语句中的 case 代码块会默认带上 break，但可以使用 fallthrough 来强制执行下一个 case 代码块,只会穿透到下一个 case
+	switch x {
+	case ' ':
+		fmt.Println("空格", x)
+		fallthrough // 返回 true
+	case '\t':
+		fmt.Println("制表符", x)
+		return true
+	case '\n':
+		fmt.Println("换行", x)
+		return true
+	}
+	fmt.Println("switch end")
+	return false
+}
+
+func TestSwitch(t *testing.T) {
+	fmt.Println(isChar(' '))
+	fmt.Println("------------")
+	fmt.Println(isChar('\t'))
+}
