@@ -68,7 +68,7 @@ func Test2(t *testing.T) {
 	})
 
 	// 这里会阻塞，numCh 是无缓冲通道，子协程写入数据后需要有人读取后才会继续执行
-	for val := range numCh {
+	for val := range numCh { // for range 读取channel里面的数据的时候，如果channel没有数据了，就会阻塞，直到close通道才会停止
 		fmt.Println("Main recv val: ", val)
 	}
 
