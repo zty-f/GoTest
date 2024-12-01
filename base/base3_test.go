@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 	"testing"
 )
 
@@ -198,4 +199,26 @@ func TestPanicRecover4(t *testing.T) {
 	}()
 	panic("not good")
 	fmt.Println("ok")
+}
+
+func TestDefer(t *testing.T) {
+	// defer 语句会将函数推迟到外层函数返回的时候执行，需要循环借宿才能关闭文件资源占用
+	for i := 0; i < 5; i++ {
+		f, err := os.Open("/path/to/file")
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer f.Close()
+	}
+
+	// 循环里面func 是一个局部函数，在局部函数里面执行 defer 将不会有问题，可以每次循环都及时释放资源
+	for i := 0; i < 5; i++ {
+		func() {
+			f, err := os.Open("/path/to/file")
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer f.Close()
+		}()
+	}
 }

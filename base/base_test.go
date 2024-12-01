@@ -229,7 +229,7 @@ func f(n int) (r int) {
 	}
 	return n + 1
 }
-func TestDefer(t *testing.T) {
+func TestDefer1(t *testing.T) {
 	// fmt.Println(f(3))
 	// var m map[int]int
 	// fmt.Println(m[1])
