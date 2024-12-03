@@ -251,3 +251,39 @@ EXIT:
 	// EXIT2:
 	fmt.Println("exit testSelectFor2")
 }
+
+// unmarshal json到结构体的时候，不存在的字段会使用默认值替换，bool的默认值是false
+func TestMarshalBool(t *testing.T) {
+	type tmp struct {
+		IsTest bool   `json:"is_test"`
+		A      int    `json:"a"`
+		B      string `json:"b"`
+	}
+	var data1 = []byte(`{"is_test": true,"a":1,"b":"2"}`)
+	var result tmp
+	if err := json.Unmarshal(data1, &result); err != nil {
+		log.Fatalln(err)
+	}
+	fmt.Printf("%+v\n", result) // {IsTest:true A:1 B:2}
+
+	var data2 = []byte(`{"is_test": false,"a":1,"b":"2"}`)
+	var result2 tmp
+	if err := json.Unmarshal(data2, &result2); err != nil {
+		log.Fatalln(err)
+	}
+	fmt.Printf("%+v\n", result2) // {IsTest:false A:1 B:2}
+
+	var data3 = []byte(`{"a":1,"b":"2"}`)
+	var result3 tmp
+	if err := json.Unmarshal(data3, &result3); err != nil {
+		log.Fatalln(err)
+	}
+	fmt.Printf("%+v\n", result3) // {IsTest:false A:1 B:2}
+
+	var data4 = []byte(`{}`)
+	var result4 tmp
+	if err := json.Unmarshal(data4, &result4); err != nil {
+		log.Fatalln(err)
+	}
+	fmt.Printf("%+v\n", result4) // {IsTest:false A:0 B:}
+}
