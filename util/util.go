@@ -224,3 +224,13 @@ func CheckStringForUnmarshal(checkStr string) (err error) {
 }
 
 var EmptyErrMsg = errors.New("empty resp")
+
+func RemoveOne(baseSlice []string, target string) []string {
+	var diff []string
+	for _, item := range baseSlice {
+		if item != target {
+			diff = append(diff, item)
+		}
+	}
+	return diff
+}

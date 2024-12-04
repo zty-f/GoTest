@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"test/util"
 	"testing"
 	"time"
 )
@@ -286,4 +287,25 @@ func TestMarshalBool(t *testing.T) {
 		log.Fatalln(err)
 	}
 	fmt.Printf("%+v\n", result4) // {IsTest:false A:0 B:}
+}
+
+var strMap = map[int][]string{
+	1: {"a", "b", "c", "h", "i", "j", "k"},
+	2: {"c", "d", "r"},
+	3: {"e", "f", "g"},
+}
+
+func TestConstMap(t *testing.T) {
+	sMap := make(map[int][]string)
+	// 赋值后对于数组的修改不会影响到原来的常量定义的数组 相当于把strMap[1]的值复制了一份给sMap[1]
+	sMap[1] = strMap[1]
+	fmt.Println(sMap)
+	for i := 0; i < 3; i++ {
+		arrs := sMap[1]
+		str := util.GetRandomOneFromStringArray(arrs)
+		fmt.Println(str)
+		sMap[1] = util.RemoveOne(arrs, str)
+	}
+	fmt.Println(sMap)
+	fmt.Println(strMap)
 }
