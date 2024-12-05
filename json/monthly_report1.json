@@ -1,0 +1,37 @@
+{
+    "is_test": true,
+    "stu_id": "2100051684",
+    "begin_date": "11.01",
+    "end_date": "11.30",
+    "year": "2024",
+    "month": "11",
+    "part": "xwx",
+    "brand": "100",
+
+    "power_value": "162",
+    "stdy_task_finish_detail": "{\"2001000\":\"1\",\"2001100\":\"1\",\"2001200\":\"6\",\"2001300\":\"6\",\"2001400\":\"6\",\"2001500\":\"2\",\"2001600\":\"5\"}",
+    "total_duration": "509",
+
+    "month_growth_value": "3003",
+    "cur_growth_value": "34553",
+    "cur_growth_level": "6",
+    "begin_month_growth_value": "34550",
+    "next_level_value_diff": "10447",
+    "growth_value_over_rate_all": "92",
+    "growth_value_over_rate_same_level": "42",
+    "growth_value_change_point": "{\"5.1-5.7\":\"2653\",\"5.14-5.21\":\"3003\",\"5.21-5.31\":\"3003\",\"5.7-5.14\":\"2813\"}",
+
+    "gold_income_num": "1200",
+    "gold_expend_num": "5900",
+    "stdy_task_gold_income_num": "1038",
+    "level_gold_income_num": "162",
+    "other_gold_income_num": "0",
+    "exchange_sku_sum": "5",
+    "exchange_detail": "[\"{\\\"sku_name\\\":\\\"240601215652100118241212\\\",\\\"sku_icon\\\":\\\"\\\",\\\"change_type\\\":2,\\\"pay_point\\\":1750,\\\"create_time\\\":1717250270}\",\"{\\\"sku_name\\\":\\\"240602213402100448601212\\\",\\\"sku_icon\\\":\\\"\\\",\\\"change_type\\\":2,\\\"pay_point\\\":250,\\\"create_time\\\":1717335252}\",\"{\\\"sku_name\\\":\\\"启蒙积木军事系列航空母舰拼装玩具\\\",\\\"sku_icon\\\":\\\"https://static0.xesimg.com/udc-o-point/jf/shop/sku/8c1e58c2d8993d68da058a1e3ac872e5.jpg\\\",\\\"change_type\\\":1,\\\"pay_point\\\":500,\\\"create_time\\\":1711113251}\",\"{\\\"sku_name\\\":\\\"超精密头盔\\\",\\\"sku_icon\\\":\\\"https://m.xiwang.com/resource/__private__/3650cd180bd6e0042977f35ed53a696d/yasuo/xingji/mao1.png\\\",\\\"change_type\\\":3,\\\"pay_point\\\":400,\\\"create_time\\\":1727866297}\",\"{\\\"sku_name\\\":\\\"齐天大圣\\\",\\\"sku_icon\\\":\\\"https://m.xiwang.com/resource/__private__/3650cd180bd6e0042977f35ed53a696d/yasuo/wukong/%E5%85%A81.png\\\",\\\"change_type\\\":3,\\\"pay_point\\\":3000,\\\"create_time\\\":1727816297}\"]",
+
+    "month_start_tier": "5",
+    "month_end_tier": "6",
+
+    "medal_num": "13",
+    "medal_detail":"[\"{\\\"medal_id\\\":10070,\\\"medal_type\\\":1,\\\"medal_name\\\":\\\"毕业成就\\\",\\\"medal_image\\\":\\\"https://static-inc.xiwang.com/mall/6cee6f9c5f0ea29fcd86aaf9ae80527e.png\\\",\\\"create_time\\\":1727866297}\",\"{\\\"medal_id\\\":10062,\\\"medal_type\\\":1,\\\"medal_name\\\":\\\"全勤战士\\\",\\\"medal_image\\\":\\\"https://static-inc.xiwang.com/mall/926524899d7743cf009c8754735ff863.png\\\",\\\"create_time\\\":1727866397}\",\"{\\\"medal_id\\\":20002,\\\"medal_type\\\":2,\\\"medal_name\\\":\\\"奋战30天\\\",\\\"medal_image\\\":\\\"https://static-inc.xiwang.com/mall/7d8628bd6a54cdab98e824c2fff202cb.png\\\",\\\"create_time\\\":1727866497}\",\"{\\\"medal_id\\\":40001,\\\"medal_type\\\":4,\\\"medal_name\\\":\\\"小试牛刀\\\",\\\"medal_image\\\":\\\"https://static-inc.xiwang.com/mall/d69d38f7e789abde2a32aa72c645fecb.png\\\",\\\"create_time\\\":1727866597}\",\"{\\\"medal_id\\\":40007,\\\"medal_type\\\":4,\\\"medal_name\\\":\\\"连胜14天\\\",\\\"medal_image\\\":\\\"https://static-inc.xiwang.com/mall/29e1e9ea7289383861183ef7f2f4ea9a.png\\\",\\\"create_time\\\":1727866697}\",\"{\\\"medal_id\\\":50002,\\\"medal_type\\\":4,\\\"medal_name\\\":\\\"钱包守卫者\\\",\\\"medal_image\\\":\\\"https://static-inc.xiwang.com/mall/fc69ef81b996dc28f41f8fccb49d9d5d.png\\\",\\\"create_time\\\":1727866797}\",\"{\\\"medal_id\\\":60001,\\\"medal_type\\\":4,\\\"medal_name\\\":\\\"坚持打卡7天\\\",\\\"medal_image\\\":\\\"https://static-inc.xiwang.com/mall/4b8dddc01e6e96409f4109a5866b30ec.png\\\",\\\"create_time\\\":1727866897}\",\"{\\\"medal_id\\\":60200,\\\"medal_type\\\":4,\\\"medal_name\\\":\\\"水星\\\",\\\"medal_image\\\":\\\"https://static-inc.xiwang.com/mall/ff3cfdd84fc3a96ce017ec8837b6ed07.png\\\",\\\"create_time\\\":1727866997}\",\"{\\\"medal_id\\\":70001,\\\"medal_type\\\":4,\\\"medal_name\\\":\\\"小小书童\\\",\\\"medal_image\\\":\\\"https://static-inc.xiwang.com/mall/b79cab2356d4497e607b52b92f8ef82b.png\\\",\\\"create_time\\\":1727867297}\",\"{\\\"medal_id\\\":10033,\\\"medal_type\\\":1,\\\"medal_name\\\":\\\"毕业成就\\\",\\\"medal_image\\\":\\\"https://static-inc.xiwang.com/mall/3c3636859c95c89ec975cb42ca49f2e2.png\\\",\\\"create_time\\\":1727868297}\"]"
+}

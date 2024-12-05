@@ -94,6 +94,7 @@ func TestMarshalExchangeDetail(t *testing.T) {
 	fmt.Println(string(bytes))
 }
 
+// ！！！将生成的字符串放入idea软件里面的json文件里面字段值""中即可自动格式化增加转义符号
 func TestMarshalMedalDetail(t *testing.T) {
 	medalDetails := []MedalDetail{
 		{
