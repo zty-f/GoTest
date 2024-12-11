@@ -309,3 +309,13 @@ func TestConstMap(t *testing.T) {
 	fmt.Println(sMap)
 	fmt.Println(strMap)
 }
+
+func Test左移(t *testing.T) {
+	fmt.Println(1 << 1)
+	fmt.Println(1 << 2)
+	fmt.Println(1 << 3)
+	fmt.Println(1 << 4)
+	fmt.Println(1 << 10)
+	fmt.Println(2 << 10)
+	fmt.Println(3 << 10)
+}
