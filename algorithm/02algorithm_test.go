@@ -64,12 +64,16 @@ func fourSum(nums []int, target int) [][]int {
 /*
 问题描述
 在一个游戏中，小W拥有 n 个英雄，每个英雄的初始能力值均为 1。她可以通过升级操作来提升英雄的能力值，最多可以进行 k 次升级。
+b[i] 表示第 i 个的能力目标值，c[i] 表示某个英雄能力值达到b[i]所获得的对应的奖励。
 https://www.marscode.cn/practice/9ejn6or69o3rdn?problem_id=7414004855076470828
 游戏规则：
 每个英雄的奖励只能获得一次
 升级操作的选择是自由的，可以多次选择同一个英雄进行升级
 请计算在最多进行 k 次升级操作后，小W能获得的最大奖励总和。
 */
+
+// 贪心&背包学习  解析链接如下：
+// https://gitcode.csdn.net/66c560349a494d224f748b2c.html?dp_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MTU0OTk3OCwiZXhwIjoxNzM0NTkyNjI5LCJpYXQiOjE3MzM5ODc4MjksInVzZXJuYW1lIjoicXFfNTA2NjAzNTYifQ.pydS5DneLUQwGE2WMfwKd6e-QeRJJhTsBBNtR1fSxNU&spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7Ebaidujs_utm_term%7Eactivity-1-137546255-blog-136336954.235%5Ev43%5Epc_blog_bottom_relevance_base8&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7Ebaidujs_utm_term%7Eactivity-1-137546255-blog-136336954.235%5Ev43%5Epc_blog_bottom_relevance_base8&utm_relevant_index=2
 
 func solution(n, k int, b, c []int) int {
 	// 获取b最大能力值
@@ -112,23 +116,45 @@ func solution(n, k int, b, c []int) int {
 	}
 
 	// 如果能够升级的次数有限，需要通过背包算法获取最优的奖励获取方式
-	// 定义数组dp[i]表示升级次数为i时的最大奖励
-	f := make([]int, k+1)
-
+	// 定义数组f[i]表示升级次数为i时的最大奖励
+	// f := make([]int, k+1)
+	f := make([][]int, n+1)
+	for i := 0; i < n+1; i++ {
+		f[i] = make([]int, k+1)
+	}
+	bt := make([]int, 1)
+	bt = append(bt, b...)
+	ct := make([]int, 1)
+	ct = append(ct, c...)
+	// 二维动态规划处理
 	// 遍历每个英雄的升级成本和奖励
-	for i := 0; i < n; i++ {
-		cost := b[i]
-		weight := c[i]
-
-		// 从 k 到 cost-1 进行倒序遍历
-		for j := k; j >= cost; j-- {
-			// 更新 f[j] 的值，取当前值和 f[j-cost] + weight 的最大值
-			f[j] = max(f[j], f[j-cost]+weight)
+	// 当前b[i]表示当前所处的能力值所需的最小升级次数
+	for i := 1; i <= n; i++ {
+		cost := bt[i]   // 升级当前英雄所需的升级次数
+		weight := ct[i] // 升级当前英雄的奖励
+		for j := 0; j < k+1; j++ {
+			f[i][j] = f[i-1][j]
+			if j >= cost {
+				f[i][j] = max(f[i-1][j], f[i-1][j-cost]+weight)
+			}
 		}
 	}
 
+	// 一维动态规划处理，必须从后往前遍历，这样才能复用上一轮生成的数据
+	dp := make([]int, k+1)
+	for i := 0; i < n; i++ {
+		cost := b[i]   // 升级当前英雄所需的升级次数
+		weight := c[i] // 升级当前英雄的奖励
+		// // 从 k 到 cost-1 进行倒序遍历
+		for j := k; j >= cost; j-- {
+			// 更新 f[j] 的值，取当前值和 f[j-cost] + weight 的最大值
+			dp[j] = max(dp[j], dp[j-cost]+weight)
+		}
+	}
+	fmt.Println(dp[k])
+
 	// 返回 f[k] 的值，即在 k 次升级操作内能获得的最大奖励总和
-	return f[k]
+	return f[n][k]
 }
 func Test4(t *testing.T) {
 	// 测试用例 1
@@ -144,20 +170,20 @@ func Test4(t *testing.T) {
 	fmt.Println(solution(5, 5, []int{1, 2, 3, 4, 5}, []int{1, 2, 3, 4, 5}) == 10)
 
 	// 测试用例 5
-	fmt.Println(solution(5, 10, []int{1, 2, 3, 4, 5}, []int{1, 2, 3, 4, 5}) == 15)
+	fmt.Println(solution(5, 4, []int{1, 2, 3, 4, 5}, []int{1, 2, 3, 4, 5}) == 8)
 
 	// 测试用例 6
-	fmt.Println(solution(5, 10, []int{1, 2, 3, 4, 5}, []int{5, 4, 3, 2, 1}) == 15)
+	fmt.Println(solution(5, 5, []int{1, 2, 3, 4, 5}, []int{5, 4, 3, 2, 1}) == 14)
 
 	// 测试用例 7
-	fmt.Println(solution(5, 10, []int{5, 4, 3, 2, 1}, []int{1, 2, 3, 4, 5}) == 15)
+	fmt.Println(solution(5, 6, []int{5, 4, 3, 2, 1}, []int{1, 2, 3, 4, 5}) == 14)
 
 	// 测试用例 8
-	fmt.Println(solution(5, 10, []int{5, 4, 3, 2, 1}, []int{5, 4, 3, 2, 1}) == 15)
+	fmt.Println(solution(5, 7, []int{5, 4, 3, 2, 1}, []int{5, 4, 3, 2, 1}) == 13)
 
 	// 测试用例 9
-	fmt.Println(solution(5, 10, []int{1, 2, 3, 4, 5}, []int{5, 4, 3, 2, 1}) == 15)
+	fmt.Println(solution(5, 3, []int{1, 2, 3, 4, 5}, []int{5, 4, 3, 2, 1}) == 12)
 
 	// 测试用例 10
-	fmt.Println(solution(5, 10, []int{1, 2, 3, 4, 5}, []int{1, 2, 3, 4, 5}) == 15)
+	fmt.Println(solution(5, 2, []int{1, 2, 3, 4, 5}, []int{1, 2, 3, 4, 5}) == 5)
 }
