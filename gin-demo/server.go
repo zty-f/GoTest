@@ -364,3 +364,19 @@ func AddCheckinQuestion(ctx context.Context, data *model.CheckinQuestion) error 
 	}
 	return nil
 }
+
+func task1() {
+	fmt.Println("Task executed at", time.Now())
+}
+
+func TestAfter(c *gin.Context) {
+	duration := 10 * time.Second
+	time.AfterFunc(duration, func() {
+		go task1()
+	})
+
+	fmt.Println("Waiting for the task to execute...")
+	c.JSON(200, gin.H{
+		"message": "hello TestAfter!",
+	})
+}

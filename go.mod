@@ -1,6 +1,6 @@
 module test
 
-go 1.19
+go 1.20
 
 require (
 	codeup.aliyun.com/61e54b0e0bb300d827e1ae27/backend/akali v0.0.0
@@ -11,7 +11,7 @@ require (
 	github.com/eclipse/paho.mqtt.golang v1.5.0
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-redis/redis/v8 v8.11.5
-	github.com/gorilla/websocket v1.5.3
+	github.com/gorilla/websocket v1.5.4
 	github.com/spf13/cast v1.6.0
 	github.com/stretchr/testify v1.8.1
 	github.com/xuri/excelize/v2 v2.8.0
