@@ -763,4 +763,35 @@ func TestMapFmt(t *testing.T) {
 		"c": 3,
 	}
 	fmt.Printf("%+v\n", m)
+	fmt.Println(time.Now().Unix())
+	fmt.Println(time.Now().UnixMilli())
+	fmt.Println(time.Now().UnixMicro())
+	fmt.Println(time.Now().UnixNano())
+}
+
+type T struct {
+	A int
+}
+
+func TestSlice1(t *testing.T) {
+	var s []*T
+	fmt.Println(s)
+	s = make([]*T, 0) // 未初始化的切片为nil
+	slice(s)
+}
+
+func slice(t []*T) {
+	fmt.Println(t)
+	if t == nil {
+		fmt.Println("t is nil")
+	} else {
+		fmt.Println("t is not nil")
+	}
+}
+
+func TestStrContains(t *testing.T) {
+	fmt.Println(strings.Contains("1,2,3,4,5", "3"))
+	fmt.Println(strings.Contains("1,2,3,4,5", "6"))
+	fmt.Println(strings.Contains("你好%s", "%s"))
+	fmt.Println(strings.Contains("%s还未完成，快去完成吧！", "%s"))
 }
