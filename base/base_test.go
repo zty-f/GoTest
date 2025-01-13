@@ -794,4 +794,10 @@ func TestStrContains(t *testing.T) {
 	fmt.Println(strings.Contains("1,2,3,4,5", "6"))
 	fmt.Println(strings.Contains("你好%s", "%s"))
 	fmt.Println(strings.Contains("%s还未完成，快去完成吧！", "%s"))
+	s1 := make([]int, 0)
+	s2 := []int{}
+	fmt.Println(s1)
+	fmt.Println(s1 == nil)
+	fmt.Println(s2)
+	fmt.Println(s2 == nil)
 }

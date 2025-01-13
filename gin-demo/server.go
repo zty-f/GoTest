@@ -9,10 +9,12 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
+	"github.com/spf13/cast"
 	"github.com/xuri/excelize/v2"
 	"io"
 	"log"
 	"math/rand"
+	"mime/multipart"
 	"strings"
 	excel "test/generate-excel"
 	"test/gin-demo/model"
@@ -379,4 +381,77 @@ func TestAfter(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "hello TestAfter!",
 	})
+}
+
+func MultiSendUserAvatarDecoration(ctx *gin.Context) {
+	file, err := ctx.FormFile("file")
+	if err != nil {
+		resp.WriteErrJSON(ctx, xerr.ErrorInternalError(fmt.Sprintf("get form err: %s", err.Error())))
+		return
+	}
+	stuIdList, err := getStuIdListFromFile(ctx.Request.Context(), file)
+	if err != nil {
+		resp.WriteErrJSON(ctx, xerr.ErrorInternalError(fmt.Sprintf("get stuId list from file err: %s", err.Error())))
+		return
+	}
+	if len(stuIdList) > 0 {
+		// 异步处理，防止数据量太大导致接口超时
+		go func() {
+			failStuIdList := make([]int64, 0)
+			count := 0
+			// 写入操作
+			if len(failStuIdList) > 0 {
+				logger.Wx(ctx, "MultiSendUserAvatarDecoration", "send avatar decoration fail stuIdList:%v", failStuIdList)
+			}
+			logger.Ix(ctx, "MultiSendUserAvatarDecoration", "send avatar decoration success allCount:%d", count)
+		}()
+	}
+	resp.WriteSuccessJSON(ctx, nil)
+}
+
+func getStuIdListFromFile(ctx context.Context, file *multipart.FileHeader) ([]int64, error) {
+	// 解析excel文件，获取stuID列表
+	stuIdList := make([]int64, 0)
+	// 读取文件
+	fileBytes, err := file.Open()
+	if err != nil {
+		logger.Ex(ctx, "getStuIdListFromFile", "read file err: %s", err.Error())
+		return stuIdList, err
+	}
+	defer fileBytes.Close()
+	// 读取文件内容
+	excelFile, err := excelize.OpenReader(fileBytes)
+	if err != nil {
+		logger.Ex(ctx, "getStuIdListFromFile", "文件:%s打开失败，error: %v", file.Filename, err)
+		return stuIdList, err
+	}
+	// 获取第一个sheet
+	sheetName := excelFile.GetSheetName(1)
+	rows, _ := excelFile.GetRows(sheetName)
+	if len(rows) == 0 {
+		logger.Wx(ctx, "getStuIdListFromFile", "Sheet【%s】没有数据", sheetName)
+		return stuIdList, err
+	}
+	total := len(rows) - 1
+	logger.Ix(ctx, "getStuIdListFromFile", "Sheet【%s】总共有【%d】行数据", sheetName, total)
+	stuIdIndex := 0
+	for index, row := range rows {
+		// 第一行是标题，不处理
+		if index == 0 {
+			for i, cell := range row {
+				if cell == "stu_id" {
+					stuIdIndex = i
+					break
+				}
+			}
+			continue
+		}
+		stuId := cast.ToInt64(row[stuIdIndex])
+		if stuId > 0 {
+			stuIdList = append(stuIdList, stuId)
+		} else {
+			logger.Ex(ctx, "getStuIdListFromFile", "Sheet【%s】第【%d】行stuId无效", sheetName, index+1)
+		}
+	}
+	return stuIdList, nil
 }

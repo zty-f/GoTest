@@ -1,47 +1,12 @@
-
-{
-  "stat": 1,
-  "code": 0,
-  "message": "Success",
-  "msg": "Success",
-  "data": {
-    "taskList": [
-      {
-        "guideText": "新的挑战开始了，准备好了吗？", // 引导激励文案
-        "buttonLink": "https://ac-test.xiwang.com/level-system/#/growthCenter?openPersonalCenter=1", // 无任务状态下按钮跳转链接
-        "buttonColor": "#FF0000", // 按钮颜色
-        "buttonText": "一键预习" , // 按钮文案
-        "taskId": 2001300,
-        "taskIcon": "https://static-inc.xiwang.com/mall/2f1159fddcceb5541e1e9dc0c5f7fda5.png",
-        "taskName": "完成课程",
-        "planId": 10039100,
-        "planName": "第一讲 小学三年级语文上册", // 讲次名称&考试名称
-        "examId": "",
-        "subjectName": "语文", // 学科名称
-        "subjectColorType": 2,
-        "taskSubtitle": "第3讲 体育比赛中的积分制",
-        "growthValue": 10
-      }
-    ],
-    "backImage": "https://static-inc.xiwang.com/mall/2f1159fddcceb5541e1e9dc0c5f7fda5.png", // 背景图
-    "idolImage": "https://m.xiwang.com/resource/__private__/3650cd180bd6e0042977f35ed53a696d/%E7%89%9B%E4%BB%94%E5%BE%88%E5%BF%99/%E5%B8%BD%E5%AD%90%20%20.png",
-    "blindBoxInfo": {  // 盲盒信息
-      "boxImage": "https://static-inc.xiwang.com/mall/fd753ffaeecc0faad472cdface3f3f9e.png", // 盲盒图片
-      "finishNum": 0,  // 完成数量
-      "lastFinishNum": 0,  // 上次完成数量
-      "totalNum": 5,    // 完成总数
-    },
-    "blindBoxUrl": "跳转链接", // 盲盒页面跳转链接
-    "blindBoxNum": 10, // 用户盲盒总次数
-    "ruleDesc": "奖励规则文案",
-    "hasNewBox": 1,  // 是否获取新盲盒 1:新获得
-    "bannerList": [  // banner资源列表
-      {
-        "bannerImage": "https://static-inc.xiwang.com/mall/2f1159fddcceb5541e1e9dc0c5f7fda5.png", // banner图片
-        "bannerLink": "https://ac-test.xiwang.com/level-system/#/growthCenter?openPersonalCenter=1", // banner跳转链接
-        "bannerRank": 1 // banner排序
-      }
-    ]
+[
+  {
+    "empId": "W008492",
+    "AccountId": "253387979282843967",
+    "ExternUid": "64105951196808e7b875a6c9"
   },
-  "trace_id": "41393d2b-d9d0-4504-ac33-8bc180eee75c"
-}
+  {
+    "empId": "W008492",
+    "AccountId": "253387979282843967",
+    "ExternUid": "64105951196808e7b875a6c9"
+  }
+]
