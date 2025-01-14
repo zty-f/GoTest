@@ -1,9 +1,12 @@
 package util
 
 import (
-	"github.com/spf13/cast"
+	"fmt"
+	"math/rand"
 	"strings"
 	"time"
+
+	"github.com/spf13/cast"
 )
 
 var (
@@ -31,8 +34,9 @@ func StrToTime(str string) (time.Time, error) {
 	layout := "2006-01-02 15:04:05"
 	return time.ParseInLocation(layout, str, time.Local)
 }
-func StrToTime1(str string) (time.Time, error) {
-	layout := "2006-01-02"
+
+func StrToTime2(str string) (time.Time, error) {
+	layout := "2006-01-02 15:04"
 	return time.ParseInLocation(layout, str, time.Local)
 }
 
@@ -40,6 +44,11 @@ func StrToTime1(str string) (time.Time, error) {
 func TimeToStr(timer int64) string {
 	tm := time.Unix(timer, 0)
 	return tm.Format("2006-01-02 15:04:05")
+}
+
+// TimeStampToTime 时间戳转时间-秒
+func TimeStampToTime(timer int64) time.Time {
+	return time.Unix(timer, 0)
 }
 
 func GetAnyDayStartAndEndTime(dateNow time.Time) (startTime, endTime time.Time) {
@@ -81,14 +90,51 @@ func GetToDayDateOfMonth() int {
 	return time.Now().Day()
 }
 
+// GetDayOfYear 获取今天是今年的第几天，返回结果为1到365（或366）
+func GetDayOfYear() int {
+	return time.Now().YearDay()
+}
+
+// GetMonthStartTime 获取某个月的开始时间戳 dateStr：2023-10
+func GetMonthStartTime(dateStr string) (int64, error) {
+	layout := "2006-01"
+	date, err := time.Parse(layout, dateStr)
+	if err != nil {
+		return 0, err
+	}
+	year, month, _ := date.Date()
+	loc, _ := time.LoadLocation("Local")
+	startOfMonth := time.Date(year, month, 1, 0, 0, 0, 0, loc)
+	return startOfMonth.Unix(), nil
+}
+
+// GetMonthEndTime 获取某个月的结束时间戳 dateStr：2023-10
+func GetMonthEndTime(dateStr string) (int64, error) {
+	layout := "2006-01"
+	date, err := time.Parse(layout, dateStr)
+	if err != nil {
+		return 0, err
+	}
+	year, month, _ := date.Date()
+	loc, _ := time.LoadLocation("Local")
+	nextMonth := time.Date(year, month+1, 1, 0, 0, 0, 0, loc)
+	endOfMonth := nextMonth.Add(-time.Second)
+	return endOfMonth.Unix(), nil
+}
+
 // FormatTimeToDayStr 把日期转换成天，格式 2006-01-02
 func FormatTimeToDayStr(t time.Time) string {
 	return t.Format("2006-01-02")
 }
 
-// FormatTimeToMonthDayStr 把日期转换成天，格式 01-02
+// FormatTimeToMonthDayStr 把日期转换成天，格式 1月2日 15:04
 func FormatTimeToMonthDayStr(t time.Time) string {
-	return t.Format("01-02")
+	return t.Format("1月2日 15:04")
+}
+
+// FormatTimeToTime 把日期转换成天，格式 15:04
+func FormatTimeToTime(t time.Time) string {
+	return t.Format("15:04")
 }
 
 // GetFormDateTimeTime 获取具体时间的time.Time
@@ -261,9 +307,32 @@ func TimeStampToYearMonth2(timestamp int64) (newTime string) {
 	return tm.Format("2006年1月")
 }
 
+// TimeToYearMonth 将时间转换为对应所处的年月 例如：2023年10月
+func TimeToYearMonth(tm time.Time) (newTime string) {
+	return tm.Format("2006年1月")
+}
+
+// TimeStampToMonthDay 将时间戳转换为对应所处的月日 例如：10月1日
+func TimeStampToMonthDay(timestamp int64) (newTime string) {
+	tm := time.Unix(timestamp, 0)
+	return tm.Format("1月2日")
+}
+
+// TimeStampToMonthDay2 将时间戳转换为对应所处的月日 例如：10.1
+func TimeStampToMonthDay2(timestamp int64) (newTime string) {
+	tm := time.Unix(timestamp, 0)
+	return tm.Format("1.2")
+}
+
 // TimeStampToYearMonthDay 将时间转换为对应所处的年月日 例如：2023年10月1日
 func TimeStampToYearMonthDay(time time.Time) (newTime string) {
 	return time.Format("2006年1月2日")
+}
+
+// TimeStampToYearMonthDay2 将时间戳转换为对应所处的年月日 例如：2023-10-01
+func TimeStampToYearMonthDay2(timestamp int64) (newTime string) {
+	tm := time.Unix(timestamp, 0)
+	return tm.Format("2006-01-02")
 }
 
 // TimeStampToDateStr 将时间戳转换为对应时间字符串展示 例如：2006-01-02 15:04:05
@@ -310,20 +379,32 @@ func GetIntervalTime(t time.Time) time.Duration {
 	return interval
 }
 
-// GetWeekStartAndEnd1 获取本周的开始时间和结束时间
-func GetWeekStartAndEnd1() (time.Time, time.Time) {
-	now := time.Now() // 当前时间
-	offset := int(time.Monday - now.Weekday())
-	if offset > 0 {
-		offset = -6
+func GetPlanDateRange(startTime time.Time, endTime time.Time) string {
+	etime := time.Date(endTime.Year(), endTime.Month(), endTime.Day(), 21, 0, 0, 0, endTime.Location())
+	if endTime.After(etime) {
+		return FormatTimeToMonthDayStr(startTime)
 	}
+	return FormatTimeToMonthDayStr(startTime) + "-" + FormatTimeToTime(endTime)
+}
 
-	// 本周开始时间（周一）
-	weekStart := now.AddDate(0, 0, offset).Truncate(24 * time.Hour)
-	// 本周结束时间（周日）
-	weekEnd := weekStart.AddDate(0, 0, 6).Add(time.Hour*23 + time.Minute*59 + time.Second*59)
+// GetDayEndIntervalDuration 获取当前时间距离今天结束的时间间隔---带有随机时间戳差异--用于缓存过期时间设置
+func GetDayEndIntervalDuration() time.Duration {
+	// 过期时间设计随机时间戳
+	rand.Seed(time.Now().UnixNano())
+	randSec := rand.Intn(10)
+	return GetDayEndTime(time.Now()).Add(time.Duration(randSec) * time.Second).Sub(time.Now())
+}
 
-	return weekStart, weekEnd
+// GetTodayRemainTime 获取当天剩余时间
+func GetTodayRemainTime(needRandSecond bool) time.Duration {
+	now := time.Now()
+	randSec := 0
+	if needRandSecond {
+		src := rand.NewSource(now.UnixNano())
+		r := rand.New(src)
+		randSec = r.Intn(10)
+	}
+	return GetDayEndTime(now).Add(time.Duration(randSec) * time.Second).Sub(now)
 }
 
 // GetWeekStartAndEnd 获取本周的开始时间和结束时间
@@ -334,25 +415,12 @@ func GetWeekStartAndEnd() (time.Time, time.Time) {
 		offset = -6
 	}
 	monday := now.AddDate(0, 0, offset)
+	// 本周开始时间（周一）
 	weekStart := time.Date(monday.Year(), monday.Month(), monday.Day(), 0, 0, 0, 0, time.Local)
 	// 本周结束时间（周日）
 	weekEnd := weekStart.AddDate(0, 0, 6).Add(time.Hour*23 + time.Minute*59 + time.Second*59)
 
 	return weekStart, weekEnd
-}
-
-func GetStartAndEndTimeOfCurrentWeek() (time.Time, time.Time) {
-	now := time.Now()
-	weekday := int(now.Weekday()) - 1
-
-	// 计算本周的开始时间
-	startOfWeek := now.AddDate(0, 0, -weekday)
-	startOfWeek = time.Date(startOfWeek.Year(), startOfWeek.Month(), startOfWeek.Day(), 0, 0, 0, 0, time.Local)
-
-	// 计算本周的结束时间
-	endOfWeek := startOfWeek.AddDate(0, 0, 7)
-	endOfWeek = endOfWeek.Add(-time.Second)
-	return startOfWeek, endOfWeek
 }
 
 // GetMonday 获取周一，想要什么格式自己传
@@ -366,7 +434,86 @@ func GetMonday(layout string) string {
 	return weekStart.Format(layout)
 }
 
+// GetLastWeekMonday 获取上周的周一
+func GetLastWeekMonday(layout string) string {
+	weekStart, _ := GetWeekStartAndEnd()
+	weekStart = weekStart.AddDate(0, 0, -7)
+	return weekStart.Format(layout)
+}
+
+// GetWeekRemainTime 获取当周剩余时间
+func GetWeekRemainTime(needRandSecond bool) time.Duration {
+	_, weekEnd := GetWeekStartAndEnd()
+	now := time.Now()
+	randSec := 0
+	if needRandSecond {
+		src := rand.NewSource(now.UnixNano())
+		r := rand.New(src)
+		randSec = r.Intn(10)
+	}
+	return weekEnd.Add(time.Duration(randSec) * time.Second).Sub(now)
+}
+
+// GetWeekRemainTimeUnix 获取当周剩余结束时间 精准返回时间戳
+func GetWeekRemainTimeUnix() int {
+	_, weekEnd := GetWeekStartAndEnd()
+	return cast.ToInt(weekEnd.Sub(time.Now()).Seconds())
+}
+
+func GetPreviousYearMonth(year int, month int) (int, int) {
+	// 创建当前年的时间对象
+	currentTime := time.Date(year, time.Month(month), 1, 0, 0, 0, 0, time.UTC)
+
+	// 减去一个月，得到上一个月份
+	previousTime := currentTime.AddDate(0, -1, 0)
+
+	return previousTime.Year(), int(previousTime.Month())
+}
+
+func GetPreviousYearMonth2(year string, month string) (string, string, error) {
+	layout := "2006-01"
+	dateStr := fmt.Sprintf("%s-%s", year, month)
+	t, err := time.Parse(layout, dateStr)
+	if err != nil {
+		return "", "", err
+	}
+
+	// 获取前一个月
+	prevMonth := t.AddDate(0, -1, 0)
+	prevYearStr := prevMonth.Format("2006")
+	prevMonthStr := prevMonth.Format("01")
+
+	return prevYearStr, prevMonthStr, nil
+}
+
+// GetLastMonthYear 获取上个月的年月 2024 06
+func GetLastMonthYear() (string, string) {
+	lastMonthDate := time.Date(time.Now().Year(), time.Now().Month(), 1, 0, 0, 0, 0, time.Local).Add(-24 * time.Hour)
+	return lastMonthDate.Format("2006"), lastMonthDate.Format("01")
+}
+
+// GetLastYear 获取上一年的年份
+func GetLastYear() string {
+	currentYear := time.Now().Year()
+	return cast.ToString(currentYear - 1)
+}
+
+func GetYearMonthByYearMonthStr(yearMonth string) (int, int) {
+	split := strings.Split(yearMonth, "_")
+	return cast.ToInt(split[0]), cast.ToInt(split[1])
+}
+
 // GetTwoDateIntervalDuration 获取开始时间到结束时间的时间间隔
 func GetTwoDateIntervalDuration(startTime time.Time, endTime time.Time) time.Duration {
 	return endTime.Sub(startTime)
+}
+
+func TwoTimeRangeHasOverlap(beginTime1, endTime1, beginTime2, endTime2 time.Time) bool {
+	return (beginTime1.Before(endTime2) || beginTime1.Equal(endTime2)) && (endTime1.After(beginTime2) || endTime1.Equal(beginTime2))
+}
+
+// GetSpecificDayTime 获取当月的某一天的某个小时的时间
+func GetSpecificDayTime(day, hour int) time.Time {
+	location := time.Now().Location() // 使用本地时区
+	return time.Date(time.Now().Year(), time.Now().Month(), day, hour, 0, 0, 0, location)
 }
