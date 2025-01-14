@@ -517,3 +517,48 @@ func GetSpecificDayTime(day, hour int) time.Time {
 	location := time.Now().Location() // 使用本地时区
 	return time.Date(time.Now().Year(), time.Now().Month(), day, hour, 0, 0, 0, location)
 }
+
+func StrToTime1(str string) (time.Time, error) {
+	layout := "2006-01-02"
+	return time.ParseInLocation(layout, str, time.Local)
+}
+
+func GetStartAndEndTimeOfCurrentWeek() (time.Time, time.Time) {
+	now := time.Now()
+	weekday := int(now.Weekday()) - 1
+
+	// 计算本周的开始时间
+	startOfWeek := now.AddDate(0, 0, -weekday)
+	startOfWeek = time.Date(startOfWeek.Year(), startOfWeek.Month(), startOfWeek.Day(), 0, 0, 0, 0, time.Local)
+
+	// 计算本周的结束时间
+	endOfWeek := startOfWeek.AddDate(0, 0, 7)
+	endOfWeek = endOfWeek.Add(-time.Second)
+	return startOfWeek, endOfWeek
+}
+
+// GetWeekStartAndEnd1 获取本周的开始时间和结束时间
+func GetWeekStartAndEnd1() (time.Time, time.Time) {
+	now := time.Now() // 当前时间
+	offset := int(time.Monday - now.Weekday())
+	if offset > 0 {
+		offset = -6
+	}
+
+	// 本周开始时间（周一）
+	weekStart := now.AddDate(0, 0, offset).Truncate(24 * time.Hour)
+	// 本周结束时间（周日）
+	weekEnd := weekStart.AddDate(0, 0, 6).Add(time.Hour*23 + time.Minute*59 + time.Second*59)
+
+	return weekStart, weekEnd
+}
+
+type LocalTime time.Time
+
+const timeFormat = "2006-01-02 15:04:05"
+const dateFormat = "2006-01-02"
+const timezone = "Asia/Shanghai"
+
+func TimestampToDate(timestamp int64) string {
+	return time.Unix(timestamp, 0).Format(dateFormat)
+}

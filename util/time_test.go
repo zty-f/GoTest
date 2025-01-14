@@ -234,3 +234,7 @@ func TestStringCut(t *testing.T) {
 	str = str[0:strings.Index(str, "【限时奖励】")]
 	fmt.Println(str)
 }
+
+func TestTimestampToDate(t *testing.T) {
+	fmt.Println(TimestampToDate(0 / 1000))
+}
