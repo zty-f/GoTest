@@ -53,20 +53,29 @@
       "create_time": "1725967582000"
     }
   ],
-  "水星": [
+  "鲨鱼岛": [
     {
-      "prizeId": "C2024080701GAVi",
-      "prizeName": "西部风沙",
-      "prizeType": 2,
+      "prizeId": "xxx",
+      "prizeName": "抽奖",
+      "prizeType": 5,
       "prizeCount": 1,
-      "prizeImage": "https://m.xiwang.com/resource/__private__/3650cd180bd6e0042977f35ed53a696d/%E7%89%9B%E4%BB%94%E5%BE%88%E5%BF%99/%E5%B8%BD%E5%AD%90%20%20.png"
+      "prizeImage": "https://static-inc.xiwang.com/mall/fd753ffaeecc0faad472cdface3f3f9e.png"
     },
     {
-      "prizeId": "58",
-      "prizeName": "绚烂星河",
-      "prizeType": 3,
+      "prizeId": "87",
+      "prizeName": "猪八戒",
+      "prizeType": 4,
       "prizeCount": 1,
-      "prizeImage": "https://static-inc.xiwang.com/mall/dd4c72fd255866e45d4c41a372c07320.png"
+      "prizeImage": "https://static-inc.xiwang.com/xwx-user-avatar/test/95aa7400fb2a1e1efb8d72319830e654.png"
+    }
+  ],
+  "鲨鱼岛": [
+    {
+      "prizeId": "xxx",
+      "prizeName": "抽奖",
+      "prizeType": 6,
+      "prizeCount": 1,
+      "prizeImage": "https://static-inc.xiwang.com/mall/fd753ffaeecc0faad472cdface3f3f9e.png"
     },
     {
       "prizeId": "60200",
@@ -76,20 +85,29 @@
       "prizeImage": "https://static-inc.xiwang.com/mall/2044f50916a3780690217b352ba45e57.png"
     }
   ],
-  "金星": [
+  "巨树岛": [
     {
       "prizeId": "xxx",
       "prizeName": "抽奖",
       "prizeType": 5,
-      "prizeCount": 2,
+      "prizeCount": 1,
       "prizeImage": "https://static-inc.xiwang.com/mall/fd753ffaeecc0faad472cdface3f3f9e.png"
     },
     {
-      "prizeId": "59",
-      "prizeName": "遨游宇宙",
-      "prizeType": 3,
+      "prizeId": "88",
+      "prizeName": "沙悟净",
+      "prizeType": 4,
       "prizeCount": 1,
-      "prizeImage": "https://static-inc.xiwang.com/mall/9c0b230d89cd2f6c4f9bdd1919bc9529.gif"
+      "prizeImage": "https://static-inc.xiwang.com/xwx-user-avatar/test/b62ca01a4d1ef98951a641cb14ecda0d.png"
+    }
+  ],
+  "巨树岛": [
+    {
+      "prizeId": "xxx",
+      "prizeName": "抽奖",
+      "prizeType": 6,
+      "prizeCount": 1,
+      "prizeImage": "https://static-inc.xiwang.com/mall/fd753ffaeecc0faad472cdface3f3f9e.png"
     },
     {
       "prizeId": "60201",
@@ -99,20 +117,29 @@
       "prizeImage": "https://static-inc.xiwang.com/mall/923f0f0a064d093570b244cbff0b463b.png"
     }
   ],
-  "火星": [
+  "蛋糕岛": [
     {
-      "prizeId": "C2024080701qa5g",
-      "prizeName": "小镇之光",
-      "prizeType": 2,
+      "prizeId": "xxx",
+      "prizeName": "抽奖",
+      "prizeType": 5,
       "prizeCount": 1,
-      "prizeImage": "https://m.xiwang.com/resource/__private__/3650cd180bd6e0042977f35ed53a696d/%E7%89%9B%E4%BB%94%E5%BE%88%E5%BF%99/%E6%89%8B%E6%8C%81.png"
+      "prizeImage": "https://static-inc.xiwang.com/mall/fd753ffaeecc0faad472cdface3f3f9e.png"
     },
     {
-      "prizeId": "55",
-      "prizeName": "火星使者",
+      "prizeId": "89",
+      "prizeName": "唐僧",
       "prizeType": 4,
       "prizeCount": 1,
-      "prizeImage": "https://static-inc.xiwang.com/xwx-user-avatar/product/e1cb18e69d757e73c5290c417bd2f73a.png"
+      "prizeImage": "https://static-inc.xiwang.com/xwx-user-avatar/test/b88d03fc23b9adf032148bc71f7778e2.png"
+    }
+  ],
+  "蛋糕岛": [
+    {
+      "prizeId": "xxx",
+      "prizeName": "抽奖",
+      "prizeType": 6,
+      "prizeCount": 1,
+      "prizeImage": "https://static-inc.xiwang.com/mall/fd753ffaeecc0faad472cdface3f3f9e.png"
     },
     {
       "prizeId": "60202",
@@ -122,20 +149,29 @@
       "prizeImage": "https://static-inc.xiwang.com/mall/27155d0c1ae2556020d19d91b23d0731.png"
     }
   ],
-  "木星": [
+  "冰岛": [
     {
       "prizeId": "xxx",
       "prizeName": "抽奖",
       "prizeType": 5,
-      "prizeCount": 2,
+      "prizeCount": 1,
       "prizeImage": "https://static-inc.xiwang.com/mall/fd753ffaeecc0faad472cdface3f3f9e.png"
     },
     {
-      "prizeId": "56",
+      "prizeId": "102",
       "prizeName": "木星先锋",
       "prizeType": 4,
       "prizeCount": 1,
-      "prizeImage": "https://static-inc.xiwang.com/xwx-user-avatar/product/5218ed10354d6ea2aa54edf2a6b06a35.png"
+      "prizeImage": "https://static-inc.xiwang.com/xwx-user-avatar/test/ef6cac7466ebfdce0e70b240a6ff4eda.png"
+    }
+  ],
+  "冰岛": [
+    {
+      "prizeId": "xxx",
+      "prizeName": "抽奖",
+      "prizeType": 6,
+      "prizeCount": 1,
+      "prizeImage": "https://static-inc.xiwang.com/mall/fd753ffaeecc0faad472cdface3f3f9e.png"
     },
     {
       "prizeId": "60203",
@@ -145,20 +181,29 @@
       "prizeImage": "https://static-inc.xiwang.com/mall/9571d7779c15221aef4d26c6f2705cc3.png"
     }
   ],
-  "土星": [
+  "空中岛": [
     {
-      "prizeId": "C2024092601XuhW",
-      "prizeName": "超精密头盔",
-      "prizeType": 2,
+      "prizeId": "xxx",
+      "prizeName": "抽奖",
+      "prizeType": 5,
       "prizeCount": 1,
-      "prizeImage": "https://m.xiwang.com/resource/__private__/3650cd180bd6e0042977f35ed53a696d/yasuo/xingji/mao1.png"
+      "prizeImage": "https://static-inc.xiwang.com/mall/fd753ffaeecc0faad472cdface3f3f9e.png"
     },
     {
-      "prizeId": "57",
+      "prizeId": "103",
       "prizeName": "土星卫士",
       "prizeType": 4,
       "prizeCount": 1,
-      "prizeImage": "https://static-inc.xiwang.com/xwx-user-avatar/product/fe017b298b3405076eebf1793e80dd57.png"
+      "prizeImage": "https://static-inc.xiwang.com/xwx-user-avatar/test/145545189deed643395cfdb00a030341.png"
+    }
+  ],
+  "空中岛": [
+    {
+      "prizeId": "xxx",
+      "prizeName": "抽奖",
+      "prizeType": 6,
+      "prizeCount": 1,
+      "prizeImage": "https://static-inc.xiwang.com/mall/fd753ffaeecc0faad472cdface3f3f9e.png"
     },
     {
       "prizeId": "60204",
@@ -166,15 +211,6 @@
       "prizeType": 1,
       "prizeCount": 1,
       "prizeImage": "https://static-inc.xiwang.com/mall/b635f06289aedae565417767e1917e0d.png"
-    }
-  ],
-  "终极大奖": [
-    {
-      "prizeId": "xxx",
-      "prizeName": "抽奖",
-      "prizeType": 6,
-      "prizeCount": 3,
-      "prizeImage": "https://static-inc.xiwang.com/mall/fd753ffaeecc0faad472cdface3f3f9e.png"
     }
   ]
 }
