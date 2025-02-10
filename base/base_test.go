@@ -805,3 +805,26 @@ func TestStrContains(t *testing.T) {
 func Test20250210(t *testing.T) {
 	fmt.Println("New Year First Code Day!")
 }
+
+var p *int
+
+func foo() (*int, error) {
+	var i int = 5
+	return &i, nil
+}
+
+func bar() {
+	// use p
+	fmt.Println(*p)
+}
+
+func TestPoint(t *testing.T) {
+	// 对于使用:=定义的变量，如果新变量与同名已定义的变量不在同一个作用域中，那么 Go 会新定义这个变量。
+	p, err := foo() // 此处的p会覆盖全局变量定义的p
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	bar()
+	fmt.Println(*p)
+}
