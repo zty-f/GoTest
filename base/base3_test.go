@@ -319,3 +319,43 @@ func Test左移(t *testing.T) {
 	fmt.Println(2 << 10)
 	fmt.Println(3 << 10)
 }
+
+func Test数值range(t *testing.T) {
+	var a = [5]int{1, 2, 3, 4, 5}
+	var r [5]int
+
+	for i, v := range a {
+		if i == 0 {
+			a[1] = 12
+			a[2] = 13
+		}
+		r[i] = v
+	}
+	fmt.Println("r = ", r)
+	fmt.Println("a = ", a)
+	// 数组不是引用类型，range循环的是副本，相当于是一个新的数组参与循环。
+	/*
+		r =  [1 2 3 4 5]
+		a =  [1 12 13 4 5]
+	*/
+}
+
+func Test切片range(t *testing.T) {
+	var a = []int{1, 2, 3, 4, 5}
+	var r [5]int
+
+	for i, v := range a {
+		if i == 0 {
+			a[1] = 12
+			a[2] = 13
+		}
+		r[i] = v
+	}
+	fmt.Println("r = ", r)
+	fmt.Println("a = ", a)
+	// 切片是引用类型，虽然是副本参与循环，但是副本也是指向的同一个地址。
+	/*
+		r =  [1 12 13 4 5]
+		a =  [1 12 13 4 5]
+	*/
+}
