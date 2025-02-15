@@ -359,3 +359,19 @@ func Test切片range(t *testing.T) {
 		a =  [1 12 13 4 5]
 	*/
 }
+
+func change(s ...int) {
+	s = append(s, 3)
+	fmt.Println(len(s))
+	fmt.Println(cap(s))
+}
+
+func TestSliceChange(t *testing.T) {
+	sl := make([]int, 5, 5)
+	sl[0] = 1
+	sl[1] = 2
+	change(sl...)
+	fmt.Println(sl)
+	change(sl[0:2]...)
+	fmt.Println(sl)
+}
