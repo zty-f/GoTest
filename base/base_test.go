@@ -1,7 +1,6 @@
 package base
 
 import (
-	"codeup.aliyun.com/61e54b0e0bb300d827e1ae27/backend/golib/logger"
 	"context"
 	"crypto/md5"
 	"encoding/hex"
@@ -272,7 +271,7 @@ func TestEqual(t *testing.T) {
 func TestContext(t *testing.T) {
 	var ctx = context.Background()
 	ctx = context.WithValue(ctx, "key", "value")
-	key := logger.ContextKey("x_trace_id")
+	key := ctx.Value("x_trace_id")
 	i := 0
 	for {
 		// 当ctx这样嵌套赋值的时候，假如要获取最开始的赋值的那个key，耗时就会越来越高，解决办法就是每次新建一个变量：ctx := context.WithValue(ctx, key, i)

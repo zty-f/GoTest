@@ -3,9 +3,6 @@ module test
 go 1.20
 
 require (
-	codeup.aliyun.com/61e54b0e0bb300d827e1ae27/backend/akali v0.0.0
-	codeup.aliyun.com/61e54b0e0bb300d827e1ae27/backend/golib v1.0.57
-	codeup.aliyun.com/61e54b0e0bb300d827e1ae27/backend/platform/idl v0.0.1
 	github.com/bytedance/sonic v1.11.2
 	github.com/confluentinc/confluent-kafka-go v1.9.2
 	github.com/eclipse/paho.mqtt.golang v1.5.0
