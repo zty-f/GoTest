@@ -2,7 +2,9 @@ package base
 
 import (
 	"fmt"
+	"net/http"
 	"testing"
+	"time"
 )
 
 type 自定义类型 string
@@ -36,7 +38,7 @@ func defer_call() {
 
 	defer func() { fmt.Println("defer: panic 之前2, 不捕获") }()
 
-	panic("异常内容") //触发defer出栈
+	panic("异常内容") // 触发defer出栈
 
 	defer func() { fmt.Println("defer: panic 之后, 永远执行不到") }()
 }
@@ -84,4 +86,53 @@ func TestDeferSum(t *testing.T) {
 	fmt.Println(DeferFunc2(1))
 	fmt.Println(DeferFunc3(1))
 	DeferFunc4()
+}
+
+func TestTimer(t *testing.T) {
+	ch1 := make(chan string, 1)
+
+	go func() {
+		time.Sleep(time.Second * 2)
+		ch1 <- "hello"
+	}()
+
+	select {
+	case res := <-ch1:
+		fmt.Println(res)
+	case <-time.After(time.Second * 1):
+		fmt.Println("timeout")
+	}
+}
+
+func TestTimer2(t *testing.T) {
+	fmt.Println("start...")
+	ch1 := make(chan string, 120)
+
+	go func() {
+		time.Sleep(time.Second * 10)
+		i := 0
+		for {
+			i++
+			ch1 <- fmt.Sprintf("%s %d", "hello", i)
+		}
+
+	}()
+
+	go func() {
+		// http 监听8080, 开启 pprof
+		if err := http.ListenAndServe(":8080", nil); err != nil {
+			fmt.Println("listen failed")
+		}
+	}()
+	// time.After 放到 for 外面
+	timeout := time.After(time.Second * 3) // 只能使用一次
+	for {
+		select {
+		case res := <-ch1:
+			fmt.Println(res)
+		case <-timeout:
+			fmt.Println("timeout")
+			// return
+		}
+	}
 }
