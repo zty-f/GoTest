@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package xerr;
+import "errors/errors.proto";
+
+option go_package = "idl/xerr;xerr";
+
+enum ErrorState {
+  option (errors.default_stat) = 0;
+  option (errors.default_code) = 1;
+  option (errors.default_message) = "UNKNOWN";
+
+
+  // biz error
+  // 系统:mall 10
+  // 模块:频道 00
+  MALL_CHANNEL_COLUMN_NOT_MATCH = 0 [(errors.stat) = 0, (errors.code) = 1000000, (errors.message) = "栏目Id不在对应频道下"];
+  MALL_CHANNEL_STYLE_NOT_MATCH = 1 [(errors.stat) = 0, (errors.code) = 1000001, (errors.message) = "栏目类型不为教师风采"];
+  MALL_CHANNEL_PKG_NOT_VALID = 2 [(errors.stat) = 0, (errors.code) = 1000002, (errors.message) = "此栏目下不存在需要考试的课包"];
+  // 模块:详情页 01
+  MALL_DETAIL_COURSE_NOT_VALID = 3 [(errors.stat) = 0, (errors.code) = 1001000, (errors.message) = "获取不到此课程内容，请挑选其它课程～"];
+  // 模块:B端登录 10
+  MALL_ADMIN_USER_NOT_LOGIN_IN = 4 [(errors.stat) = 0, (errors.code) = 1010000, (errors.message) = "用户未登录"];
+  MALL_ADMIN_USER_NOT_AUTHORITY = 5 [(errors.stat) = 0, (errors.code) = 1010001, (errors.message) = "用户没权限"];
+  // 模块:老师详情页 02
+  MALL_TEACHER_DETAIL_NOT_VALID = 6 [(errors.stat) = 0, (errors.code) = 1002000, (errors.message) = "老师还未上传介绍～去看看其他老师吧"];
+
+}

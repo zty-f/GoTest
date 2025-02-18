@@ -4,7 +4,7 @@ import (
 	"context"
 	"runtime/debug"
 
-	"codeup.aliyun.com/61e54b0e0bb300d827e1ae27/backend/golib/logger"
+	"test/logger"
 )
 
 // 仅仅是对函数本身做Panic Recover，自身不会启动协程，需要在协程中调用

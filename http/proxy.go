@@ -1,7 +1,6 @@
 package http
 
 import (
-	"codeup.aliyun.com/61e54b0e0bb300d827e1ae27/backend/golib/http_utils"
 	"context"
 	"crypto/md5"
 	"encoding/hex"
@@ -15,6 +14,7 @@ import (
 	"net/url"
 	"reflect"
 	"strings"
+	"test/http_utils"
 	"test/util"
 	"time"
 )
@@ -96,21 +96,21 @@ func (p *Proxy) Do(c context.Context) (*proxyRes, error) {
 	fmt.Println(u)
 
 	// 如果是指定域名的服务直接切走，替换域名直接请求，不走代理
-	//if isSyhService, _ := SyhService[u.Host]; isSyhService {
+	// if isSyhService, _ := SyhService[u.Host]; isSyhService {
 	//	p.Url = strings.ReplaceAll(p.Url, "xxx.xxx", "xxx.xxx")
 	//	return p.DoDirectRequest(c)
-	//}
+	// }
 
 	// 测试环境默认走代理
-	//if utils.IsDevEnv() {
+	// if utils.IsDevEnv() {
 	//	return p.DoProxyRequest(c)
-	//}
+	// }
 
 	// 内网域名直接请求，不走代理
-	//isIntranetNet, _ := IntranetRequestHostMap[u.Host]
-	//if isIntranetNet {
+	// isIntranetNet, _ := IntranetRequestHostMap[u.Host]
+	// if isIntranetNet {
 	//	return p.DoDirectRequest(c)
-	//}
+	// }
 	return p.DoProxyRequest(c)
 }
 
@@ -133,7 +133,7 @@ func (p *Proxy) DoProxyRequest(c context.Context) (*proxyRes, error) {
 	}
 	http.DefaultTransport.(*http.Transport).DialContext = func(ctx context.Context, network, addr string) (net.Conn, error) {
 		// 开发环境和测试环境单独处理代理配置
-		//if utils.IsDevEnv() || utils.IsTestEnv() {
+		// if utils.IsDevEnv() || utils.IsTestEnv() {
 		//	resolveHttps := proxyConf["resolve_https"].(string)
 		//	resolveHttp := proxyConf["resolve_http"].(string)
 		//	if addr == "xxx.xxx.com:443" && len(resolveHttps) > 1 {
@@ -142,7 +142,7 @@ func (p *Proxy) DoProxyRequest(c context.Context) (*proxyRes, error) {
 		//	if addr == "xxx.xxx.com:80" && len(resolveHttp) > 1 {
 		//		addr = resolveHttp
 		//	}
-		//}
+		// }
 		return dialer.DialContext(ctx, network, addr)
 	}
 	resp, err := http.Post(PROXY_API, "application/json", params)

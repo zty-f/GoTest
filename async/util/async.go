@@ -1,8 +1,8 @@
 package util
 
 import (
-	"codeup.aliyun.com/61e54b0e0bb300d827e1ae27/backend/golib/logger"
 	"context"
+	"test/logger"
 	"time"
 )
 

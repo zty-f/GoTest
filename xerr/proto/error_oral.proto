@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package xerr;
+import "errors/errors.proto";
+
+option go_package = "idl/xerr;xerr";
+
+enum OralErrorState {
+  option (errors.default_stat) = 0;
+  option (errors.default_code) = 1;
+  option (errors.default_message) = "UNKNOWN";
+
+  // biz error
+  // 系统:oral 12 口算
+  // 模块:通用 00
+  ORAL_PHOTO_OCR_JUDGEMENT_OVER_LIMIT = 0 [(errors.stat) = 0, (errors.code) = 1200000, (errors.message) = "今天已经检查好多啦 休息一下明天再来吧～"];
+  ORAL_PHOTO_OCR_JUDGEMENT_REQUEST_TOO_FAST = 1 [(errors.stat) = 0, (errors.code) = 1200001, (errors.message) = "请求速度过快"];
+  ORAL_COMMON = 2 [(errors.stat)=0, (errors.code)=1200002, (errors.message)="哎呀，好像出现了一点问题"];
+  ORAL_PHOTO_OCR_JUDGEMENT_IMG_TOO_LARGE = 3 [(errors.stat)=0, (errors.code)=1200003, (errors.message)="图片尺寸过大"];
+  ORAL_PHOTO_OCR_JUDGEMENT_IMG_TYPE_ERR = 4 [(errors.stat)=0, (errors.code)=1200004, (errors.message)="图片格式错误"];
+
+}

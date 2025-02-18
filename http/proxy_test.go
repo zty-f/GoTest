@@ -1,12 +1,12 @@
 package http
 
 import (
-	"codeup.aliyun.com/61e54b0e0bb300d827e1ae27/backend/golib/http_utils"
 	"context"
 	"errors"
 	"fmt"
 	"github.com/bytedance/sonic"
 	"net/http"
+	"test/http_utils"
 	"test/util"
 	"testing"
 )
@@ -29,7 +29,7 @@ const API = "https://xxxx.xxx.com/xx/xxx"
 func doRequestOfProxy(ctx context.Context, req Req) (Data, error) {
 	var data Data
 	get := http_utils.Map2HttpQueryEncode(http_utils.Struct2ReqMap(req))
-	//post := http_utils.Map2HttpQueryEncode(http_utils.Struct2ReqMap(req))  //post一致
+	// post := http_utils.Map2HttpQueryEncode(http_utils.Struct2ReqMap(req))  //post一致
 	p, err := NewProxy(API, get, "", http.MethodGet, 3, map[string]string{})
 	if err != nil {
 		return data, err

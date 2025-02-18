@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package akali.errors;
+
+option go_package = "test/errors;errors";
+
+import "google/protobuf/descriptor.proto";
+
+message Status {
+  Stat stat = 1;
+  int32 code = 2;
+  string message = 3;
+  map<string, string> metadata= 4;
+}
+
+enum Stat {
+  FAILED = 0;
+  SUCCESS = 1;
+  REDIRECT = 2;
+  SERVER_LIMIT = 8;
+  FORCE_USER_LOGOUT = 9;
+  FORCE_UPGRADE = 10;
+}
+
+extend google.protobuf.EnumOptions {
+  int32 default_stat = 1114;
+  int32 default_code = 1109;
+  string default_message = 1110;
+}
+
+extend google.protobuf.EnumValueOptions {
+  int32 stat = 1111;
+  int32 code = 1112;
+  string message = 1113;
+}
