@@ -2,6 +2,7 @@ package algorithm
 
 import (
 	"fmt"
+	"math/rand"
 	"testing"
 )
 
@@ -245,7 +246,7 @@ func setZeroes1(matrix [][]int) {
 	}
 }
 
-// 方法二：
+// 方法二：使用第一行和第一列来记录需要置零的行和列，空间复杂度O(1)
 func setZeroes2(matrix [][]int) {
 	m, n := len(matrix), len(matrix[0])
 	row0, col0 := false, false
@@ -292,4 +293,144 @@ func setZeroes2(matrix [][]int) {
 			matrix[i][0] = 0
 		}
 	}
+}
+
+// 5、LeetCode384 打乱数组
+/*
+给你一个整数数组 nums ，设计算法来打乱一个没有重复元素的数组。打乱后，数组的所有排列应该是 等可能 的。
+实现 Solution class:
+Solution(int[] nums) 使用整数数组 nums 初始化对象
+int[] reset() 重设数组到它的初始状态并返回
+int[] shuffle() 返回数组随机打乱后的结果
+示例 1：
+输入
+["Solution", "shuffle", "reset", "shuffle"]
+[[[1, 2, 3]], [], [], []]
+输出
+[null, [3, 1, 2], [1, 2, 3], [1, 3, 2]]
+解释
+Solution solution = new Solution([1, 2, 3]);
+solution.shuffle();    // 打乱数组 [1,2,3] 并返回结果。任何 [1,2,3]的排列返回的概率应该相同。例如，返回 [3, 1, 2]
+solution.reset();      // 重设数组到它的初始状态 [1, 2, 3] 。返回 [1, 2, 3]
+solution.shuffle();    // 随机返回数组 [1, 2, 3] 打乱后的结果。例如，返回 [1, 3, 2]
+*/
+
+func Test打乱数组(t *testing.T) {
+	s := Constructor([]int{1, 2, 3})
+	fmt.Println(s.Shuffle())
+	fmt.Println(s.Reset())
+	fmt.Println(s.Shuffle())
+}
+
+type Solution struct {
+	origin []int
+}
+
+func Constructor(nums []int) Solution {
+	return Solution{origin: nums}
+}
+
+func (s *Solution) Reset() []int {
+	return s.origin
+}
+
+// 洗牌算法
+/*
+洗牌算法的思路很简单。我们有个长度为n的数组nums，对于每个nums[i]来说，都生成一个[i,n−1]范围的随机数，作为random_idx，然后交换nums[i]和nums[random_idx。
+为什么说洗牌算法实现的shuffle()返回的数组会有n!种可能呢？
+对于nums[0]，它可能会和[0,n−1]范围内的任何一个数交换，有n种可能。
+对于nums[1]，它可能会和[1,n−1]范围内的任何一个数交换，有n−1种可能。
+...
+对于nums[n-1]，它只能和nums[n-1]自己交换，只有1种可能。
+所以总的可能性是: n+(n−1)+(n−2)+...+1=n!
+*/
+func (s *Solution) Shuffle() []int {
+	x := make([]int, len(s.origin))
+	/*
+		copy()函数会将src中的元素逐个复制到dst，不会对切片进行扩容或缩容。
+		copy()函数不会创建新的切片，它只是修改目标切片的内容。
+	*/
+	copy(x, s.origin)
+	for i := len(x) - 1; i >= 0; i-- {
+		j := rand.Intn(i + 1)
+		x[i], x[j] = x[j], x[i]
+	}
+	return x
+}
+
+// 原生库函数
+func (s *Solution) Shuffle1() []int {
+	x := make([]int, len(s.origin))
+	copy(x, s.origin)
+	rand.Shuffle(len(x), func(i, j int) {
+		x[i], x[j] = x[j], x[i]
+	})
+	return x
+}
+
+// 6、LeetCode581 最短无序连续子数组
+/*
+给你一个整数数组 nums ，你需要找出一个 连续子数组 ，如果对这个子数组进行升序排序，那么整个数组都会变为升序排序。
+请你找出符合题意的 最短 子数组，并输出它的长度。
+示例 1：
+输入：nums = [2,6,4,8,10,9,15]
+输出：5
+解释：你只需要对 [6, 4, 8, 10, 9] 进行升序排序，那么整个表都会变为升序排序。
+*/
+func Test最短无序连续子数组(t *testing.T) {
+	fmt.Println(findUnsortedSubarray([]int{2, 6, 4, 8, 10, 9, 15}))
+	fmt.Println(findUnsortedSubarray([]int{1, 2, 3, 4}))
+	fmt.Println(findUnsortedSubarray1([]int{1, 3, 2, 2, 2}))
+	fmt.Println(findUnsortedSubarray1([]int{1, 3, 2, 3, 3}))
+}
+
+// 方法一，排序，然后和原数组对比即可
+func findUnsortedSubarray(nums []int) int {
+	sortNum := numSort(nums)
+	l, r := 0, len(nums)-1
+	for l < len(nums) && sortNum[l] == nums[l] {
+		l++
+	}
+	for r > l && sortNum[r] == nums[r] {
+		r--
+	}
+	return r - l + 1
+}
+
+// 排序
+func numSort(nums []int) []int {
+	x := make([]int, len(nums))
+	copy(x, nums)
+	for i := 0; i < len(x); i++ {
+		for j := i + 1; j < len(x); j++ {
+			if x[j] < x[i] {
+				x[i], x[j] = x[j], x[i]
+			}
+		}
+	}
+	return x
+}
+
+// 方法二：一次遍历，分别维护左右的最大值和最小值
+func findUnsortedSubarray1(nums []int) int {
+	maxl, minr := -1<<31, 1<<31-1
+	l, r := -1, -1
+	for i := 0; i < len(nums); i++ {
+		// 从左到右维护最大值 右边界之后的数字都将大于左边的所有数字
+		if nums[i] < maxl {
+			r = i
+		} else {
+			maxl = nums[i]
+		}
+		// 从右到左维护最小值 左边界之前的数字都将小于右边的所有数字
+		if nums[len(nums)-1-i] > minr {
+			l = len(nums) - 1 - i
+		} else {
+			minr = nums[len(nums)-1-i]
+		}
+	}
+	if r == -1 {
+		return 0
+	}
+	return r - l + 1
 }
