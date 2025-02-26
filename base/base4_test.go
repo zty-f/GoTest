@@ -1,6 +1,7 @@
 package base
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -135,4 +136,36 @@ func TestTimer2(t *testing.T) {
 			// return
 		}
 	}
+}
+
+func TestContextTimeout(t *testing.T) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*2)
+	defer cancel()
+
+	go func() {
+		select {
+		case <-ctx.Done(): // 阻塞等待
+			fmt.Println("timeout之后会调用这里")
+			fmt.Println(ctx.Err())
+		}
+		fmt.Println(ctx.Err()) // context deadline exceeded
+	}()
+
+	time.Sleep(time.Second * 5)
+}
+
+func TestContextDeedLine(t *testing.T) {
+	ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(time.Second*1))
+	defer cancel()
+
+	go func() {
+		select {
+		case <-ctx.Done(): // 阻塞等待
+			fmt.Println("Deadline之后会调用这里")
+			fmt.Println(ctx.Err())
+		}
+		fmt.Println(ctx.Err()) // context deadline exceeded
+	}()
+
+	time.Sleep(time.Second * 5)
 }
