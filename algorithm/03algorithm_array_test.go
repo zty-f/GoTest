@@ -3,6 +3,7 @@ package algorithm
 import (
 	"fmt"
 	"math/rand"
+	"sort"
 	"testing"
 )
 
@@ -433,4 +434,52 @@ func findUnsortedSubarray1(nums []int) int {
 		return 0
 	}
 	return r - l + 1
+}
+
+// 7、LeetCode945 使数组唯一的最小增量
+/*
+给你一个整数数组 nums 。每次 move 操作将会选择任意一个满足 0 <= i < nums.length 的下标 i，并将 nums[i] 递增 1。
+返回使 nums 中的每个值都变成唯一的所需要的最少操作次数。
+生成的测试用例保证答案在 32 位整数范围内。
+示例 1：
+输入：nums = [1,2,2]
+输出：1
+解释：经过一次 move 操作，数组将变为 [1, 2, 3]。
+示例 2：
+输入：nums = [3,2,1,2,1,7] 1 2 3 2 3 7
+输出：6
+解释：经过 6 次 move 操作，数组将变为 [3, 4, 1, 2, 5, 7]。
+可以看出 5 次或 5 次以下的 move 操作是不能让数组的每个值唯一的。
+*/
+
+func Test使数组唯一的最小增量(t *testing.T) {
+	fmt.Println(minIncrementForUnique([]int{1, 2, 2}))
+	fmt.Println(minIncrementForUnique([]int{3, 2, 1, 2, 1, 7}))
+}
+
+// 方法一：排序+贪心
+func minIncrementForUnique(nums []int) int {
+	sort.Ints(nums)
+	res := 0
+	for i := 1; i < len(nums); i++ {
+		if nums[i] <= nums[i-1] {
+			res += nums[i-1] + 1 - nums[i]
+			nums[i] = nums[i-1] + 1
+		}
+	}
+	return res
+}
+
+// 方法二：计数+贪心
+// https://leetcode.cn/problems/minimum-increment-to-make-array-unique/solutions/163214/ji-shu-onxian-xing-tan-ce-fa-onpai-xu-onlogn-yi-ya/
+func minIncrementForUnique1(nums []int) int {
+	// counter数组统计每个数字的个数。
+	// （这里为了防止下面遍历counter的时候每次都走到40000，所以设置了一个max，这个数据量不设也行，再额外设置min也行）
+
+	// 遍历counter数组，若当前数字的个数cnt大于1个，则只留下1个，其他的cnt-1个后移
+
+	// 最后, counter[max+1]里可能会有从counter[max]后移过来的，counter[max+1]里只留下1个，其它的d个后移。
+	// 设 max+1 = x，那么后面的d个数就是[x+1,x+2,x+3,...,x+d],
+	// 因此操作次数是[1,2,3,...,d],用求和公式求和。
+	return 0
 }
