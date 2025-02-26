@@ -454,7 +454,9 @@ func findUnsortedSubarray1(nums []int) int {
 
 func Test使数组唯一的最小增量(t *testing.T) {
 	fmt.Println(minIncrementForUnique([]int{1, 2, 2}))
-	fmt.Println(minIncrementForUnique([]int{3, 2, 1, 2, 1, 7}))
+	fmt.Println(minIncrementForUnique1([]int{3, 2, 1, 2, 1, 7}))
+	fmt.Println(minIncrementForUnique2([]int{3, 2, 1, 2, 1, 7}))
+	fmt.Println(minIncrementForUnique3([]int{3, 2, 1, 2, 1, 7}))
 }
 
 // 方法一：排序+贪心
@@ -474,12 +476,72 @@ func minIncrementForUnique(nums []int) int {
 // https://leetcode.cn/problems/minimum-increment-to-make-array-unique/solutions/163214/ji-shu-onxian-xing-tan-ce-fa-onpai-xu-onlogn-yi-ya/
 func minIncrementForUnique1(nums []int) int {
 	// counter数组统计每个数字的个数。
-	// （这里为了防止下面遍历counter的时候每次都走到40000，所以设置了一个max，这个数据量不设也行，再额外设置min也行）
-
+	// （这里为了防止下面遍历counter的时候每次都走到100000，所以设置了一个max）
+	cnt := make([]int, 100002)
+	max := 0
+	for _, x := range nums {
+		cnt[x]++
+		if x > max {
+			max = x
+		}
+	}
+	res := 0
 	// 遍历counter数组，若当前数字的个数cnt大于1个，则只留下1个，其他的cnt-1个后移
-
+	for i := 0; i <= max; i++ {
+		if cnt[i] > 1 {
+			// 如果某个数出现超过一次，将这些多出的数字都加一，相当于下一个数字加上这些数量即可
+			d := cnt[i] - 1
+			res += d
+			cnt[i+1] += d
+		}
+	}
 	// 最后, counter[max+1]里可能会有从counter[max]后移过来的，counter[max+1]里只留下1个，其它的d个后移。
 	// 设 max+1 = x，那么后面的d个数就是[x+1,x+2,x+3,...,x+d],
 	// 因此操作次数是[1,2,3,...,d],用求和公式求和。
-	return 0
+	d := cnt[max+1] - 1
+	res += d * (1 + d) / 2
+	return res
+}
+
+// 方法三：线性探测法+路径压缩--使用数组
+func minIncrementForUnique2(nums []int) int {
+	pos := make([]int, 200005)
+	for i, _ := range pos {
+		pos[i] = -1
+	}
+	move := 0
+	for _, x := range nums {
+		move += findPos(pos, x) - x
+	}
+	return move
+}
+
+func findPos(pos []int, x int) int {
+	value := pos[x]
+	if value == -1 {
+		pos[x] = x
+		return x
+	}
+	pos[x] = findPos(pos, value+1)
+	return pos[x]
+}
+
+// 方法三：线性探测法+路径压缩--使用map
+func minIncrementForUnique3(nums []int) int {
+	pos := make(map[int]int)
+	move := 0
+	for _, x := range nums {
+		move += findPos2(pos, x) - x
+	}
+	return move
+}
+
+func findPos2(pos map[int]int, x int) int {
+	value := pos[x]
+	if _, ex := pos[x]; !ex {
+		pos[x] = x
+		return x
+	}
+	pos[x] = findPos2(pos, value+1)
+	return pos[x]
 }
