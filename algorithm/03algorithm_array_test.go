@@ -29,7 +29,7 @@ import (
 6 7 8 9 2
 */
 
-func Test螺旋矩阵(t *testing.T) {
+func TestLeetCode54(t *testing.T) {
 	fmt.Println(spiralOrder([][]int{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}))
 	fmt.Println(spiralOrder([][]int{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}}))
 }
@@ -98,7 +98,7 @@ func spiralOrder(matrix [][]int) []int {
 解释：最小覆盖子串 "BANC" 包含来自字符串 t 的 'A'、'B' 和 'C'。
 */
 
-func Test最小覆盖子串(t *testing.T) {
+func TestLeetCode76(t *testing.T) {
 	fmt.Println(minWindow("ADOBECODEBANC", "ABC"))
 	fmt.Println(minWindow("a", "a"))
 	fmt.Println(minWindow("a", "aa"))
@@ -217,7 +217,7 @@ func swap(nums []int, i, j int) {
 1 0 1
 1 1 1
 */
-func Test矩阵置零(t *testing.T) {
+func TestLeetCode73(t *testing.T) {
 	x1 := [][]int{{1, 1, 1}, {1, 0, 1}, {1, 1, 1}}
 	setZeroes1(x1)
 	fmt.Println(x1)
@@ -316,7 +316,7 @@ solution.reset();      // 重设数组到它的初始状态 [1, 2, 3] 。返回 
 solution.shuffle();    // 随机返回数组 [1, 2, 3] 打乱后的结果。例如，返回 [1, 3, 2]
 */
 
-func Test打乱数组(t *testing.T) {
+func TestLeetCode384(t *testing.T) {
 	s := Constructor([]int{1, 2, 3})
 	fmt.Println(s.Shuffle())
 	fmt.Println(s.Reset())
@@ -378,7 +378,7 @@ func (s *Solution) Shuffle1() []int {
 输出：5
 解释：你只需要对 [6, 4, 8, 10, 9] 进行升序排序，那么整个表都会变为升序排序。
 */
-func Test最短无序连续子数组(t *testing.T) {
+func TestLeetCode581(t *testing.T) {
 	fmt.Println(findUnsortedSubarray([]int{2, 6, 4, 8, 10, 9, 15}))
 	fmt.Println(findUnsortedSubarray([]int{1, 2, 3, 4}))
 	fmt.Println(findUnsortedSubarray1([]int{1, 3, 2, 2, 2}))
@@ -452,7 +452,7 @@ func findUnsortedSubarray1(nums []int) int {
 可以看出 5 次或 5 次以下的 move 操作是不能让数组的每个值唯一的。
 */
 
-func Test使数组唯一的最小增量(t *testing.T) {
+func TestLeetCode945(t *testing.T) {
 	fmt.Println(minIncrementForUnique([]int{1, 2, 2}))
 	fmt.Println(minIncrementForUnique1([]int{3, 2, 1, 2, 1, 7}))
 	fmt.Println(minIncrementForUnique2([]int{3, 2, 1, 2, 1, 7}))
