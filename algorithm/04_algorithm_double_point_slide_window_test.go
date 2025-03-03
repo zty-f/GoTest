@@ -278,6 +278,73 @@ func threeSumClosest(nums []int, target int) int {
 	return res
 }
 
+// 5、LeetCode26 删除排序数组中的重复项
+/*
+给你一个 非严格递增排列 的数组 nums ，请你 原地 删除重复出现的元素，使每个元素 只出现一次 ，
+返回删除后数组的新长度。元素的 相对顺序 应该保持 一致 。然后返回 nums 中唯一元素的个数。
+考虑 nums 的唯一元素的数量为 k ，你需要做以下事情确保你的题解可以被通过：
+更改数组 nums ，使 nums 的前 k 个元素包含唯一元素，并按照它们最初在 nums 中出现的顺序排列。nums 的其余元素与 nums 的大小不重要。
+返回 k 。
+输入：nums = [1,1,2]
+输出：2, nums = [1,2,_]
+解释：函数应该返回新的长度 2 ，并且原数组 nums 的前两个元素被修改为 1, 2 。不需要考虑数组中超出新长度后面的元素。
+*/
+func TestLeetCode26(t *testing.T) {
+	nums := []int{1, 1, 2}
+	fmt.Println(removeDuplicates(nums))
+	fmt.Println(nums)
+	nums = []int{0, 0, 1, 1, 1, 2, 2, 3, 3, 4}
+	fmt.Println(removeDuplicates1(nums))
+	fmt.Println(nums)
+	nums = []int{0, 0, 1, 1, 1, 2, 2, 3, 3, 4}
+	fmt.Println(removeDuplicates2(nums))
+	fmt.Println(nums)
+}
+
+// 方法一：使用额外空间 + 双指针
+func removeDuplicates(nums []int) int {
+	set := make(map[int]struct{})
+	i := 0
+	for j := 0; j < len(nums); j++ {
+		if _, ok := set[nums[j]]; !ok {
+			nums[i] = nums[j]
+			set[nums[j]] = struct{}{}
+			i++
+		}
+	}
+	return i
+}
+
+// 方法二：原地使用双指针，不额外空间！！！推荐
+func removeDuplicates1(nums []int) int {
+	if len(nums) == 0 {
+		return 0
+	}
+	i := 1
+	for j := 1; j < len(nums); j++ {
+		if nums[j] != nums[j-1] {
+			nums[i] = nums[j]
+			i++
+		}
+	}
+	return i
+}
+
+// 方法三：原地使用双指针，不额外空间！！！推荐 和上面的略有不同-比较不好理解
+func removeDuplicates2(nums []int) int {
+	if len(nums) == 0 {
+		return 0
+	}
+	i := 0
+	for j := 1; j < len(nums); j++ {
+		if nums[j] != nums[i] {
+			i++
+			nums[i] = nums[j]
+		}
+	}
+	return i + 1
+}
+
 func abs(x int) int {
 	if x < 0 {
 		return -x
