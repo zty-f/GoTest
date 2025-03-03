@@ -315,7 +315,7 @@ func removeDuplicates(nums []int) int {
 	return i
 }
 
-// 方法二：原地使用双指针，不额外空间！！！推荐
+// 方法二：原地使用双指针，不额外空间！！！推荐-比较不好理解
 func removeDuplicates1(nums []int) int {
 	if len(nums) == 0 {
 		return 0
@@ -330,7 +330,7 @@ func removeDuplicates1(nums []int) int {
 	return i
 }
 
-// 方法三：原地使用双指针，不额外空间！！！推荐 和上面的略有不同-比较不好理解
+// 方法三：原地使用双指针，不额外空间！！！推荐 和上面的略有不同
 func removeDuplicates2(nums []int) int {
 	if len(nums) == 0 {
 		return 0
@@ -343,6 +343,126 @@ func removeDuplicates2(nums []int) int {
 		}
 	}
 	return i + 1
+}
+
+// 6、LeetCode42 接雨水
+/*
+给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
+示例 1：
+输入：height = [0,1,0,2,1,0,1,3,2,1,2,1]
+输出：6
+解释：上面是由数组 [0,1,0,2,1,0,1,3,2,1,2,1] 表示的高度图，在这种情况下，可以接 6 个单位的雨水（蓝色部分表示雨水）。
+示例 2：
+输入：height = [4,2,0,3,2,5]
+输出：9
+*/
+func TestLeetCode42(t *testing.T) {
+	fmt.Println(trap1([]int{0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1}))
+	fmt.Println(trap1([]int{4, 2, 0, 3, 2, 5}))
+	fmt.Println(trap2([]int{0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1}))
+	fmt.Println(trap2([]int{4, 2, 0, 3, 2, 5}))
+}
+
+// 方法一：双向获取最大值，第i个位置能存储的雨水量 = min(leftMax[i], rightMax[i]) - height[i]
+func trap1(height []int) int {
+	afterMax := make([]int, len(height))
+	n := len(height)
+	afterMax[n-1] = height[n-1]
+	for i := n - 2; i >= 0; i-- {
+		afterMax[i] = max(height[i], afterMax[i+1])
+	}
+	sum := 0
+	preMax := height[0]
+	for i := 1; i < n; i++ {
+		if height[i] > preMax {
+			preMax = height[i]
+		}
+		sum += min(preMax, afterMax[i]) - height[i]
+	}
+	return sum
+}
+
+// 方法二：使用常量空间标记最大值，第i个位置能存储的雨水量 = min(leftMax[i], rightMax[i]) - height[i]
+func trap2(height []int) int {
+	n := len(height)
+	left, right, preMax, afterMax := 0, n-1, 0, 0
+	sum := 0
+	for left < right {
+		preMax = max(preMax, height[left])
+		afterMax = max(afterMax, height[right])
+		if preMax < afterMax {
+			sum += preMax - height[left]
+			left++
+		} else {
+			sum += afterMax - height[right]
+			right--
+		}
+	}
+	return sum
+}
+
+// 7、LeetCode121 买卖股票的最佳时机
+/*
+给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。
+你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。
+返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。
+示例 1：
+输入：[7,1,5,3,6,4]
+输出：5
+解释：在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。
+     注意利润不能是 7-1 = 6, 因为卖出价格需要大于买入价格；同时，你不能在买入前卖出股票。
+示例 2：
+输入：prices = [7,6,4,3,1]
+输出：0
+解释：在这种情况下, 没有交易完成, 所以最大利润为 0
+*/
+
+func TestLeetCode121(t *testing.T) {
+	fmt.Println(maxProfit([]int{7, 1, 5, 3, 6, 4}))
+	fmt.Println(maxProfit([]int{7, 6, 4, 3, 1}))
+	fmt.Println(maxProfit1([]int{7, 1, 5, 3, 6, 4}))
+	fmt.Println(maxProfit1([]int{7, 6, 4, 3, 1}))
+	fmt.Println(maxProfit1([]int{2, 1, 4}))
+	fmt.Println(maxProfit2([]int{7, 1, 5, 3, 6, 4}))
+	fmt.Println(maxProfit2([]int{7, 6, 4, 3, 1}))
+	fmt.Println(maxProfit2([]int{2, 1, 4}))
+}
+
+// 方法一：暴力法 两次遍历 超时
+func maxProfit(prices []int) int {
+	res := 0
+	for i := 0; i < len(prices); i++ {
+		for j := i + 1; j < len(prices); j++ {
+			res = max(res, prices[j]-prices[i])
+		}
+	}
+	return res
+}
+
+// 方法二：从右往左维护最大值
+func maxProfit1(prices []int) int {
+	res := 0
+	afterMax := 0
+	for r := len(prices) - 1; r >= 0; r-- {
+		afterMax = max(afterMax, prices[r])
+		if prices[r] < afterMax {
+			res = max(res, afterMax-prices[r])
+		}
+	}
+	return res
+}
+
+// 方法三：从左往右维护最小指
+func maxProfit2(prices []int) int {
+	res := 0
+	preMin := 100000
+	for l := 0; l < len(prices); l++ {
+		preMin = min(preMin, prices[l])
+		if prices[l] > preMin {
+			res = max(res, prices[l]-preMin)
+		}
+	}
+	return res
 }
 
 func abs(x int) int {
