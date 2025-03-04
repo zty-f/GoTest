@@ -30,7 +30,7 @@ func main() {
 		} else {
 			fmt.Println("服务器接收客户端连接成功:", conn.RemoteAddr())
 		}
-		// 处理客户端请求 多个协程处理
+		// 处理客户端请求 多个协程处理-多个连接处理互不影响
 		go process(conn)
 	}
 }
