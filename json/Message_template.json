@@ -212,5 +212,41 @@
       "prizeCount": 1,
       "prizeImage": "https://static-inc.xiwang.com/mall/b635f06289aedae565417767e1917e0d.png"
     }
+  ],
+  "奖牌": [
+    {
+      "prizeId": "60204",
+      "prizeName": "土星",
+      "prizeType": 1,
+      "prizeCount": 1,
+      "prizeImage": "https://static-inc.xiwang.com/mall/b635f06289aedae565417767e1917e0d.png"
+    }
+  ],
+  "头像": [
+    {
+      "prizeId": "87",
+      "prizeName": "猪八戒",
+      "prizeType": 4,
+      "prizeCount": 1,
+      "prizeImage": "https://static-inc.xiwang.com/xwx-user-avatar/test/95aa7400fb2a1e1efb8d72319830e654.png"
+    }
+  ],
+  "头像框": [
+    {
+      "prizeId": "102",
+      "prizeName": "木星先锋",
+      "prizeType": 4,
+      "prizeCount": 1,
+      "prizeImage": "https://static-inc.xiwang.com/xwx-user-avatar/test/ef6cac7466ebfdce0e70b240a6ff4eda.png"
+    }
+  ],
+  "idol": [
+    {
+      "prizeId": "C2024082601wPfE",
+      "prizeName": "蒸汽飞行帽",
+      "prizeType": 2,
+      "prizeCount": 1,
+      "prizeImage": "https://m.xiwang.com/resource/__private__/3650cd180bd6e0042977f35ed53a696d/yasuo/pengke/%E5%B8%BD%E5%AD%90.png"
+    }
   ]
 }

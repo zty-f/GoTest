@@ -3,6 +3,8 @@ package base
 import (
 	"context"
 	"fmt"
+	"golang.org/x/time/rate"
+	"log"
 	"net/http"
 	"testing"
 	"time"
@@ -168,4 +170,67 @@ func TestContextDeedLine(t *testing.T) {
 	}()
 
 	time.Sleep(time.Second * 5)
+}
+
+func TestMapInit(t *testing.T) {
+	m := make(map[int][]int)
+	fmt.Println(m[1])
+	m[1] = append(m[1], 1)
+	m[1] = append(m[1], 2)
+	fmt.Println(m)
+}
+
+func TestSliceInit(t *testing.T) {
+	m := make([][]int, 0)
+	fmt.Println(m)
+	m = append(m, make([]int, 0))
+	fmt.Println(m[0])
+	fmt.Println(len(m))
+	// 限流
+	limiter := rate.NewLimiter(1, 1)
+	limiter.Wait(context.Background())
+}
+
+// https://juejin.cn/post/7258233838370603069
+/*
+使用NewLimiter创建一个限流器Limiter：
+r：表示速率，每秒产生r个令牌
+b：表示桶大小，最大突发b个事件
+示例代码：
+如下表示限制10 QPS，突发1
+limiter := NewLimiter(10, 1);
+*/
+func TestRate(t *testing.T) {
+	// 1表示每次放进筒内的数量，桶内的令牌数是5，最大令牌数也是5，这个筒子是自动补充的，你只要取了令牌不管你取多少个，这里都会在每次取完后自动加1个进来，因为我们设置的是1
+	r := rate.NewLimiter(1, 5)
+	ctx := context.Background()
+
+	for {
+		// 每次消耗2个，放入一个，消耗完了还会放进去，因为初始是5个，所以这段代码再执行到第4次的时候筒里面就空了，如果当前不够取两个了，本次就不取，再放一个进去，然后返回false
+		err := r.WaitN(ctx, 2)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(time.Now().Format("2021-11-02 15:04:05"))
+		time.Sleep(time.Second)
+	}
+
+}
+
+/*
+AllowN方法
+AllowN 方法表示，截止到某一时刻，目前桶中数目是否至少为 n 个，满足则返回 true，同时从桶中消费 n 个 token。反之不消费桶中的Token，返回false。
+此外还有Allow方法，含义和作用等同于Allow(time.Now(),1)
+*/
+func Limiter(next http.Handler) http.Handler {
+	r := rate.NewLimiter(1, 5)
+	// 这里使用http.HandlerFunc进行类型转换把匿名函数转换成了type http.HandlerFunc，因为HandlerFunc实现了ServeHttp方法所以是http.Handler的实例
+	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		if !r.Allow() {
+			http.Error(writer, "too many requests", http.StatusTooManyRequests)
+		} else {
+			// 获取令牌之后，再调用next.ServerHTTP继续完成请求
+			next.ServeHTTP(writer, request)
+		}
+	})
 }
