@@ -14,6 +14,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"sync"
 	"test/util"
 	"testing"
 	"time"
@@ -826,4 +827,61 @@ func TestPoint(t *testing.T) {
 	}
 	bar()
 	fmt.Println(*p)
+}
+
+// 问题代码
+func TestGoThread(t *testing.T) {
+	x := []int{1, 2, 3, 4, 5}
+	var y []int
+	for i := range x {
+		go func() {
+			y = append(y, i)
+		}()
+	}
+	fmt.Println(y)
+}
+
+// 代码解决方案
+/*
+1. 循环变量捕获问题
+2. 并发写入的数据竞争 切片不是并发安全的
+3. 缺乏同步导致结果不可预测
+*/
+func TestGoThreadSolution(t *testing.T) {
+	x := []int{1, 2, 3, 4, 5}
+	var (
+		y  []int
+		mu sync.Mutex
+		wg sync.WaitGroup
+	)
+
+	for i := range x {
+		wg.Add(1)
+		go func(val int) {
+			defer wg.Done()
+			mu.Lock()
+			defer mu.Unlock()
+			y = append(y, val)
+		}(i)
+	}
+	wg.Wait()
+	fmt.Println(y) // 输出结果可能是乱序的，但包含所有元素
+}
+
+func appendStr() func(string) string {
+	t := "Hello"
+	z := func(x string) string {
+		t = t + " " + x
+		return t
+	}
+	return z
+}
+
+func TestPrint(t *testing.T) {
+	a := appendStr()
+	b := appendStr()
+	fmt.Println(a("world"))
+	fmt.Println(b("Go"))
+	fmt.Println(a("ZTy"))
+	fmt.Println(b("!"))
 }
