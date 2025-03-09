@@ -315,7 +315,7 @@ func removeDuplicates(nums []int) int {
 	return i
 }
 
-// 方法二：原地使用双指针，不额外空间！！！推荐-比较不好理解
+// 方法二：原地使用双指针，不额外空间！！！推荐-比较好理解
 func removeDuplicates1(nums []int) int {
 	if len(nums) == 0 {
 		return 0
@@ -330,7 +330,7 @@ func removeDuplicates1(nums []int) int {
 	return i
 }
 
-// 方法三：原地使用双指针，不额外空间！！！推荐 和上面的略有不同
+// 方法三：原地使用双指针，不额外空间！！！推荐 和上面的略有不同 -比较不好理解
 func removeDuplicates2(nums []int) int {
 	if len(nums) == 0 {
 		return 0
