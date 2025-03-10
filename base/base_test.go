@@ -875,6 +875,7 @@ func appendStr() func(string) string {
 		t = t + " " + x
 		return t
 	}
+	t = "wwww" // 闭包引用的是外部变量的地址，这里修改也会影响闭包里面的t的值
 	return z
 }
 
@@ -896,4 +897,20 @@ func TestInit(t *testing.T) {
 	fmt.Println(m)
 	// fmt.Println(arr[0])
 	fmt.Println(m[0])
+}
+
+func create() (fs [2]func()) {
+	for i := 0; i < 2; i++ {
+		fs[i] = func() {
+			fmt.Println(i)
+		}
+	}
+	return
+}
+func TestClosure2(t *testing.T) {
+	fs := create()
+	// 闭包引用的是外部变量的地址，所以会打印最后的i值，共用的是同一个i
+	for i := 0; i < len(fs); i++ {
+		fs[i]()
+	}
 }
