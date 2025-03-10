@@ -67,7 +67,7 @@ func getMaxLenPath(root *Node) []int {
 	left := getMaxLenPath(root.Left)
 	right := getMaxLenPath(root.Right)
 	if len(left) > len(right) {
-		return append(left, root.Val)
+		return append([]int{root.Val}, left...)
 	}
-	return append(right, root.Val)
+	return append([]int{root.Val}, right...)
 }

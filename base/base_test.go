@@ -885,3 +885,14 @@ func TestPrint(t *testing.T) {
 	fmt.Println(a("ZTy"))
 	fmt.Println(b("!"))
 }
+
+func TestInit(t *testing.T) {
+	// 对于nil的slice，能够直接append数据。但是不能直接访问数据，否则会panic
+	var arr []int
+	// nil的map和slice不同，是不能直接赋值的，会panic，需要使用make初始化，但是可以直接访问
+	var m map[int]int
+	fmt.Println(arr)
+	fmt.Println(m)
+	// fmt.Println(arr[0])
+	fmt.Println(m[0])
+}
