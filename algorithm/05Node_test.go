@@ -2,72 +2,75 @@ package algorithm
 
 import "testing"
 
-type Node struct {
+/*
+树的遍历
+●LeetCode94 二叉树的中序遍历
+●LeetCode102 二叉树的层次遍历
+●LeetCode110 平衡二叉树
+●LeetCode144 二叉树的前序遍历
+●LeetCode145 二叉树的后序遍历
+二叉搜索树
+●LeetCode98 验证二叉搜索树
+●LeetCode450 删除二叉搜索树中的节点
+●LeetCode701 二叉搜索树中的插入操作
+递归
+●LeetCode21 合并两个有序链表
+●LeetCode101 对称二叉树
+●LeetCode104 二叉树的最大深度
+●LeetCode226 翻转二叉树
+●LeetCode236 二叉树的最近公共祖先
+*/
+
+type TreeNode struct {
 	Val   int
-	Left  *Node
-	Right *Node
+	Left  *TreeNode
+	Right *TreeNode
 }
 
-// 二叉树的最大深度
-func TestGetMaxLen(t *testing.T) {
-	root := &Node{
-		Val: 1,
-		Left: &Node{
+// 1、LeetCode94 二叉树的中序遍历
+func TestLeetCode94(t *testing.T) {
+	root := &TreeNode{
+		Val:  1,
+		Left: nil,
+		Right: &TreeNode{
 			Val: 2,
-			Left: &Node{
-				Val: 4,
+			Left: &TreeNode{
+				Val:   3,
+				Left:  nil,
+				Right: nil,
 			},
-			Right: &Node{
-				Val: 5,
-			},
-		},
-		Right: &Node{
-			Val: 3,
+			Right: nil,
 		},
 	}
-	t.Log(getMaxLen(root))
+	t.Log(inorderTraversal(root))
 }
 
-func getMaxLen(root *Node) int {
+func inorderTraversal(root *TreeNode) []int {
+	res := make([]int, 0)
+	dfs1(root, &res) // append修改后原值不会变，需要传地址
+	return res
+}
+
+func dfs1(root *TreeNode, res *[]int) {
 	if root == nil {
-		return 0
+		return
 	}
-	left := getMaxLen(root.Left)
-	right := getMaxLen(root.Right)
-	if left > right {
-		return left + 1
-	}
-	return right + 1
+	dfs1(root.Left, res)
+	*res = append(*res, root.Val)
+	dfs1(root.Right, res)
 }
 
-// 二叉树的最大深度路径数据
-func TestGetMaxLenPath(t *testing.T) {
-	root := &Node{
-		Val: 1,
-		Left: &Node{
-			Val: 2,
-			Left: &Node{
-				Val: 4,
-			},
-			Right: &Node{
-				Val: 5,
-			},
-		},
-		Right: &Node{
-			Val: 3,
-		},
+func inorderTraversal1(root *TreeNode) []int {
+	res := make([]int, 0)
+	var dfs func(root *TreeNode)
+	dfs = func(root *TreeNode) {
+		if root == nil {
+			return
+		}
+		dfs(root.Left)
+		res = append(res, root.Val)
+		dfs(root.Right)
 	}
-	t.Log(getMaxLenPath(root))
-}
-
-func getMaxLenPath(root *Node) []int {
-	if root == nil {
-		return []int{}
-	}
-	left := getMaxLenPath(root.Left)
-	right := getMaxLenPath(root.Right)
-	if len(left) > len(right) {
-		return append([]int{root.Val}, left...)
-	}
-	return append([]int{root.Val}, right...)
+	dfs(root)
+	return res
 }
