@@ -856,13 +856,14 @@ func TestGoThreadSolution(t *testing.T) {
 	)
 
 	for i := range x {
+		z := i // 重新生成变量或者传入值也可以
 		wg.Add(1)
-		go func(val int) {
+		go func() {
 			defer wg.Done()
 			mu.Lock()
 			defer mu.Unlock()
-			y = append(y, val)
-		}(i)
+			y = append(y, z)
+		}()
 	}
 	wg.Wait()
 	fmt.Println(y) // 输出结果可能是乱序的，但包含所有元素
