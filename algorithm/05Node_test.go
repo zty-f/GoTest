@@ -27,7 +27,7 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
-// 1、LeetCode94 二叉树的中序遍历
+// 1、LeetCode94 二叉树的中序遍历\LeetCode144 二叉树的前序遍历\LeetCode145 二叉树的后序遍历
 func TestLeetCode94(t *testing.T) {
 	root := &TreeNode{
 		Val:  1,
@@ -60,6 +60,7 @@ func dfs1(root *TreeNode, res *[]int) {
 	dfs1(root.Right, res)
 }
 
+// 中序
 func inorderTraversal1(root *TreeNode) []int {
 	res := make([]int, 0)
 	var dfs func(root *TreeNode)
@@ -72,5 +73,81 @@ func inorderTraversal1(root *TreeNode) []int {
 		dfs(root.Right)
 	}
 	dfs(root)
+	return res
+}
+
+// 前序
+func inorderTraversal2(root *TreeNode) []int {
+	res := make([]int, 0)
+	var dfs func(root *TreeNode)
+	dfs = func(root *TreeNode) {
+		if root == nil {
+			return
+		}
+		res = append(res, root.Val)
+		dfs(root.Left)
+		dfs(root.Right)
+	}
+	dfs(root)
+	return res
+}
+
+// 后序
+func inorderTraversal3(root *TreeNode) []int {
+	res := make([]int, 0)
+	var dfs func(root *TreeNode)
+	dfs = func(root *TreeNode) {
+		if root == nil {
+			return
+		}
+		dfs(root.Left)
+		dfs(root.Right)
+		res = append(res, root.Val)
+	}
+	dfs(root)
+	return res
+}
+
+// 2、LeetCode102 二叉树的层次遍历
+func TestLeetCode102(t *testing.T) {
+	root := &TreeNode{
+		Val:  1,
+		Left: nil,
+		Right: &TreeNode{
+			Val: 2,
+			Left: &TreeNode{
+				Val:   3,
+				Left:  nil,
+				Right: nil,
+			},
+			Right: nil,
+		},
+	}
+	t.Log(levelOrder(root))
+}
+
+func levelOrder(root *TreeNode) [][]int {
+	res := make([][]int, 0)
+	if root == nil {
+		return res
+	}
+	queue := make([]*TreeNode, 0)
+	queue = append(queue, root)
+	for len(queue) > 0 {
+		tList := make([]int, 0)
+		tQueue := make([]*TreeNode, 0)
+		for i := 0; i < len(queue); i++ {
+			t := queue[i]
+			tList = append(tList, t.Val)
+			if t.Left != nil {
+				tQueue = append(tQueue, t.Left)
+			}
+			if t.Right != nil {
+				tQueue = append(tQueue, t.Right)
+			}
+		}
+		queue = tQueue
+		res = append(res, tList)
+	}
 	return res
 }
