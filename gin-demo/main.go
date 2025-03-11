@@ -10,6 +10,7 @@ func main() {
 	engine.GET("/testRetry", TestRetry)
 	engine.POST("/importData", ImportCheckinQuestion)
 	engine.GET("/testAfter", TestAfter)
+	engine.GET("/testGo", TestMutiGo)
 	err := engine.Run(":8080")
 	if err != nil {
 		return

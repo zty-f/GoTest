@@ -455,3 +455,15 @@ func getStuIdListFromFile(ctx context.Context, file *multipart.FileHeader) ([]in
 	}
 	return stuIdList, nil
 }
+
+func TestMutiGo(c *gin.Context) {
+	for i := 0; i < 10; i++ {
+		go func(i int) {
+			time.Sleep(time.Duration(i) * time.Second)
+			fmt.Println("i:", i)
+		}(i)
+	}
+	c.JSON(200, gin.H{
+		"message": "hello TestMutiGo!",
+	})
+}
