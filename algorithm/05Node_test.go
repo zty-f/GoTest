@@ -151,3 +151,52 @@ func levelOrder(root *TreeNode) [][]int {
 	}
 	return res
 }
+
+// 3、LeetCode110 平衡二叉树
+func TestLeetCode110(t *testing.T) {
+	root := &TreeNode{
+		Val:  1,
+		Left: nil,
+		Right: &TreeNode{
+			Val: 2,
+			Left: &TreeNode{
+				Val:   3,
+				Left:  nil,
+				Right: nil,
+			},
+			Right: nil,
+		},
+	}
+	t.Log(isBalanced(root))
+}
+
+func isBalanced(root *TreeNode) bool {
+	return height(root) >= 0
+}
+
+// 自底向上 不断更新节点的高度
+func height(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	lh := height(root.Left)
+	rh := height(root.Right)
+	if lh == -1 || rh == -1 || abs(lh-rh) > 1 {
+		return -1
+	}
+	return max(lh, rh) + 1
+}
+
+func abs(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
