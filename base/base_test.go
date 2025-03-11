@@ -1003,3 +1003,29 @@ func TestSlice22(t *testing.T) {
 	mod(x)
 	fmt.Println(x)
 }
+
+type Mt struct {
+	Name string
+	Age  int
+}
+
+func TestArray(t *testing.T) {
+	a := [5]int{1, 2, 3, 4, 5}
+	fmt.Println(a[1:])
+	// fmt.Println([3]int{1, 2, 3}[1:]) // 不能这么寻址
+	m := map[string]Mt{
+		"a": {
+			Name: "zhangsan",
+			Age:  18,
+		},
+		"b": {
+			Name: "lisi",
+			Age:  20,
+		},
+	}
+	fmt.Println(m["a"])
+	fmt.Println(m["b"].Name) // 可以取值 但是不能赋值：m["b"].Name = ""  因为map的元素是不可寻址的
+
+	// map取值得到的是元素值的拷贝副本，内存中不是同一个数据，不能进行修改
+	fmt.Printf("%#v\n", m["c"]) // 返回空对象的零值状态 base.Mt{Name:"", Age:0}
+}
