@@ -1002,6 +1002,9 @@ func TestSlice22(t *testing.T) {
 	fmt.Println(x)
 	mod(x)
 	fmt.Println(x)
+	rand.Seed(time.Now().UnixNano())
+	randNum := rand.Intn(2)
+	fmt.Println(randNum)
 }
 
 type Mt struct {
@@ -1028,4 +1031,22 @@ func TestArray(t *testing.T) {
 
 	// map取值得到的是元素值的拷贝副本，内存中不是同一个数据，不能进行修改
 	fmt.Printf("%#v\n", m["c"]) // 返回空对象的零值状态 base.Mt{Name:"", Age:0}
+}
+
+// 切片Append坑-使用索引访问切片需要注意
+/*
+当是切片（slice）时，表达式 s[low : high] 中的 high，最大的取值范围对应着切片的容量（cap），不是单纯的长度（len）。因此调用 fmt.Println(sl[:10]) 时可以输出容量范围内的值，不会出现越界。
+相对的 fmt.Println(sl) 因为该切片 len 值为 0，没有指定最大索引值，high 则取 len 值，导致输出结果为空。
+*/
+func TestAppend1(t *testing.T) {
+	sl := make([]int, 0, 10)
+	var appenFunc = func(s []int) {
+		s = append(s, 10, 20, 30) // 这里的s是一个新的切片，不会影响原切片,底层共用一个数组
+		fmt.Println(s)            // [10 20 30]
+	}
+	fmt.Println(sl) // []
+	appenFunc(sl)
+	fmt.Println(sl)      // [] 长度为0 类似于[0:0] 取不到元素
+	fmt.Println(sl[0:0]) // []
+	fmt.Println(sl[:10]) // [10 20 30 0 0 0 0 0 0 0]
 }
