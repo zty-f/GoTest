@@ -1050,3 +1050,59 @@ func TestAppend1(t *testing.T) {
 	fmt.Println(sl[0:0]) // []
 	fmt.Println(sl[:10]) // [10 20 30 0 0 0 0 0 0 0]
 }
+
+type Doc struct {
+	Name     string
+	Children *[]Doc
+}
+
+// 输出文件树目录结构
+func TestDoc(t *testing.T) {
+	doc := Doc{
+		Name: "root",
+		Children: &[]Doc{
+			{
+				Name: "child1",
+				Children: &[]Doc{
+					{
+						Name: "1",
+					},
+					{
+						Name: "2",
+					},
+				},
+			},
+			{
+				Name: "child2",
+				Children: &[]Doc{
+					{
+						Name: "1",
+					},
+					{
+						Name: "2",
+					},
+				},
+			},
+		},
+	}
+	// 输出路径树
+	bytes, _ := json.Marshal(doc)
+	fmt.Println(string(bytes))
+	dfs("", doc)
+}
+
+func dfs(str string, doc Doc) {
+	path := str
+	if path == "" {
+		path = doc.Name
+	} else {
+		path = path + "/" + doc.Name
+	}
+	if doc.Children == nil || len(*doc.Children) == 0 {
+		fmt.Println(path)
+		return
+	}
+	for _, v := range *doc.Children {
+		dfs(path, v)
+	}
+}
