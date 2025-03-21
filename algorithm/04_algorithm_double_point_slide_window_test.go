@@ -512,3 +512,66 @@ func min(a, b int) int {
 	}
 	return b
 }
+
+type List struct {
+	Value int
+	Next  *List
+}
+
+func TestMergeList(t *testing.T) {
+	list1 := &List{
+		Value: 1,
+		Next: &List{
+			Value: 3,
+			Next: &List{
+				Value: 5,
+				Next: &List{
+					Value: 8,
+				},
+			},
+		},
+	}
+	list2 := &List{
+		Value: 2,
+		Next: &List{
+			Value: 4,
+			Next: &List{
+				Value: 6,
+				Next: &List{
+					Value: 9,
+					Next: &List{
+						Value: 10,
+						Next: &List{
+							Value: 18,
+						},
+					},
+				},
+			},
+		},
+	}
+	res := merge(list1, list2)
+	fmt.Printf("%+v", res)
+}
+
+func merge(l1 *List, l2 *List) *List {
+	tmp := &List{0, nil}
+	res := tmp
+	for l1 != nil && l2 != nil {
+		if l1.Value < l2.Value {
+			tmp.Next = &List{l1.Value, nil}
+			tmp = tmp.Next
+			l1 = l1.Next
+		} else {
+			tmp.Next = &List{l2.Value, nil}
+			tmp = tmp.Next
+			l2 = l2.Next
+		}
+	}
+	if l1 != nil {
+		tmp.Next = l1
+	}
+	if l2 != nil {
+		tmp.Next = l2
+	}
+	return res.Next
+}
