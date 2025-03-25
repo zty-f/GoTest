@@ -248,7 +248,7 @@ func isCircleList(list *ListNode) bool {
 		mid = cur.Next
 	}
 	// 3 2 1 4 3 2 1
-	if mid != nil && pre != nil {
+	for mid != nil && pre != nil {
 		if mid.Value != pre.Value {
 			return false
 		}
