@@ -200,3 +200,109 @@ func TestCurlUserModify(t *testing.T) {
 
 	fmt.Println(string(body))
 }
+
+type ListNode struct {
+	Value int
+	Next  *ListNode
+}
+
+// LeetCode 27 判断回文链表
+func TestJudgeList(t *testing.T) {
+	list1 := &ListNode{
+		Value: 1,
+		Next: &ListNode{
+			Value: 2,
+			Next: &ListNode{
+				Value: 3,
+				Next: &ListNode{
+					Value: 3,
+					Next: &ListNode{
+						Value: 2,
+						Next: &ListNode{
+							Value: 1,
+						},
+					},
+				},
+			},
+		},
+	}
+	fmt.Println(isCircleList(list1))
+	fmt.Println(isPalindrome(list1))
+}
+
+func isCircleList(list *ListNode) bool {
+	if list == nil || list.Next == nil {
+		return true
+	}
+	tmp, cur := list, list
+	var pre *ListNode
+	// 1 2 3 4 3 2 1
+	for tmp != nil && tmp.Next != nil {
+		tmp = tmp.Next.Next
+		nxt := cur.Next
+		cur.Next = pre
+		pre, cur = cur, nxt
+	}
+	mid := cur
+	if tmp != nil {
+		mid = cur.Next
+	}
+	// 3 2 1 4 3 2 1
+	if mid != nil && pre != nil {
+		if mid.Value != pre.Value {
+			return false
+		}
+		nxt := pre
+		mid, pre = mid.Next, pre.Next
+		nxt.Next, cur = cur, nxt
+	}
+	return true
+}
+
+func reverseList(head *ListNode) *ListNode {
+	// 1 2 3
+	var prev, cur *ListNode = nil, head
+	for cur != nil {
+		nextTmp := cur.Next
+		cur.Next = prev
+		prev = cur
+		cur = nextTmp
+	}
+	return prev
+}
+
+func endOfFirstHalf(head *ListNode) *ListNode {
+	fast := head
+	slow := head
+	for fast.Next != nil && fast.Next.Next != nil {
+		fast = fast.Next.Next
+		slow = slow.Next
+	}
+	return slow
+}
+
+func isPalindrome(head *ListNode) bool {
+	if head == nil {
+		return true
+	}
+
+	// 找到前半部分链表的尾节点并反转后半部分链表
+	firstHalfEnd := endOfFirstHalf(head)
+	secondHalfStart := reverseList(firstHalfEnd.Next)
+
+	// 判断是否回文
+	p1 := head
+	p2 := secondHalfStart
+	result := true
+	for result && p2 != nil {
+		if p1.Value != p2.Value {
+			result = false
+		}
+		p1 = p1.Next
+		p2 = p2.Next
+	}
+
+	// 还原链表并返回结果
+	firstHalfEnd.Next = reverseList(secondHalfStart)
+	return result
+}
