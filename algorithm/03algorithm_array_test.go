@@ -545,3 +545,137 @@ func findPos2(pos map[int]int, x int) int {
 	pos[x] = findPos2(pos, value+1)
 	return pos[x]
 }
+
+// 8、LeetCode59 螺旋矩阵 II 贪吃蛇
+func TestCircle(t *testing.T) {
+	x := [][]int{
+		{1, 1, 1},
+		{1, 1, 1},
+		{1, 1, 1},
+	}
+	x1 := [][]int{
+		{1, 1, 1},
+	}
+	x2 := [][]int{
+		{1, 1, 1},
+		{1, 1, 1},
+		{1, 1, 1},
+		{1, 1, 1},
+		{1, 1, 1},
+	}
+	x3 := [][]int{
+		{1},
+		{1},
+		{1},
+	}
+	x4 := [][]int{
+		{1, 1, 1, 1, 1, 1},
+		{1, 1, 1, 1, 1, 1},
+		{1, 1, 1, 1, 1, 1},
+	}
+	fmt.Println(GetEndPoint(x))
+	fmt.Println(GetEndPoint(x1))
+	fmt.Println(GetEndPoint(x2))
+	fmt.Println(GetEndPoint(x3))
+	fmt.Println(GetEndPoint(x4))
+	fmt.Println(GetEndPoint2(x))
+	fmt.Println(GetEndPoint2(x1))
+	fmt.Println(GetEndPoint2(x2))
+	fmt.Println(GetEndPoint2(x3))
+	fmt.Println(GetEndPoint2(x4))
+}
+
+// 模拟遍历流程
+func GetEndPoint(x [][]int) (int, int) {
+	if len(x) == 0 {
+		return 0, 0
+	}
+	m := len(x)
+	n := len(x[0])
+	curX, curY := m-1, 0
+	cnt := 0
+	for {
+		// 向上
+		for curX >= 0 && x[curX][curY] != 99 {
+			x[curX][curY] = 99
+			cnt++
+			if cnt == m*n {
+				return curX, curY
+			}
+			curX--
+		}
+		curX++
+		curY++
+		// 向右
+		for curY < n && x[curX][curY] != 99 {
+			x[curX][curY] = 99
+			cnt++
+			if cnt == m*n {
+				return curX, curY
+			}
+			curY++
+		}
+		curY--
+		curX++
+		// 向下
+		for curX < m && x[curX][curY] != 99 {
+			x[curX][curY] = 99
+			cnt++
+			if cnt == m*n {
+				return curX, curY
+			}
+			curX++
+		}
+		curX--
+		curY--
+		// 向左
+		for curY >= 0 && x[curX][curY] != 99 {
+			x[curX][curY] = 99
+			cnt++
+			if cnt == m*n {
+				return curX, curY
+			}
+			curY--
+		}
+		curY++
+		curX--
+	}
+}
+
+// 向量转换
+/*
+一个向量顺时针旋转 a 度，等价于乘矩阵:
+[cos(a) -sin(a)]
+[sin(a)   cos(a)]
+将 90 带进去就能得到
+[0, -1]
+[1   0]
+[x]   * [0, -1]  =   [x*0+y*1]    =   [y]
+[y]      [1   0]       [x*-1+y*0]  =   [-x]
+所以每次旋转方向，都是顺时针转 90度，所以只需要
+   dx, dy = dy, -dx
+所以每次旋转方向，都是逆时针转 90度，所以只需要
+   dx, dy = -dy, dx
+*/
+func GetEndPoint2(matrix [][]int) (int, int) {
+	if len(matrix) == 0 {
+		return 0, 0
+	}
+	// 向量做法
+	m, n := len(matrix), len(matrix[0])
+	i, j, dx, dy := m-1, 0, -1, 0
+	cnt := 0
+	for {
+		cnt++
+		matrix[i][j] = 101
+		// 每次临界点顺时针转换90度只需要使用如下向量变化
+		if i+dx >= m || i+dx < 0 || j+dy >= n || j+dy < 0 || matrix[i+dx][j+dy] == 101 {
+			dx, dy = dy, -dx
+		}
+		if cnt == m*n {
+			return i, j
+		}
+		i += dx
+		j += dy
+	}
+}

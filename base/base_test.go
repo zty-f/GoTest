@@ -1106,3 +1106,27 @@ func dfs(str string, doc Doc) {
 		dfs(path, v)
 	}
 }
+
+func TestChannel(t *testing.T) {
+	ch := make(chan int)
+	setData(ch)
+	for x := range ch {
+		fmt.Println(x)
+	}
+	fmt.Println("done")
+}
+
+func setData(ch chan int) {
+	wg := sync.WaitGroup{}
+	for i := 0; i < 5; i++ {
+		x := i
+		wg.Add(1)
+		go func() {
+			ch <- x
+			time.Sleep(time.Second)
+			wg.Done()
+		}()
+	}
+	wg.Wait()
+	close(ch)
+}
