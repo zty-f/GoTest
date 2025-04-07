@@ -16,7 +16,7 @@ import (
 var rdb *redis.Client
 var DB *gorm.DB
 
-func init() {
+func init1() {
 	log.SetFlags(log.Lshortfile)
 
 	env := strings.ToLower(os.Getenv("envType"))

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>量子玫瑰</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            background: #0a0a12;
+            font-family: 'SF Pro Display', system-ui;
+        }
+
+        .container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            perspective: 1000px;
+        }
+
+        /* 真实感花瓣 */
+        .sakura {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle,
+            rgba(255,152,150,0.8) 0%,
+            rgba(255,105,180,0.4) 70%,
+            transparent 100%);
+            border-radius: 50%;
+            filter: blur(2px);
+            animation: float 8s linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(0.8);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translateY(-10vh) rotate(180deg) scale(1.2);
+                opacity: 0.4;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg) scale(0.8);
+                opacity: 0.8;
+            }
+        }
+
+        /* 全息玫瑰 */
+        .rose {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            opacity: 0;
+            transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .rose.active {
+            opacity: 1;
+            transform: translateY(0) rotate(0deg);
+        }
+
+        /* 交互光效 */
+        .cursor-follow {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: radial-gradient(circle,
+            rgba(255,255,255,0.1) 0%,
+            transparent 70%);
+            pointer-events: none;
+            mix-blend-mode: screen;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="rose" id="rose"></div>
+    <canvas id="sakuraCanvas"></canvas>
+</div>
+
+<script>
+    // 3D玫瑰建模（纯Canvas实现）
+    const canvas = document.getElementById('sakuraCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function initCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // 创建玫瑰几何体
+        function drawRose() {
+            ctx.save();
+            ctx.translate(canvas.width/2, canvas.height/2);
+            ctx.rotate(-Math.PI/2);
+
+            // 参数化花瓣绘制
+            for(let i=0; i<36; i++) {
+                ctx.beginPath();
+                ctx.moveTo(0,0);
+                for(let j=0; j<=360; j+=10) {
+                    const r = 100 * Math.pow(Math.abs(Math.cos(j * Math.PI/180)), 0.5) *
+                        Math.pow(Math.abs(Math.sin(j * Math.PI/180)), 0.5);
+                    const x = r * Math.cos(j * Math.PI/180 + i * 10);
+                    const y = r * Math.sin(j * Math.PI/180 + i * 10);
+                    ctx.lineTo(x, y);
+                }
+                ctx.closePath();
+                ctx.fillStyle = `hsl(${i*10},70%,60%)`;
+                ctx.fill();
+            }
+            ctx.restore();
+        }
+        drawRose();
+    }
+
+    // 物理花瓣系统
+    function createSakura() {
+        for(let i=0; i<300; i++) {
+            ctx.beginPath();
+            ctx.arc(
+                Math.random()*window.innerWidth,
+                Math.random()*window.innerHeight,
+                Math.random()*3 + 1,
+                0, Math.PI*2
+            );
+            ctx.fillStyle = `hsla(${Math.random()*360},70%,60%,${Math.random()})`;
+            ctx.fill();
+        }
+    }
+
+    // 交互系统
+    let isHovering = false;
+    canvas.addEventListener('mousemove', (e) => {
+        const x = e.clientX;
+        const y = e.clientY;
+
+        // 创建跟随光标的光斑
+        const follower = document.createElement('div');
+        follower.className = 'cursor-follow';
+        follower.style.left = x + 'px';
+        follower.style.top = y + 'px';
+        document.body.appendChild(follower);
+
+        // 玫瑰展开动画
+        if(!isHovering) {
+            isHovering = true;
+            document.querySelector('.rose').classList.add('active');
+        }
+    });
+
+    // 初始化
+    window.onload = () => {
+        initCanvas();
+        createSakura();
+    }
+</script>
+</body>
+</html>
