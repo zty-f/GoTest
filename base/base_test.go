@@ -1165,3 +1165,13 @@ func TestGenStr(t *testing.T) {
 
 	fmt.Println(GetTraceID())
 }
+
+func TestUrlEncode(t *testing.T) {
+	param := url.Values{}
+	param.Add("conv_ext", "33444")
+	param.Add("conv_action", "convertType")
+	param.Add("conv_time", fmt.Sprintf("%d", time.Now().UnixMilli()))
+
+	queryStr := param.Encode()
+	fmt.Println(queryStr) // conv_action=convertType&conv_ext=33444&conv_time=1744189495357
+}
