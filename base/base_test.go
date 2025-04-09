@@ -1137,3 +1137,31 @@ func setData(ch chan int) {
 // https://www.bilibili.com/video/BV1rP4y1A7j4?p=2
 // test 链接3
 // https://www.bilibili.com/video/BV1rP4y1A7j4?p=3
+
+type TraceID struct {
+	High, Low uint64
+}
+
+// String returns a string representation of the TraceID ---- 使用此方法可以自定义结构体的字符串输出形式
+func (t TraceID) String() string {
+	if t.High == 0 {
+		return fmt.Sprintf("%x", t.Low) // 输出 16 进制
+	}
+	return fmt.Sprintf("%x%016x", t.High, t.Low)
+}
+
+func GetTraceID() TraceID {
+	return TraceID{
+		High: 0,
+		Low:  7771031616213812862,
+	}
+}
+
+func TestGenStr(t *testing.T) {
+	s := fmt.Sprint(GetTraceID())
+	fmt.Println(s)
+	x := []string{s}
+	fmt.Println(x)
+
+	fmt.Println(GetTraceID())
+}
