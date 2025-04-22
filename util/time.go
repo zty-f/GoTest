@@ -460,6 +460,17 @@ func GetWeekRemainTimeUnix() int {
 	return cast.ToInt(weekEnd.Sub(time.Now()).Seconds())
 }
 
+// GetMonthStartAndEndTime 获取每个月的开始时间和结束时间
+func GetMonthStartAndEndTime(cur time.Time) (time.Time, time.Time) {
+	year, month, _ := cur.Date()
+	startTime := time.Date(year, month, 1, 0, 0, 0, 0, time.Local)
+	// 计算该月最后一天
+	endOfMonth := startTime.AddDate(0, 1, -1)
+	// 将结束时间设置为该月最后一天的 23:59:59.999999999
+	endTime := time.Date(endOfMonth.Year(), endOfMonth.Month(), endOfMonth.Day(), 23, 59, 59, 999999999, endOfMonth.Location())
+	return startTime, endTime
+}
+
 func GetPreviousYearMonth(year int, month int) (int, int) {
 	// 创建当前年的时间对象
 	currentTime := time.Date(year, time.Month(month), 1, 0, 0, 0, 0, time.UTC)

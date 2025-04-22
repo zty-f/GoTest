@@ -238,3 +238,29 @@ func TestStringCut(t *testing.T) {
 func TestTimestampToDate(t *testing.T) {
 	fmt.Println(TimestampToDate(0 / 1000))
 }
+
+func TestGetMonthStartAndEndTime(t *testing.T) {
+	type testCase struct {
+		ct int64
+	}
+	cases := []testCase{
+		{
+			ct: 1642730400, // 2022-01-21 10:00:00
+		},
+		{
+			ct: 1740755514, // 2025-02-28 23:11:54
+		},
+		{
+			ct: 1745305916, // 2025-04-22 15:11:56
+		},
+		{
+			ct: 1735369914, // 2024-12-28 15:11:54
+		},
+		{
+			ct: 1709190714, // 2024-02-29 15:11:54
+		},
+	}
+	for _, c := range cases {
+		fmt.Println(GetMonthStartAndEndTime(time.Unix(c.ct, 0)))
+	}
+}
