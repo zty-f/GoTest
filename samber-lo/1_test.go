@@ -435,3 +435,57 @@ func TestFilterReject(t *testing.T) {
 	fmt.Printf("%#v\n", filtered) // []int{2, 4}
 	fmt.Printf("%#v\n", rejected) // []int{1, 3}
 }
+
+// 计算集合中与值相等的元素的数量。
+func TestCount(t *testing.T) {
+	count := lo.Count([]int{1, 5, 1}, 1)
+	fmt.Println(count) // 2
+}
+
+// 计算集合中回调函数返回值为真的元素数量。
+func TestCountBy(t *testing.T) {
+	count := lo.CountBy([]int{1, 5, 1}, func(x int) bool {
+		return x == 1
+	})
+	fmt.Println(count) // 2
+	count = lo.CountBy([]int{1, 5, 1}, func(i int) bool {
+		return i < 4
+	})
+	fmt.Println(count) // 2
+}
+
+// 计算集合中每个元素的数量。
+func TestCountValues(t *testing.T) {
+	count := lo.CountValues([]int{1, 5, 1})
+	fmt.Println(count)                   // map[1:2 5:1]
+	fmt.Println(lo.CountValues([]int{})) // map[int]int{}
+
+	fmt.Println(lo.CountValues([]int{1, 2})) // map[int]int{1: 1, 2: 1}
+
+	fmt.Println(lo.CountValues([]int{1, 2, 2})) // map[int]int{1: 1, 2: 2}
+
+	fmt.Println(lo.CountValues([]string{"foo", "bar", ""})) // map[string]int{"": 1, "foo": 1, "bar": 1}
+
+	fmt.Println(lo.CountValues([]string{"foo", "bar", "bar"})) // map[string]int{"foo": 1, "bar": 2}
+}
+
+// 统计集合中每个元素的数量。相当于 lo.Map 和 lo.CountValues 的链接操作。
+func TestCountByValues(t *testing.T) {
+	isEven := func(v int) bool {
+		return v%2 == 0
+	}
+
+	fmt.Println(lo.CountValuesBy([]int{}, isEven)) // map[bool]int{}
+
+	fmt.Println(lo.CountValuesBy([]int{1, 2}, isEven)) // map[bool]int{false: 1, true: 1}
+
+	fmt.Println(lo.CountValuesBy([]int{1, 2, 2}, isEven)) // map[bool]int{false: 1, true: 2}
+
+	length := func(v string) int {
+		return len(v)
+	}
+
+	fmt.Println(lo.CountValuesBy([]string{"foo", "bar", ""}, length)) // map[int]int{0: 1, 3: 2}
+
+	fmt.Println(lo.CountValuesBy([]string{"foo", "bar", "bar"}, length)) // map[int]int{3: 3}
+}
