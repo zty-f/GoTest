@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/samber/lo"
 	"github.com/samber/lo/parallel"
+	"math"
 	"strconv"
 	"strings"
 	"testing"
@@ -280,4 +281,157 @@ func TestFill(t *testing.T) {
 func TestRepeat(t *testing.T) {
 	repeatedSlice := lo.Repeat(3, foo{"a"})
 	fmt.Printf("%#v\n", repeatedSlice) // []samber_lo.foo{samber_lo.foo{bar:"a"}, samber_lo.foo{bar:"a"}, samber_lo.foo{bar:"a"}}
+}
+
+// 使用 N 次回调调用返回的值构建一个切片。
+func TestRepeatBy(t *testing.T) {
+	slice := lo.RepeatBy(0, func(i int) string {
+		return strconv.FormatInt(int64(math.Pow(float64(i), 2)), 10)
+	})
+	fmt.Println(slice) // []string{}
+
+	slice = lo.RepeatBy(5, func(i int) string {
+		return strconv.FormatInt(int64(math.Pow(float64(i), 2)), 10)
+	})
+	fmt.Println(slice) // []string{"0", "1", "4", "9", "16"}
+}
+
+// 根据指定的回调函数将切片或结构数组转换为映射。
+func TestKeyBy(t *testing.T) {
+	// 转换成相同的key会自动过滤掉，只保留第一个
+	m := lo.KeyBy([]string{"a", "aa", "aaa", "aa"}, func(str string) int {
+		return len(str)
+	})
+	fmt.Println(m) // map[int]string{1: "a", 2: "aa", 3: "aaa"}
+
+	type Character struct {
+		dir  string
+		code int
+	}
+	characters := []Character{
+		{dir: "left", code: 97},
+		{dir: "right", code: 100},
+	}
+	result := lo.KeyBy(characters, func(char Character) string {
+		return string(rune(char.code))
+	})
+	fmt.Println(result) // map[a:{dir:left code:97} d:{dir:right code:100}]
+}
+
+// 返回一个包含键值对的映射，该映射由 transform 函数应用于给定切片的元素而生成。如果任意两对键值对中的任意一对具有相同的键，则最后一个键值对将被添加到映射中。
+// 返回映射中的键的顺序未指定，并且不能保证与原始数组相同。
+func TestSliceToMap(t *testing.T) {
+	type foo struct {
+		baz string
+		bar int
+	}
+
+	in := []*foo{{baz: "apple", bar: 1}, {baz: "banana", bar: 2}}
+
+	aMap := lo.Associate(in, func(f *foo) (string, *foo) {
+		return f.baz, f
+	})
+	fmt.Printf("%#v", aMap) // map[string][int]{ "apple":1, "banana":2 }
+
+	// 该方法同Associate
+	aMap = lo.SliceToMap(in, func(f *foo) (string, *foo) {
+		return f.baz, f
+	})
+	fmt.Printf("%#v", aMap) // map[string][int]{ "apple":1, "banana":2 }
+}
+
+/*
+返回一个映射，其中包含由应用于给定切片元素的转换函数提供的键值对。
+如果两对中的任何一对具有相同的键，则最后一个键将被添加到地图中。
+返回映射中的键的顺序未指定，并且不能保证与原始数组相同。
+转换函数的第三个返回值是一个布尔值，指示是否应将键值对包含在映射中。
+*/
+func TestFilterSliceToMap(t *testing.T) {
+	list := []string{"a", "aa", "aaa"}
+
+	// 只有符合条件的元素会被添加到map中
+	result := lo.FilterSliceToMap(list, func(str string) (string, int, bool) {
+		return str, len(str), len(str) > 1
+	})
+	fmt.Println(result) // map[string][int]{"aa":2 "aaa":3}
+}
+
+// 从切片或数组的开头删除 n 个元素。
+func TestDrop(t *testing.T) {
+	dropped := lo.Drop([]int{1, 2, 3, 4, 5}, 2)
+	fmt.Printf("%#v\n", dropped) // []int{3, 4, 5}
+	dropped = lo.Drop([]int{1, 2, 3, 4, 5}, 10)
+	fmt.Printf("%#v\n", dropped) // []int{}
+}
+
+// 从切片或数组的末尾删除 n 个元素。
+func TestDropRight(t *testing.T) {
+	dropped := lo.DropRight([]int{1, 2, 3, 4, 5}, 2)
+	fmt.Printf("%#v\n", dropped) // []int{1, 2, 3}
+	dropped = lo.DropRight([]int{1, 2, 3, 4, 5}, 10)
+	fmt.Printf("%#v\n", dropped) // []int{}
+}
+
+// 从切片或数组的开头删除 n 个元素，直到满足 predicate 函数返回 false。
+func TestDropWhile(t *testing.T) {
+	dropped := lo.DropWhile([]int{1, 2, 3, 4, 5}, func(x int) bool {
+		return x < 3
+	})
+	fmt.Printf("%#v\n", dropped) // []int{3, 4, 5}
+	dropped = lo.DropWhile([]int{1, 2, 3, 4, 5}, func(x int) bool {
+		return x < 10
+	})
+	fmt.Printf("%#v\n", dropped) // []int{}
+}
+
+// 从切片或数组的末尾删除 n 个元素，直到满足 predicate 函数返回 false。
+func TestDropRightWhile(t *testing.T) {
+	dropped := lo.DropRightWhile([]int{1, 2, 3, 4, 5}, func(x int) bool {
+		return x > 3
+	})
+	fmt.Printf("%#v\n", dropped) // []int{1, 2, 3}
+	dropped = lo.DropRightWhile([]int{1, 2, 3, 4, 5}, func(x int) bool {
+		return x > 10
+	})
+	fmt.Printf("%#v\n", dropped) // []int{1, 2, 3, 4, 5}
+}
+
+// 根据索引从切片或数组中删除元素。负索引将从切片末尾删除元素。
+func TestDropByIndex(t *testing.T) {
+	dropped := lo.DropByIndex([]int{1, 2, 3, 4, 5}, 0, 2)
+	fmt.Printf("%#v\n", dropped)                               // []int{2, 4, 5}
+	dropped = lo.DropByIndex([]int{1, 2, 3, 4, 5}, -1, -1, -2) // 负数索引表示从后往前
+	fmt.Printf("%#v\n", dropped)                               // []int{1, 2, 3, 4}
+}
+
+// 与 Filter 相反，此方法返回谓词未返回真值的集合元素。
+func TestReject(t *testing.T) {
+	rejected := lo.Reject([]int{1, 2, 3, 4}, func(x int, index int) bool {
+		return x%2 == 0 // 返回false的元素会被返回 为true的元素会被过滤掉
+	})
+	fmt.Printf("%#v\n", rejected) // []int{1, 3}
+}
+
+/*
+与 FilterMap 相反，该方法返回使用给定的回调函数进行过滤和映射后获得的切片。
+回调函数应该返回两个值：
+映射操作的结果和
+是否应包含结果元素。
+*/
+func TestRejectMap(t *testing.T) {
+	// 根据条件过滤掉元素，返回的元素是经过转换的结果
+	items := lo.RejectMap([]int{1, 2, 3, 4}, func(x int, index int) (int, bool) {
+		return x * 10, x%2 == 0
+	})
+	fmt.Printf("%#v\n", items) // []int{10, 30}
+}
+
+// 混合Filter和Reject，此方法返回两个切片，一个用于谓词返回真值的集合元素，另一个用于谓词不返回真值的元素。
+func TestFilterReject(t *testing.T) {
+	// 过滤出符合条件的元素
+	filtered, rejected := lo.FilterReject([]int{1, 2, 3, 4}, func(x int, index int) bool {
+		return x%2 == 0
+	})
+	fmt.Printf("%#v\n", filtered) // []int{2, 4}
+	fmt.Printf("%#v\n", rejected) // []int{1, 3}
 }
