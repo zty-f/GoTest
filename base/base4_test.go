@@ -260,3 +260,16 @@ func TestIfElse(t *testing.T) {
 		fmt.Println("y<0")
 	}
 }
+
+func TestSwitch3(t *testing.T) {
+	x := 1
+	switch x {
+	case 1:
+		fmt.Println("x=1")
+	case 2:
+		fmt.Println("x=2")
+	default:
+		fmt.Println("x!=1,2")
+	}
+	fmt.Println("------------")
+}
