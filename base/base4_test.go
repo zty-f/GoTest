@@ -234,3 +234,29 @@ func Limiter(next http.Handler) http.Handler {
 		}
 	})
 }
+
+type Y struct {
+	Name string
+	Age  int
+}
+
+func TestStructNil(t *testing.T) {
+	var y *Y // nil指针
+	if y == nil {
+		fmt.Println("y is nil")
+	}
+	fmt.Println(y)
+}
+
+func TestIfElse(t *testing.T) {
+	x, y := 2, 4
+	// if else 语句只会执行最先满足条件的分支，后面的分支即时符合条件也不会执行
+	if x > 0 {
+		fmt.Println("x>0")
+	} else if y > 0 {
+		fmt.Println("y>0")
+	} else {
+		fmt.Println("x<0")
+		fmt.Println("y<0")
+	}
+}
