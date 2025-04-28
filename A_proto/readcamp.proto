@@ -4853,8 +4853,15 @@ message ShopmallOrderProduct {
 }
 
 message AdminOrderProductListResponse {
+  // 废弃
   repeated ShopmallOrderProduct products = 1;
+  // 废弃
   repeated ShopmallOrderProduct products_v2 = 2;
+  message ShopmallOrderProducts {
+    repeated ShopmallOrderProduct products = 1;
+  }
+  // 套餐id对应的商品列表
+  map<int64, ShopmallOrderProducts> group_products = 3;
 }
 
 message AdminUpdateShopmallOrderProductRequest {
@@ -9019,7 +9026,31 @@ message AdminLeadsBindSearchRes{
   repeated LeadsBindSearchInfo items = 4;
 }
 
+message UserIosAdReportReq {
+  // 归因值。
+  bool attribution = 1;
+  // 拥有该⼴告系列的组织标识符。
+  int64 org_id = 2;
+  // ⼴告系列的唯⼀标识符。
+  int64 campaign_id = 3;
+  // 转化类型
+  string conversion_type = 4;
+  // ⼴告组的标识符
+  int64 adGroup_id = 5;
+  // 关键字的标识符。
+  int64 keyword_id = 6;
+  // 表示⼴告对象和⼴告组之间分配关系的标识符。
+  int64 ad_id = 7;
+}
+
 service ReadCampHttpService {
+  // 用户-IOS侧渠道广告来源上报
+  // `midware:"Auth"`
+  rpc UserIosAdReport(UserIosAdReportReq) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: '/base/readcamp/user_ios_ad/report'
+    };
+  }
   // 用户-学习信息上报
   // `midware:"Auth"`
   rpc LectureStudyReport(LectureStudyReportRequest) returns (LectureStudyReportResponse) {
