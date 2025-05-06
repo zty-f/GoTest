@@ -6,6 +6,7 @@ import (
 	"golang.org/x/time/rate"
 	"log"
 	"net/http"
+	"net/url"
 	"testing"
 	"time"
 )
@@ -272,4 +273,19 @@ func TestSwitch3(t *testing.T) {
 		fmt.Println("x!=1,2")
 	}
 	fmt.Println("------------")
+}
+
+func TestParseQuery(t *testing.T) {
+	rawUrl := "/base/readcamp/market/track/vivo?imei=UNKNOWN&oaid=b98a037c6dac84fe2574e93d2b27c49e&timestamp=1746532109868&adid=36540213&creative_id=151603710&request_id=4fdd56e1d0484808a60eab645147aec1&ad_name=%E4%BC%B4%E9%B1%BC%E9%98%85%E8%AF%BB%E8%90%A5-%E6%B3%A8%E5%86%8C-%E6%8E%A8%E8%8D%90-%E5%AD%A9%E5%AD%90%E5%B9%B4%E9%BE%840-6%E5%B2%81-0403"
+	parsedUrl, err := url.Parse(rawUrl)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	queryParam, err := url.ParseQuery(parsedUrl.RawQuery)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("%+v\n", queryParam)
 }
