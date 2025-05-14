@@ -573,3 +573,11 @@ const timezone = "Asia/Shanghai"
 func TimestampToDate(timestamp int64) string {
 	return time.Unix(timestamp, 0).Format(dateFormat)
 }
+
+// GetNextDay8AM 通过计算时间差获取第二天 8 点的时间
+func GetNextDay8AM(t time.Time) time.Time {
+	// 将时间设置为当天 0 点
+	midnight := time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, t.Location())
+	// 加上 32 小时（24 小时 + 8 小时）
+	return midnight.Add(32 * time.Hour)
+}

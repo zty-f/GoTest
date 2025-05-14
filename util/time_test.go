@@ -264,3 +264,12 @@ func TestGetMonthStartAndEndTime(t *testing.T) {
 		fmt.Println(GetMonthStartAndEndTime(time.Unix(c.ct, 0)))
 	}
 }
+
+func TestGetNextDay8AM(t *testing.T) {
+	date := "2025-05-10 23:59:59"
+	// 将字符串转换为时间对象
+	now, _ := time.Parse("2006-01-02 15:04:05", date)
+	nextDay8AM := GetNextDay8AM(now)
+	fmt.Printf("当前时间: %s\n", now.Format(time.RFC3339))
+	fmt.Printf("第二天 8 点的时间: %s\n", nextDay8AM.Format(time.RFC3339))
+}
