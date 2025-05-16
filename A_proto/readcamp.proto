@@ -4623,6 +4623,8 @@ message TeacherListRequest {
   int32 deleted = 5;
   // 顾问id
   int64 teacher_id = 6;
+  // 角色标签
+  repeated string role_tags = 7;
 }
 
 // 老师企微好友情况
@@ -5404,6 +5406,8 @@ message UserDKAwardStatusResponse {
   int32 trial_task_finished_cnt = 5;
   // 正价课好友邀请进度 (邀请就算)
   int32 formal_task_finished_cnt = 6;
+  // 海报创建时间
+  int64 poster_ct = 7;
 }
 
 message AdminUploadStudyPlanImageRequest {
@@ -5738,6 +5742,8 @@ message WechatGroupMemberStatistics {
   int32 this_month_tinglixiong_read_num = 16;
   // 本周听力熊（去重）
   int32 this_week_tinglixiong_read_num = 17;
+  // uid
+  int64 uid =18;
 }
 
 message WechatGroupStatistics {
@@ -8156,11 +8162,14 @@ message AdminCRMUserRes {
     string utm_description = 41;
     // 分配原因
     string assign_reason = 42;
+    // teacher 信息
+    Teacher teacher_info = 43;
   }
   int64 offset = 1;
   int64 total = 2;
   bool more = 3;
   repeated CRMUsers items = 4;
+  AdminCRMUserStatisticsRes statistics_info = 5;
 }
 
 message AdminCRMUserFollowUpEditReq {
@@ -8211,7 +8220,7 @@ message AdminCRMUserTagsUpdateReq {
   repeated string tags = 2;
 }
 
-
+// 待下线
 message AdminCRMUserStatisticsReq {
   // 未付费和付费用户 1是付费 2是未付费
   int32 is_paid_user = 1;
@@ -8234,64 +8243,34 @@ message AdminCRMUserStatisticsRes {
   int32 after_assign_no_dial = 1;
   // 新进库未接通
   int32 after_assign_no_answer = 2;
-  // 即将试听（废弃）
-  int32 today_no_attend_class = 3;
   // 完课后待拨打
-  int32 finish_class_no_dial = 4;
-  // 完课后未接通(废弃)
-  int32 finish_class_no_answer = 5;
-  // 未到课未拨打（废弃）
-  int32 no_attend_class_no_dial = 6;
-  // 未到课未接通（废弃）
-  int32 no_attend_class_no_answer = 7;
+  int32 finish_class_no_dial = 3;
   // 未接通 < 3
-  int32 no_answer_less_than3 = 8;
-  // 即将流转（废弃）
-  int32 soon_transfer = 9;
-  // 新数据 未付费和付费（废弃）
-  int32 today_assign = 10;
-  // 未加微（废弃）
-  int32 un_add_qw = 11;
-  // 未约课（废弃）
-  int32 no_trial_start_ts = 12;
-  // 已约课（废弃）
-  int32 has_trial_start_ts = 13;
+  int32 no_answer_less_than3 = 4;
   // 未到课
-  int32 no_attend_ts = 14;
-  // 已完课（废弃）
-  int32 has_finish_class = 15;
-  // 0课时（废弃）
-  int32 no_remain_lecture_cnt = 16;
-  // 非0课时（废弃）
-  int32 has_remain_lecture_cnt = 17;
-  // 未购买正式课（废弃）
-  int32 no_formal_course = 18;
-  // 未购买拓展课（废弃）
-  int32 no_extend_course = 19;
-  // 当月未跟进（废弃）
-  int32 this_month_no_connect_ts = 20;
+  int32 no_attend_ts = 5;
   // 未转化/未付费学员
-  int32 no_assign = 21;
+  int32 no_assign = 6;
   // 已转化/已付费学员
-  int32 has_assign = 22;
+  int32 has_assign = 7;
   // 部分退
-  int32 refund_part = 23;
+  int32 refund_part = 8;
   // 全额退
-  int32 refund_all = 24;
+  int32 refund_all = 9;
   // 今日上课
-  int32 today_class = 25;
+  int32 today_class = 10;
   // 今日待跟进
-  int32 today_follow_up = 26;
+  int32 today_follow_up = 11;
   // 本周截图未上传
-  int32 has_assign_week_no_screenshot = 27;
+  int32 has_assign_week_no_screenshot = 12;
   // 完课未转化
-  int32 finish_class_no_assign = 28;
+  int32 finish_class_no_assign = 13;
   // 线索信息
-  CRMClueInfo crm_clue_info = 29;
+  CRMClueInfo crm_clue_info = 14;
   // 预计今日掉库
-  int32 predict_drop_sea_today = 30;
+  int32 predict_drop_sea_today = 15;
   // 进库待拨打< 9
-  int32 no_answer_less_than9 = 31;
+  int32 no_answer_less_than9 = 16;
 }
 message AdminKOCUserBindReq {
   int64 user_id = 1;
