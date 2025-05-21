@@ -2,6 +2,7 @@ package util
 
 import (
 	"fmt"
+	"math"
 	"math/rand"
 	"strings"
 	"time"
@@ -580,4 +581,17 @@ func GetNextDay8AM(t time.Time) time.Time {
 	midnight := time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, t.Location())
 	// 加上 32 小时（24 小时 + 8 小时）
 	return midnight.Add(32 * time.Hour)
+}
+
+func SecondsToMinutes(seconds int) float64 {
+	// 将秒转换为分钟，四舍五入保留两位小数
+	minutes := float64(seconds) / 60.0
+	roundedMinutes := math.Round(minutes*100) / 100
+	return roundedMinutes
+}
+
+func SecondsToMinutes2(seconds int) string {
+	// 将秒转换为分钟，四舍五入保留两位小数
+	minutes := float64(seconds) / 60.0
+	return fmt.Sprintf("%.2f", minutes) // 会四舍五入
 }

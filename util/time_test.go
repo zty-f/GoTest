@@ -273,3 +273,14 @@ func TestGetNextDay8AM(t *testing.T) {
 	fmt.Printf("当前时间: %s\n", now.Format(time.RFC3339))
 	fmt.Printf("第二天 8 点的时间: %s\n", nextDay8AM.Format(time.RFC3339))
 }
+
+func TestSecondsToMinutes(t *testing.T) {
+	fmt.Println(SecondsToMinutes(60))
+	fmt.Println(SecondsToMinutes(245))
+	fmt.Println(SecondsToMinutes(234))
+	fmt.Println(SecondsToMinutes(3334))
+	fmt.Println(SecondsToMinutes(54673))
+	fmt.Println(fmt.Sprintf("%.2f", SecondsToMinutes(54673)))
+	fmt.Println(fmt.Sprintf("%.2f", 2.578)) // 会四舍五入
+	fmt.Println(fmt.Sprintf("%.2f", 2.573))
+}

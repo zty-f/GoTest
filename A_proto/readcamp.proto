@@ -8172,6 +8172,40 @@ message AdminCRMUserRes {
   AdminCRMUserStatisticsRes statistics_info = 5;
 }
 
+message AdminTeacherWorkReq {
+  int64 limit = 1;
+  int64 offset = 2;
+  // 顾问op_name列表
+  repeated string teacher_op_names = 3;
+  // 筛选开始时间戳/秒
+  int64 begin_ts = 4;
+  // 筛选结束时间戳/秒
+  int64 end_ts = 5;
+}
+
+message TeacherWorkInfo {
+  // 顾问所在架构名称
+  string dept_name = 1;
+  // 顾问名称
+  string name = 2;
+  // 顾问外呼时长/秒
+  int64 call_duration = 3;
+  // 顾问外呼次数
+  int64 call_num = 4;
+  // 顾问加微数
+  int64 add_qw_num = 5;
+  // 顾问完课数
+  int64 finish_num = 6;
+}
+
+message AdminTeacherWorkRes {
+  int64 offset = 1;
+  int64 total = 2;
+  bool more = 3;
+  repeated TeacherWorkInfo items = 4;
+}
+
+
 message AdminCRMUserFollowUpEditReq {
   int64 user_id = 1;
   // 备注类型 1:课前 2:课后 3:其他
@@ -11562,6 +11596,13 @@ service ReadCampHttpService {
   rpc AdminLeadsBindSearch(AdminLeadsBindSearchReq) returns (AdminLeadsBindSearchRes) {
     option (google.api.http) = {
       post: '/admin/base/readcamp/leads/bind_search'
+    };
+  }
+
+  // 管理-顾问通时通次列表
+  rpc AdminTeacherWorkInfoList(AdminTeacherWorkReq) returns (AdminTeacherWorkRes) {
+    option (google.api.http) = {
+      post: '/admin/base/readcamp/teacher/work_info/list'
     };
   }
 }

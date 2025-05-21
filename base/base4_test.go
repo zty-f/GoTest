@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"strings"
 	"testing"
 	"time"
 )
@@ -288,4 +289,14 @@ func TestParseQuery(t *testing.T) {
 		return
 	}
 	fmt.Printf("%+v\n", queryParam)
+}
+
+func TestSplit1(t *testing.T) {
+	// 分割字符串
+	str := "1,2,3,4,5"
+	arr := strings.Split(str, ",")
+	fmt.Println(arr)
+	str = "5"
+	arr = strings.Split(str, ",")
+	fmt.Println(arr)
 }
