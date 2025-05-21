@@ -165,3 +165,47 @@ func removeElement2(nums []int, val int) int {
 	}
 	return i
 }
+
+// LCR 192. 把字符串转换成整数 (atoi)
+/*
+函数 myAtoi(string s) 的算法如下：
+1、读入字符串并丢弃无用的前导空格
+2、检查下一个字符（假设还未到字符末尾）为正还是负号，读取该字符（如果有）。 确定最终结果是负数还是正数。 如果两者都不存在，则假定结果为正。
+3、读入下一个字符，直到到达下一个非数字字符或到达输入的结尾。字符串的其余部分将被忽略。
+4、将前面步骤读入的这些数字转换为整数（即，"123" -> 123， "0032" -> 32）。如果没有读入数字，则整数为 0 。必要时更改符号（从步骤 2 开始）。
+5、如果整数数超过 32 位有符号整数范围 [−231,  231 − 1] ，需要截断这个整数，使其保持在这个范围内。具体来说，小于 −231 的整数应该被固定为 −231 ，大于 231 − 1 的整数应该被固定为 231 − 1 。
+6、返回整数作为最终结果。
+*/
+func TestMyAtoi(t *testing.T) {
+	fmt.Println(myAtoi("42"))
+	fmt.Println(myAtoi("   -42"))
+	fmt.Println(myAtoi("4193 with words"))
+}
+
+func myAtoi(s string) int {
+	// 1. 去除空格
+	index := 0
+	for index < len(s) && s[index] == ' ' {
+		index++
+	}
+	// 2. 判断正负号
+	sign := 1 // 默认是正数
+	if index < len(s) && (s[index] == '-' || s[index] == '+') {
+		if s[index] == '-' {
+			sign = -1
+		}
+		index++
+	}
+	res := 0
+	for index < len(s) && s[index] >= '0' && s[index] <= '9' {
+		res = res*10 + int(s[index]-'0')
+		index++
+		if res*sign < math.MinInt32 {
+			return math.MinInt32
+		}
+		if res*sign > math.MaxInt32 {
+			return math.MaxInt32
+		}
+	}
+	return res * sign
+}
