@@ -1,0 +1,1 @@
+INSERT INTO `coin_operation_type` (`operation_type`, `operation_type_desc`, `bus_from`, `apply_user`, `flag`, `reason`, `create_time`, `update_time`) VALUES (120, '阅读营商城兑换', '', 'zhangtianyong26331', 0, '阅读营商城兑换', 1747971731, 0);

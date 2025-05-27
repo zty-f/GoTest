@@ -3256,6 +3256,8 @@ message LogisticsOrderInfo {
   string remark = 10;
   // 商品id
   int64 gid = 11;
+  // 赠品延迟发货时间,默认0
+  int64 delay_sec = 12;
 }
 
 // 换绑 outerorder skuid
@@ -3529,6 +3531,12 @@ message AddSkuPackageMappingRequest {
   string sku_remark = 3;
   // 兑换码批次
   repeated int64 category_ids = 4;
+  // 1：只更新赠品信息，gift_conf 必传；
+  int64 mode = 5;
+  // 赠品配置
+  SkuPackageGiftConf gift_conf = 6;
+  // id
+  int64 id = 7;
 }
 
 message OrderCategory {
@@ -3555,6 +3563,19 @@ message SkuPackageMapppingItem {
   int64 ut = 6;
   // 创建人
   string creator = 7;
+  // 赠品配置信息
+  SkuPackageGiftConf gift_conf = 8;
+  // id
+  int64 id = 9;
+}
+
+message SkuPackageGiftConf {
+  // 绑定达人id
+  repeated string daren_ids = 1;
+  // 赠送套餐id
+  repeated int64 gift_package_ids = 2;
+  // 赠送延迟时间,传延迟多少秒 1d：86400
+  int64 delay_sec = 3;
 }
 
 message ListSkuPackageMappingRequest {
@@ -4087,8 +4108,21 @@ message AdminUserSearchResponse {
     repeated QwFriendInfo qw_friends = 6;
     // 转介绍相关
     InvitationInfo invitation_info = 7;
+    // 用户设备信息
+    repeated DeviceInfo device_infos = 8;
   }
   repeated UserInfo users = 1;
+}
+
+message DeviceInfo {
+  // 设备id
+  string device_id = 1;
+  // 设备类型 1=听力熊 2=牛听听
+  int64 device_type = 2;
+  // 绑定类型
+  int64 bind_time = 3;
+  // 来源
+  int64 source = 4;
 }
 
 message AdminUserStudyDurationDailyRequest {
@@ -4130,6 +4164,16 @@ message AdminUserStudyDailyRequest {
   int64 limit = 3;
 }
 
+enum StudyClient {
+  //阅读营APP
+  READ_CAMP_APP = 0;
+  // 听力熊
+  LISTEN_BEAR = 1;
+  // 牛听听
+  NIU_LISTEN = 2;
+}
+
+
 message AdminUserStudyDailyResponse {
   message Lecture {
     int32 lecture_id = 1;
@@ -4146,6 +4190,20 @@ message AdminUserStudyDailyResponse {
     // 这一天这个课程学习了哪些课节
     repeated Lecture lectures = 5;
   }
+
+  message StudyClientAgg {
+    // 所属的客户端
+    StudyClient study_client = 1;
+    // 当前客户端下的学习内容时长
+    StudyContent study_content = 2;
+    // 客户端下的总学习时长
+    int32 study_duration_s = 3;
+    // 客户端下的学习场景时长；
+    StudyScene study_scene = 4;
+    // 客户端名字
+    string study_client_name = 5;
+  }
+
   message StudyScene {
     // 上课页面的学习时长（s）
     int32 inclass_study_duration_s = 1;
@@ -4169,6 +4227,8 @@ message AdminUserStudyDailyResponse {
     StudyScene study_scene = 4;
     // 上课内容
     StudyContent study_content = 5;
+    // 按学习客户端聚合的学习时长
+    repeated StudyClientAgg study_client_agg = 6;
   }
   repeated Item items = 1;
   int64 offset = 2;
@@ -6007,6 +6067,8 @@ message GetModuleInfoResponse {
     int32 question_cnt = 1;
     // 已完成 question 数量
     int32 finished_question_cnt = 2;
+    // 用户在模块下最近一次练习信息
+    CustomizedPractice customized_practice = 3;
   }
 
   // module_name -> module_info
@@ -6055,6 +6117,13 @@ message ExamPaperQuestionsGetRes {
   map<int32, Material> materials = 2;
 }
 
+enum QuestionOrder {
+  //  默认题目正序
+  Forward = 0;
+  //   随机
+  Random = 1;
+}
+
 message GetQuestionsRequest {
   // lecture_id 和 course_id 二选一，优先使用 lecture_id
   int32 course_id = 1;
@@ -6063,6 +6132,12 @@ message GetQuestionsRequest {
   int32 module = 3;
   // 是否重新开始做题，默认false：false：继续上次，true：重新开始。
   bool is_restart = 4;
+  // 指定练习ID，查一次练习下的题目
+  int64 customized_practice_id = 5;
+  // 指定题目顺序；默认是按题目正序
+  QuestionOrder question_order = 6;
+  // 是否视为一次练习；是，将在响应中返回新的一次练习信息；在答题提交时需要透传练习ID
+  bool is_customized_practice = 7;
 }
 
 message GetQuestionsResponse {
@@ -6072,7 +6147,8 @@ message GetQuestionsResponse {
   map<int32, Material> materials = 2;
   // 记忆实体id映射到记忆实体
   map<int32, MemoryTarget> memory_targets = 3;
-
+  // 当前题目所归属的练习记录
+  CustomizedPractice customized_practice = 4;
 }
 
 message GetQuestionAnswerListRequest {
@@ -6520,6 +6596,11 @@ message MemoryTarget {
   Word phase = 4;
 }
 
+message CustomizedPractice {
+  int64 id = 1;
+  bool  finished = 2;
+}
+
 message Word {
   // 单词或者短语
   string name = 1;
@@ -6784,6 +6865,8 @@ message ReportQuestionResultRequest {
   int32 duration_ms = 5;
   // 用户考试id
   int64 user_exam_id = 6;
+  // 个性化练习ID
+  int64 customized_practice_id = 7;
 }
 
 message ReportQuestionResultResponse {
@@ -8172,40 +8255,6 @@ message AdminCRMUserRes {
   AdminCRMUserStatisticsRes statistics_info = 5;
 }
 
-message AdminTeacherWorkReq {
-  int64 limit = 1;
-  int64 offset = 2;
-  // 顾问op_name列表
-  repeated string teacher_op_names = 3;
-  // 筛选开始时间戳/秒
-  int64 begin_ts = 4;
-  // 筛选结束时间戳/秒
-  int64 end_ts = 5;
-}
-
-message TeacherWorkInfo {
-  // 顾问所在架构名称
-  string dept_name = 1;
-  // 顾问名称
-  string name = 2;
-  // 顾问外呼时长/秒
-  int64 call_duration = 3;
-  // 顾问外呼次数
-  int64 call_num = 4;
-  // 顾问加微数
-  int64 add_qw_num = 5;
-  // 顾问完课数
-  int64 finish_num = 6;
-}
-
-message AdminTeacherWorkRes {
-  int64 offset = 1;
-  int64 total = 2;
-  bool more = 3;
-  repeated TeacherWorkInfo items = 4;
-}
-
-
 message AdminCRMUserFollowUpEditReq {
   int64 user_id = 1;
   // 备注类型 1:课前 2:课后 3:其他
@@ -8218,6 +8267,8 @@ message AdminCRMUserFollowUpEditReq {
   int64 trial_start_ts = 5;
   // 下次跟进时间
   int64 next_followup_ts = 6;
+  // 完成状态 1=未完成 2=完成
+  int64 finish_state =  7;
 }
 
 message AdminCRMUserFollowUpListReq {
@@ -8241,6 +8292,8 @@ message AdminCRMUserFollowUpListRes {
     string content = 7;
     int64 ct = 8;
     string teacher_opname = 9;
+    // 完成状态 1=未完成 2=完成
+    int64 finish_state =  10;
   }
   int64 offset = 1;
   int64 total = 2;
@@ -11596,13 +11649,6 @@ service ReadCampHttpService {
   rpc AdminLeadsBindSearch(AdminLeadsBindSearchReq) returns (AdminLeadsBindSearchRes) {
     option (google.api.http) = {
       post: '/admin/base/readcamp/leads/bind_search'
-    };
-  }
-
-  // 管理-顾问通时通次列表
-  rpc AdminTeacherWorkInfoList(AdminTeacherWorkReq) returns (AdminTeacherWorkRes) {
-    option (google.api.http) = {
-      post: '/admin/base/readcamp/teacher/work_info/list'
     };
   }
 }
