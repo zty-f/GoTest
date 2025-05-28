@@ -9109,7 +9109,69 @@ message UserIosAdReportReq {
   int64 ad_id = 7;
 }
 
+message UserExchangeGiftListReq {
+  // 请求信息年月-例：202506
+  string year_month = 1;
+}
+
+message GiftInfo {
+  // 奖励id
+  int64 id = 1;
+  // 奖励名称
+  string name = 2;
+  // 奖励类型 1-开课(不含物流) 2-积分 3-图书 4-电子产品 5-课程(含物流) 1和5在c端统一展示课程
+  string gift_type = 3;
+  // 奖励兑换开始时间戳 秒
+  int64 begin_time = 4;
+  // 奖励兑换截止时间戳 秒
+  int64 end_time = 5;
+  // 奖励兑换状态 1-未兑换 2-已兑换
+  int64 status = 6;
+  // 奖励兑换时间戳 秒
+  int64 exchange_time = 7;
+  // 奖励兑换剩余库存
+  int64 stock = 8;
+}
+
+message ExchangeGiftData {
+  // 奖励类型 1：分享奖励 2：推荐奖励
+  string exchange_type = 1;
+  // 用户当前类型奖励的剩余兑换次数
+  int64 exchange_num = 2;
+  // 奖励信息列表
+  repeated GiftInfo gift_list = 3;
+}
+
+message UserExchangeGiftListRes {
+  // 页面奖励信息封装
+  repeated ExchangeGiftData data = 1;
+}
+
+message UserGiftExchangeReq {
+  // 奖励id
+  int64 gift_id = 1;
+  // 奖励类型 1-开课(不含物流) 2-积分 3-图书 4-电子产品 5-课程(含物流) 1和5在c端统一展示课程
+  string gift_type = 2;
+}
+
+message UserGiftExchangeRes {
+}
+
 service ReadCampHttpService {
+  // 用户-权益兑换列表
+  // `midware:"Auth"`
+  rpc UserExchangeGiftList(UserExchangeGiftListReq) returns (UserExchangeGiftListRes) {
+    option (google.api.http) = {
+      post: '/base/readcamp/user_exchange_gift/list'
+    };
+  }
+  // 用户-权益兑换
+  // `midware:"Auth"`
+  rpc UserGiftExchange(UserGiftExchangeReq) returns (UserGiftExchangeRes) {
+    option (google.api.http) = {
+      post: '/base/readcamp/gift/exchange'
+    };
+  }
   // 用户-IOS侧渠道广告来源上报
   // `midware:"Auth"`
   rpc UserIosAdReport(UserIosAdReportReq) returns (google.protobuf.Empty) {
