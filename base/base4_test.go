@@ -300,3 +300,16 @@ func TestSplit1(t *testing.T) {
 	arr = strings.Split(str, ",")
 	fmt.Println(arr)
 }
+
+func TestFor(t *testing.T) {
+	for i := 0; i < 10; i++ {
+		for j := 0; j < 10; j++ {
+			if j == 1 {
+				fmt.Println("continue")
+				break // 这里是跳出内层循环
+			}
+			fmt.Printf("%d,%d\n", i, j)
+		}
+		fmt.Println(i)
+	}
+}
