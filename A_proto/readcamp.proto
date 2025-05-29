@@ -8399,6 +8399,16 @@ message AdminWorkOrderOrderRefundReq {
   // 操作类型 (1:退费 2:返现)
   int32 action_type = 6;
 }
+message AdminWorkOrderOuterOrderRefundNotifyReq {
+  // 工单id
+  string work_order_id = 1;
+  // 站外订单id
+  string outer_order_id = 2;
+  // 订单来源
+  int64 source = 3;
+  // 用户id
+  int64 uid = 4;
+}
 message AdminWorkOrderPreCheckReq {
   // 工单模板Id
   string pid = 1;
@@ -9120,7 +9130,7 @@ message GiftInfo {
   // 奖励名称
   string name = 2;
   // 奖励类型 1-开课 2-星币（积分） 3-实物
-  string gift_type = 3;
+  int64 gift_type = 3;
   // 奖励兑换开始时间戳 秒
   int64 begin_time = 4;
   // 奖励兑换截止时间戳 秒
@@ -9132,12 +9142,12 @@ message GiftInfo {
   // 奖励兑换剩余库存
   int64 stock = 8;
   // 奖励对应的品类 1-图书 2-电子产品 3-课程 4-积分 5-玩具
-  string category = 9;
+  int64 category = 9;
 }
 
 message ExchangeGiftData {
   // 奖励类型 1：分享奖励 2：推荐奖励
-  string exchange_type = 1;
+  int64 exchange_type = 1;
   // 用户当前类型奖励的剩余兑换次数
   int64 exchange_num = 2;
   // 奖励信息列表
@@ -9153,7 +9163,7 @@ message UserGiftExchangeReq {
   // 奖励id
   int64 gift_id = 1;
   // 奖励类型 1-开课 2-星币（积分） 3-实物
-  string gift_type = 2;
+  int64 gift_type = 2;
 }
 
 message UserGiftExchangeRes {
@@ -11617,6 +11627,12 @@ service ReadCampHttpService {
   rpc AdminWorkOrderPreCheck(AdminWorkOrderPreCheckReq) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: '/admin/base/readcamp/work-order/pre_check'
+    };
+  }
+  // 管理-工单外部订单退费物流拦截通知
+  rpc AdminWorkOrderOuterOrderRefundNotify(AdminWorkOrderOuterOrderRefundNotifyReq) returns(google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: '/admin/base/readcamp/work-order/outer_order/refund_notify'
     };
   }
   // 管理-工单业绩改判
