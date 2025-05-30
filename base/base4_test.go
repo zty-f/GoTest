@@ -313,3 +313,13 @@ func TestFor(t *testing.T) {
 		fmt.Println(i)
 	}
 }
+
+func Test除法(t *testing.T) {
+	a := 10
+	b := 3
+	fmt.Println(a / b) // 整数除法，结果为3
+	fmt.Println(5 / 3)
+	fmt.Println(4 / 3)
+	fmt.Println(6 / 3)
+	fmt.Println(8 / 3)
+}
