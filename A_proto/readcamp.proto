@@ -9162,8 +9162,8 @@ message UserExchangeGiftListRes {
 message UserGiftExchangeReq {
   // 奖励id
   int64 gift_id = 1;
-  // 奖励类型 1-开课 2-星币（积分） 3-实物
-  int64 gift_type = 2;
+  // 请求信息年月-例：202506
+  string year_month = 2;
 }
 
 message UserGiftExchangeRes {
