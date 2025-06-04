@@ -7794,6 +7794,14 @@ message ReferralActivity {
   int64 ut = 11;
   // 星币
   int64 coin = 12;
+  // 归属月份
+  string year_month = 13;
+  // 海报图片
+  string poster_url = 14;
+  // 分享奖励权益id列表
+  repeated int64 share_award_gift = 15;
+  // 推荐奖励权益id列表
+  repeated int64 recom_award_gift = 16;
 }
 
 message GetPosterUploadListRequest {}
@@ -7821,22 +7829,26 @@ message AdminReferralActivity {
   int32 id = 1;
   // 场景
   uint32 scene = 2;
-  // 场景
+  // 活动状态
   uint32 status = 3;
   // 活动描述
   string description = 4;
   // 活动开始时间
   int64 start_time = 5;
-  // 活动结束时间
-  int64 end_time = 6;
+  // 活动周期
+  int64 act_cycle = 6;
   // 奖励最大数量
   int32 award_max_count = 7;
-  // 奖励开始时间
-  int64 award_st = 8;
-  // 奖励结束时间
-  int64 award_et = 9;
   // 星币
-  int64 coin = 10;
+  int64 coin = 8;
+  // 活动归属月份
+  string year_month = 9;
+  // 分享奖励权益id列表
+  repeated int64 share_award_gift = 10;
+  // 推荐奖励权益id列表
+  repeated int64 recom_award_gift = 11;
+  // 海报图片uri
+  string poster_uri = 12;
 }
 
 message ListReferralActivityRequest {
@@ -8067,12 +8079,26 @@ message AdminGiftConfigListRes {
   message GiftConfig {
     // id
     int32 id = 1;
-    // 枚举类型 1:开课 其他暂定
+    // 枚举类型 1:开课 2:星币 3:实物
     int32 gift_type = 2;
     // 描述
     string gift_desc = 3;
-    // 具体配置 类型为开课时,存储开课信息课程id逗号分隔. 其他类型暂定为 json string
+    // 具体配置 类型为开课时,存储开课信息课程id逗号分隔. 实物时为商品id，星币时为星币数
     string details = 4;
+    // 上架状态 1: 未上架, 2:已上架
+    int32 status = 5;
+    // 权益兑换开始时间戳-秒
+    int64 start_at = 6;
+    // 权益兑换结束时间戳-秒
+    int64 end_at = 7;
+    // 权益库存
+    int64 stock = 8;
+    // 权益品类/类目 1-图书 2-电子产品 3-课程 4-积分 5-玩具 6-周边 7-文体用品
+    int32 category = 9;
+    // 是否支持重复兑换 0代表可以重复 1代表不可以重复 其余代表重复次数
+    int64 change_num = 10;
+    // 权益对应的商品名称
+    string gift_name = 11;
   }
   int64 offset = 1;
   int64 total = 2;
@@ -8083,12 +8109,26 @@ message AdminGiftConfigListRes {
 message AdminGiftConfigEditReq {
   // 为0:创建配置 非0:修改配置
   int32 id = 1;
-  // 类型 创建后不支持修改
+  // 类型 创建后不支持修改 1:开课 2:星币 3:实物
   int32 gift_type = 2;
   // 描述
   string gift_desc = 3;
-  // 详情
+  // 详情 类型为开课时,存储开课信息课程id逗号分隔. 实物时为商品id，星币时为星币数
   string details = 4;
+  // 上架状态 1: 未上架, 2:已上架
+  int32 status = 5;
+  // 权益兑换开始时间戳-秒
+  int64 start_at = 6;
+  // 权益兑换结束时间戳-秒
+  int64 end_at = 7;
+  // 权益库存
+  int64 stock = 8;
+  // 权益品类/类目 1-图书 2-电子产品 3-课程 4-积分 5-玩具 6-周边 7-文体用品
+  int32 category = 9;
+  // 是否支持重复兑换 0代表可以重复 1代表不可以重复 其余代表重复次数
+  int64 change_num = 10;
+  // 权益对应的商品名称
+  string gift_name = 11;
 }
 
 message AdminCRMUserReq {

@@ -323,3 +323,10 @@ func Test除法(t *testing.T) {
 	fmt.Println(6 / 3)
 	fmt.Println(8 / 3)
 }
+
+func TestTimeSecond(t *testing.T) {
+	timeStr := "2025-06-02 00:00:00"
+	ti, _ := time.ParseInLocation("2006-01-02 15:04:05", timeStr, time.Local)
+	fmt.Println(ti.Unix())                                                          // 输出时间戳，单位为秒
+	fmt.Println(time.Unix(ti.Unix()+60*60*24*7-1, 0).Format("2006-01-02 15:04:05")) // 输出加7天后的时间戳对应的时间字符串
+}
