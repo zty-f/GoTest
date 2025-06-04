@@ -7835,20 +7835,26 @@ message AdminReferralActivity {
   string description = 4;
   // 活动开始时间
   int64 start_time = 5;
-  // 活动周期
+  // 活动周期-创建时使用
   int64 act_cycle = 6;
+  // 活动结束时间-更新时使用
+  int64 end_time = 7;
+  // 奖励开始时间-更新时使用
+  int64 award_st = 8;
+  // 奖励结束时间-更新时使用
+  int64 award_et = 9;
   // 奖励最大数量
-  int32 award_max_count = 7;
+  int32 award_max_count = 10;
   // 星币
-  int64 coin = 8;
+  int64 coin = 11;
   // 活动归属月份
-  string year_month = 9;
+  string year_month = 12;
   // 分享奖励权益id列表
-  repeated int64 share_award_gift = 10;
+  repeated int64 share_award_gift = 13;
   // 推荐奖励权益id列表
-  repeated int64 recom_award_gift = 11;
+  repeated int64 recom_award_gift = 14;
   // 海报图片uri
-  string poster_uri = 12;
+  string poster_uri = 15;
 }
 
 message ListReferralActivityRequest {
