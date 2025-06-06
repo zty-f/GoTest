@@ -9,9 +9,9 @@ import (
 )
 
 func Test1(t *testing.T) {
-	//num := 0007
-	//number := strconv.FormatInt(int64(num), 2)
-	//fmt.Println(number)
+	// num := 0007
+	// number := strconv.FormatInt(int64(num), 2)
+	// fmt.Println(number)
 	number := "42"
 	res, err := strconv.ParseUint(number, 2, 64)
 	if err != nil {
@@ -88,5 +88,76 @@ func BenchmarkGetRandomString2(b *testing.B) {
 func BenchmarkGetRandomString3(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		GetRandomString3(10)
+	}
+}
+
+func TestContains(t *testing.T) {
+	fmt.Println(Contains([]int{1, 2, 3, 4}, 3))
+	fmt.Println(Contains([]int{1, 2, 3, 4}, 5))
+	fmt.Println(Contains([]string{"a", "b", "c"}, "b"))
+	fmt.Println(Contains([]string{"a", "b", "c"}, "d"))
+}
+
+func TestNumToChinese(t *testing.T) {
+	nums := []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	for _, num := range nums {
+		chineseNum, err := NumToChinese(num)
+		if err != nil {
+			fmt.Printf("Error converting %d to Chinese: %v\n", num, err)
+		} else {
+			fmt.Printf("%d in Chinese is: %s\n", num, chineseNum)
+		}
+	}
+}
+
+func TestChineseToNum(t *testing.T) {
+	chineseNums := []string{"零", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十"}
+	for _, chineseNum := range chineseNums {
+		num, err := ChineseToNum(chineseNum)
+		if err != nil {
+			fmt.Printf("Error converting %s to number: %v\n", chineseNum, err)
+		} else {
+			fmt.Printf("%s in number is: %d\n", chineseNum, num)
+		}
+	}
+}
+
+func TestExtractChineseNumber(t *testing.T) {
+	// 示例描述
+	descriptions := []string{
+		"这是第七周的任务",
+		"今天是第二周的开始",
+		"第十周的会议安排在下周",
+		"没有中文数字的描述",
+		"没有第五周中文数字的第1周描述第七周",
+	}
+
+	for _, desc := range descriptions {
+		chineseNum, err := ExtractChineseNumber(desc)
+		if err != nil {
+			fmt.Printf("Error extracting Chinese number from '%s': %v\n", desc, err)
+		} else {
+			fmt.Printf("Extracted Chinese number from '%s': %s\n", desc, chineseNum)
+		}
+	}
+}
+
+func TestExtractAndIncrementChineseWeek(t *testing.T) {
+	// 示例描述
+	descriptions := []string{
+		"这是第七周的任务",
+		"今天是第二周的开始",
+		"第十周的会议安排在下周",
+		"没有中文数字的描述",
+		"没有第五周中文数字的第1周描述第七周",
+	}
+
+	for _, desc := range descriptions {
+		newDesc, err := ExtractAndIncrementChineseWeek(desc)
+		if err != nil {
+			fmt.Printf("Error incrementing Chinese week in '%s': %v\n", desc, err)
+		} else {
+			fmt.Printf("New description after incrementing week in '%s': %s\n", desc, newDesc)
+		}
 	}
 }

@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"math"
 	"reflect"
+	"regexp"
 	"strconv"
 )
 
@@ -205,4 +206,84 @@ func RemoveOne(baseSlice []string, target string) []string {
 		}
 	}
 	return diff
+}
+
+// Contains 判断某个元素是否在数组中 泛型实现
+func Contains[T comparable](arr []T, item T) bool {
+	for _, v := range arr {
+		if v == item {
+			return true
+		}
+	}
+	return false
+}
+
+// NumToChinese 数字转中文数字
+func NumToChinese(num int) (string, error) {
+	if num < 0 || num > 10 {
+		return "", fmt.Errorf("number out of range, should be between 0 and 10")
+	}
+	chineseNumbers := []string{"零", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十"}
+	return chineseNumbers[num], nil
+}
+
+// ChineseToNum 中文数字转数字
+func ChineseToNum(chinese string) (int, error) {
+	chineseNumbers := map[string]int{
+		"零": 0,
+		"一": 1,
+		"二": 2,
+		"三": 3,
+		"四": 4,
+		"五": 5,
+		"六": 6,
+		"七": 7,
+		"八": 8,
+		"九": 9,
+		"十": 10,
+	}
+	if num, ok := chineseNumbers[chinese]; ok {
+		return num, nil
+	}
+	return 0, fmt.Errorf("invalid chinese number: %s", chinese)
+}
+
+// ExtractChineseNumber 从描述中提取“第几周”里的中文数字
+func ExtractChineseNumber(description string) (string, error) {
+	// 匹配“第”和“周”之间的中文数字
+	re := regexp.MustCompile(`第([零一二三四五六七八九十]+)周`)
+	matches := re.FindStringSubmatch(description)
+	if len(matches) < 2 {
+		return "", fmt.Errorf("no chinese number found in 'week' description")
+	}
+	return matches[1], nil
+}
+
+// ExtractAndIncrementChineseWeek 从描述中提取“第几周”里的中文数字并加一替换
+func ExtractAndIncrementChineseWeek(description string) (string, error) {
+	// 匹配“第”和“周”之间的中文数字
+	re := regexp.MustCompile(`第([零一二三四五六七八九十]+)周`)
+	matches := re.FindStringSubmatch(description)
+	if len(matches) < 2 {
+		return "", fmt.Errorf("no chinese number found in 'week' description")
+	}
+	chineseNum := matches[1]
+	// 中文数字转整数
+	num, err := ChineseToNum(chineseNum)
+	if err != nil {
+		return "", err
+	}
+	// 整数加一
+	num++
+	// 检查是否超出范围
+	if num > 10 {
+		return "", fmt.Errorf("number out of range after increment, should be between 0 and 10")
+	}
+	// 整数转回中文数字
+	newChineseNum, err := NumToChinese(num)
+	if err != nil {
+		return "", err
+	}
+	// 替换原描述中的中文数字
+	return re.ReplaceAllString(description, "第"+newChineseNum+"周"), nil
 }
