@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestNilStrcut(t *testing.T) {
+func TestNilStruct(t *testing.T) {
 	type User struct {
 		Name string
 	}

@@ -8293,6 +8293,8 @@ message AdminCRMUserRes {
     string assign_reason = 42;
     // teacher 信息
     Teacher teacher_info = 43;
+    // koc介绍人，自产koc渠道才有，其他渠道不返回
+    string koc_refer_sale_account = 44;
   }
   int64 offset = 1;
   int64 total = 2;
