@@ -8105,6 +8105,8 @@ message AdminGiftConfigListRes {
     int64 change_num = 10;
     // 权益对应的商品名称
     string gift_name = 11;
+    // 权益对应的商品图片
+    string gift_image = 12;
   }
   int64 offset = 1;
   int64 total = 2;
@@ -8135,6 +8137,8 @@ message AdminGiftConfigEditReq {
   int64 change_num = 10;
   // 权益对应的商品名称
   string gift_name = 11;
+  // 权益对应的商品图片
+  string gift_image = 12;
 }
 
 message AdminCRMUserReq {
@@ -9191,6 +9195,8 @@ message GiftInfo {
   int64 stock = 8;
   // 奖励对应的品类 1-图书 2-电子产品 3-课程 4-积分 5-玩具
   int64 category = 9;
+  // 奖励对应的商品图片
+  string image = 10;
 }
 
 message ExchangeGiftData {
