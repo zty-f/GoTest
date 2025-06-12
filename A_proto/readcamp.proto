@@ -963,6 +963,8 @@ message LectureGetRequest {
 
 message LikeLectureRequest{
   int32 lecture_id = 1;
+  // 允许批量添加喜欢
+  repeated int32 lecture_ids = 2;
 }
 
 message CancelLikeLectureRequest {
@@ -2200,10 +2202,72 @@ message ListPracticeLecturesRequest {
   string category_tag = 8;
   // 1 近1天，15 近15天
   int64 last_days_num = 9;
+  // 套系筛选，默认全部
+  string series = 10;
+}
+
+message AggLecturesRequest {
+  // 聚合字段
+  string agg_field = 1;
+  // 筛选课程ID
+  int64 course_id = 2;
+}
+
+message PracticeStatisticsReq {
+}
+
+
+// 磨耳朵用到的统计数据
+message PracticeStatisticsResp {
+  // 我喜欢的数量
+  int64 liked_count = 1;
+  // 我读的书数量
+  int64 inclass_finished_lecture_cnt = 2;
+  // 磨耳朵的书数量
+  int64 practice_lecture_cnt = 3;
+  // 听力设备的书的数量
+  int64 inbp_lecture_cnt = 4;
+}
+
+message AggLecturesResult {
+  int64 total = 1;
+  repeated AggLecturesItem agg_items = 2;
+}
+
+message AggLecturesItem {
+  string field_value = 1;
+  int64  count = 2;
+}
+
+// 课节的基础信息
+message LectureBaseInfo {
+  // 课节ID
+  int64 id = 1;
+  // 课节名称
+  string name = 2;
+  // 封面
+  ImageResource front_picture = 3;
+  // 导读资源信息
+  MediaResource guide_resource = 5;
+  // 原音资源信息
+  MediaResource original_resource = 6;
 }
 
 message ListPracticeLecturesResponse {
   repeated UserLecture lectures = 1;
+  int64 offset = 2;
+  int64 total = 3;
+  bool more = 4;
+}
+
+message ListPracticeLecturesBaseInfoResponse {
+  message Item {
+    // 课程基本信息
+    LectureBaseInfo lecture = 1;
+    // 是否喜欢
+    bool liked = 2;
+  }
+  repeated Item lectures = 1;
   int64 offset = 2;
   int64 total = 3;
   bool more = 4;
@@ -8948,11 +9012,24 @@ message BookList {
   int64 ut = 4;
 }
 
+message BookListDetail {
+  // id
+  int32 id = 1;
+  // 书单名
+  string name = 2;
+  // 创建时间
+  int64 ct = 3;
+  // 更新时间
+  int64 ut = 4;
+  // 总课节数
+  int64 lecture_count = 5;
+}
+
 message UserBookListListRes {
   int64 offset = 1;
   int64 total = 2;
   bool more = 3;
-  repeated BookList items = 4;
+  repeated BookListDetail items = 4;
 }
 
 message UserBookListGetReq {
@@ -8978,6 +9055,8 @@ message UserBookListDeleteReq {
 message UserBookListCreateReq {
   // 书单名
   string name = 1;
+  // 允许创建书单时携带课节
+  repeated int64 lecture_ids = 2;
 }
 
 message UserBookListCreateRes {
@@ -8989,6 +9068,15 @@ message UserBookListUpdateReq {
   int64 booklist_id = 1;
   // 书单名
   string name = 2;
+}
+
+message UserBookListSortLectureReq {
+  // 书单id
+  int64 booklist_id = 1;
+  // 被拖拽的课节ID
+  int64 lecture_id = 2;
+  // 移动到哪个课节之后；移到队首则 after_lecture_id=0
+  int64 after_lecture_id = 3;
 }
 
 message UserBookListUpdateRes {
@@ -9774,6 +9862,25 @@ service ReadCampHttpService {
       post: '/base/readcamp/practice/lectures/list'
     };
   }
+  // 磨耳朵-获取课节列表-只返回基础信息
+  // `midware:"Auth"`
+  rpc ListPracticeLecturesBaseInfo(ListPracticeLecturesRequest) returns (ListPracticeLecturesBaseInfoResponse) {
+    option (google.api.http) = {
+      post: '/base/readcamp/practice/lectures/base_info/list'
+    };
+  }
+  // 磨耳朵-聚合统计课节
+  rpc AggPracticeLectures(AggLecturesRequest) returns (AggLecturesResult) {
+    option (google.api.http) = {
+      post: '/base/readcamp/practice/lectures/agg'
+    };
+  }
+  // 磨耳朵-统计数据
+  rpc PracticeStatistics(PracticeStatisticsReq) returns (PracticeStatisticsResp) {
+    option (google.api.http) = {
+      post: '/base/readcamp/practice/statistics'
+    };
+  }
   // 10 元返现-申请
   rpc ApplyCashback(ApplyCashbackRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
@@ -10543,6 +10650,12 @@ service ReadCampHttpService {
   rpc UserBookListUpdate(UserBookListUpdateReq) returns (UserBookListUpdateRes) {
     option (google.api.http) = {
       post: '/base/readcamp/booklist/update'
+    };
+  }
+  // 用户-书单-书排序
+  rpc UserBookListSortLecture(UserBookListSortLectureReq) returns  (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: '/base/readcamp/booklist/lecture/sort'
     };
   }
   // 用户-书单-加书
