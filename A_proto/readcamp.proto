@@ -2251,6 +2251,10 @@ message LectureBaseInfo {
   MediaResource guide_resource = 5;
   // 原音资源信息
   MediaResource original_resource = 6;
+  // 课节序号
+  int32 lecture_number = 7;
+  // 课节别名
+  string alias_name = 8;
 }
 
 message ListPracticeLecturesResponse {
@@ -9311,12 +9315,24 @@ message UserGiftExchangeReq {
 message UserGiftExchangeRes {
 }
 
-message UseCodeReq {
-  // 兑换码
+message VerifyCodeReq {
+  // 验证码
   string code = 1;
 }
 
+message VerifyCodeRes {
+  // 验证码通过返回 true
+  bool pass = 1;
+}
+
 service ReadCampHttpService {
+  // 验证码验证
+  // `midware:"Auth"`
+  rpc VerifyCode(VerifyCodeReq) returns (VerifyCodeRes) {
+    option (google.api.http) = {
+      post: '/base/readcamp/user/verify_code'
+    };
+  }
   // 用户-权益兑换列表
   // `midware:"Auth"`
   rpc UserExchangeGiftList(UserExchangeGiftListReq) returns (UserExchangeGiftListRes) {
@@ -10029,13 +10045,6 @@ service ReadCampHttpService {
   rpc GetCode(GetCodeRequest) returns (GetCodeResponse) {
     option (google.api.http) = {
       post: '/base/readcamp/code/get'
-    };
-  }
-  // 用户-兑换码核销
-  // `midware:"Auth"`
-  rpc UseCode(UseCodeReq) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
-      post: '/base/readcamp/code/use'
     };
   }
   // 用户-获取正价课套餐课程关联列表
