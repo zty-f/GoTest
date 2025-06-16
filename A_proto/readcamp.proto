@@ -7892,6 +7892,11 @@ message PosterRecord {
   int32 status = 4;
 }
 
+message AdminGetReferralActivityBySceneReq {
+  // 场景 不传默认查询当前进行中的活动信息
+  uint32 scene = 1;
+}
+
 message AdminReferralActivity {
   // 活动id (id为0 代表创建)
   int32 id = 1;
@@ -11917,6 +11922,12 @@ service ReadCampHttpService {
   rpc AdminLeadsBindSearch(AdminLeadsBindSearchReq) returns (AdminLeadsBindSearchRes) {
     option (google.api.http) = {
       post: '/admin/base/readcamp/leads/bind_search'
+    };
+  }
+  // 管理-查询对应场景的活动信息
+  rpc AdminGetReferralActivityByScene(AdminGetReferralActivityBySceneReq) returns (ReferralActivity) {
+    option (google.api.http) = {
+      post: '/admin/base/readcamp/referral_activity/query_by_scene'
     };
   }
 }
