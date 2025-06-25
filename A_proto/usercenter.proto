@@ -1,0 +1,232 @@
+syntax = "proto3";
+
+package usercenterapi;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+message GeneralPagination {
+  int64 limit = 1;
+  int64 offset = 2;
+}
+message GeneralPaginationByPageSize {
+  int64 page = 1;
+  int64 size = 2;
+}
+
+message UserProfileReq {
+  // 用户ID 不传默认为当前登录用户/传值代表查询指定用户
+  int64 user_id = 1;
+  // 查询场景 1-个人介绍页 2-分享介绍页
+  int64 query_scene = 2;
+}
+
+message UserProfileResp {
+  // 用户ID 只有当前登录用户才会返回
+  int64 id = 1;
+  // 用户昵称
+  string name = 2;
+  // 用户头像
+  string avatar = 3;
+  // 注册时间
+  int64 register_time = 4;
+  // 在读课程数
+  int64 reading_count = 5;
+  // 关注数
+  int64 follow_count = 6;
+  // 粉丝数
+  int64 fans_count = 7;
+  // 登录用户是否关注信息页用户 1-关注 2-未关注
+  int64 follow_status = 8;
+  // 是否正价课用户 >0 是 <=0 否 分享页使用
+  int64 formal_course = 9;
+}
+
+message UserRecommendReq {
+
+}
+
+message UserTinyInfo {
+  // 用户ID
+  int64 id = 1;
+  // 用户昵称
+  string name = 2;
+  // 用户头像
+  string avatar = 3;
+  // 推荐信息提示
+  string recommend_text = 4;
+}
+
+message UserRecommendResp {
+  // 推荐用户列表
+  repeated UserTinyInfo list = 1;
+}
+
+message UserFollowReq {
+  // 被关注的用户ID
+  int64 followed_id = 1;
+  // 操作类型 1-关注 2-取消关注
+  int64 action_type = 2;
+}
+
+message UserFollowResp {
+
+}
+
+message UserFollowListReq {
+  int64 limit = 1;
+  int64 offset = 2;
+  // 用户ID-不传默认为当前登录用户/传值代表查询指定用户
+  int64 user_id = 3;
+  // 1-关注列表 2-粉丝列表
+  int64 query_type = 4;
+}
+
+message FollowUserInfo {
+  // 用户ID
+  int64 id = 1;
+  // 用户昵称
+  string name = 2;
+  // 用户头像
+  string avatar = 3;
+  // 关注时间
+  int64 follow_time = 4;
+  // 关注状态 1-关注 2-未关注
+  int64 follow_status = 5;
+}
+
+message UserFollowListResp {
+  int64 offset = 1;
+  int64 total = 2;
+  bool more = 3;
+  // 是否支持查看-隐私设置
+  bool visible = 4;
+  // 关注/粉丝列表
+  repeated FollowUserInfo list = 5;
+}
+
+message UserSearchReq {
+  // 搜索关键词
+  string keyword = 1;
+}
+
+message UserSearchResp {
+  // 用户列表
+  repeated FollowUserInfo list = 1;
+}
+
+message ReportConfigReq {
+  // 举报类型 1-用户
+  int64 report_type = 1;
+}
+
+message ReportConfigResp {
+  // 举报类型 1-用户
+  int64 report_type = 1;
+  // 举报原因列表
+  repeated string reason_list = 2;
+}
+
+message UserReportReq {
+  // 举报类型 1-用户
+  int64 report_type = 1;
+  // 被举报的用户ID
+  int64 target_id = 2;
+  // 举报原因
+  string reason = 3;
+  // 举报证据-扩展字段
+  string evidence = 4;
+}
+
+message UserReportResp {
+}
+
+message PrivacyConfigReq {
+  // 隐私配置类型 1-个人主页相关
+  int64 privacy_type = 1;
+}
+
+message PrivacyInfo {
+  // 隐私配置Id
+  int64 privacy_id = 1;
+  // 隐私配置名称
+  string privacy_name = 2;
+  // 是否支持查看
+  bool visible = 3;
+}
+
+message PrivacyConfigResp {
+  // 隐私配置类型 1-个人主页相关
+  int64 privacy_type = 1;
+  // 隐私配置列表
+  repeated PrivacyInfo list = 2;
+}
+
+message PrivacySetReq {
+  // 隐私配置类型 1-个人主页相关
+  int64 privacy_type = 1;
+  // 隐私配置Id
+  int64 privacy_id = 2;
+  // 是否支持查看
+  bool visible = 3;
+}
+
+message PrivacySetResp {
+}
+
+service UserCenterHttpService {
+  // 用户-个人介绍页基础信息
+  rpc UserProfile(UserProfileReq) returns (UserProfileResp) {
+    option (google.api.http) = {
+      post: "/base/readcamp/user/profile"
+    };
+  }
+  // 用户-好友推荐列表
+  rpc UserRecommend(UserRecommendReq) returns (UserRecommendResp) {
+    option (google.api.http) = {
+      post: "/base/readcamp/user/recommend"
+    };
+  }
+  // 用户-关注/取关
+  rpc UserFollow(UserFollowReq) returns (UserFollowResp) {
+    option (google.api.http) = {
+      post: "/base/readcamp/user/follow"
+    };
+  }
+  // 用户-关注/粉丝列表
+  rpc UserFollowList(UserFollowListReq) returns (UserFollowListResp) {
+    option (google.api.http) = {
+      post: "/base/readcamp/user/follow/list"
+    };
+  }
+  // 用户-用户搜索
+  rpc UserSearch(UserSearchReq) returns (UserSearchResp) {
+    option (google.api.http) = {
+      post: "/base/readcamp/user/search"
+    };
+  }
+  // 用户-举报信息页配置
+  rpc ReportConfig(ReportConfigReq) returns (ReportConfigResp) {
+    option (google.api.http) = {
+      post: "/base/readcamp/report/config"
+    };
+  }
+  // 用户-用户举报
+  rpc UserReport(UserReportReq) returns (UserReportResp) {
+    option (google.api.http) = {
+      post: "/base/readcamp/report/user"
+    };
+  }
+  // 用户-隐私设置配置信息
+  rpc PrivacyConfig(PrivacyConfigReq) returns (PrivacyConfigResp) {
+    option (google.api.http) = {
+      post: "/base/readcamp/privacy/config"
+    };
+  }
+  // 用户-用户隐私设置
+  rpc PrivacySet(PrivacySetReq) returns (PrivacySetResp) {
+    option (google.api.http) = {
+      post: "/base/readcamp/privacy/set"
+    };
+  }
+}
