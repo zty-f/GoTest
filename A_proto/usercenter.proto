@@ -151,8 +151,8 @@ message PrivacyInfo {
   int64 privacy_id = 1;
   // 隐私配置名称
   string privacy_name = 2;
-  // 是否支持查看
-  bool visible = 3;
+  // 是否支持查看 1-可见 2-不可见
+  int64 visible = 3;
 }
 
 message PrivacyConfigResp {
@@ -167,8 +167,8 @@ message PrivacySetReq {
   int64 privacy_type = 1;
   // 隐私配置Id
   int64 privacy_id = 2;
-  // 是否支持查看
-  bool visible = 3;
+  // 是否支持查看 1-可见 2-不可见
+  int64 visible = 3;
 }
 
 message PrivacySetResp {
