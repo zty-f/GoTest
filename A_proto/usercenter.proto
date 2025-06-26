@@ -16,7 +16,7 @@ message GeneralPaginationByPageSize {
 
 message UserProfileReq {
   // 用户ID 不传默认为当前登录用户/传值代表查询指定用户
-  int64 user_id = 1;
+  int64 uid = 1;
   // 查询场景 1-个人介绍页 2-分享介绍页
   int64 query_scene = 2;
 }
@@ -77,7 +77,7 @@ message UserFollowListReq {
   int64 limit = 1;
   int64 offset = 2;
   // 用户ID-不传默认为当前登录用户/传值代表查询指定用户
-  int64 user_id = 3;
+  int64 uid = 3;
   // 1-关注列表 2-粉丝列表
   int64 query_type = 4;
 }
