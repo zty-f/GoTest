@@ -82,4 +82,28 @@ func TestPrivacyTypeMarshal(t *testing.T) {
 	}
 	marshal, _ := json.Marshal(config)
 	fmt.Printf("%+v\n", string(marshal))
+	x := &PrivacyConfig{}
+	fmt.Println(x.Id)
+	fmt.Println(x.Name)
+
+	fmt.Println(cast.ToInt64("1234567890")) // 1234567890
+	fmt.Println(cast.ToInt64("nh"))         // 0
+	fmt.Println(cast.ToInt64("忘记"))         // 0
+	dayTime := cast.ToInt64(time.Now().AddDate(0, -1, 0).Format("20060102"))
+	fmt.Println(dayTime)
+}
+
+func TestMapRange(t *testing.T) {
+	m := map[string]int{
+		"apple":  1,
+		"banana": 2,
+		"cherry": 3,
+	}
+	for key, value := range m {
+		fmt.Printf("Key: %s, Value: %d\n", key, value)
+	}
+
+	for key := range m {
+		fmt.Printf("Key: %s\n", key)
+	}
 }
