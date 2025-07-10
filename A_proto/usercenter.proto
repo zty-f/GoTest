@@ -182,6 +182,26 @@ message UserRecommendRemoveReq {
 message UserRecommendRemoveResp {
 }
 
+message UserStatisticsReq{
+  // 用户ID 不传默认为当前登录用户/传值代表查询指定用户
+  int64 uid = 1;
+}
+
+message UserStatisticsResp{
+  // 定级
+  int64 level = 1;
+  // 阅读天数
+  int64 read_day_count = 2;
+  // 磨耳朵时长 秒
+  int64 practice_time = 3;
+  // 阅读本数
+  int64 read_book_count = 4;
+  // 阅读量-单词数
+  int64 read_word_count = 5;
+  // 加入时间
+  int64 join_time = 6;
+}
+
 service UserCenterHttpService {
   // 用户-个人介绍页基础信息
   rpc UserProfile(UserProfileReq) returns (UserProfileResp) {
@@ -241,6 +261,12 @@ service UserCenterHttpService {
   rpc UserRecommendRemove(UserRecommendRemoveReq) returns (UserRecommendRemoveResp) {
     option (google.api.http) = {
       post: "/base/readcamp/user/recommend/remove"
+    };
+  }
+  // 用户-用户统计信息
+  rpc UserStatistics(UserStatisticsReq) returns (UserStatisticsResp) {
+    option (google.api.http) = {
+      post: "/base/readcamp/user/statistics"
     };
   }
 }
