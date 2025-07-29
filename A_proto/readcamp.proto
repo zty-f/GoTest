@@ -5129,7 +5129,10 @@ message GetUserLecturePrepareProgressResponse {
   int32 item_stars = 7;
 }
 
-message GetUserCourseStatusRequest {}
+message GetUserCourseStatusRequest {
+  int64 koc_id = 1;
+  int64 utm_source = 2;
+}
 
 message GetUserCourseStatusResponse {
   // uid
