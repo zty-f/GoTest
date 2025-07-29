@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package readcamp;
+package readcampapi;
 
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
@@ -472,6 +472,81 @@ message Lecture {
   string zp_rule = 35;
 }
 
+message BookListLectureDetail {
+  int64 id = 1;
+  // 课节名称
+  string name = 2;
+  // 课节描述：RAZ
+  string description = 3;
+  // 课节头图信息
+  ImageResource front_picture = 4;
+  // 课程id
+  int32 course_id = 5;
+  // 导读资源信息
+  MediaResource guide_resource = 6;
+  // 原音资源信息
+  MediaResource original_resource = 7;
+  // 已学习量
+  int32 studied_number = 8;
+  // 已作废，优先使用 UserLecture 中的 status 字段。课节状态: 1: 锁定, 2: 可用(已解锁), 3: 不可用
+  LectureStatus status = 9;
+  // 创建时间
+  int64 created_at = 10;
+  // 更新时间
+  int64 updated_at = 11;
+  // 课节编号
+  int32 lecture_number = 12;
+  // 词汇量
+  int32 vocabulary = 13;
+  // 难度
+  string grade = 14;
+  // 套系
+  string series = 15;
+  // 蓝思值
+  string lexile = 16;
+  // 标签列表
+  repeated string tag_list = 17;
+  // 适合年龄
+  string ages = 18;
+  // 条形码
+  string bar_code = 19;
+  // 喜欢人数
+  int32 like_number = 20;
+  // 学习人数。进入此课节的人数。区别于上面的 studied_number，后者代表已「学完」此课节的人数。
+  int32 study_number = 21;
+  // 评价人数。此课节总评价数，即使有些评论是仅自己可见
+  int32 checkin_number = 22;
+  // 课节级别，合法的level是0-4，其中0是导学课，非这个范围的level说明该课节没有级别概念
+  int32 level = 23;
+  // 绘本跟读资源的id
+  int64 book_id = 24;
+  // 「练一练」绘本 id
+  int64 lianyilian_book_id = 25;
+  // 「玩一玩」绘本 id
+  int64 wanyiwan_book_id = 26;
+  // 新词数量
+  int64 new_words = 27;
+  // 导读的交互讲解配置，为 null 代表没有此配置
+  InteractionConf guide_interaction_conf = 28;
+  // wpm 对应的文本信息
+  string wpm = 29;
+  // 是否存在题目练习
+  bool has_questions = 30;
+  // 是否展示口语表达
+  bool has_speaking_express = 31;
+  // 课节别名
+  string alias_name = 32;
+  // 课节编号别名
+  string alias_lecture_num = 33;
+  // 是否展示创意写作
+  bool has_creative_write = 34;
+  // 自拼规则
+  string zp_rule = 35;
+  // 用户是否喜欢
+  bool liked = 36;
+}
+
+
 enum LectureModuleType {
   Unknown = 0;
   // 学规则
@@ -786,6 +861,8 @@ message AdminCourseListRequest {
   // 按 course_type 搜索：0：不搜索，1：正价课，2：体验课，3：分销课，4：赠送课，5：拓课包
   int32 course_type = 3;
   string course_name = 4;
+  // 筛选用户已开课程
+  int64 uid = 5;
 }
 
 message AdminCourseListResponse {
@@ -812,6 +889,8 @@ message AdminLectureListRequest {
   string series = 6;
   // 状态
   LectureStatus status = 7;
+  // 课程ID列表
+  repeated int64 course_ids = 8;
 }
 
 message AdminLectureListResponse {
@@ -1101,6 +1180,21 @@ message BPAuthQRCodeRes {
   string qrcode_url = 1;
 }
 
+// 合作方设备覆盖上报学习进度
+message BpOverrideReportUserStudyReq {
+  StudyRecordSource study_scene = 1;
+  repeated BpOverrideReportItem data = 2;
+}
+
+message BpOverrideReportItem {
+  // 牛听听本地听单的字段
+  int64 start = 1;
+  string extraData = 2;
+  int64 ts = 3;
+}
+
+message BpOverrideReportUserStudyResp {
+}
 
 message BPBatchReportUserStudyReq {
   message Record {
@@ -1224,10 +1318,16 @@ message UserLecture {
 }
 
 message UserLectureWithCourse {
+  message ActivityInfo {
+    // 排行榜增量经验
+    int64 rank_incr_exp = 1;
+  }
   // 课节信息
   UserLecture user_lecture = 1;
   // 所属课程信息
   UserCourse user_course = 2;
+  // 活动信息
+  ActivityInfo activity_info = 3;
 }
 
 message GetUserLecturesResponse {
@@ -1333,6 +1433,8 @@ message CancelLikeCheckinRequest {
 }
 
 message ShareCheckinRequest {
+  // 支持筛选课程分类
+  repeated string category_tags = 1;
 }
 
 message ShareCheckinResponse {
@@ -1528,6 +1630,61 @@ message AdminQueryUserEventHisReq {
   repeated int64 event_type = 4;
 }
 
+message AdminQueryUserLectureStudyDetail {
+  int64 uid = 1;
+  repeated int64 course_ids = 2;
+  repeated int64 lecture_ids = 3;
+  int64 limit = 4;
+  int64 offset = 5;
+  StudyRecordSource source = 6;
+  int64 daytime_start = 7;
+  int64 daytime_end = 8;
+}
+
+message AdminUserLectureStudyDetailResp {
+  message Statistics {
+    // 导读学习时长（s）
+    int64 guide_study_duration_s = 1;
+    // 原音学习时长（s）
+    int64 original_study_duration_s = 2;
+  }
+
+  int64 offset = 1;
+  int64 total = 2;
+  bool more = 3;
+  // 汇总统计
+  Statistics statistics = 4;
+  // 学习的课节明细列表
+  repeated UserLectureStudy items = 5;
+  // 涉及的课程映射
+  map<int64, Course> course_info = 6;
+  // 涉及的课节映射
+  map<int64, LectureBaseInfo> lecture_info = 7;
+}
+
+
+
+message UserLectureStudy {
+  // 日期
+  string daytime = 1;
+  // 课程
+  int64 course_id = 2;
+  // 课节基本信息
+  int64 lecture_id = 3;
+  // 学习来源
+  StudyRecordSource source = 4;
+  // 导读学习时长（s）
+  int64 guide_study_duration_s = 5;
+  // 原音学习时长（s）
+  int64 original_study_duration_s = 6;
+  // 导读学习
+  int64 guide_study_rate = 7;
+  // 原音学习进度
+  int64 original_study_rate = 8;
+  // 学习课节的阶段
+  string user_lecture_stage = 9;
+}
+
 message AdminQueryUserEventHisRes {
   repeated UserEventHistory items = 1;
   int64 offset = 2;
@@ -1570,6 +1727,8 @@ message LogisticsAddressInfo {
   string area = 5;
   // 门牌号地址
   string address = 6;
+  // 更新时间
+  int64 ut = 7;
 }
 
 message QwInvitation {
@@ -2213,21 +2372,7 @@ message AggLecturesRequest {
   int64 course_id = 2;
 }
 
-message PracticeStatisticsReq {
-}
 
-
-// 磨耳朵用到的统计数据
-message PracticeStatisticsResp {
-  // 我喜欢的数量
-  int64 liked_count = 1;
-  // 我读的书数量
-  int64 inclass_finished_lecture_cnt = 2;
-  // 磨耳朵的书数量
-  int64 practice_lecture_cnt = 3;
-  // 听力设备的书的数量
-  int64 inbp_lecture_cnt = 4;
-}
 
 message AggLecturesResult {
   int64 total = 1;
@@ -2255,6 +2400,8 @@ message LectureBaseInfo {
   int32 lecture_number = 7;
   // 课节别名
   string alias_name = 8;
+  // 课节编号别名
+  string alias_lecture_num = 9;
 }
 
 message ListPracticeLecturesResponse {
@@ -2270,6 +2417,8 @@ message ListPracticeLecturesBaseInfoResponse {
     LectureBaseInfo lecture = 1;
     // 是否喜欢
     bool liked = 2;
+    // 当前用户看到的课节状态：1：未购买；2：资源未ready；3：未解锁；4：可上课；5：已下架
+    int32 status = 3;
   }
   repeated Item lectures = 1;
   int64 offset = 2;
@@ -2315,6 +2464,8 @@ message GetCourseCategoryTagsResponse {
   repeated string category_no1 = 1;
   // 二级类目
   repeated string category_no2 = 2;
+  // 用户开课的一级类目
+  repeated string user_category_no1 = 3;
 }
 
 
@@ -2375,7 +2526,12 @@ message SetUserSettingsRequest {
 
 message GetUserTeacherResponse {
   // 是否已添加老师微信。这里暂不返回老师二维码，因为获取老师二维码太慢了，最好由用户触发获取
+  // 已添加老师或在白名单中 都返回true
   bool has_added_teacher = 1;
+  // 只有已添加老师 返回true
+  bool only_has_added_teacher = 2;
+  // 只有在白名单中返回true
+  bool only_is_white = 3;
 }
 
 message PackageCourse {
@@ -2572,6 +2728,12 @@ message QueryOuterOrderReq {
 }
 
 message QueryOuterOrderRes {
+  message DarenInfo {
+    // 达人id
+    string id = 1;
+    // 达人昵称
+    string nick_name = 2;
+  }
   message Item {
     // 订单信息
     OuterOrderInfo order_info = 1;
@@ -2595,6 +2757,8 @@ message QueryOuterOrderRes {
     bool has_sale_order_package = 10;
     // 用户归属的老师
     string user_teacher_op_name = 11;
+    // 达人信息
+    DarenInfo daren_info = 12;
   }
 
   repeated Item items = 1;
@@ -3482,6 +3646,20 @@ message PlaceYouzanSaleOrderRequest {
 }
 
 message ConfirmOuterOrderPackageReq {
+  message AddressInfo {
+    // 收货人
+    string receiver_name = 1;
+    // 手机号
+    string receiver_tel = 2;
+    // 省份
+    string delivery_province = 3;
+    // 城市
+    string delivery_city = 4;
+    // 区域
+    string delivery_district = 5;
+    // 详细地址
+    string delivery_address = 6;
+  }
   // 外部订单 id
   string order_id = 1;
   // 套餐 id
@@ -3490,6 +3668,8 @@ message ConfirmOuterOrderPackageReq {
   OrderSource source = 3;
   // 用户手机号
   string phone = 4;
+  // 地址信息，默认null
+  AddressInfo address_info = 5;
 }
 
 // 很多地方都会用到的一个字段，定义为枚举
@@ -3508,6 +3688,8 @@ enum OrderSource {
   Doudian = 5;
   // 小红书
   XHS = 6;
+  // 淘宝
+  TB = 7;
 }
 
 // 外部订单表 outer_order-订单状态
@@ -4067,6 +4249,8 @@ message AdminUserSearchResponse {
     string trial_course_period = 7;
     // 脱敏手机号
     string phone = 8;
+    // teacher roles
+    repeated string teacher_roles = 9;
   }
   message Course {
     int32 id = 1;
@@ -4376,6 +4560,8 @@ message CodeInfo {
   bool has_shopmall_order = 1;
   // 是否包含体验课
   bool has_trial_course = 2;
+  // 渠道id
+  string utm_source = 3;
 }
 
 message GetCodeResponse {
@@ -4554,6 +4740,8 @@ message SetAppUpdateConfigRequest {
 
 message SendAddWechatSmsRequest {
   int64 user_id = 1;
+  // 动作id,没有发默认短信
+  string event_no = 2;
 }
 
 message BatchSendAddWechatSmsRequest {
@@ -6024,6 +6212,8 @@ message UpdateUtmSourceRequest {
   string description = 3;
   // 三级渠道名称
   string l3_name = 4;
+  // 渠道等级 1=S，2=A，3=B，4=C
+  int64 utm_level = 5;
 }
 
 message ListUtmSourceRequest {
@@ -8103,6 +8293,14 @@ message AdminShopCommodityListReq {
   string name = 2;
   int64 limit = 3;
   int64 offset = 4;
+  // 售卖起止时间，默认 null
+  repeated int64 sale_ts_range = 5;
+  // 上下架状态 -1:下架(0是默认值，区分不了) 1：上架
+  int64 status = 6;
+  // 权重排序,搜索0 传-1
+  int64 rank = 7;
+  // 支付方式 1=现金 2=星币
+  int64 pay_type = 8;
 }
 
 message AdminShopCommodityListRes {
@@ -8128,6 +8326,10 @@ message AdminShopCommodityListRes {
     int32 ct = 10;
     // 更新时间
     int32 ut = 11;
+    // 售卖开始时间
+    int64 sale_start_ts = 12;
+    // 支付方式 1=现金 2=星币
+    int64 pay_type = 13;
   }
   int64 offset = 1;
   int64 total = 2;
@@ -8152,6 +8354,29 @@ message AdminShopCommodityEditReq {
   int32 gift_id = 7;
   // 商品名称 (根据中台信息回填)
   string name = 8;
+  // 售卖开始时间
+  int64 sale_start_ts = 9;
+  // 支付方式 1=现金 2=星币
+  int64 pay_type = 10;
+}
+
+message AdminGiftConfigListReq {
+  int64 limit = 1;
+  int64 offset = 2;
+  // 为0:创建配置 非0:修改配置
+  int32 id = 3;
+  // 类型 创建后不支持修改 1:开课 2:星币 3:实物
+  int32 gift_type = 4;
+  // 描述 转介绍活动权益需要指明分享还是推荐奖励
+  string gift_desc = 5;
+  // 上架状态 1: 未上架, 2:已上架
+  int32 status = 6;
+  // 权益品类/类目 1-图书 2-电子产品 3-课程 4-积分 5-玩具 6-周边 7-文体用品
+  int32 category = 7;
+  // 是否支持重复兑换 -1代表可以重复 1代表不可以重复 其余代表重复次数
+  int64 change_num = 8;
+  // 权益对应的商品名称
+  string gift_name = 9;
 }
 
 message AdminGiftConfigListRes {
@@ -8249,7 +8474,7 @@ message AdminCRMUserReq {
   repeated int64 utm_source_ids = 18;
   // 意向度
   repeated int64 intention = 19;
-  // 查询类型 1-未转化 2-已转化 3-部分退 4-全额退 5-进库待拨打<3 6-进库未接通 7-进库拨打<=3 8-未到课 9-完课待跟进 10-完课未转化 11-今日上课 12-今日待跟进 13-本周截图未上传 14-预计今日掉库 15-进库待拨打<9
+  // 查询类型 1-未转化 2-已转化 3-部分退 4-全额退 5-进库待拨打<3 6-进库未接通 7-进库拨打<=3 8-未到课 9-完课待跟进 10-完课未转化 11-今日上课 12-今日待跟进 13-海报生成未上传 14-预计今日掉库 15-进库待拨打<9 16-海报未生成 17-海报上传待审核 18-海报上传被驳回
   int64 query_type = 20;
   // 捞取后上课数
   int64 last_bind_study_num = 21;
@@ -8265,7 +8490,7 @@ message AdminCRMUserReq {
   repeated int64 readcamp_acc_call_duration_secs = 26;
   // 用户事件
   UserEventType user_event_type = 27;
-  // 标签筛选 线索保护、勿扰库、no_tags
+  // 标签筛选 线索保护、勿扰库、no_tags、转介绍活跃、转介绍不活跃
   string query_tag = 28;
   // 最近掉海时间筛选
   repeated int64 lately_drop_ts_range = 29;
@@ -8273,6 +8498,10 @@ message AdminCRMUserReq {
   repeated string teacher_op_names = 30;
   // 分配原因
   string assign_reason = 31;
+  // 转介绍参与次数（本月｜上月）1-12
+  int64 poster_join_month = 32;
+  // 转介绍参与次数, 默认-1
+  int64 poster_join_num = 33;
 }
 message AdminCRMUserRes {
   message RemarkInfo {
@@ -8282,6 +8511,18 @@ message AdminCRMUserRes {
   message UserEventInfo {
     UserEventType event_type = 1;
     int64 ct = 2;
+  }
+  message ReferralInfo {
+    // 活动名称
+    string desc = 1;
+    // 参与情况 0=海报已生成, 1=截图已上传(即待审核), 2=审核通过, 3=审核不通过
+    int64 status = 2;
+    // 海报生成时间
+    int64 post_ct = 3;
+    // 活动开始时间
+    int64 ct = 4;
+    // 活动归属月份
+    int64 belong_month = 5;
   }
 
   message CRMUsers {
@@ -8372,6 +8613,8 @@ message AdminCRMUserRes {
     Teacher teacher_info = 43;
     // koc介绍人，自产koc渠道才有，其他渠道不返回
     string koc_refer_sale_account = 44;
+    // 转介绍活动信息
+    repeated ReferralInfo referral_infos= 45;
   }
   int64 offset = 1;
   int64 total = 2;
@@ -8473,7 +8716,7 @@ message AdminCRMUserStatisticsRes {
   int32 today_class = 10;
   // 今日待跟进
   int32 today_follow_up = 11;
-  // 本周截图未上传
+  // 本周截图未上传,海报生成未上传
   int32 has_assign_week_no_screenshot = 12;
   // 完课未转化
   int32 finish_class_no_assign = 13;
@@ -8483,6 +8726,12 @@ message AdminCRMUserStatisticsRes {
   int32 predict_drop_sea_today = 15;
   // 进库待拨打< 9
   int32 no_answer_less_than9 = 16;
+  // 海报未生成
+  int32 referral_poster_uncreated = 17;
+  // 海报上传待审核
+  int32 referral_poster_wait_review = 18;
+  // 海报上传被驳回
+  int32 referral_poster_reject = 19;
 }
 message AdminKOCUserBindReq {
   int64 user_id = 1;
@@ -8876,6 +9125,8 @@ message PicturebookStudyReportReq {
 message UserReadRecordLearnCalendarReq {
   // 时间区间范围
   repeated int64 days_range = 1;
+  // 支持筛选课程分类
+  repeated string category_tags = 2;
 }
 
 message UserReadRecordLearnCalendarRes {
@@ -8897,6 +9148,8 @@ message UserReadRecordLearnInfoReq {
   string scene_type = 2;
   int64 offset = 3;
   int64 limit = 4;
+  // 支持筛选课程分类
+  repeated string category_tags = 5;
 }
 
 message UserReadRecordLearnInfoRes {
@@ -8947,6 +9200,37 @@ message AdminShopMallOrderApplySendReq {
   int64 eid = 1;
   // 备注
   string remark = 2;
+  // 省份
+  string province = 3;
+  // 城市
+  string city = 4;
+  // 地区
+  string area = 5;
+  // 详细地址
+  string addr = 6;
+  // 手机号
+  string phone_number = 7;
+  // 收货人
+  string post_name = 8;
+  // 中台地址库id
+  int64 geo_id = 9;
+}
+
+message BaseShopMallOrderApplySendReq {
+  // 商城订单 root_id,前端精度丢失，用 string
+  string rootidstr = 1;
+  // 省份
+  string province = 2;
+  // 城市
+  string city = 3;
+  // 地区
+  string area = 4;
+  // 详细地址
+  string addr = 5;
+  // 手机号
+  string phone_number = 6;
+  // 收货人
+  string post_name = 7;
 }
 
 message AdminWechatCourseAddrGetReq {
@@ -9021,6 +9305,15 @@ message BookList {
   int64 ut = 4;
 }
 
+// 书单类型
+enum BookListType {
+  BookListCustom = 0;
+  BookListLiked = 1;
+  BookListInClass = 2;
+  BookListPractice = 3;
+  BookListInBp = 4;
+}
+
 message BookListDetail {
   // id
   int32 id = 1;
@@ -9032,6 +9325,10 @@ message BookListDetail {
   int64 ut = 4;
   // 总课节数
   int64 lecture_count = 5;
+  // 是否是系统书单
+  bool is_system = 6;
+  // 书单类型，0：自定义 1：我喜欢的 2：我读的书 3：磨耳朵 4：合作方听力设备
+  BookListType type = 7;
 }
 
 message UserBookListListRes {
@@ -9041,6 +9338,14 @@ message UserBookListListRes {
   repeated BookListDetail items = 4;
 }
 
+message UserBookListQueryRes {
+  int64 offset = 1;
+  int64 total = 2;
+  bool more = 3;
+  repeated BookListDetail items = 4;
+}
+
+
 message UserBookListGetReq {
   // 书单id
   int32 booklist_id = 1;
@@ -9048,12 +9353,22 @@ message UserBookListGetReq {
   int64 offset = 3;
 }
 
+
+message UserBookListQueryReq {
+  // 分页
+  int64 limit = 1;
+  int64 offset = 2;
+  // 指定书单类型查询
+  repeated int64 type = 3;
+}
+
+
 message UserBookListGetRes {
   int64 offset = 1;
   int64 total = 2;
   bool more = 3;
   // 课节信息
-  repeated Lecture items = 4;
+  repeated BookListLectureDetail items = 4;
 }
 
 message UserBookListDeleteReq {
@@ -9110,6 +9425,10 @@ enum StudyRecordSource {
   Practice = 1;
   // 听力熊
   ListenBear = 2;
+  // 牛听听
+  NiuTingTing = 3;
+  // 牛听听本地听单
+  NttLocalPlayList = 5;
 }
 message PlaylistGetReq {
   StudyRecordSource source = 1;
@@ -9208,6 +9527,8 @@ message AdminUpsertActivityReq {
 message AdminAddActivityUserReq {
   int64 activity_id = 1;
   repeated int64 uids = 2;
+  // 默认新增｜更新，传delete删除
+  string action = 3;
 }
 
 message AdminQueryLeadsFlowLogReq {
@@ -9330,12 +9651,161 @@ message VerifyCodeRes {
   bool pass = 1;
 }
 
+message UseCodeReq {
+  // 兑换码
+  string code = 1;
+}
+
+message ShopmallGiftInfo {
+  // 中台商品id
+  int64 id = 1;
+  // 星币数
+  int64 price = 2;
+  // 商品名
+  string name = 3;
+  // 商品描述
+  string desc = 4;
+  // 头图
+  string avatar = 5;
+  // 轮播图
+  repeated string originavtlist = 6;
+  // 详情图
+  repeated string descavtlist = 7;
+  // 现金金额,单位分
+  int64 cashprice = 8;
+  // 原价,单位分
+  int64 originprice = 9;
+}
+
+message ListShopmallGiftInfoReq {
+  int64 offset = 1;
+  int64 limit = 2;
+  // 支付方式 1=现金 2=星币
+  int64 pay_type =3;
+}
+
+message ListShopmallGiftInfoRes{
+  repeated ShopmallGiftInfo items = 1;
+  int64 offset = 2;
+  int64 total = 3;
+  bool more = 4;
+}
+
+message GetShopmallOrderInfoReq {
+  int64 uid = 1;
+  int64 rootid = 2;
+  string rootidstr = 3;
+  int64 eid = 4;
+  bool include_deleted = 5;
+}
+
+message ShopmallExcOrderRoot {
+  int64 rootid = 1;
+  int64 coupon = 2;
+  int32 couponuse = 3;
+  int32 preprice = 4;
+  int32 price = 5;
+  int32 paytype = 6;
+  int32 vipcut = 7;
+  int32 postfee = 8;
+  int64 payorderid = 9;
+  string ct = 10;
+  int64 uid = 11;
+  bool ispay = 12;
+  string statusdesc = 13;
+  int64 tradeid = 14;
+  int32 status = 15;
+  string addr = 16;
+  string postname = 17;
+  string phone = 18;
+  string rootidstr = 19;
+  string province = 20;
+  string city = 21;
+  string area = 22;
+  int64 remaining_time_to_pay_sec = 23;
+}
+
+message ShopmallExcChildOrder {
+  message SkuInfo {
+    int64 gid = 1;
+    string sku = 2;
+    string skuname = 3;
+    string pic = 4;
+  }
+  message ExpressInfo {
+    string tracking = 1;
+    string trackcompany = 2;
+    string last_accept_station = 3;
+  }
+  int64 eid = 1;
+  int32 price = 2;
+  int32 paytype = 3;
+  int32 status = 4;
+  string statusdesc = 5;
+  string ct = 6;
+  SkuInfo skuinfo = 7;
+  ExpressInfo express = 8;
+  string gname = 9;
+  int64 gid = 10;
+  string postname = 11;
+  string phone = 12;
+  string province = 13;
+  string city = 14;
+  string area = 15;
+  string addr = 16;
+  int64 remaining_time_to_pay_sec = 17;
+}
+
+message ShopmallExcOrderDetail {
+  ShopmallExcOrderRoot root = 1;
+  repeated ShopmallExcChildOrder children = 2;
+  bool ispay = 3;
+  string applytime = 4;
+  int32 tabcolor = 5;
+}
+
+message GetShopmallOrderInfoRes {
+  message GetShopmallOrderInfoData {
+    ShopmallExcOrderDetail info = 1;
+    // 距下单时间多久可以申请发货（阅读营赠品订单用）
+    int64 delay_sec = 2;
+  }
+}
+
 service ReadCampHttpService {
+  // 阅读营-客户端申请发货
+  // `midware:"Auth"`
+  rpc BaseShopMallOrderApplySend(BaseShopMallOrderApplySendReq) returns(google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: '/base/readcamp/shopmall/order/apply_send'
+    };
+  }
+  // 阅读营-封装中台商城商品详情
+  // `midware:"Auth"`
+  rpc GetShopmallOrderInfo(GetShopmallOrderInfoReq) returns(GetShopmallOrderInfoRes) {
+    option (google.api.http) = {
+      post: '/base/readcamp/shopmall/order/get'
+    };
+  }
+  // 阅读营商城-商品列表
+  // `midware:"Auth"`
+  rpc ListShopmallGiftInfo(ListShopmallGiftInfoReq) returns (ListShopmallGiftInfoRes){
+    option (google.api.http) = {
+      post: '/base/readcamp/shopmall/gift/list'
+    };
+  }
   // 验证码验证
   // `midware:"Auth"`
   rpc VerifyCode(VerifyCodeReq) returns (VerifyCodeRes) {
     option (google.api.http) = {
       post: '/base/readcamp/user/verify_code'
+    };
+  }
+  // 用户-兑换码核销
+  // `midware:"Auth"`
+  rpc UseCode(UseCodeReq) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: '/base/readcamp/code/use'
     };
   }
   // 用户-权益兑换列表
@@ -9891,17 +10361,13 @@ service ReadCampHttpService {
     };
   }
   // 磨耳朵-聚合统计课节
+  // `midware:"Auth"`
   rpc AggPracticeLectures(AggLecturesRequest) returns (AggLecturesResult) {
     option (google.api.http) = {
       post: '/base/readcamp/practice/lectures/agg'
     };
   }
-  // 磨耳朵-统计数据
-  rpc PracticeStatistics(PracticeStatisticsReq) returns (PracticeStatisticsResp) {
-    option (google.api.http) = {
-      post: '/base/readcamp/practice/statistics'
-    };
-  }
+
   // 10 元返现-申请
   rpc ApplyCashback(ApplyCashbackRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
@@ -10529,6 +10995,13 @@ service ReadCampHttpService {
       post: '/base/readcamp/bp/user_study/batch_report'
     };
   }
+  // Bp-全量覆盖上报学习进度
+  // `midware:"IAMAuth"`
+  rpc BPOverrideReportUserStudy(BpOverrideReportUserStudyReq) returns (BpOverrideReportUserStudyResp) {
+    option (google.api.http) = {
+      post: '/base/readcamp/bp/user_study/override_report'
+    };
+  }
   // 商务合作-获取小程序绑定码
   rpc BPAuthQRCode(BPAuthQRCodeReq) returns (BPAuthQRCodeRes) {
     option (google.api.http) = {
@@ -10645,6 +11118,13 @@ service ReadCampHttpService {
       post: '/base/readcamp/booklist/get'
     };
   }
+  // 用户-书单-列表查询-新包含系统书单
+  // `midware:"Auth"`
+  rpc UserBookListQuery(UserBookListQueryReq) returns (UserBookListQueryRes) {
+    option (google.api.http) = {
+      post: '/base/readcamp/booklist/query'
+    };
+  }
   // 用户-书单-删除
   // `midware:"Auth"`
   rpc UserBookListDelete(UserBookListDeleteReq) returns (google.protobuf.Empty) {
@@ -10667,6 +11147,7 @@ service ReadCampHttpService {
     };
   }
   // 用户-书单-书排序
+  // `midware:"Auth"`
   rpc UserBookListSortLecture(UserBookListSortLectureReq) returns  (google.protobuf.Empty) {
     option (google.api.http) = {
       post: '/base/readcamp/booklist/lecture/sort'
@@ -11757,7 +12238,7 @@ service ReadCampHttpService {
     };
   }
   // 管理-权益赠品配置列表
-  rpc AdminGiftConfigList(GeneralPagination) returns (AdminGiftConfigListRes) {
+  rpc AdminGiftConfigList(AdminGiftConfigListReq) returns (AdminGiftConfigListRes) {
     option (google.api.http) = {
       post: '/admin/base/readcamp/gift_config/list'
     };
@@ -11898,6 +12379,12 @@ service ReadCampHttpService {
   rpc AdminQueryUserEventHistory(AdminQueryUserEventHisReq) returns (AdminQueryUserEventHisRes) {
     option (google.api.http) = {
       post: '/admin/base/readcamp/user/user_event_history/query'
+    };
+  }
+  // 管理-用户详情-用户课节学习明细
+  rpc AdminQueryUserLectureStudyDetails(AdminQueryUserLectureStudyDetail) returns (AdminUserLectureStudyDetailResp) {
+    option (google.api.http) = {
+      post: '/admin/base/readcamp/user/lecture_study_detail/query'
     };
   }
   // 管理-用户详情-流转日志

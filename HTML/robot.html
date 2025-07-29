@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>简易智能体HTML</title>
+</head>
+<body>
+<script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.10/libs/cn/index.js"></script>
+<script>
+    new CozeWebSDK.WebChatClient({
+        config: {
+            bot_id: '7527642214542049306',
+        },
+        componentProps: {
+            title: 'Coze',
+        },
+        auth: {
+            type: 'token',
+            token: 'cztei_qulhjZi44zbby2fKJioX0moPH4phpgprzVbBSEXjSgsLTwW1X7YCjxSqTZRbR5qpU',
+            onRefreshToken: function () {
+                return 'cztei_qulhjZi44zbby2fKJioX0moPH4phpgprzVbBSEXjSgsLTwW1X7YCjxSqTZRbR5qpU'
+            }
+        }
+    });
+</script>
+</body>
+</html>
