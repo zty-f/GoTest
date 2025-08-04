@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSE 示例</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .message {
+            background-color: #f0f0f0;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .connected {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .disconnected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .connect {
+            background-color: #28a745;
+            color: white;
+        }
+        .disconnect {
+            background-color: #dc3545;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<h1>SSE 实时消息示例</h1>
+
+<div id="status" class="status disconnected">
+    状态: 未连接
+</div>
+
+<button id="connectBtn" class="connect" onclick="connect()">连接</button>
+<button id="disconnectBtn" class="disconnect" onclick="disconnect()" disabled>断开</button>
+
+<div id="messages"></div>
+
+<script>
+    let eventSource = null;
+
+    function connect() {
+        if (eventSource) {
+            eventSource.close();
+        }
+
+        eventSource = new EventSource('http://localhost:8080/events');
+
+        eventSource.onopen = function(event) {
+            updateStatus('已连接', true);
+            document.getElementById('connectBtn').disabled = true;
+            document.getElementById('disconnectBtn').disabled = false;
+            addMessage('系统', '连接已建立');
+        };
+
+        eventSource.onmessage = function(event) {
+            addMessage('服务器', event.data);
+        };
+
+        eventSource.onerror = function(event) {
+            updateStatus('连接错误', false);
+            document.getElementById('connectBtn').disabled = false;
+            document.getElementById('disconnectBtn').disabled = true;
+            addMessage('系统', '连接发生错误');
+        };
+    }
+
+    function disconnect() {
+        if (eventSource) {
+            eventSource.close();
+            eventSource = null;
+            updateStatus('已断开', false);
+            document.getElementById('connectBtn').disabled = false;
+            document.getElementById('disconnectBtn').disabled = true;
+            addMessage('系统', '连接已断开');
+        }
+    }
+
+    function updateStatus(message, connected) {
+        const statusDiv = document.getElementById('status');
+        statusDiv.textContent = '状态: ' + message;
+        statusDiv.className = 'status ' + (connected ? 'connected' : 'disconnected');
+    }
+
+    function addMessage(sender, message) {
+        const messagesDiv = document.getElementById('messages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message';
+        messageDiv.innerHTML = `<strong>${sender}:</strong> ${message}`;
+        messagesDiv.appendChild(messageDiv);
+
+        // 自动滚动到底部
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+</script>
+</body>
+</html>
