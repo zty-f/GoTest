@@ -1867,6 +1867,8 @@ message GetTeacherDynamicQrcodeResponse {
   string wechat_nickname = 2;
   // 学生的手机号
   string student_fuzzy_phone = 3;
+  // 微信添加链接
+  string vx_link = 4;
 }
 
 message BanCheckinRequest {
@@ -6306,6 +6308,10 @@ message CallUserRequest {
   int64 user_id = 1;
   // 线路选择  1、2、3 代表 线路1,2,3
   int32 call_show_type = 2;
+}
+
+message CallUserResponse {
+  string webcall_id = 1;
 }
 
 message AddWebcallRemarkRequest {
@@ -12047,7 +12053,7 @@ service ReadCampHttpService {
     };
   }
   // 管理-给用户打电话
-  rpc CallUser(CallUserRequest) returns (google.protobuf.Empty) {
+  rpc CallUser(CallUserRequest) returns (CallUserResponse) {
     option (google.api.http) = {
       post: '/admin/base/readcamp/webcall'
     };
