@@ -595,3 +595,8 @@ func SecondsToMinutes2(seconds int) string {
 	minutes := float64(seconds) / 60.0
 	return fmt.Sprintf("%.2f", minutes) // 会四舍五入
 }
+
+func GetDayOfWeek(t time.Time) int {
+	weekday := t.Weekday()
+	return int(weekday)
+}

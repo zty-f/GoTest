@@ -284,3 +284,14 @@ func TestSecondsToMinutes(t *testing.T) {
 	fmt.Println(fmt.Sprintf("%.2f", 2.578)) // 会四舍五入
 	fmt.Println(fmt.Sprintf("%.2f", 2.573))
 }
+
+func TestGetDayOfWeek(t *testing.T) {
+	fmt.Println(GetDayOfWeek(time.Now()))
+	fmt.Println(GetDayOfWeek(time.Date(2025, 8, 25, 0, 0, 0, 0, time.Local)))
+	fmt.Println(GetDayOfWeek(time.Date(2025, 8, 26, 0, 0, 0, 0, time.Local)))
+	fmt.Println(GetDayOfWeek(time.Date(2025, 8, 27, 0, 0, 0, 0, time.Local)))
+	fmt.Println(GetDayOfWeek(time.Date(2025, 8, 28, 0, 0, 0, 0, time.Local)))
+	fmt.Println(GetDayOfWeek(time.Date(2025, 8, 29, 0, 0, 0, 0, time.Local)))
+	fmt.Println(GetDayOfWeek(time.Date(2025, 8, 30, 0, 0, 0, 0, time.Local)))
+	fmt.Println(GetDayOfWeek(time.Date(2025, 8, 31, 0, 0, 0, 0, time.Local)))
+}
