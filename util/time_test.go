@@ -295,3 +295,13 @@ func TestGetDayOfWeek(t *testing.T) {
 	fmt.Println(GetDayOfWeek(time.Date(2025, 8, 30, 0, 0, 0, 0, time.Local)))
 	fmt.Println(GetDayOfWeek(time.Date(2025, 8, 31, 0, 0, 0, 0, time.Local)))
 }
+
+func TestIsValidTimeFormat(t *testing.T) {
+	fmt.Println(IsValidTimeFormat("18:00:00")) // true
+	fmt.Println(IsValidTimeFormat("-1:00:00")) // true
+	fmt.Println(IsValidTimeFormat("18:76:00")) // true
+	fmt.Println(IsValidTimeFormat("25:00:00")) // false
+	fmt.Println(IsValidTimeFormat("24:00:00")) // false
+	fmt.Println(IsValidTimeFormat("18:60:00")) // false
+	fmt.Println(IsValidTimeFormat("18:00"))    // false
+}

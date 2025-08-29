@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"math/rand"
+	"regexp"
 	"strings"
 	"time"
 
@@ -599,4 +600,11 @@ func SecondsToMinutes2(seconds int) string {
 func GetDayOfWeek(t time.Time) int {
 	weekday := t.Weekday()
 	return int(weekday)
+}
+
+func IsValidTimeFormat(timeStr string) bool {
+	// 正则表达式匹配 HH:MM:SS 格式
+	regex := `^(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d$`
+	matched, _ := regexp.MatchString(regex, timeStr)
+	return matched
 }
