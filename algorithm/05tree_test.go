@@ -21,11 +21,15 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
-// 1、LeetCode94
+// 1、LeetCode94、LeetCode144、LeetCode145
 func TestLeetCode94(t *testing.T) {
 	root := &TreeNode{
-		Val:  1,
-		Left: nil,
+		Val: 1,
+		Left: &TreeNode{
+			Val:   2,
+			Left:  nil,
+			Right: nil,
+		},
 		Right: &TreeNode{
 			Val: 2,
 			Left: &TreeNode{
@@ -33,29 +37,47 @@ func TestLeetCode94(t *testing.T) {
 				Left:  nil,
 				Right: nil,
 			},
-			Right: nil,
+			Right: &TreeNode{
+				Val:   4,
+				Left:  nil,
+				Right: nil,
+			},
 		},
 	}
-	t.Log(inorderTraversal(root))
-}
-
-func inorderTraversal(root *TreeNode) []int {
-	res := make([]int, 0)
-	dfs1(root, &res) // append修改后原值不会变，需要传地址
-	return res
-}
-
-func dfs1(root *TreeNode, res *[]int) {
-	if root == nil {
-		return
-	}
-	dfs1(root.Left, res)
-	*res = append(*res, root.Val)
-	dfs1(root.Right, res)
+	/*
+	    1
+	   / \
+	  2   2
+	     / \
+	    3   4
+	*/
+	// 中序
+	t.Log(inorderTraversal1(root))
+	t.Log(inorderTraversal2(root))
+	// 前序
+	t.Log(preorderTraversal(root))
+	// 后序
+	t.Log(postorderTraversal(root))
 }
 
 // 中序
 func inorderTraversal1(root *TreeNode) []int {
+	res := make([]int, 0)
+	dfs(root, &res) // append修改后原值不会变，需要传地址
+	return res
+}
+
+func dfs(root *TreeNode, res *[]int) {
+	if root == nil {
+		return
+	}
+	dfs(root.Left, res)
+	*res = append(*res, root.Val)
+	dfs(root.Right, res)
+}
+
+// 中序
+func inorderTraversal2(root *TreeNode) []int {
 	res := make([]int, 0)
 	var dfs func(root *TreeNode)
 	dfs = func(root *TreeNode) {
@@ -71,7 +93,7 @@ func inorderTraversal1(root *TreeNode) []int {
 }
 
 // 前序
-func inorderTraversal2(root *TreeNode) []int {
+func preorderTraversal(root *TreeNode) []int {
 	res := make([]int, 0)
 	var dfs func(root *TreeNode)
 	dfs = func(root *TreeNode) {
@@ -87,7 +109,7 @@ func inorderTraversal2(root *TreeNode) []int {
 }
 
 // 后序
-func inorderTraversal3(root *TreeNode) []int {
+func postorderTraversal(root *TreeNode) []int {
 	res := make([]int, 0)
 	var dfs func(root *TreeNode)
 	dfs = func(root *TreeNode) {
@@ -147,10 +169,15 @@ func levelOrder(root *TreeNode) [][]int {
 }
 
 // 3、LeetCode110 平衡二叉树
+// 平衡二叉树：任意节点的左右子树高度差不超过1
 func TestLeetCode110(t *testing.T) {
 	root := &TreeNode{
-		Val:  1,
-		Left: nil,
+		Val: 1,
+		Left: &TreeNode{
+			Val:   2,
+			Left:  nil,
+			Right: nil,
+		},
 		Right: &TreeNode{
 			Val: 2,
 			Left: &TreeNode{
@@ -158,9 +185,20 @@ func TestLeetCode110(t *testing.T) {
 				Left:  nil,
 				Right: nil,
 			},
-			Right: nil,
+			Right: &TreeNode{
+				Val:   4,
+				Left:  nil,
+				Right: nil,
+			},
 		},
 	}
+	/*
+	    1
+	   / \
+	  2   2
+	     / \
+	    3   4
+	*/
 	t.Log(isBalanced(root))
 }
 
@@ -173,8 +211,11 @@ func height(root *TreeNode) int {
 	if root == nil {
 		return 0
 	}
-	lh := height(root.Left)
-	rh := height(root.Right)
+	lh := height(root.Left)  // 获取左子树高度
+	rh := height(root.Right) // 获取右子树高度
+	// 左子树不是平衡二叉树，返回-1
+	// 右子树不是平衡二叉树，返回-1
+	// 左右子树高度差大于1，返回-1
 	if lh == -1 || rh == -1 || abs(lh-rh) > 1 {
 		return -1
 	}
