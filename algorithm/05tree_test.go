@@ -13,12 +13,6 @@ import "testing"
 ●LeetCode98 验证二叉搜索树
 ●LeetCode450 删除二叉搜索树中的节点
 ●LeetCode701 二叉搜索树中的插入操作
-递归
-●LeetCode21 合并两个有序链表
-●LeetCode101 对称二叉树
-●LeetCode104 二叉树的最大深度
-●LeetCode226 翻转二叉树
-●LeetCode236 二叉树的最近公共祖先
 */
 
 type TreeNode struct {
@@ -27,7 +21,7 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
-// 1、LeetCode94 二叉树的中序遍历\LeetCode144 二叉树的前序遍历\LeetCode145 二叉树的后序遍历
+// 1、LeetCode94
 func TestLeetCode94(t *testing.T) {
 	root := &TreeNode{
 		Val:  1,
