@@ -5,59 +5,91 @@ package usercenterapi;
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 
-message TeacherAvailableTimeSetReq {
-  int64 begin_ts = 1;
-  int64 end_ts = 2;
-  // 循环类型：1-每日循环，2-每周循环
-  int64 recurrence_type = 3;
+message GetQwMsgListReq {
+  // 聊天类型
+  int32 chat_type = 1;
+  // 会话对象1
+  string from_account = 2;
+  // 会话对象2
+  string to_account = 3;
+  // 消息发送时间
+  int64 msgtime = 4;
+  // 消息类型
+  string msg_type = 5;
+  // 截止时间
+  int64 msgtime_end = 9;
 }
 
-message TeacherAvailableTimeSetRes {
+message GetQwMsgListResp {
+  repeated MsgInfo items = 1;
 }
 
-message TeacherAvailableTimeCancelReq {
-  // 老师时段策略的id
-  int64 id = 1;
+// 聊天消息
+message MsgInfo {
+  // 企业id
+  string corp_id = 1;
+  // 聊天类型
+  int32 chat_type = 2;
+  // 消息类型
+  string msg_type = 3;
+  // 消息发起者account
+  string from_account = 4;
+  // 消息接受者account
+  string to_account = 5;
+  // 消息产生时间 (UNIX时间戳) 单位是ms(毫秒)
+  int64 msgtime = 6;
+  // 消息内容
+  string content = 7;
+  // 消息ID
+  string msgid = 8;
 }
 
-message TeacherAvailableTimeCancelRes {
-
+message QwAIChatReq {
+  // 聊天请求内容文本
+  repeated string msg_list = 1;
+  // 消息接受者account
+  repeated string to_account = 2;
 }
 
-message TeacherAvailableTimeGetReq {
-
+message QwAIChatRes {
+  // 聊天会话id
+  string conversation_id = 1;
+  // 聊天消息id
+  string  message_id = 2;
+  // 回复内容
+  string content = 3;
+  // 消息创建时间
+  int64 create_time = 4;
 }
 
-message TeacherAvailableTimeInfo {
-  int64 id = 1;
-  int64 teacher_uid = 2;
-  int64 begin_ts = 3;
-  int64 end_ts = 4;
-  // 循环类型：1-每日循环，2-每周循环
-  int64 recurrence_type = 5;
+message QwAiMsgOpRep {
+  // 聊天消息id
+  string  message_id = 1;
+  // 操作类型 1:踩 2：复制 3：一键转发
+  int64 op_type = 2;
 }
 
-message TeacherAvailableTimeGetRes {
-  repeated TeacherAvailableTimeInfo items = 1;
+message QwAiMsgOpResp {
 }
+
 
 service UserCenterHttpService {
-  // 【api】老师开课时段设置
-  rpc TeacherAvailableTimeSet(TeacherAvailableTimeSetReq) returns(TeacherAvailableTimeSetRes) {
+  // 【api】查询用户最近消息列表
+  rpc GetQwMsgList(GetQwMsgListReq) returns(GetQwMsgListResp) {
     option (google.api.http) = {
-      post: "/readcampapiv2/classroom/teacher/available/time/set"
+      post: "/readcampopapi/qw/msg/list"
     };
   }
-  // 【api】老师开课时段取消
-  rpc TeacherAvailableTimeCancel(TeacherAvailableTimeCancelReq) returns(TeacherAvailableTimeCancelRes) {
+  // 【api】AI聊天
+  rpc QwAIChat(QwAIChatReq) returns(QwAIChatRes) {
     option (google.api.http) = {
-      post: "/readcampapiv2/classroom/teacher/available/time/cancel"
+      post: "/readcampopapi/qw/ai/chat"
     };
   }
-  // 【api】老师开课时段查询
-  rpc TeacherAvailableTimeGet(TeacherAvailableTimeGetReq) returns(TeacherAvailableTimeGetRes) {
+  // 【api】AI消息操作
+  rpc QwAiMsgOp(QwAiMsgOpRep) returns(QwAiMsgOpResp) {
     option (google.api.http) = {
-      post: "/readcampapiv2/classroom/teacher/available/time/get"
+      post: "/readcampopapi/qw/ai/msg_op"
     };
   }
 }
