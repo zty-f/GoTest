@@ -6,7 +6,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 
 message GetQwMsgListReq {
-  // 聊天类型
+  // 聊天类型 1-单聊 2-群聊
   int32 chat_type = 1;
   // 会话对象1
   string from_account = 2;
