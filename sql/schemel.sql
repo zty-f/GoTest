@@ -70,6 +70,7 @@ CREATE TABLE `readcamp_user_privacy`
 CREATE TABLE `readcamp_chat_messages`
 (
     `id`           bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+    `conversation_id` varchar(128)        NOT NULL COMMENT '会话id',
     `from_account` varchar(128)        NOT NULL COMMENT '消息发送者',
     `to_account`   varchar(128)        NOT NULL COMMENT '消息接收者',
     `msg`          text                NOT NULL COMMENT '用户发的消息',
