@@ -48,7 +48,7 @@ message QwAIChatReq {
   // 聊天请求内容文本
   repeated string msg_list = 1;
   // 消息接受者account
-  repeated string to_account = 2;
+  string to_account = 2;
 }
 
 message QwAIChatRes {
