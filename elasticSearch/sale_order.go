@@ -3,9 +3,8 @@ package es
 import (
 	"context"
 	"encoding/json"
-	"time"
-
 	"github.com/olivere/elastic/v7"
+	"time"
 )
 
 const BussTypeSaleOrder = "readcamp_sale_order"
@@ -290,6 +289,167 @@ func SearchSaleOrder(ctx context.Context, req *SearchSaleOrderRequest) (SaleOrde
 	return search, data.Offset, data.Total, data.More, nil
 }
 
+// SearchSaleOrderV2 使用EsSearch方式构建查询的订单搜索方法--推荐使用
+/*
+Es查询方式第二种：通过elastic包官方方法构建，然后转为json查询即可
+功能和SearchSaleOrder一致，但使用EsSearch结构体构建查询
+*/
+func SearchSaleOrderV2(ctx context.Context, req *SearchSaleOrderRequest) (SaleOrders, int64, int64, bool, error) {
+	var search EsSearch
+
+	// 添加查询条件
+	if req.ID != "" {
+		search.AddMustQuery(elastic.NewTermQuery("id", req.ID))
+	}
+
+	if len(req.IDs) > 0 {
+		ids := make([]interface{}, len(req.IDs))
+		for i, id := range req.IDs {
+			ids[i] = id
+		}
+		search.AddMustQuery(elastic.NewTermsQuery("id", ids...))
+	}
+
+	if req.UserID > 0 {
+		search.AddMustQuery(elastic.NewTermQuery("user_id", req.UserID))
+	}
+
+	if len(req.UserIDs) > 0 {
+		userIDs := make([]interface{}, len(req.UserIDs))
+		for i, userID := range req.UserIDs {
+			userIDs[i] = userID
+		}
+		search.AddMustQuery(elastic.NewTermsQuery("user_id", userIDs...))
+	}
+
+	if req.PackageID > 0 {
+		search.AddMustQuery(elastic.NewTermQuery("package_id", req.PackageID))
+	}
+
+	if len(req.PackageIDs) > 0 {
+		packageIDs := make([]interface{}, len(req.PackageIDs))
+		for i, packageID := range req.PackageIDs {
+			packageIDs[i] = packageID
+		}
+		search.AddMustQuery(elastic.NewTermsQuery("package_id", packageIDs...))
+	}
+
+	if len(req.UtmSources) > 0 {
+		utmSources := make([]interface{}, len(req.UtmSources))
+		for i, utmSource := range req.UtmSources {
+			utmSources[i] = utmSource
+		}
+		search.AddMustQuery(elastic.NewTermsQuery("utm_source", utmSources...))
+	}
+
+	if len(req.PayTypes) > 0 {
+		payTypes := make([]interface{}, len(req.PayTypes))
+		for i, payType := range req.PayTypes {
+			payTypes[i] = payType
+		}
+		search.AddMustQuery(elastic.NewTermsQuery("pay_type", payTypes...))
+	}
+
+	// 价格范围查询
+	if req.MinPrice > 0 || req.MaxPrice > 0 {
+		priceRange := elastic.NewRangeQuery("price")
+		if req.MinPrice > 0 {
+			priceRange.Gte(req.MinPrice)
+		}
+		if req.MaxPrice > 0 {
+			priceRange.Lte(req.MaxPrice)
+		}
+		search.AddMustQuery(priceRange)
+	}
+
+	if req.Source > 0 {
+		search.AddMustQuery(elastic.NewTermQuery("source", req.Source))
+	}
+
+	if len(req.Sources) > 0 {
+		sources := make([]interface{}, len(req.Sources))
+		for i, source := range req.Sources {
+			sources[i] = source
+		}
+		search.AddMustQuery(elastic.NewTermsQuery("source", sources...))
+	}
+
+	if req.OuterOrderID != "" {
+		search.AddMustQuery(elastic.NewTermQuery("outer_order_id", req.OuterOrderID))
+	}
+
+	// 处理order_assign和leads_assign的OR关系
+	var shouldConditions []elastic.Query
+
+	// 单个值的Term查询
+	if req.OrderAssign != "" {
+		shouldConditions = append(shouldConditions, elastic.NewTermQuery("order_assign", req.OrderAssign))
+	}
+	if req.LeadsAssign != "" {
+		shouldConditions = append(shouldConditions, elastic.NewTermQuery("leads_assign", req.LeadsAssign))
+	}
+
+	// 多个值的Terms查询
+	if len(req.OrderAssigns) > 0 {
+		orderAssigns := make([]interface{}, len(req.OrderAssigns))
+		for i, orderAssign := range req.OrderAssigns {
+			orderAssigns[i] = orderAssign
+		}
+		shouldConditions = append(shouldConditions, elastic.NewTermsQuery("order_assign", orderAssigns...))
+	}
+	if len(req.LeadsAssigns) > 0 {
+		leadsAssigns := make([]interface{}, len(req.LeadsAssigns))
+		for i, leadsAssign := range req.LeadsAssigns {
+			leadsAssigns[i] = leadsAssign
+		}
+		shouldConditions = append(shouldConditions, elastic.NewTermsQuery("leads_assign", leadsAssigns...))
+	}
+
+	// 如果有任何assign条件，将它们作为should条件添加到查询中
+	if len(shouldConditions) > 0 {
+		search.AddMustQuery(elastic.NewBoolQuery().Should(shouldConditions...).MinimumShouldMatch("1"))
+	}
+
+	// 消息内容模糊匹配
+	if req.MsgStr != "" {
+		search.AddMustQuery(elastic.NewMatchPhraseQuery("msg_str", req.MsgStr))
+	}
+
+	// 时间范围查询
+	if req.BeginTime != nil || req.EndTime != nil {
+		createTimeRange := elastic.NewRangeQuery("ct")
+		if req.BeginTime != nil {
+			createTimeRange.Gte(req.BeginTime)
+		}
+		if req.EndTime != nil {
+			createTimeRange.Lte(req.EndTime)
+		}
+		search.AddMustQuery(createTimeRange)
+	}
+
+	// 默认按创建时间降序排序
+	search.Sorters = append(search.Sorters, elastic.NewFieldSort("ct").Desc())
+
+	dsl, err := search.BoolQueryDSL()
+	if err != nil {
+		return []*SaleOrder{}, 0, 0, false, err
+	}
+
+	var searchResult []*SaleOrder
+	data, err := SearchByDSL(ctx, BussTypeSaleOrder, string(dsl), req.Offset, req.Limit)
+	if err != nil {
+		return searchResult, 0, 0, false, err
+	}
+
+	docs := data.Docs
+	err = json.Unmarshal([]byte(docs), &searchResult)
+	if err != nil {
+		return searchResult, 0, 0, false, err
+	}
+
+	return searchResult, data.Offset, data.Total, data.More, nil
+}
+
 // BatchGetSaleOrderByUserIDs 批量获取用户订单
 func BatchGetSaleOrderByUserIDs(ctx context.Context, userIDs []int64) (SaleOrders, int64, int64, bool, error) {
 	// fun := "BatchGetSaleOrderByUserIDs-->"
@@ -456,165 +616,4 @@ func BatchUpdateLeadsAssignByUserIDs(ctx context.Context, userIDs []int64, leads
 // BatchUpdateLeadsAssignByUserID 更新单个用户ID的所有记录的leads_assign字段
 func BatchUpdateLeadsAssignByUserID(ctx context.Context, userID int64, leadsAssign string) (int64, error) {
 	return BatchUpdateLeadsAssignByUserIDs(ctx, []int64{userID}, leadsAssign)
-}
-
-// SearchSaleOrderV2 使用EsSearch方式构建查询的订单搜索方法
-/*
-Es查询方式第二种：通过elastic包官方方法构建，然后转为json查询即可
-功能和SearchSaleOrder一致，但使用EsSearch结构体构建查询
-*/
-func SearchSaleOrderV2(ctx context.Context, req *SearchSaleOrderRequest) (SaleOrders, int64, int64, bool, error) {
-	var search EsSearch
-
-	// 添加查询条件
-	if req.ID != "" {
-		search.AddMustQuery(elastic.NewTermQuery("id", req.ID))
-	}
-
-	if len(req.IDs) > 0 {
-		ids := make([]interface{}, len(req.IDs))
-		for i, id := range req.IDs {
-			ids[i] = id
-		}
-		search.AddMustQuery(elastic.NewTermsQuery("id", ids...))
-	}
-
-	if req.UserID > 0 {
-		search.AddMustQuery(elastic.NewTermQuery("user_id", req.UserID))
-	}
-
-	if len(req.UserIDs) > 0 {
-		userIDs := make([]interface{}, len(req.UserIDs))
-		for i, userID := range req.UserIDs {
-			userIDs[i] = userID
-		}
-		search.AddMustQuery(elastic.NewTermsQuery("user_id", userIDs...))
-	}
-
-	if req.PackageID > 0 {
-		search.AddMustQuery(elastic.NewTermQuery("package_id", req.PackageID))
-	}
-
-	if len(req.PackageIDs) > 0 {
-		packageIDs := make([]interface{}, len(req.PackageIDs))
-		for i, packageID := range req.PackageIDs {
-			packageIDs[i] = packageID
-		}
-		search.AddMustQuery(elastic.NewTermsQuery("package_id", packageIDs...))
-	}
-
-	if len(req.UtmSources) > 0 {
-		utmSources := make([]interface{}, len(req.UtmSources))
-		for i, utmSource := range req.UtmSources {
-			utmSources[i] = utmSource
-		}
-		search.AddMustQuery(elastic.NewTermsQuery("utm_source", utmSources...))
-	}
-
-	if len(req.PayTypes) > 0 {
-		payTypes := make([]interface{}, len(req.PayTypes))
-		for i, payType := range req.PayTypes {
-			payTypes[i] = payType
-		}
-		search.AddMustQuery(elastic.NewTermsQuery("pay_type", payTypes...))
-	}
-
-	// 价格范围查询
-	if req.MinPrice > 0 || req.MaxPrice > 0 {
-		priceRange := elastic.NewRangeQuery("price")
-		if req.MinPrice > 0 {
-			priceRange.Gte(req.MinPrice)
-		}
-		if req.MaxPrice > 0 {
-			priceRange.Lte(req.MaxPrice)
-		}
-		search.AddMustQuery(priceRange)
-	}
-
-	if req.Source > 0 {
-		search.AddMustQuery(elastic.NewTermQuery("source", req.Source))
-	}
-
-	if len(req.Sources) > 0 {
-		sources := make([]interface{}, len(req.Sources))
-		for i, source := range req.Sources {
-			sources[i] = source
-		}
-		search.AddMustQuery(elastic.NewTermsQuery("source", sources...))
-	}
-
-	if req.OuterOrderID != "" {
-		search.AddMustQuery(elastic.NewTermQuery("outer_order_id", req.OuterOrderID))
-	}
-
-	// 处理order_assign和leads_assign的OR关系
-	var shouldConditions []elastic.Query
-
-	// 单个值的Term查询
-	if req.OrderAssign != "" {
-		shouldConditions = append(shouldConditions, elastic.NewTermQuery("order_assign", req.OrderAssign))
-	}
-	if req.LeadsAssign != "" {
-		shouldConditions = append(shouldConditions, elastic.NewTermQuery("leads_assign", req.LeadsAssign))
-	}
-
-	// 多个值的Terms查询
-	if len(req.OrderAssigns) > 0 {
-		orderAssigns := make([]interface{}, len(req.OrderAssigns))
-		for i, orderAssign := range req.OrderAssigns {
-			orderAssigns[i] = orderAssign
-		}
-		shouldConditions = append(shouldConditions, elastic.NewTermsQuery("order_assign", orderAssigns...))
-	}
-	if len(req.LeadsAssigns) > 0 {
-		leadsAssigns := make([]interface{}, len(req.LeadsAssigns))
-		for i, leadsAssign := range req.LeadsAssigns {
-			leadsAssigns[i] = leadsAssign
-		}
-		shouldConditions = append(shouldConditions, elastic.NewTermsQuery("leads_assign", leadsAssigns...))
-	}
-
-	// 如果有任何assign条件，将它们作为should条件添加到查询中
-	if len(shouldConditions) > 0 {
-		search.AddMustQuery(elastic.NewBoolQuery().Should(shouldConditions...).MinimumShouldMatch("1"))
-	}
-
-	// 消息内容模糊匹配
-	if req.MsgStr != "" {
-		search.AddMustQuery(elastic.NewMatchPhraseQuery("msg_str", req.MsgStr))
-	}
-
-	// 时间范围查询
-	if req.BeginTime != nil || req.EndTime != nil {
-		createTimeRange := elastic.NewRangeQuery("ct")
-		if req.BeginTime != nil {
-			createTimeRange.Gte(req.BeginTime)
-		}
-		if req.EndTime != nil {
-			createTimeRange.Lte(req.EndTime)
-		}
-		search.AddMustQuery(createTimeRange)
-	}
-
-	// 默认按创建时间降序排序
-	search.Sorters = append(search.Sorters, elastic.NewFieldSort("ct").Desc())
-
-	dsl, err := search.BoolQueryDSL()
-	if err != nil {
-		return []*SaleOrder{}, 0, 0, false, err
-	}
-
-	var searchResult []*SaleOrder
-	data, err := SearchByDSL(ctx, BussTypeSaleOrder, string(dsl), req.Offset, req.Limit)
-	if err != nil {
-		return searchResult, 0, 0, false, err
-	}
-
-	docs := data.Docs
-	err = json.Unmarshal([]byte(docs), &searchResult)
-	if err != nil {
-		return searchResult, 0, 0, false, err
-	}
-
-	return searchResult, data.Offset, data.Total, data.More, nil
 }
