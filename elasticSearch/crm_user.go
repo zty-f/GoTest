@@ -391,3 +391,73 @@ func SearchCRMUser(ctx context.Context, req *SearchCRMUserRequest) (users ESCRMU
 	}
 	return res, data.Offset, data.Total, data.More, nil
 }
+
+// SearchAggregationByTid 统计每个teacher_id库容
+/*
+Es 聚合查询，统计每个teacher_id库容
+*/
+func SearchAggregationByTid(ctx context.Context, req *SearchCRMUserRequest) (map[int64]int64, error) {
+	var search EsSearch
+	search.AddMustQuery(elastic.NewTermQuery("user_type", 1))
+	if req.TeacherId > 0 {
+		search.AddMustQuery(elastic.NewTermsQuery("teacher_id", req.TeacherId))
+	}
+	if req.IsPaidUser != 0 {
+		if req.IsPaidUser == 1 {
+			search.AddMustQuery(elastic.NewBoolQuery().
+				Should(elastic.NewTermQuery("has_formal_course", true)).
+				Should(elastic.NewTermQuery("has_extend_course", true)))
+		} else {
+			search.AddMustQuery(elastic.NewBoolQuery().
+				Should(
+					elastic.NewBoolQuery().
+						MustNot(elastic.NewExistsQuery("has_formal_course")).
+						MustNot(elastic.NewExistsQuery("has_extend_course")),
+				).
+				Should(
+					elastic.NewBoolQuery().
+						Must(elastic.NewTermQuery("has_formal_course", false)).
+						Must(elastic.NewTermQuery("has_extend_course", false)),
+				).
+				MinimumShouldMatch("1"),
+			)
+		}
+	}
+	if req.NotRefundType > 0 {
+		search.AddMustNotQuery(elastic.NewTermQuery("refund_type", req.NotRefundType))
+	}
+
+	search.Aggregations = append(search.Aggregations, ESSearchAgg{
+		Name: "group_by_date_ts",
+		Agg:  elastic.NewTermsAggregation().Field("teacher_id").OrderByKey(false).Size(500),
+	})
+
+	size := int(req.Limit)
+	search.Size = &size
+
+	dsl, err := search.BoolQueryDSL()
+	if err != nil {
+		return nil, err
+	}
+
+	var esRes EsRespBody
+	var res = make(map[int64]int64)
+
+	data, err := SearchQueryDslBasic(ctx, "BussTypeTelemarkingUser", string(dsl))
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal([]byte(data), &esRes)
+	if err != nil {
+		return nil, err
+	}
+	if len(esRes.Aggregations.GroupByDateTs.Buckets) == 0 {
+		return res, nil
+	}
+
+	for _, bucket := range esRes.Aggregations.GroupByDateTs.Buckets {
+		res[bucket.Key] = bucket.DocCount
+	}
+	return res, nil
+}

@@ -29,6 +29,16 @@ type EsBucket struct {
 	DocCount int64 `json:"doc_count"`
 }
 
+type EsRespBody struct {
+	Aggregations struct {
+		GroupByDateTs struct {
+			DocCountErrorUpperBound int         `json:"doc_count_error_upper_bound"`
+			SumOtherDocCount        int         `json:"sum_other_doc_count"`
+			Buckets                 []*EsBucket `json:"buckets"`
+		} `json:"group_by_date_ts"`
+	} `json:"aggregations"`
+}
+
 func (e *EsSearch) BoolQueryDSL() ([]byte, error) {
 	boolQuery := elastic.NewBoolQuery()
 	boolQuery.Must(e.MustQuery...)
