@@ -4,9 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/samber/lo"
 	"testing"
 	"time"
+
+	"github.com/samber/lo"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -160,6 +161,104 @@ func TestSearchSaleOrder_Integration(t *testing.T) {
 	assert.Equal(t, int64(0), offset)
 	assert.Equal(t, 1, len(orders))
 	assert.Equal(t, order.ID, orders[0].ID)
+
+	// 测试完成后删除测试数据
+	// err = DeleteSaleOrder(ctx, order.ID)
+	assert.NoError(t, err)
+}
+
+func TestSearchSaleOrderV2_Integration(t *testing.T) {
+	t.Skip("集成测试，需要ES环境，默认跳过")
+
+	ctx := context.Background()
+
+	// 创建测试订单
+	now := time.Now()
+	order := &SaleOrder{
+		ID:           "test9999_v2",
+		UserID:       8889,
+		PackageID:    7778,
+		MsgStr:       "测试订单V2",
+		UtmSource:    "test_v2",
+		PayType:      "test_v2",
+		Price:        2000,
+		Source:       1,
+		OuterOrderID: "TEST_OUTER_ID_V2",
+		OrderAssign:  "test_user_v2",
+		LeadsAssign:  "test_leads_v2",
+		CreateTime:   &now,
+		UpdateTime:   &now,
+	}
+
+	// 插入测试数据
+	err := InsertOrUpdateSaleOrder(ctx, order)
+	assert.NoError(t, err)
+
+	// 查询测试 - 使用SearchSaleOrderV2
+	req := &SearchSaleOrderRequest{
+		ID: order.ID,
+	}
+
+	orders, offset, total, more, err := SearchSaleOrderV2(ctx, req)
+	assert.NoError(t, err)
+	assert.Equal(t, int64(1), total)
+	assert.False(t, more)
+	assert.Equal(t, int64(0), offset)
+	assert.Equal(t, 1, len(orders))
+	assert.Equal(t, order.ID, orders[0].ID)
+
+	// 测试完成后删除测试数据
+	// err = DeleteSaleOrder(ctx, order.ID)
+	assert.NoError(t, err)
+}
+
+func TestSearchSaleOrderV2_CompareWithOriginal(t *testing.T) {
+	t.Skip("集成测试，需要ES环境，默认跳过")
+
+	ctx := context.Background()
+
+	// 创建测试订单
+	now := time.Now()
+	order := &SaleOrder{
+		ID:           "test_compare",
+		UserID:       9999,
+		PackageID:    8888,
+		MsgStr:       "比较测试订单",
+		UtmSource:    "compare_test",
+		PayType:      "compare_test",
+		Price:        3000,
+		Source:       1,
+		OuterOrderID: "COMPARE_TEST_ID",
+		OrderAssign:  "compare_user",
+		LeadsAssign:  "compare_leads",
+		CreateTime:   &now,
+		UpdateTime:   &now,
+	}
+
+	// 插入测试数据
+	err := InsertOrUpdateSaleOrder(ctx, order)
+	assert.NoError(t, err)
+
+	// 使用相同的查询条件测试两个方法
+	req := &SearchSaleOrderRequest{
+		UserID: order.UserID,
+		Limit:  10,
+		Offset: 0,
+	}
+
+	// 测试原始方法
+	orders1, offset1, total1, more1, err1 := SearchSaleOrder(ctx, req)
+	assert.NoError(t, err1)
+
+	// 测试V2方法
+	orders2, offset2, total2, more2, err2 := SearchSaleOrderV2(ctx, req)
+	assert.NoError(t, err2)
+
+	// 比较结果
+	assert.Equal(t, total1, total2, "Total count should be the same")
+	assert.Equal(t, offset1, offset2, "Offset should be the same")
+	assert.Equal(t, more1, more2, "More flag should be the same")
+	assert.Equal(t, len(orders1), len(orders2), "Result count should be the same")
 
 	// 测试完成后删除测试数据
 	// err = DeleteSaleOrder(ctx, order.ID)
