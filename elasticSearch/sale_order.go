@@ -25,22 +25,6 @@ type SaleOrder struct {
 	UpdateTime   *time.Time `json:"ut,omitempty"`
 }
 
-type SaleOrders []*SaleOrder
-
-// InsertOrUpdateSaleOrder 插入或更新订单数据到ES
-func InsertOrUpdateSaleOrder(ctx context.Context, saleOrder *SaleOrder) error {
-	jsonReq, err := json.Marshal(saleOrder)
-	if err != nil {
-		return err
-	}
-	return UpsertDoc(ctx, BussTypeSaleOrder, saleOrder.ID, string(jsonReq), SEARCH_UP_TYPE_UPSERT_FILED)
-}
-
-// DeleteSaleOrder 从ES中删除订单数据
-func DeleteSaleOrder(ctx context.Context, id string) error {
-	return DeleteDoc(ctx, BussTypeSaleOrder, id)
-}
-
 // SearchSaleOrderRequest 查询请求参数
 type SearchSaleOrderRequest struct {
 	ID           string     `json:"id"`
@@ -139,7 +123,31 @@ type SaleOrderMatchPhrase struct {
 	MsgStr string `json:"msg_str,omitempty"`
 }
 
+type SaleOrders []*SaleOrder
+
+// InsertOrUpdateSaleOrder 插入或更新订单数据到ES
+func InsertOrUpdateSaleOrder(ctx context.Context, saleOrder *SaleOrder) error {
+	jsonReq, err := json.Marshal(saleOrder)
+	if err != nil {
+		return err
+	}
+	return UpsertDoc(ctx, BussTypeSaleOrder, saleOrder.ID, string(jsonReq), SEARCH_UP_TYPE_UPSERT_FILED)
+}
+
+// DeleteSaleOrder 从ES中删除订单数据
+func DeleteSaleOrder(ctx context.Context, id string) error {
+	return DeleteDoc(ctx, BussTypeSaleOrder, id)
+}
+
 // SearchSaleOrder 根据条件查询订单
+/*
+Es 构建查询方式1：通过结构体构造然后最终marshal成为对应的查询json字符串
+！！！！！！注意！！！！！！！！
+Es有设置最大的默认结果窗口限制，即分页查询offset+limit的总和不能超过这个值，否则会返回错误
+类似于mysql的深分页问题，offset太大会导致需要加载大量数据进入内存进行排序，导致性能下降。
+导出需求可以使用scroll api进行分页查询，避免offset+limit的总和超过默认限制。
+如果是后台查询的需求，则可以通过增加查询条件控制结果集的数量。判断offset+limit的大小超过默认限制时，返回空结果集，给出提示即可。
+*/
 func SearchSaleOrder(ctx context.Context, req *SearchSaleOrderRequest) (SaleOrders, int64, int64, bool, error) {
 	// fun := "SearchSaleOrder-->"
 

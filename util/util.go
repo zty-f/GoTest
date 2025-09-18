@@ -12,6 +12,7 @@ import (
 	"math"
 	"reflect"
 	"regexp"
+	"runtime/debug"
 	"strconv"
 )
 
@@ -286,4 +287,50 @@ func ExtractAndIncrementChineseWeek(description string) (string, error) {
 	}
 	// 替换原描述中的中文数字
 	return re.ReplaceAllString(description, "第"+newChineseNum+"周"), nil
+}
+
+// 数组转 any数组
+func SliceToAny[T int | int32 | int64 | string](s []T) []any {
+	anyList := make([]any, 0, len(s))
+	for _, v := range s {
+		anyList = append(anyList, v)
+	}
+	return anyList
+}
+
+// 数组转字符串数组
+func SliceToString[T int | int32 | int64](s []T) []string {
+	strList := make([]string, 0, len(s))
+	for _, v := range s {
+		strList = append(strList, strconv.FormatInt(int64(v), 10))
+	}
+	return strList
+}
+
+// 数组转 int64数组
+func SliceToInt64[T int | int32](s []T) []int64 {
+	anyList := make([]int64, 0, len(s))
+	for _, v := range s {
+		anyList = append(anyList, int64(v))
+	}
+	return anyList
+}
+
+func SliceToAnyInt[T, S int | int32 | int64](s []T) []S {
+	anyList := make([]S, 0, len(s))
+	for _, v := range s {
+		anyList = append(anyList, S(v))
+	}
+	return anyList
+}
+
+func SafeGo(ctx context.Context, fun func()) {
+	defer func(ctx context.Context) {
+		if err := recover(); err != nil {
+			stack := string(debug.Stack())
+			fmt.Println(stack)
+			// xlog.Errorf(ctx, "SafeGo,Goroutine Recover: %+v, stack is %s", err, stack)
+		}
+	}(ctx)
+	fun()
 }
