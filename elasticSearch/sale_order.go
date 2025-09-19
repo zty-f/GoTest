@@ -3,8 +3,9 @@ package es
 import (
 	"context"
 	"encoding/json"
-	"github.com/olivere/elastic/v7"
 	"time"
+
+	"github.com/olivere/elastic/v7"
 )
 
 const BussTypeSaleOrder = "readcamp_sale_order"
