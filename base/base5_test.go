@@ -124,4 +124,5 @@ func TestBase5(t *testing.T) {
 	if beginTime == nil {
 		fmt.Println("nil")
 	}
+	fmt.Println(time.Now().AddDate(0, 0, -1).Unix())
 }
