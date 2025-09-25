@@ -1,6 +1,9 @@
 package algorithm
 
-import "testing"
+import (
+	"math"
+	"testing"
+)
 
 /*
 树的遍历
@@ -234,4 +237,92 @@ func max(a, b int) int {
 		return a
 	}
 	return b
+}
+
+/*
+//给你一个二叉树的根节点 root ，判断其是否是一个有效的二叉搜索树。
+// 有效 二叉搜索树定义如下：
+// 节点的左子树只包含 严格小于 当前节点的数。
+// 节点的右子树只包含 严格大于 当前节点的数。
+// 所有左子树和右子树自身必须也是二叉搜索树。
+*/
+func TestLeetCode98(t *testing.T) {
+	root := &TreeNode{
+		Val: 2,
+		Left: &TreeNode{
+			Val:   1,
+			Left:  nil,
+			Right: nil,
+		},
+		Right: &TreeNode{
+			Val:   3,
+			Left:  nil,
+			Right: nil,
+		},
+	}
+	/*
+	    3
+	   / \
+	  2   5
+	     / \
+	    4   6
+	*/ // 特点：中序遍历是递增数组
+	t.Log(isValidBST1(root))
+}
+
+// 解法1：理由二叉搜索树中序遍历单调递增的特点来判断-递归
+func isValidBST1(root *TreeNode) bool {
+	res := inorderTraversal1(root)
+	for i := 1; i < len(res); i++ {
+		if res[i] <= res[i-1] {
+			return false
+		}
+	}
+	return true
+}
+
+// 解法2：理由二叉搜索树中序遍历单调递增的特点来判断-迭代
+func isValidBST2(root *TreeNode) bool {
+	var stack []*TreeNode
+	inorder := math.MinInt64
+	for len(stack) > 0 || root != nil {
+		// 左子树入栈
+		for root != nil {
+			stack = append(stack, root)
+			root = root.Left
+		}
+		root = stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		if root.Val <= inorder {
+			return false
+		}
+		inorder = root.Val
+		root = root.Right
+	}
+	return true
+}
+
+/*
+    5
+  4   6
+     3  7
+*/
+// 解法3：递归
+/*
+函数表示考虑以 root 为根的子树，判断子树中所有节点的值是否都在 (l,r) 的范围内（注意是开区间）。
+如果 root 节点的值 val 不在 (l,r) 的范围内说明不满足条件直接返回，
+否则我们要继续递归调用检查它的左右子树是否满足，如果都满足才说明这是一棵二叉搜索树。
+*/
+func isValidBST3(root *TreeNode) bool {
+	return helper(root, math.MinInt64, math.MaxInt64)
+}
+
+func helper(root *TreeNode, lower, upper int) bool {
+	if root == nil {
+		return true
+	}
+	if root.Val <= lower || root.Val >= upper {
+		return false
+	}
+	return helper(root.Left, lower, root.Val) && helper(root.Right, root.Val, upper)
 }
