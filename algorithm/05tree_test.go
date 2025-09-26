@@ -59,6 +59,7 @@ func TestLeetCode94(t *testing.T) {
 	t.Log(inorderTraversal2(root))
 	// 前序
 	t.Log(preorderTraversal(root))
+	t.Log(preorderTraversal2(root))
 	// 后序
 	t.Log(postorderTraversal(root))
 }
@@ -79,7 +80,7 @@ func dfs(root *TreeNode, res *[]int) {
 	dfs(root.Right, res)
 }
 
-// 中序
+// 中序-递归
 func inorderTraversal2(root *TreeNode) []int {
 	res := make([]int, 0)
 	var dfs func(root *TreeNode)
@@ -95,7 +96,24 @@ func inorderTraversal2(root *TreeNode) []int {
 	return res
 }
 
-// 前序
+// 中序-迭代
+func inorderTraversal3(root *TreeNode) []int {
+	res := make([]int, 0)
+	queue := make([]*TreeNode, 0)
+	for root != nil || len(queue) > 0 {
+		for root != nil {
+			queue = append(queue, root)
+			root = root.Left
+		}
+		root = queue[len(queue)-1]
+		queue = queue[:len(queue)-1]
+		res = append(res, root.Val)
+		root = root.Right
+	}
+	return res
+}
+
+// 前序-递归
 func preorderTraversal(root *TreeNode) []int {
 	res := make([]int, 0)
 	var dfs func(root *TreeNode)
@@ -111,7 +129,23 @@ func preorderTraversal(root *TreeNode) []int {
 	return res
 }
 
-// 后序
+// 前序-迭代
+func preorderTraversal2(root *TreeNode) []int {
+	res := make([]int, 0)
+	queue := make([]*TreeNode, 0)
+	for root != nil || len(queue) > 0 {
+		for root != nil {
+			res = append(res, root.Val)
+			queue = append(queue, root)
+			root = root.Left
+		}
+		root = queue[len(queue)-1].Right
+		queue = queue[:len(queue)-1]
+	}
+	return res
+}
+
+// 后序-递归
 func postorderTraversal(root *TreeNode) []int {
 	res := make([]int, 0)
 	var dfs func(root *TreeNode)
@@ -124,6 +158,30 @@ func postorderTraversal(root *TreeNode) []int {
 		res = append(res, root.Val)
 	}
 	dfs(root)
+	return res
+}
+
+// 后序-迭代
+func postorderTraversal2(root *TreeNode) []int {
+	res := make([]int, 0)
+	var stk []*TreeNode
+	var prev *TreeNode
+	for root != nil || len(stk) > 0 {
+		for root != nil {
+			stk = append(stk, root)
+			root = root.Left
+		}
+		root = stk[len(stk)-1]
+		stk = stk[:len(stk)-1]
+		if root.Right == nil || root.Right == prev {
+			res = append(res, root.Val)
+			prev = root
+			root = nil
+		} else {
+			stk = append(stk, root)
+			root = root.Right
+		}
+	}
 	return res
 }
 
