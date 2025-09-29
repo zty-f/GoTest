@@ -126,3 +126,19 @@ func TestBase5(t *testing.T) {
 	}
 	fmt.Println(time.Now().AddDate(0, 0, -1).Unix())
 }
+
+func TestGetOaidFromString(t *testing.T) {
+	orderContext := `{"oaid":""}} Status:20 Ct:1758855067 Ut:1758855067 Note: EquityOpType:give Childs:[0xc000a17340]`
+	oaid := ""
+	// 其他广告来源，默认使用oaid,从order_context中解析
+	oaidIndex := strings.Index(orderContext, `"oaid"`)
+	if oaidIndex != -1 {
+		start := oaidIndex + len(`"oaid"`) + 2
+		fmt.Println(orderContext[start:])
+		end := strings.Index(orderContext[start:], `"`)
+		if end != -1 {
+			oaid = orderContext[start : start+end]
+		}
+	}
+	fmt.Println(oaid)
+}
