@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/spf13/cast"
+	"regexp"
 	"strings"
 	"testing"
 	"time"
@@ -128,7 +129,7 @@ func TestBase5(t *testing.T) {
 }
 
 func TestGetOaidFromString(t *testing.T) {
-	orderContext := `{"oaid":""}} Status:20 Ct:1758855067 Ut:1758855067 Note: EquityOpType:give Childs:[0xc000a17340]`
+	orderContext := `{"oaid":"8888"}} Status:20 Ct:1758855067 Ut:1758855067 Note: EquityOpType:give Childs:[0xc000a17340]`
 	oaid := ""
 	// 其他广告来源，默认使用oaid,从order_context中解析
 	oaidIndex := strings.Index(orderContext, `"oaid"`)
@@ -141,4 +142,13 @@ func TestGetOaidFromString(t *testing.T) {
 		}
 	}
 	fmt.Println(oaid)
+	oaid2 := ""
+	// 使用正则表达式提取 "oaid" 的值
+	re := regexp.MustCompile(`"oaid":"(.*?)"`)
+	matches := re.FindStringSubmatch(orderContext)
+	if len(matches) > 1 {
+		oaid2 = matches[1]
+	}
+
+	fmt.Println(oaid2)
 }
