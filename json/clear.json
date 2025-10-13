@@ -1,14 +1,45 @@
-[
-  {
-    "empId": "W008492",
-    "AccountId": "253387979282843967",
-    "ExternUid": "64105951196808e7b875a6c9"
-  },
-  {
-    "empId": "W008492",
-    "AccountId": "253387979282843967",
-    "ExternUid": "64105951196808e7b875a6c9"
-  }
-]
-(412811,412220,406379,410726,411854,412480,408462,412709,412236,412005,406275)
-3279577126 特殊处理
+{
+  "levelStudyData": [
+    {
+      "level": "1",
+      "explanation": 2,
+      "originalAudio": 4,
+      "practice": 1,
+      "readAloud": 0
+    }
+  ],
+  "levelAgeData": [
+    {
+      "level": "1",
+      "ageGroups": [
+        {
+          "type": "small",
+          "ageMin": 0,
+          "ageMax": 4,
+          "weights": {
+            "explanation": 2,
+            "originalAudio": 4,
+            "practice": 1,
+            "readAloud": 0
+          }
+        }
+      ]
+    }
+  ],
+  "levelGoalData": [
+    {
+      "level": "1",
+      "goalGroups": [
+        {
+          "goal": "understand",
+          "weights": {
+            "explanation": 2,
+            "originalAudio": 4,
+            "practice": 1,
+            "readAloud": 0
+          }
+        }
+      ]
+    }
+  ]
+}
