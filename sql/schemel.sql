@@ -84,3 +84,15 @@ CREATE TABLE `readcamp_chat_messages`
     KEY `idx_ftc` (`from_account`, `to_account`, `ct`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='用户聊天消息表';
+
+
+CREATE TABLE `readcamp_user_study_plan` (
+   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+   `uid` bigint(20) unsigned NOT NULL COMMENT '用户id',
+   `data` json NOT NULL COMMENT '用户学习计划填写数据',
+   `result` json NOT NULL COMMENT '用户学习计划结果',
+   `ct` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间戳',
+   `ut` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间戳',
+   PRIMARY KEY (`id`),
+   UNIQUE KEY `uniq_ui` (`uid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT ='用户学习计划表';
