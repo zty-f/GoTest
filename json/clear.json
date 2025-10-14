@@ -1,62 +1,62 @@
 {
-  "levelStudyData": [
-    {
+  "levelStudyData": {
+    "1": {
       "level": 1,
       "explanation": 8,
       "originalAudio": 2,
       "practice": 3,
       "readAloud": 5
     },
-    {
+    "2": {
       "level": 2,
       "explanation": 10,
       "originalAudio": 2,
       "practice": 3,
       "readAloud": 6
     },
-    {
+    "3": {
       "level": 3,
       "explanation": 12,
       "originalAudio": 3,
       "practice": 3,
       "readAloud": 6
     },
-    {
+    "4": {
       "level": 4,
       "explanation": 15,
       "originalAudio": 4,
       "practice": 3,
       "readAloud": 8
     },
-    {
+    "5": {
       "level": 5,
       "explanation": 20,
       "originalAudio": 6,
       "practice": 3,
       "readAloud": 8
     },
-    {
+    "6": {
       "level": 6,
       "explanation": 23,
       "originalAudio": 8,
       "practice": 5,
       "readAloud": 10
     },
-    {
+    "7": {
       "level": 7,
       "explanation": 25,
       "originalAudio": 8,
       "practice": 5,
       "readAloud": 10
     },
-    {
+    "8": {
       "level": 8,
       "explanation": 28,
       "originalAudio": 10,
       "practice": 6,
       "readAloud": 10
     }
-  ],
+  },
   "levelAgeData": [
     {
       "level": 1,

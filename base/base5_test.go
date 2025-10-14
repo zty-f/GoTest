@@ -152,3 +152,18 @@ func TestGetOaidFromString(t *testing.T) {
 
 	fmt.Println(oaid2)
 }
+
+func TestUnMarshal4(t *testing.T) {
+	var config []map[int]PrivacyConfig
+	str := `[{
+		"1": {"id": 1, "name": "学习时长"},
+		"2": {"id": 2, "name": "关注列表"},
+		"3": {"id": 3, "name": "关注者列表"},
+		"4": {"id": 4, "name": "毕业证书"}
+	}]`
+	err := json.Unmarshal([]byte(str), &config)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Printf("%+v\n", config)
+}
