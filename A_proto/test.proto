@@ -35,8 +35,10 @@ message UserStudyPlanCreateResp {
   int64 readAloud_num = 7;
   // 每日阅读本数
   int64 readBook_num = 8;
+  // 每本书阅读时长-多少分钟
+  string book_read_time = 9;
   // 每日提醒时间 14:00
-  string remind_time = 9;
+  string remind_time = 10;
 }
 
 message UserStudyPlanInfoReq {
@@ -60,8 +62,10 @@ message UserStudyPlanInfoResp {
   int64 readAloud_num = 7;
   // 每日阅读本数
   int64 readBook_num = 8;
+  // 每本书阅读时长-多少分钟
+  string book_read_time = 9;
   // 每日提醒时间 14:00
-  string remind_time = 9;
+  string remind_time = 10;
 }
 
 service UserCenterHttpService {
