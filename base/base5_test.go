@@ -166,4 +166,8 @@ func TestUnMarshal4(t *testing.T) {
 		fmt.Println(err)
 	}
 	fmt.Printf("%+v\n", config)
+
+	fmt.Println(max(1, 3))
+	fmt.Println(max(5, 3))
+	fmt.Println(max(6, 3))
 }
