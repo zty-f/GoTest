@@ -300,9 +300,8 @@
       ]
     }
   },
-  "levelGoalData": [
-    {
-      "level": 1,
+  "levelGoalData": {
+    "1":{
       "goalGroups": [
         {
           "goal": "NLL",
@@ -351,8 +350,7 @@
         }
       ]
     },
-    {
-      "level": 2,
+    "2":{
       "goalGroups": [
         {
           "goal": "NLL",
@@ -401,8 +399,7 @@
         }
       ]
     },
-    {
-      "level": 3,
+    "3":{
       "goalGroups": [
         {
           "goal": "NLL",
@@ -451,8 +448,7 @@
         }
       ]
     },
-    {
-      "level": 4,
+    "4":{
       "goalGroups": [
         {
           "goal": "NLL",
@@ -501,8 +497,7 @@
         }
       ]
     },
-    {
-      "level": 5,
+    "5":{
       "goalGroups": [
         {
           "goal": "NLL",
@@ -551,8 +546,7 @@
         }
       ]
     },
-    {
-      "level": 6,
+    "6":{
       "goalGroups": [
         {
           "goal": "NLL",
@@ -601,8 +595,7 @@
         }
       ]
     },
-    {
-      "level": 7,
+    "7":{
       "goalGroups": [
         {
           "goal": "NLL",
@@ -651,8 +644,7 @@
         }
       ]
     },
-    {
-      "level": 8,
+    "8":{
       "goalGroups": [
         {
           "goal": "NLL",
@@ -701,5 +693,5 @@
         }
       ]
     }
-  ]
+  }
 }
