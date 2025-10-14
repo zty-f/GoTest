@@ -14,31 +14,54 @@ message UserStudyPlanCreateReq {
   int64 study_time = 3;
   // 学习目标 NLL-母语听力 AR-自主阅读 KET-KET/中考 PET-PET/高考 FCE-FCE/超越高考
   string goal = 4;
-  // 提醒时间 时间戳-秒
-  int64 remind_time = 5;
+  // 每日提醒时间 14:00
+  string remind_time = 5;
 }
 
 message UserStudyPlanCreateResp {
   // 级别
   string level = 1;
   // 学习时长-多少分钟
-  string study_time = 3;
+  string study_time = 2;
   // 学习目标 NLL-母语听力 AR-自主阅读 KET-KET/中考 PET-PET/高考 FCE-FCE/超越高考
-  string goal = 4;
+  string goal = 3;
+  // 每日听讲解次数
+  int64 explanation_num = 4;
+  // 每日听原音次数
+  int64 originalAudio_num = 5;
+  // 每日练一练次数
+  int64 practice_num = 6;
+  // 每日跟读次数
+  int64 readAloud_num = 7;
+  // 每日阅读本数
+  int64 readBook_num = 8;
+  // 每日提醒时间 14:00
+  string remind_time = 9;
 }
 
 message UserStudyPlanInfoReq {
-  // 用户ID-不传默认为当前登录用户/传值代表查询指定用户
-  int64 uid = 1;
+
 }
 
 message UserStudyPlanInfoResp {
   // 级别
   string level = 1;
   // 学习时长-多少分钟
-  string study_time = 3;
+  string study_time = 2;
   // 学习目标 NLL-母语听力 AR-自主阅读 KET-KET/中考 PET-PET/高考 FCE-FCE/超越高考
-  string goal = 4;
+  string goal = 3;
+  // 每日听讲解次数
+  int64 explanation_num = 4;
+  // 每日听原音次数
+  int64 originalAudio_num = 5;
+  // 每日练一练次数
+  int64 practice_num = 6;
+  // 每日跟读次数
+  int64 readAloud_num = 7;
+  // 每日阅读本数
+  int64 readBook_num = 8;
+  // 每日提醒时间 14:00
+  string remind_time = 9;
 }
 
 service UserCenterHttpService {
