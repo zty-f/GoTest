@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/spf13/cast"
+	"math"
 	"regexp"
 	"strings"
 	"testing"
@@ -173,4 +174,7 @@ func TestUnMarshal4(t *testing.T) {
 	fmt.Println(2 / 1 * 3)
 	fmt.Println(2 * 1.00 / 2 * 3)
 	fmt.Println(1 * 1.00 / 2 * 3)
+	// 四舍五入取整
+	fmt.Println(int64(math.Round(float64(60) / float64(31))))
+	fmt.Println(int64(math.Round(float64(60) / float64(43))))
 }
