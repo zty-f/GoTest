@@ -170,4 +170,7 @@ func TestUnMarshal4(t *testing.T) {
 	fmt.Println(max(1, 3))
 	fmt.Println(max(5, 3))
 	fmt.Println(max(6, 3))
+	fmt.Println(2 / 1 * 3)
+	fmt.Println(2 * 1.00 / 2 * 3)
+	fmt.Println(1 * 1.00 / 2 * 3)
 }
