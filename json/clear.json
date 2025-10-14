@@ -302,8 +302,8 @@
   },
   "levelGoalData": {
     "1":{
-      "goalGroups": [
-        {
+      "goalGroups": {
+        "NLL":{
           "goal": "NLL",
           "weights": {
             "explanation": 2,
@@ -312,7 +312,7 @@
             "readAloud": 0
           }
         },
-        {
+        "AR":{
           "goal": "AR",
           "weights": {
             "explanation": 1,
@@ -321,7 +321,7 @@
             "readAloud": 2
           }
         },
-        {
+        "KET":{
           "goal": "KET",
           "weights": {
             "explanation": 1,
@@ -330,7 +330,7 @@
             "readAloud": 2
           }
         },
-        {
+        "PET":{
           "goal": "PET",
           "weights": {
             "explanation": 1,
@@ -339,7 +339,7 @@
             "readAloud": 2
           }
         },
-        {
+        "FCE":{
           "goal": "FCE",
           "weights": {
             "explanation": 1,
@@ -348,11 +348,11 @@
             "readAloud": 2
           }
         }
-      ]
+      }
     },
     "2":{
-      "goalGroups": [
-        {
+      "goalGroups": {
+        "NLL":{
           "goal": "NLL",
           "weights": {
             "explanation": 1,
@@ -361,7 +361,7 @@
             "readAloud": 1
           }
         },
-        {
+        "AR":{
           "goal": "AR",
           "weights": {
             "explanation": 1,
@@ -370,7 +370,7 @@
             "readAloud": 2
           }
         },
-        {
+        "KET":{
           "goal": "KET",
           "weights": {
             "explanation": 1,
@@ -379,7 +379,7 @@
             "readAloud": 2
           }
         },
-        {
+        "PET":{
           "goal": "PET",
           "weights": {
             "explanation": 1,
@@ -388,7 +388,7 @@
             "readAloud": 2
           }
         },
-        {
+        "FCE":{
           "goal": "FCE",
           "weights": {
             "explanation": 1,
@@ -397,11 +397,11 @@
             "readAloud": 2
           }
         }
-      ]
+      }
     },
     "3":{
-      "goalGroups": [
-        {
+      "goalGroups": {
+        "NLL":{
           "goal": "NLL",
           "weights": {
             "explanation": 1,
@@ -410,7 +410,7 @@
             "readAloud": 1
           }
         },
-        {
+        "AR":{
           "goal": "AR",
           "weights": {
             "explanation": 1,
@@ -419,7 +419,7 @@
             "readAloud": 2
           }
         },
-        {
+        "KET":{
           "goal": "KET",
           "weights": {
             "explanation": 1,
@@ -428,7 +428,7 @@
             "readAloud": 2
           }
         },
-        {
+        "PET":{
           "goal": "PET",
           "weights": {
             "explanation": 1,
@@ -437,7 +437,7 @@
             "readAloud": 2
           }
         },
-        {
+        "FCE":{
           "goal": "FCE",
           "weights": {
             "explanation": 1,
@@ -446,11 +446,11 @@
             "readAloud": 2
           }
         }
-      ]
+      }
     },
     "4":{
-      "goalGroups": [
-        {
+      "goalGroups": {
+        "NLL":{
           "goal": "NLL",
           "weights": {
             "explanation": 1,
@@ -459,7 +459,7 @@
             "readAloud": 1
           }
         },
-        {
+        "AR":{
           "goal": "AR",
           "weights": {
             "explanation": 1,
@@ -468,7 +468,7 @@
             "readAloud": 2
           }
         },
-        {
+        "KET":{
           "goal": "KET",
           "weights": {
             "explanation": 1,
@@ -477,7 +477,7 @@
             "readAloud": 2
           }
         },
-        {
+        "PET":{
           "goal": "PET",
           "weights": {
             "explanation": 1,
@@ -486,7 +486,7 @@
             "readAloud": 2
           }
         },
-        {
+        "FCE":{
           "goal": "FCE",
           "weights": {
             "explanation": 1,
@@ -495,11 +495,11 @@
             "readAloud": 2
           }
         }
-      ]
+      }
     },
     "5":{
-      "goalGroups": [
-        {
+      "goalGroups": {
+        "NLL":{
           "goal": "NLL",
           "weights": {
             "explanation": 1,
@@ -508,7 +508,7 @@
             "readAloud": 1
           }
         },
-        {
+        "AR":{
           "goal": "AR",
           "weights": {
             "explanation": 1,
@@ -517,7 +517,7 @@
             "readAloud": 2
           }
         },
-        {
+        "KET":{
           "goal": "KET",
           "weights": {
             "explanation": 1,
@@ -526,7 +526,7 @@
             "readAloud": 2
           }
         },
-        {
+        "PET":{
           "goal": "PET",
           "weights": {
             "explanation": 1,
@@ -535,7 +535,7 @@
             "readAloud": 2
           }
         },
-        {
+        "FCE":{
           "goal": "FCE",
           "weights": {
             "explanation": 1,
@@ -544,11 +544,11 @@
             "readAloud": 2
           }
         }
-      ]
+      }
     },
     "6":{
-      "goalGroups": [
-        {
+      "goalGroups": {
+        "NLL":{
           "goal": "NLL",
           "weights": {
             "explanation": 1,
@@ -557,7 +557,7 @@
             "readAloud": 1
           }
         },
-        {
+        "AR":{
           "goal": "AR",
           "weights": {
             "explanation": 1,
@@ -566,7 +566,7 @@
             "readAloud": 2
           }
         },
-        {
+        "KET":{
           "goal": "KET",
           "weights": {
             "explanation": 1,
@@ -575,7 +575,7 @@
             "readAloud": 2
           }
         },
-        {
+        "PET":{
           "goal": "PET",
           "weights": {
             "explanation": 1,
@@ -584,7 +584,7 @@
             "readAloud": 2
           }
         },
-        {
+        "FCE":{
           "goal": "FCE",
           "weights": {
             "explanation": 1,
@@ -593,11 +593,11 @@
             "readAloud": 2
           }
         }
-      ]
+      }
     },
     "7":{
-      "goalGroups": [
-        {
+      "goalGroups": {
+        "NLL":{
           "goal": "NLL",
           "weights": {
             "explanation": 1,
@@ -606,7 +606,7 @@
             "readAloud": 1
           }
         },
-        {
+        "AR":{
           "goal": "AR",
           "weights": {
             "explanation": 1,
@@ -615,7 +615,7 @@
             "readAloud": 1
           }
         },
-        {
+        "KET":{
           "goal": "KET",
           "weights": {
             "explanation": 1,
@@ -624,7 +624,7 @@
             "readAloud": 1
           }
         },
-        {
+        "PET":{
           "goal": "PET",
           "weights": {
             "explanation": 1,
@@ -633,7 +633,7 @@
             "readAloud": 1
           }
         },
-        {
+        "FCE":{
           "goal": "FCE",
           "weights": {
             "explanation": 1,
@@ -642,11 +642,11 @@
             "readAloud": 1
           }
         }
-      ]
+      }
     },
     "8":{
-      "goalGroups": [
-        {
+      "goalGroups": {
+        "NLL":{
           "goal": "NLL",
           "weights": {
             "explanation": 1,
@@ -655,7 +655,7 @@
             "readAloud": 1
           }
         },
-        {
+        "AR":{
           "goal": "AR",
           "weights": {
             "explanation": 1,
@@ -664,7 +664,7 @@
             "readAloud": 1
           }
         },
-        {
+        "KET":{
           "goal": "KET",
           "weights": {
             "explanation": 1,
@@ -673,7 +673,7 @@
             "readAloud": 1
           }
         },
-        {
+        "PET":{
           "goal": "PET",
           "weights": {
             "explanation": 1,
@@ -682,7 +682,7 @@
             "readAloud": 1
           }
         },
-        {
+        "FCE":{
           "goal": "FCE",
           "weights": {
             "explanation": 1,
@@ -691,7 +691,7 @@
             "readAloud": 1
           }
         }
-      ]
+      }
     }
   }
 }
