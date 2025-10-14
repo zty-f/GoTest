@@ -57,9 +57,8 @@
       "readAloud": 10
     }
   },
-  "levelAgeData": [
-    {
-      "level": 1,
+  "levelAgeData": {
+    "1":{
       "ageGroups": [
         {
           "type": "small",
@@ -96,8 +95,7 @@
         }
       ]
     },
-    {
-      "level": 2,
+    "2":{
       "ageGroups": [
         {
           "type": "small",
@@ -134,8 +132,7 @@
         }
       ]
     },
-    {
-      "level": 3,
+    "3":{
       "ageGroups": [
         {
           "type": "small",
@@ -172,8 +169,7 @@
         }
       ]
     },
-    {
-      "level": 4,
+    "4":{
       "ageGroups": [
         {
           "type": "small",
@@ -199,8 +195,7 @@
         }
       ]
     },
-    {
-      "level": 5,
+    "5":{
       "ageGroups": [
         {
           "type": "small",
@@ -226,8 +221,7 @@
         }
       ]
     },
-    {
-      "level": 6,
+    "6":{
       "ageGroups": [
         {
           "type": "small",
@@ -253,8 +247,7 @@
         }
       ]
     },
-    {
-      "level": 7,
+    "7":{
       "ageGroups": [
         {
           "type": "small",
@@ -280,8 +273,7 @@
         }
       ]
     },
-    {
-      "level": 8,
+    "8":{
       "ageGroups": [
         {
           "type": "small",
@@ -307,7 +299,7 @@
         }
       ]
     }
-  ],
+  },
   "levelGoalData": [
     {
       "level": 1,
