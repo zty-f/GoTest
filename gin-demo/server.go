@@ -13,7 +13,7 @@ import (
 	"math/rand"
 	"mime/multipart"
 	"strings"
-	excel "test/generate-excel"
+	excel "test/excel"
 	"test/gin-demo/model"
 	"test/http/resp"
 	"test/logger"
