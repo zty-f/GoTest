@@ -177,4 +177,5 @@ func TestUnMarshal4(t *testing.T) {
 	// 四舍五入取整
 	fmt.Println(int64(math.Round(float64(60) / float64(31))))
 	fmt.Println(int64(math.Round(float64(60) / float64(43))))
+	fmt.Println(cast.ToInt64("")) // 0
 }
