@@ -43,7 +43,7 @@ func (e *ExcelExporter) AddBookSheet(bookData *APIResponse) error {
 
 	// 设置列宽
 	e.file.SetColWidth(sheetName, "A", "A", 8)  // 页码
-	e.file.SetColWidth(sheetName, "B", "B", 20) // 绘本内容（图片列）- 适中的宽度
+	e.file.SetColWidth(sheetName, "B", "B", 15) // 绘本内容（图片列）- 2cm约等于9个字符宽度
 	e.file.SetColWidth(sheetName, "C", "C", 30) // 英文字幕原文
 	e.file.SetColWidth(sheetName, "D", "D", 30) // 中文翻译原文
 	e.file.SetColWidth(sheetName, "E", "E", 20) // 英文字母音频
@@ -222,15 +222,19 @@ func (e *ExcelExporter) insertImage(sheetName, cell, imagePath string) error {
 	if err != nil {
 		return fmt.Errorf("解析单元格坐标失败: %v", err)
 	}
-	e.file.SetRowHeight(sheetName, row, 60) // 设置行高为60点，适中的高度
+	e.file.SetRowHeight(sheetName, row, 56) // 设置行高为56.7点，约等于2cm
 
 	fmt.Printf("尝试插入图片: %s\n", imagePath)
 
 	// 使用文档中的标准方法插入图片
 	err = e.file.AddPicture(sheetName, cell, imagePath, &excelize.GraphicOptions{
-		LockAspectRatio: true,      // 锁定宽高比
+		ScaleX:          1.0,       // 不缩放，让AutoFit控制大小
+		ScaleY:          1.0,       // 不缩放，让AutoFit控制大小
+		OffsetX:         0,         // 无偏移，完全嵌入
+		OffsetY:         0,         // 无偏移，完全嵌入
+		LockAspectRatio: false,     // 锁定宽高比
 		AutoFit:         true,      // 自动适应单元格大小
-		Positioning:     "twoCell", // 固定在单元格内
+		Positioning:     "oneCell", // 固定在单个单元格内
 	})
 
 	if err != nil {
