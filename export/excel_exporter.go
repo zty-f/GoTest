@@ -55,7 +55,17 @@ func (e *ExcelExporter) AddBookSheet(bookData *APIResponse) error {
 	row++
 
 	e.file.SetCellValue(sheetName, fmt.Sprintf("A%d", row), "绘本封面")
-	e.file.SetCellValue(sheetName, fmt.Sprintf("B%d", row), bookData.Data.Ent.BookInfo.Cover.Origin)
+	// 尝试插入封面图片
+	coverPath := e.getCoverPath(bookTitle)
+	if coverPath != "" {
+		if err := e.insertImage(sheetName, fmt.Sprintf("B%d", row), coverPath); err != nil {
+			// 如果插入图片失败，显示URL
+			e.file.SetCellValue(sheetName, fmt.Sprintf("B%d", row), bookData.Data.Ent.BookInfo.Cover.Origin)
+			fmt.Printf("插入封面图片失败: %v\n", err)
+		}
+	} else {
+		e.file.SetCellValue(sheetName, fmt.Sprintf("B%d", row), bookData.Data.Ent.BookInfo.Cover.Origin)
+	}
 	row++
 
 	// 添加空行
@@ -183,6 +193,22 @@ func (e *ExcelExporter) getAudioPath(bookTitle string, pageIndex int) string {
 	return ""
 }
 
+// getCoverPath 获取封面图片路径
+func (e *ExcelExporter) getCoverPath(bookTitle string) string {
+	cleanTitle := cleanFileName(bookTitle)
+	imageDir := filepath.Join(e.outputDir, cleanTitle, "图片")
+
+	// 尝试不同的封面图片格式
+	extensions := []string{".jpg", ".jpeg", ".png", ".gif", ".bmp"}
+	for _, ext := range extensions {
+		coverPath := filepath.Join(imageDir, fmt.Sprintf("封面%s", ext))
+		if _, err := os.Stat(coverPath); err == nil {
+			return coverPath
+		}
+	}
+	return ""
+}
+
 // insertImage 插入图片到Excel单元格
 func (e *ExcelExporter) insertImage(sheetName, cell, imagePath string) error {
 	// 检查图片文件是否存在
@@ -201,10 +227,6 @@ func (e *ExcelExporter) insertImage(sheetName, cell, imagePath string) error {
 
 	// 使用文档中的标准方法插入图片
 	err = e.file.AddPicture(sheetName, cell, imagePath, &excelize.GraphicOptions{
-		// ScaleX:          2.0, // 缩放比例，控制图片大小
-		// ScaleY:          2.0,
-		// OffsetX:         2, // 减少偏移量
-		// OffsetY:         2,
 		LockAspectRatio: true,      // 锁定宽高比
 		AutoFit:         true,      // 自动适应单元格大小
 		Positioning:     "twoCell", // 固定在单元格内
