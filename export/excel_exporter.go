@@ -106,14 +106,15 @@ func (e *ExcelExporter) AddBookSheet(bookData *APIResponse) error {
 		// 英文字母音频（创建超链接）
 		audioPath := e.getAudioPath(bookTitle, page.Index)
 		if audioPath != "" {
-			// 创建超链接
+			// 创建超链接 - 使用file://协议指向本地文件
 			if err := e.file.SetCellHyperLink(sheetName, fmt.Sprintf("E%d", row), audioPath, "External"); err != nil {
-				e.file.SetCellValue(sheetName, fmt.Sprintf("E%d", row), audioPath)
+				e.file.SetCellValue(sheetName, fmt.Sprintf("E%d", row), fmt.Sprintf("音频%d (链接失败)", page.Index))
+				fmt.Printf("创建音频超链接失败: %v\n", err)
 			} else {
-				e.file.SetCellValue(sheetName, fmt.Sprintf("E%d", row), fmt.Sprintf("音频%d", page.Index))
+				e.file.SetCellValue(sheetName, fmt.Sprintf("E%d", row), fmt.Sprintf("🎵 音频%d", page.Index))
 			}
 		} else {
-			e.file.SetCellValue(sheetName, fmt.Sprintf("E%d", row), "音频未找到")
+			e.file.SetCellValue(sheetName, fmt.Sprintf("E%d", row), fmt.Sprintf("音频%d (未找到)", page.Index))
 		}
 
 		row++
