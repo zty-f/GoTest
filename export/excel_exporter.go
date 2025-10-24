@@ -76,6 +76,23 @@ func (e *ExcelExporter) AddBookSheet(bookData *APIResponse) error {
 	for i, header := range headers {
 		cell := fmt.Sprintf("%c%d", 'A'+i, row)
 		e.file.SetCellValue(sheetName, cell, header)
+		// 设置表头字体为加粗
+		style, err := e.file.NewStyle(&excelize.Style{
+			Font: &excelize.Font{
+				Bold:   true,
+				Italic: true,
+				Family: "Times New Roman",
+			},
+			// 居中
+			Alignment: &excelize.Alignment{
+				Horizontal: "center",
+				Vertical:   "center",
+			},
+		})
+		if err != nil {
+			fmt.Println(err)
+		}
+		e.file.SetCellStyle(sheetName, cell, cell, style)
 	}
 	row++
 
