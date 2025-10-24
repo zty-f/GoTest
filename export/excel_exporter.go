@@ -2,6 +2,9 @@ package main
 
 import (
 	"fmt"
+	_ "image/gif"
+	_ "image/jpeg"
+	_ "image/png"
 	"os"
 	"path/filepath"
 	"strings"
@@ -11,13 +14,15 @@ import (
 
 // ExcelExporter Excel导出器
 type ExcelExporter struct {
-	file *excelize.File
+	file      *excelize.File
+	outputDir string
 }
 
 // NewExcelExporter 创建新的Excel导出器
-func NewExcelExporter() *ExcelExporter {
+func NewExcelExporter(outputDir string) *ExcelExporter {
 	return &ExcelExporter{
-		file: excelize.NewFile(),
+		file:      excelize.NewFile(),
+		outputDir: outputDir,
 	}
 }
 
@@ -35,6 +40,13 @@ func (e *ExcelExporter) AddBookSheet(bookData *APIResponse) error {
 
 	// 设置活动工作表
 	e.file.SetActiveSheet(index)
+
+	// 设置列宽
+	e.file.SetColWidth(sheetName, "A", "A", 8)  // 页码
+	e.file.SetColWidth(sheetName, "B", "B", 20) // 绘本内容（图片列）- 适中的宽度
+	e.file.SetColWidth(sheetName, "C", "C", 30) // 英文字幕原文
+	e.file.SetColWidth(sheetName, "D", "D", 30) // 中文翻译原文
+	e.file.SetColWidth(sheetName, "E", "E", 20) // 英文字母音频
 
 	// 写入绘本信息
 	row := 1
@@ -62,8 +74,18 @@ func (e *ExcelExporter) AddBookSheet(bookData *APIResponse) error {
 		// 页码
 		e.file.SetCellValue(sheetName, fmt.Sprintf("A%d", row), page.Index)
 
-		// 绘本内容（背景图片URL）
-		e.file.SetCellValue(sheetName, fmt.Sprintf("B%d", row), page.BGPicture)
+		// 绘本内容（插入图片）
+		imagePath := e.getImagePath(bookTitle, page.Index)
+		if imagePath != "" {
+			// 插入图片到单元格
+			if err := e.insertImage(sheetName, fmt.Sprintf("B%d", row), imagePath); err != nil {
+				// 如果插入图片失败，显示提示信息而不是路径
+				e.file.SetCellValue(sheetName, fmt.Sprintf("B%d", row), fmt.Sprintf("图片%d (插入失败)", page.Index))
+				fmt.Printf("插入图片失败: %v\n", err)
+			}
+		} else {
+			e.file.SetCellValue(sheetName, fmt.Sprintf("B%d", row), fmt.Sprintf("图片%d (未找到)", page.Index))
+		}
 
 		// 英文字幕原文
 		e.file.SetCellValue(sheetName, fmt.Sprintf("C%d", row), page.ListenText)
@@ -71,18 +93,21 @@ func (e *ExcelExporter) AddBookSheet(bookData *APIResponse) error {
 		// 中文翻译原文
 		e.file.SetCellValue(sheetName, fmt.Sprintf("D%d", row), page.Translation)
 
-		// 英文字母音频
-		e.file.SetCellValue(sheetName, fmt.Sprintf("E%d", row), page.ListenAudioURL)
+		// 英文字母音频（创建超链接）
+		audioPath := e.getAudioPath(bookTitle, page.Index)
+		if audioPath != "" {
+			// 创建超链接
+			if err := e.file.SetCellHyperLink(sheetName, fmt.Sprintf("E%d", row), audioPath, "External"); err != nil {
+				e.file.SetCellValue(sheetName, fmt.Sprintf("E%d", row), audioPath)
+			} else {
+				e.file.SetCellValue(sheetName, fmt.Sprintf("E%d", row), fmt.Sprintf("音频%d", page.Index))
+			}
+		} else {
+			e.file.SetCellValue(sheetName, fmt.Sprintf("E%d", row), "音频未找到")
+		}
 
 		row++
 	}
-
-	// 设置列宽
-	e.file.SetColWidth(sheetName, "A", "A", 10) // 页码
-	e.file.SetColWidth(sheetName, "B", "B", 50) // 绘本内容
-	e.file.SetColWidth(sheetName, "C", "C", 30) // 英文字幕原文
-	e.file.SetColWidth(sheetName, "D", "D", 30) // 中文翻译原文
-	e.file.SetColWidth(sheetName, "E", "E", 50) // 英文字母音频
 
 	return nil
 }
@@ -128,4 +153,67 @@ func cleanSheetName(name string) string {
 	}
 
 	return cleanName
+}
+
+// getImagePath 获取图片文件路径
+func (e *ExcelExporter) getImagePath(bookTitle string, pageIndex int) string {
+	cleanTitle := cleanFileName(bookTitle)
+	imageDir := filepath.Join(e.outputDir, cleanTitle, "图片")
+
+	// 尝试不同的图片格式
+	extensions := []string{".jpg", ".jpeg", ".png", ".gif", ".bmp"}
+	for _, ext := range extensions {
+		imagePath := filepath.Join(imageDir, fmt.Sprintf("%d%s", pageIndex, ext))
+		if _, err := os.Stat(imagePath); err == nil {
+			return imagePath
+		}
+	}
+	return ""
+}
+
+// getAudioPath 获取音频文件路径
+func (e *ExcelExporter) getAudioPath(bookTitle string, pageIndex int) string {
+	cleanTitle := cleanFileName(bookTitle)
+	audioPath := filepath.Join(e.outputDir, cleanTitle, "音频", fmt.Sprintf("%d.mp3", pageIndex))
+
+	// 检查文件是否存在
+	if _, err := os.Stat(audioPath); err == nil {
+		return audioPath
+	}
+	return ""
+}
+
+// insertImage 插入图片到Excel单元格
+func (e *ExcelExporter) insertImage(sheetName, cell, imagePath string) error {
+	// 检查图片文件是否存在
+	if _, err := os.Stat(imagePath); os.IsNotExist(err) {
+		return fmt.Errorf("图片文件不存在: %s", imagePath)
+	}
+	// 设置行高以适应图片
+	_, row, err := excelize.CellNameToCoordinates(cell)
+	fmt.Printf("成功解析单元格坐标: %s -> 行: %d\n", cell, row)
+	if err != nil {
+		return fmt.Errorf("解析单元格坐标失败: %v", err)
+	}
+	e.file.SetRowHeight(sheetName, row, 60) // 设置行高为60点，适中的高度
+
+	fmt.Printf("尝试插入图片: %s\n", imagePath)
+
+	// 使用文档中的标准方法插入图片
+	err = e.file.AddPicture(sheetName, cell, imagePath, &excelize.GraphicOptions{
+		// ScaleX:          2.0, // 缩放比例，控制图片大小
+		// ScaleY:          2.0,
+		// OffsetX:         2, // 减少偏移量
+		// OffsetY:         2,
+		LockAspectRatio: true,      // 锁定宽高比
+		AutoFit:         true,      // 自动适应单元格大小
+		Positioning:     "twoCell", // 固定在单元格内
+	})
+
+	if err != nil {
+		return fmt.Errorf("添加图片失败: %v", err)
+	}
+
+	fmt.Printf("成功插入图片: %s\n", imagePath)
+	return nil
 }

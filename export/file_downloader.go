@@ -77,7 +77,7 @@ func (d *FileDownloader) DownloadFile(url, filePath string) error {
 }
 
 // DownloadBookFiles 下载绘本的所有文件
-func (d *FileDownloader) DownloadBookFiles(bookData *APIResponse, outputDir string) error {
+func (d *FileDownloader) DownloadBookFiles(bookData *APIResponse, outputDir string) (*DownloadResult, error) {
 	bookTitle := bookData.Data.Ent.BookInfo.Title
 	// 清理文件名中的特殊字符
 	cleanTitle := cleanFileName(bookTitle)
@@ -89,10 +89,17 @@ func (d *FileDownloader) DownloadBookFiles(bookData *APIResponse, outputDir stri
 
 	// 创建目录
 	if err := os.MkdirAll(imageDir, 0755); err != nil {
-		return fmt.Errorf("创建图片目录失败: %v", err)
+		return nil, fmt.Errorf("创建图片目录失败: %v", err)
 	}
 	if err := os.MkdirAll(audioDir, 0755); err != nil {
-		return fmt.Errorf("创建音频目录失败: %v", err)
+		return nil, fmt.Errorf("创建音频目录失败: %v", err)
+	}
+
+	// 初始化下载结果
+	result := &DownloadResult{
+		BookTitle:  bookTitle,
+		ImagePaths: make(map[int]string),
+		AudioPaths: make(map[int]string),
 	}
 
 	// 下载封面
@@ -101,6 +108,8 @@ func (d *FileDownloader) DownloadBookFiles(bookData *APIResponse, outputDir stri
 		coverPath := filepath.Join(imageDir, "封面.jpg")
 		if err := d.DownloadFile(coverURL, coverPath); err != nil {
 			fmt.Printf("下载封面失败: %v\n", err)
+		} else {
+			result.CoverPath = coverPath
 		}
 	}
 
@@ -111,6 +120,24 @@ func (d *FileDownloader) DownloadBookFiles(bookData *APIResponse, outputDir stri
 			imagePath := filepath.Join(imageDir, fmt.Sprintf("%d.jpg", page.Index))
 			if err := d.DownloadFile(page.BGPicture, imagePath); err != nil {
 				fmt.Printf("下载第%d页图片失败: %v\n", page.Index, err)
+			} else {
+				// 检查下载的文件是否为有效图片
+				if d.isValidImage(imagePath) {
+					result.ImagePaths[page.Index] = imagePath
+				} else {
+					fmt.Printf("第%d页图片格式无效，尝试其他扩展名\n", page.Index)
+					// 尝试其他扩展名
+					extensions := []string{".png", ".jpeg", ".gif", ".bmp"}
+					for _, ext := range extensions {
+						newPath := filepath.Join(imageDir, fmt.Sprintf("%d%s", page.Index, ext))
+						if err := d.DownloadFile(page.BGPicture, newPath); err == nil && d.isValidImage(newPath) {
+							result.ImagePaths[page.Index] = newPath
+							// 删除原来的jpg文件
+							os.Remove(imagePath)
+							break
+						}
+					}
+				}
 			}
 		}
 
@@ -119,11 +146,13 @@ func (d *FileDownloader) DownloadBookFiles(bookData *APIResponse, outputDir stri
 			audioPath := filepath.Join(audioDir, fmt.Sprintf("%d.mp3", page.Index))
 			if err := d.DownloadFile(page.ListenAudioURL, audioPath); err != nil {
 				fmt.Printf("下载第%d页音频失败: %v\n", page.Index, err)
+			} else {
+				result.AudioPaths[page.Index] = audioPath
 			}
 		}
 	}
 
-	return nil
+	return result, nil
 }
 
 // cleanFileName 清理文件名中的特殊字符
@@ -142,4 +171,32 @@ func cleanFileName(filename string) string {
 		" ", "_",
 	)
 	return replacer.Replace(filename)
+}
+
+// isValidImage 检查文件是否为有效的图片
+func (d *FileDownloader) isValidImage(filePath string) bool {
+	file, err := os.Open(filePath)
+	if err != nil {
+		return false
+	}
+	defer file.Close()
+
+	// 读取文件头部的几个字节来检测图片格式
+	buffer := make([]byte, 512)
+	_, err = file.Read(buffer)
+	if err != nil {
+		return false
+	}
+
+	// 检查常见的图片格式的文件头
+	contentType := http.DetectContentType(buffer)
+	return strings.HasPrefix(contentType, "image/")
+}
+
+// DownloadResult 下载结果
+type DownloadResult struct {
+	BookTitle  string
+	ImagePaths map[int]string // 页码 -> 图片路径
+	AudioPaths map[int]string // 页码 -> 音频路径
+	CoverPath  string         // 封面路径
 }

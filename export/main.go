@@ -26,7 +26,7 @@ func main() {
 	// 初始化组件
 	apiClient := NewAPIClient(config.APIURL, config.Cookie)
 	fileDownloader := NewFileDownloader()
-	excelExporter := NewExcelExporter()
+	excelExporter := NewExcelExporter(config.OutputDir)
 
 	fmt.Printf("开始处理 %d 个绘本...\n", len(config.BookIDs))
 
@@ -47,10 +47,16 @@ func main() {
 
 		// 下载文件
 		fmt.Printf("正在下载文件...\n")
-		if err := fileDownloader.DownloadBookFiles(bookData, config.OutputDir); err != nil {
+		downloadResult, err := fileDownloader.DownloadBookFiles(bookData, config.OutputDir)
+		if err != nil {
 			log.Printf("下载文件失败 (ID: %d): %v", bookID, err)
 		} else {
 			fmt.Printf("文件下载完成\n")
+			fmt.Printf("  - 下载了 %d 张图片\n", len(downloadResult.ImagePaths))
+			fmt.Printf("  - 下载了 %d 个音频文件\n", len(downloadResult.AudioPaths))
+			if downloadResult.CoverPath != "" {
+				fmt.Printf("  - 封面: %s\n", downloadResult.CoverPath)
+			}
 		}
 
 		// 添加到Excel
