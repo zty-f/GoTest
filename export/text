@@ -1,0 +1,328 @@
+请求curl:
+curl 'https://sea.pri.ibanyu.com/picturebookopapi/ugc/picturebook/boutique/book/page/get' \
+  -H 'accept: application/json, text/plain, */*' \
+  -H 'accept-language: zh-CN,zh;q=0.9' \
+  -H 'content-type: application/json;charset=UTF-8' \
+  -b 'ipalfish_device_id=e416b0ae2221b84cfa8a84f87b7ace73; _ga=GA1.1.952297019.1743422236; _ga_89WN60ZK2E=GS2.1.s1747893991$o2$g0$t1747893991$j0$l0$h0; did=17483382255380000; utype=op; user=zhangtianyong26331; id=NDAyNTA=; name=5byg5aSp5rOz; phone=ODYtMTM0NTg4MzgyNDg=; logintype=0; lang=zh-cn; groups=WyJkdXdvIiwiNzAwMTg2OTI4IiwicmQiLCI3MDAxNzI3MDIiLCJkZWZhdWx0Il0=; token=275422a3dd89dace07504a935d1d573e' \
+  -H 'origin: https://sea.pri.ibanyu.com' \
+  -H 'priority: u=1, i' \
+  -H 'referer: https://sea.pri.ibanyu.com/character-admin/' \
+  -H 'sec-ch-ua: "Google Chrome";v="141", "Not?A_Brand";v="8", "Chromium";v="141"' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'sec-ch-ua-platform: "macOS"' \
+  -H 'sec-fetch-dest: empty' \
+  -H 'sec-fetch-mode: cors' \
+  -H 'sec-fetch-site: same-origin' \
+  -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36' \
+  --data-raw '{"bookid":465442971693328}'
+响应示例：
+{
+    "ret": 1,
+    "code": 0,
+    "data": {
+        "ent": {
+            "bookinfo": {
+                "bookid": 465442971693328,
+                "level": 0,
+                "title": "The Lunch Box",
+                "cover": {
+                    "tiny": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/68/e4/689ed0e3525a045b03615f2ebdb9",
+                    "origin": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/5e/dc/8def6c558803e587962492967e24",
+                    "w": 600,
+                    "h": 708
+                },
+                "ct": 1642067076,
+                "ut": 1656944908,
+                "state": 2,
+                "domain": "",
+                "downloads": 0,
+                "resid": 0,
+                "screen": 0,
+                "top": 0,
+                "flag": 0,
+                "playcount": 407825,
+                "pagecount": 0,
+                "score": 0,
+                "version": 0,
+                "lock": 0,
+                "recordstate": 20,
+                "topicstate": 0,
+                "vocabulary": 0,
+                "difficulty": 1,
+                "isvip": false,
+                "isstoproll": false,
+                "topicid": 0,
+                "topicbookindex": 0,
+                "vipbubble": false,
+                "newbubble": false,
+                "recordbubble": false,
+                "onlinetime": 0,
+                "readbubble": false,
+                "themeinfos": null,
+                "notinpicgallery": false,
+                "tags": [
+                    "字母认知",
+                    "趣味故事",
+                    "习惯培养"
+                ],
+                "words": null,
+                "introduction": "伊森的午餐盒绑带松了，哥哥一直提醒他修，但因为是暑假，伊森总说不着急。这天，Ethan在午餐盒里装了六块曲奇，可是当他打开午餐盒时，却只剩五块了。第六块曲奇去哪儿了呢？",
+                "voicetype": 2,
+                "pressid": 91003,
+                "booktype": 2,
+                "illustrator": "",
+                "translator": "",
+                "writer": "",
+                "bgm": "",
+                "firstclassifyid": 0,
+                "secondclassifyid": 0,
+                "paytype": 2,
+                "sort": 0,
+                "levellist": null,
+                "createrid": 465442971687182,
+                "lastupdateid": 478847638135052,
+                "avescore": 0,
+                "learnlink": [
+                    1,
+                    2,
+                    3,
+                    4
+                ],
+                "reprice": 0,
+                "bookprice": "",
+                "difficultyname": "A",
+                "explainvideo": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/a9/be/8c35066ad44215344cc2af226a82",
+                "listenvideo": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/71/f1/cc2a41f38d9b3c2831171f804a17",
+                "explainvideostate": 2,
+                "listenvideostate": 2,
+                "bg_picture": ""
+            },
+            "pageinfos": [
+                {
+                    "pageid": 465445577810190,
+                    "imageurl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/07/96/dfeb94cc3b7e679a7d8f9d015c0d",
+                    "listentext": "Xx",
+                    "listenaudiourl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/6e/bb/caa41db9ba6f843dd762dc37a090",
+                    "explainaudiourl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/94/e3/e7e95d347cc4ef56debbe14d8af5",
+                    "recordtext": "Xx",
+                    "recordaudiourl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/6e/bb/caa41db9ba6f843dd762dc37a090",
+                    "ext": "{\"elements\":[],\"timeline\":[],\"baseInfo\":{\"sizeType\":2}}",
+                    "picture": {
+                        "tiny": "",
+                        "origin": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/07/96/dfeb94cc3b7e679a7d8f9d015c0d",
+                        "w": 0,
+                        "h": 0
+                    },
+                    "translation": "字母Xx",
+                    "hasteach": true,
+                    "hasrecord": true,
+                    "index": 1,
+                    "listentext_pinyin": "",
+                    "recordtext_pinyin": "",
+                    "is_open_lp": false,
+                    "is_open_rp": false,
+                    "bg_picture": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/d6/9b/c747d890f62b4d350ad32ca043db",
+                    "listenofficialevaluation": "{\"recordid\":465446573463820,\"totalscore\":{\"content\":\"Xx\",\"score\":100,\"rank\":3,\"index\":0,\"startts\":0,\"endts\":0},\"wordscore\":[{\"content\":\"Xx\",\"score\":90,\"rank\":3,\"index\":0,\"startts\":0,\"endts\":0}],\"productid\":465446572349712,\"ut\":1642068840}",
+                    "recordofficialevaluation": "{\"recordid\":465446573496588,\"totalscore\":{\"content\":\"Xx\",\"score\":100,\"rank\":3,\"index\":0,\"startts\":0,\"endts\":0},\"wordscore\":[{\"content\":\"Xx\",\"score\":90,\"rank\":3,\"index\":0,\"startts\":0,\"endts\":0}],\"productid\":465446573105424,\"ut\":1642068844}",
+                    "scoretext": ""
+                },
+                {
+                    "pageid": 465445619579148,
+                    "imageurl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/d2/86/d8a8c1f80d70ef13189ec352bf97",
+                    "listentext": "Broken Lunch box.",
+                    "listenaudiourl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/47/80/e15d72a6f104e6e73c1e6849d2c0",
+                    "explainaudiourl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/cd/65/cdc5a08eb0b3c818c1ec23a68810",
+                    "recordtext": "Broken Lunch box.",
+                    "recordaudiourl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/47/80/e15d72a6f104e6e73c1e6849d2c0",
+                    "ext": "{\"elements\":[{\"_events\":{},\"_eventsCount\":0,\"name\":\"元素1\",\"type\":2,\"assets\":{\"atlas\":\"https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/26/16/6b9995444e788e3b87169cfca55f\",\"skel\":\"https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/44/5c/7476d4dca5ad5b8698f12b15b861\",\"png\":\"https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/4e/6b/1b32bbe082e3f9c8fd7d4bb63a38\"},\"time\":-1,\"zIndex\":0,\"id\":\"78210109-4b50-4af5-becb-55930178b199\",\"x\":0,\"y\":0,\"width\":0,\"height\":0,\"configAnimation\":[{\"title\":\"动效1\",\"type\":\"loop\",\"triggerType\":[],\"name\":\"animation\",\"audio\":\"\",\"rect\":[0,0,1922.0001220703125,1082.0001220703125],\"guidePos\":[0,0]}],\"spineAnimations\":[{\"label\":\"animation\",\"value\":\"animation\",\"duration\":4}],\"spineAniVersion\":1}],\"timeline\":[],\"baseInfo\":{\"sizeType\":2}}",
+                    "picture": {
+                        "tiny": "",
+                        "origin": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/d2/86/d8a8c1f80d70ef13189ec352bf97",
+                        "w": 0,
+                        "h": 0
+                    },
+                    "translation": "坏掉的午餐盒。",
+                    "hasteach": true,
+                    "hasrecord": true,
+                    "index": 2,
+                    "listentext_pinyin": "",
+                    "recordtext_pinyin": "",
+                    "is_open_lp": false,
+                    "is_open_rp": false,
+                    "bg_picture": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/8f/51/aa47e7a0655a1eabc97590bafac7",
+                    "listenofficialevaluation": "{\"recordid\":465446573508878,\"totalscore\":{\"content\":\"Broken Lunch box.\",\"score\":85,\"rank\":2,\"index\":0,\"startts\":0,\"endts\":0},\"wordscore\":[{\"content\":\"Broken\",\"score\":100,\"rank\":3,\"index\":0,\"startts\":6,\"endts\":63},{\"content\":\"Lunch\",\"score\":61,\"rank\":1,\"index\":1,\"startts\":66,\"endts\":105},{\"content\":\"box\",\"score\":52,\"rank\":0,\"index\":2,\"startts\":108,\"endts\":162}],\"productid\":465446572349712,\"ut\":1648612461}",
+                    "recordofficialevaluation": "{\"recordid\":465446573537548,\"totalscore\":{\"content\":\"Broken Lunch box.\",\"score\":100,\"rank\":3,\"index\":0,\"startts\":0,\"endts\":0},\"wordscore\":[{\"content\":\"Broken\",\"score\":100,\"rank\":3,\"index\":0,\"startts\":6,\"endts\":63},{\"content\":\"Lunch\",\"score\":100,\"rank\":3,\"index\":1,\"startts\":66,\"endts\":105},{\"content\":\"box\",\"score\":100,\"rank\":3,\"index\":2,\"startts\":108,\"endts\":162}],\"productid\":465446573105424,\"ut\":1648612462}",
+                    "scoretext": ""
+                },
+                {
+                    "pageid": 465445619581196,
+                    "imageurl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/da/cc/ce04d7f866471b390592ecb07b3a",
+                    "listentext": "“Fix your lunch box.” ",
+                    "listenaudiourl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/31/75/cd188892dfdeb8f1fd8e61dab70c",
+                    "explainaudiourl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/a8/56/50b6c9a99f116561f5abff491037",
+                    "recordtext": "“Fix your lunch box.” ",
+                    "recordaudiourl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/31/75/cd188892dfdeb8f1fd8e61dab70c",
+                    "ext": "{\"elements\":[{\"_events\":{},\"_eventsCount\":0,\"name\":\"元素1\",\"type\":2,\"assets\":{\"atlas\":\"https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/1b/c7/6608d76b5409c502d9e4f448659f\",\"skel\":\"https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/34/70/a4ddff475001c7fb006f5a5e0dd0\",\"png\":\"https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/c8/e6/f6a8754492977600493decf5712c\"},\"time\":-1,\"zIndex\":0,\"id\":\"81727f49-cc09-4a95-90ec-ce3fe66d5feb\",\"x\":0,\"y\":0,\"width\":0,\"height\":0,\"configAnimation\":[{\"title\":\"动效1\",\"type\":\"loop\",\"triggerType\":[],\"name\":\"animation\",\"audio\":\"\",\"rect\":[0,0,1922,1082],\"guidePos\":[0,0]}],\"spineAnimations\":[{\"label\":\"animation\",\"value\":\"animation\",\"duration\":4}],\"spineAniVersion\":1}],\"timeline\":[],\"baseInfo\":{\"sizeType\":2}}",
+                    "picture": {
+                        "tiny": "",
+                        "origin": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/da/cc/ce04d7f866471b390592ecb07b3a",
+                        "w": 0,
+                        "h": 0
+                    },
+                    "translation": "“修一下你的午餐盒。\"",
+                    "hasteach": true,
+                    "hasrecord": true,
+                    "index": 3,
+                    "listentext_pinyin": "",
+                    "recordtext_pinyin": "",
+                    "is_open_lp": false,
+                    "is_open_rp": false,
+                    "bg_picture": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/66/14/cc8869d69e754a5e08d295da3270",
+                    "listenofficialevaluation": "{\"recordid\":465446573541644,\"totalscore\":{\"content\":\"“Fix your lunch box.” \",\"score\":91,\"rank\":3,\"index\":0,\"startts\":0,\"endts\":0},\"wordscore\":[{\"content\":\"Fix\",\"score\":100,\"rank\":3,\"index\":0,\"startts\":9,\"endts\":57},{\"content\":\"your\",\"score\":100,\"rank\":3,\"index\":1,\"startts\":57,\"endts\":78},{\"content\":\"lunch\",\"score\":100,\"rank\":3,\"index\":2,\"startts\":78,\"endts\":117},{\"content\":\"box\",\"score\":52,\"rank\":0,\"index\":3,\"startts\":120,\"endts\":195}],\"productid\":465446572349712,\"ut\":1642068840}",
+                    "recordofficialevaluation": "{\"recordid\":465446573551884,\"totalscore\":{\"content\":\"“Fix your lunch box.” \",\"score\":89,\"rank\":2,\"index\":0,\"startts\":0,\"endts\":0},\"wordscore\":[{\"content\":\"Fix\",\"score\":100,\"rank\":3,\"index\":0,\"startts\":9,\"endts\":57},{\"content\":\"your\",\"score\":100,\"rank\":3,\"index\":1,\"startts\":57,\"endts\":78},{\"content\":\"lunch\",\"score\":64,\"rank\":1,\"index\":2,\"startts\":78,\"endts\":117},{\"content\":\"box\",\"score\":51,\"rank\":0,\"index\":3,\"startts\":120,\"endts\":195}],\"productid\":465446573105424,\"ut\":1642068844}",
+                    "scoretext": ""
+                },
+                {
+                    "pageid": 465445619583246,
+                    "imageurl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/3b/52/7550d7945636579428d64f073b95",
+                    "listentext": "Six cookies for picnic.",
+                    "listenaudiourl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/cd/25/0d79e1c0df560c47580443e2648e",
+                    "explainaudiourl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/00/23/7220aa90c778ef718a8926fa0c3b",
+                    "recordtext": "Six cookies for picnic.",
+                    "recordaudiourl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/cd/25/0d79e1c0df560c47580443e2648e",
+                    "ext": "{\"elements\":[{\"_events\":{},\"_eventsCount\":0,\"name\":\"元素1\",\"type\":2,\"assets\":{\"atlas\":\"https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/90/fc/fda3972887039bf0ea7384ddbb13\",\"skel\":\"https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/19/c8/7f8c2fcd296a5764c6b93f450079\",\"png\":\"https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/02/7d/306d4bb48960eee8912492a3c6b9\"},\"time\":-1,\"zIndex\":0,\"id\":\"d0ca1537-00d1-4cb2-975f-ab4fa82b6911\",\"x\":0,\"y\":0,\"width\":0,\"height\":0,\"configAnimation\":[{\"title\":\"动效1\",\"type\":\"loop\",\"triggerType\":[],\"name\":\"animation\",\"audio\":\"\",\"rect\":[0,0,1922,1099.30859375],\"guidePos\":[0,0]}],\"spineAnimations\":[{\"label\":\"animation\",\"value\":\"animation\",\"duration\":4.666666507720947}],\"spineAniVersion\":1}],\"timeline\":[],\"baseInfo\":{\"sizeType\":2}}",
+                    "picture": {
+                        "tiny": "",
+                        "origin": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/3b/52/7550d7945636579428d64f073b95",
+                        "w": 0,
+                        "h": 0
+                    },
+                    "translation": "带六块饼干去野餐。",
+                    "hasteach": true,
+                    "hasrecord": true,
+                    "index": 4,
+                    "listentext_pinyin": "",
+                    "recordtext_pinyin": "",
+                    "is_open_lp": false,
+                    "is_open_rp": false,
+                    "bg_picture": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/e8/7e/5bac9fe1df3b113194e07191f976",
+                    "listenofficialevaluation": "{\"recordid\":465446573551888,\"totalscore\":{\"content\":\"Six cookies for picnic.\",\"score\":100,\"rank\":3,\"index\":0,\"startts\":0,\"endts\":0},\"wordscore\":[{\"content\":\"Six\",\"score\":100,\"rank\":3,\"index\":0,\"startts\":69,\"endts\":123},{\"content\":\"cookies\",\"score\":100,\"rank\":3,\"index\":1,\"startts\":126,\"endts\":195},{\"content\":\"for\",\"score\":100,\"rank\":3,\"index\":2,\"startts\":198,\"endts\":225},{\"content\":\"picnic\",\"score\":100,\"rank\":3,\"index\":3,\"startts\":228,\"endts\":306}],\"productid\":465446572349712,\"ut\":1642068840}",
+                    "recordofficialevaluation": "{\"recordid\":465446573572366,\"totalscore\":{\"content\":\"Six cookies for picnic.\",\"score\":100,\"rank\":3,\"index\":0,\"startts\":0,\"endts\":0},\"wordscore\":[{\"content\":\"Six\",\"score\":100,\"rank\":3,\"index\":0,\"startts\":69,\"endts\":123},{\"content\":\"cookies\",\"score\":100,\"rank\":3,\"index\":1,\"startts\":126,\"endts\":195},{\"content\":\"for\",\"score\":100,\"rank\":3,\"index\":2,\"startts\":198,\"endts\":225},{\"content\":\"picnic\",\"score\":100,\"rank\":3,\"index\":3,\"startts\":228,\"endts\":306}],\"productid\":465446573105424,\"ut\":1642068844}",
+                    "scoretext": ""
+                },
+                {
+                    "pageid": 465445619583244,
+                    "imageurl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/78/eb/ed11de977d71577d8585eff86d54",
+                    "listentext": "One. Two. Three. Four. Five. Six?",
+                    "listenaudiourl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/66/33/9d49da1fbbdc76d7a6553c4cc4f4",
+                    "explainaudiourl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/08/f8/039a325408a3183f73034fdac380",
+                    "recordtext": "One. Two. Three. Four. Five. Six?",
+                    "recordaudiourl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/66/33/9d49da1fbbdc76d7a6553c4cc4f4",
+                    "ext": "{\"elements\":[{\"_events\":{},\"_eventsCount\":0,\"name\":\"元素1\",\"type\":2,\"assets\":{\"atlas\":\"https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/8d/6e/b8329ab8f947b584ff58132c3229\",\"skel\":\"https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/3a/d2/197ba33e6c93bb2bd4faa5726440\",\"png\":\"https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/22/16/62b0f82cbe4e971352038a193697\"},\"time\":-1,\"zIndex\":0,\"id\":\"3e1f9764-025d-45fd-897f-e7941e71b1a0\",\"x\":0,\"y\":0,\"width\":0,\"height\":0,\"configAnimation\":[{\"title\":\"动效1\",\"type\":\"loop\",\"triggerType\":[],\"name\":\"animation\",\"audio\":\"\",\"rect\":[0,0,1922,1104.064453125],\"guidePos\":[0,0]}],\"spineAnimations\":[{\"label\":\"animation\",\"value\":\"animation\",\"duration\":3.3333332538604736}],\"spineAniVersion\":1}],\"timeline\":[],\"baseInfo\":{\"sizeType\":2}}",
+                    "picture": {
+                        "tiny": "",
+                        "origin": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/78/eb/ed11de977d71577d8585eff86d54",
+                        "w": 0,
+                        "h": 0
+                    },
+                    "translation": "一块。两块。三块。四块。五块。第六块呢？",
+                    "hasteach": true,
+                    "hasrecord": true,
+                    "index": 5,
+                    "listentext_pinyin": "",
+                    "recordtext_pinyin": "",
+                    "is_open_lp": false,
+                    "is_open_rp": false,
+                    "bg_picture": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/ca/1b/63a43bfb084b77e8c56b9e1c6f63",
+                    "listenofficialevaluation": "{\"recordid\":465446573588750,\"totalscore\":{\"content\":\"One. Two. Three. Four. Five. Six?\",\"score\":100,\"rank\":3,\"index\":0,\"startts\":0,\"endts\":0},\"wordscore\":[{\"content\":\"One\",\"score\":100,\"rank\":3,\"index\":0,\"startts\":72,\"endts\":132},{\"content\":\"Two\",\"score\":100,\"rank\":3,\"index\":1,\"startts\":195,\"endts\":258},{\"content\":\"Three\",\"score\":100,\"rank\":3,\"index\":2,\"startts\":312,\"endts\":375},{\"content\":\"Four\",\"score\":100,\"rank\":3,\"index\":3,\"startts\":429,\"endts\":498},{\"content\":\"Five\",\"score\":100,\"rank\":3,\"index\":4,\"startts\":561,\"endts\":633},{\"content\":\"Six\",\"score\":100,\"rank\":3,\"index\":5,\"startts\":687,\"endts\":768}],\"productid\":465446572349712,\"ut\":1642068840}",
+                    "recordofficialevaluation": "{\"recordid\":465446573607184,\"totalscore\":{\"content\":\"One. Two. Three. Four. Five. Six?\",\"score\":100,\"rank\":3,\"index\":0,\"startts\":0,\"endts\":0},\"wordscore\":[{\"content\":\"One\",\"score\":100,\"rank\":3,\"index\":0,\"startts\":72,\"endts\":132},{\"content\":\"Two\",\"score\":100,\"rank\":3,\"index\":1,\"startts\":195,\"endts\":258},{\"content\":\"Three\",\"score\":100,\"rank\":3,\"index\":2,\"startts\":312,\"endts\":375},{\"content\":\"Four\",\"score\":100,\"rank\":3,\"index\":3,\"startts\":429,\"endts\":498},{\"content\":\"Five\",\"score\":100,\"rank\":3,\"index\":4,\"startts\":561,\"endts\":633},{\"content\":\"Six\",\"score\":100,\"rank\":3,\"index\":5,\"startts\":687,\"endts\":768}],\"productid\":465446573105424,\"ut\":1642068845}",
+                    "scoretext": ""
+                },
+                {
+                    "pageid": 465445619581200,
+                    "imageurl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/02/fb/c4318f656f8e9ba83a70bb753bbe",
+                    "listentext": "One. Two. Three. Four. Five. No six!",
+                    "listenaudiourl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/58/ba/7f8a2c0a75bf94785f00a817faea",
+                    "explainaudiourl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/83/fd/1f496292f1d75787bb860d6ed292",
+                    "recordtext": "One. Two. Three. Four. Five. No six!",
+                    "recordaudiourl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/58/ba/7f8a2c0a75bf94785f00a817faea",
+                    "ext": "{\"elements\":[],\"timeline\":[],\"baseInfo\":{\"sizeType\":2}}",
+                    "picture": {
+                        "tiny": "",
+                        "origin": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/02/fb/c4318f656f8e9ba83a70bb753bbe",
+                        "w": 0,
+                        "h": 0
+                    },
+                    "translation": "一块。两块。三块。四块。五块。没有第六块！",
+                    "hasteach": true,
+                    "hasrecord": true,
+                    "index": 6,
+                    "listentext_pinyin": "",
+                    "recordtext_pinyin": "",
+                    "is_open_lp": false,
+                    "is_open_rp": false,
+                    "bg_picture": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/ed/fd/f9cf6a66b3af9762ce23abec9592",
+                    "listenofficialevaluation": "{\"recordid\":465446573615374,\"totalscore\":{\"content\":\"One. Two. Three. Four. Five. No six!\",\"score\":100,\"rank\":3,\"index\":0,\"startts\":0,\"endts\":0},\"wordscore\":[{\"content\":\"One\",\"score\":100,\"rank\":3,\"index\":0,\"startts\":48,\"endts\":108},{\"content\":\"Two\",\"score\":100,\"rank\":3,\"index\":1,\"startts\":135,\"endts\":195},{\"content\":\"Three\",\"score\":100,\"rank\":3,\"index\":2,\"startts\":237,\"endts\":303},{\"content\":\"Four\",\"score\":100,\"rank\":3,\"index\":3,\"startts\":351,\"endts\":414},{\"content\":\"Five\",\"score\":100,\"rank\":3,\"index\":4,\"startts\":456,\"endts\":522},{\"content\":\"No\",\"score\":100,\"rank\":3,\"index\":5,\"startts\":579,\"endts\":621},{\"content\":\"six\",\"score\":100,\"rank\":3,\"index\":6,\"startts\":621,\"endts\":708}],\"productid\":465446572349712,\"ut\":1642068840}",
+                    "recordofficialevaluation": "{\"recordid\":465446573633804,\"totalscore\":{\"content\":\"One. Two. Three. Four. Five. No six!\",\"score\":100,\"rank\":3,\"index\":0,\"startts\":0,\"endts\":0},\"wordscore\":[{\"content\":\"One\",\"score\":100,\"rank\":3,\"index\":0,\"startts\":48,\"endts\":108},{\"content\":\"Two\",\"score\":100,\"rank\":3,\"index\":1,\"startts\":135,\"endts\":195},{\"content\":\"Three\",\"score\":100,\"rank\":3,\"index\":2,\"startts\":237,\"endts\":303},{\"content\":\"Four\",\"score\":100,\"rank\":3,\"index\":3,\"startts\":351,\"endts\":414},{\"content\":\"Five\",\"score\":100,\"rank\":3,\"index\":4,\"startts\":456,\"endts\":522},{\"content\":\"No\",\"score\":100,\"rank\":3,\"index\":5,\"startts\":579,\"endts\":621},{\"content\":\"six\",\"score\":100,\"rank\":3,\"index\":6,\"startts\":621,\"endts\":708}],\"productid\":465446573105424,\"ut\":1642068845}",
+                    "scoretext": ""
+                },
+                {
+                    "pageid": 465445619583248,
+                    "imageurl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/22/ca/d8ed16c1b61923df3c8c2a97540c",
+                    "listentext": "“Fix your lunch box?”",
+                    "listenaudiourl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/ed/5c/297f09bcdf3860c55dfaa9adcd33",
+                    "explainaudiourl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/e2/e8/4c188ac37c050eda779865589213",
+                    "recordtext": "“Fix your lunch box?”",
+                    "recordaudiourl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/ed/5c/297f09bcdf3860c55dfaa9adcd33",
+                    "ext": "{\"elements\":[{\"_events\":{},\"_eventsCount\":0,\"name\":\"元素1\",\"type\":2,\"assets\":{\"atlas\":\"https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/e8/1a/f3ff58e877d0e5d30ecccdce0ce5\",\"skel\":\"https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/da/5f/1ba011ada7d10f21d93bfff40698\",\"png\":\"https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/9a/1a/1739817b7c2233ef90ca4933f1f4\"},\"time\":-1,\"zIndex\":0,\"id\":\"332f4257-d5c3-43a6-ac34-28a8b02b5d24\",\"x\":0,\"y\":0,\"width\":0,\"height\":0,\"configAnimation\":[{\"title\":\"动效1\",\"type\":\"loop\",\"triggerType\":[],\"name\":\"animation\",\"audio\":\"\",\"rect\":[0,0,1922,1082],\"guidePos\":[0,0]}],\"spineAnimations\":[{\"label\":\"animation\",\"value\":\"animation\",\"duration\":4}],\"spineAniVersion\":1}],\"timeline\":[],\"baseInfo\":{\"sizeType\":2}}",
+                    "picture": {
+                        "tiny": "",
+                        "origin": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/22/ca/d8ed16c1b61923df3c8c2a97540c",
+                        "w": 0,
+                        "h": 0
+                    },
+                    "translation": "”要不要修你的午餐盒啊？“",
+                    "hasteach": true,
+                    "hasrecord": true,
+                    "index": 7,
+                    "listentext_pinyin": "",
+                    "recordtext_pinyin": "",
+                    "is_open_lp": false,
+                    "is_open_rp": false,
+                    "bg_picture": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/bc/c7/39917df3051a0ff59fb854d51dbd",
+                    "listenofficialevaluation": "{\"recordid\":465446573635852,\"totalscore\":{\"content\":\"“Fix your lunch box?”\",\"score\":78,\"rank\":2,\"index\":0,\"startts\":0,\"endts\":0},\"wordscore\":[{\"content\":\"Fix\",\"score\":100,\"rank\":3,\"index\":0,\"startts\":111,\"endts\":159},{\"content\":\"your\",\"score\":100,\"rank\":3,\"index\":1,\"startts\":159,\"endts\":180},{\"content\":\"lunch\",\"score\":10,\"rank\":0,\"index\":2,\"startts\":180,\"endts\":216},{\"content\":\"box\",\"score\":100,\"rank\":3,\"index\":3,\"startts\":219,\"endts\":294}],\"productid\":465446572349712,\"ut\":1642068840}",
+                    "recordofficialevaluation": "{\"recordid\":465446573664524,\"totalscore\":{\"content\":\"“Fix your lunch box?”\",\"score\":78,\"rank\":2,\"index\":0,\"startts\":0,\"endts\":0},\"wordscore\":[{\"content\":\"Fix\",\"score\":100,\"rank\":3,\"index\":0,\"startts\":111,\"endts\":159},{\"content\":\"your\",\"score\":100,\"rank\":3,\"index\":1,\"startts\":159,\"endts\":180},{\"content\":\"lunch\",\"score\":10,\"rank\":0,\"index\":2,\"startts\":180,\"endts\":216},{\"content\":\"box\",\"score\":100,\"rank\":3,\"index\":3,\"startts\":219,\"endts\":294}],\"productid\":465446573105424,\"ut\":1642068845}",
+                    "scoretext": ""
+                },
+                {
+                    "pageid": 465445619589390,
+                    "imageurl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/26/2d/ad46c29d3623875e9c452848c942",
+                    "listentext": "Fix my lunch box!",
+                    "listenaudiourl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/da/2b/b506ae1d4eed593351508344d11a",
+                    "explainaudiourl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/07/b1/ca1e9899973121da8f3d0d3930f2",
+                    "recordtext": "Fix my lunch box!",
+                    "recordaudiourl": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/da/2b/b506ae1d4eed593351508344d11a",
+                    "ext": "{\"elements\":[{\"_events\":{},\"_eventsCount\":0,\"name\":\"元素1\",\"type\":2,\"assets\":{\"atlas\":\"https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/2b/7a/5b567104d54d33125e2380c16c37\",\"skel\":\"https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/83/2f/2f06d3058c9ddecb912ce936c0a5\",\"png\":\"https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/ca/5e/fa2e015b6beaaa1415064dc8ea32\"},\"time\":-1,\"zIndex\":0,\"id\":\"9b612e45-b062-4e11-8a9f-b70198d49afa\",\"x\":0,\"y\":0,\"width\":0,\"height\":0,\"configAnimation\":[{\"title\":\"动效1\",\"type\":\"loop\",\"triggerType\":[],\"name\":\"animation\",\"audio\":\"\",\"rect\":[0,0,1922,1082],\"guidePos\":[0,0]}],\"spineAnimations\":[{\"label\":\"animation\",\"value\":\"animation\",\"duration\":2.8333332538604736}],\"spineAniVersion\":1}],\"timeline\":[],\"baseInfo\":{\"sizeType\":2}}",
+                    "picture": {
+                        "tiny": "",
+                        "origin": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/26/2d/ad46c29d3623875e9c452848c942",
+                        "w": 0,
+                        "h": 0
+                    },
+                    "translation": "修理我的午餐盒！",
+                    "hasteach": true,
+                    "hasrecord": true,
+                    "index": 8,
+                    "listentext_pinyin": "",
+                    "recordtext_pinyin": "",
+                    "is_open_lp": false,
+                    "is_open_rp": false,
+                    "bg_picture": "https://cn-picturebook.cdn.ipalfish.com/picturebook/general/app/9a/15/71fa231d775b06b70d8bbf2d5e66",
+                    "listenofficialevaluation": "{\"recordid\":465446573678862,\"totalscore\":{\"content\":\"Fix my lunch box!\",\"score\":79,\"rank\":2,\"index\":0,\"startts\":0,\"endts\":0},\"wordscore\":[{\"content\":\"Fix\",\"score\":100,\"rank\":3,\"index\":0,\"startts\":57,\"endts\":117},{\"content\":\"my\",\"score\":100,\"rank\":3,\"index\":1,\"startts\":117,\"endts\":138},{\"content\":\"lunch\",\"score\":51,\"rank\":0,\"index\":2,\"startts\":138,\"endts\":174},{\"content\":\"box\",\"score\":42,\"rank\":0,\"index\":3,\"startts\":177,\"endts\":252}],\"productid\":465446572349712,\"ut\":1642068840}",
+                    "recordofficialevaluation": "{\"recordid\":465446573707534,\"totalscore\":{\"content\":\"Fix my lunch box!\",\"score\":77,\"rank\":2,\"index\":0,\"startts\":0,\"endts\":0},\"wordscore\":[{\"content\":\"Fix\",\"score\":100,\"rank\":3,\"index\":0,\"startts\":57,\"endts\":117},{\"content\":\"my\",\"score\":100,\"rank\":3,\"index\":1,\"startts\":117,\"endts\":138},{\"content\":\"lunch\",\"score\":43,\"rank\":0,\"index\":2,\"startts\":138,\"endts\":174},{\"content\":\"box\",\"score\":42,\"rank\":0,\"index\":3,\"startts\":177,\"endts\":252}],\"productid\":465446573105424,\"ut\":1642068845}",
+                    "scoretext": ""
+                }
+            ]
+        }
+    }
+}

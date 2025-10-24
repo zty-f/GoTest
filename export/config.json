@@ -1,0 +1,7 @@
+{
+  "book_ids": [465442971693328],
+  "output_dir": "./output",
+  "excel_file": "./output/绘本数据导出.xlsx",
+  "api_url": "https://sea.pri.ibanyu.com/picturebookopapi/ugc/picturebook/boutique/book/page/get",
+  "cookie": "ipalfish_device_id=e416b0ae2221b84cfa8a84f87b7ace73; _ga=GA1.1.952297019.1743422236; _ga_89WN60ZK2E=GS2.1.s1747893991$o2$g0$t1747893991$j0$l0$h0; did=17483382255380000; utype=op; user=zhangtianyong26331; id=NDAyNTA=; name=5byg5aSp5rOz; phone=ODYtMTM0NTg4MzgyNDg=; logintype=0; lang=zh-cn; groups=WyJkdXdvIiwiNzAwMTg2OTI4IiwicmQiLCI3MDAxNzI3MDIiLCJkZWZhdWx0Il0=; token=275422a3dd89dace07504a935d1d573e"
+}
