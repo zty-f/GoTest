@@ -143,7 +143,9 @@ func (d *FileDownloader) DownloadBookFiles(bookData *APIResponse, outputDir stri
 
 		// 下载音频文件
 		if page.ListenAudioURL != "" {
-			audioPath := filepath.Join(audioDir, fmt.Sprintf("%d.mp3", page.Index))
+			// 检测音频文件格式
+			audioExt := d.getAudioExtension(page.ListenAudioURL)
+			audioPath := filepath.Join(audioDir, fmt.Sprintf("%d%s", page.Index, audioExt))
 			if err := d.DownloadFile(page.ListenAudioURL, audioPath); err != nil {
 				fmt.Printf("下载第%d页音频失败: %v\n", page.Index, err)
 			} else {
@@ -171,6 +173,37 @@ func cleanFileName(filename string) string {
 		" ", "_",
 	)
 	return replacer.Replace(filename)
+}
+
+// getAudioExtension 从URL中检测音频文件扩展名
+func (d *FileDownloader) getAudioExtension(url string) string {
+	// 从URL中提取文件扩展名
+	ext := filepath.Ext(url)
+
+	// 如果没有扩展名或扩展名不是音频格式，默认为.mp3
+	if ext == "" {
+		return ".mp3"
+	}
+
+	// 检查是否为支持的音频格式
+	supportedAudioFormats := map[string]bool{
+		".mp3":  true,
+		".wav":  true,
+		".m4a":  true,
+		".aac":  true,
+		".ogg":  true,
+		".flac": true,
+		".wma":  true,
+	}
+
+	// 转换为小写进行比较
+	extLower := strings.ToLower(ext)
+	if supportedAudioFormats[extLower] {
+		return extLower
+	}
+
+	// 如果不支持的格式，默认为.mp3
+	return ".mp3"
 }
 
 // isValidImage 检查文件是否为有效的图片

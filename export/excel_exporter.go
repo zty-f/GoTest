@@ -202,11 +202,15 @@ func (e *ExcelExporter) getImagePath(bookTitle string, pageIndex int) string {
 // getAudioPath 获取音频文件路径
 func (e *ExcelExporter) getAudioPath(bookTitle string, pageIndex int) string {
 	cleanTitle := cleanFileName(bookTitle)
-	audioPath := filepath.Join(e.outputDir, cleanTitle, "音频", fmt.Sprintf("%d.mp3", pageIndex))
+	audioDir := filepath.Join(e.outputDir, cleanTitle, "音频")
 
-	// 检查文件是否存在
-	if _, err := os.Stat(audioPath); err == nil {
-		return audioPath
+	// 尝试不同的音频格式
+	extensions := []string{".mp3", ".wav", ".m4a", ".aac", ".ogg", ".flac", ".wma"}
+	for _, ext := range extensions {
+		audioPath := filepath.Join(audioDir, fmt.Sprintf("%d%s", pageIndex, ext))
+		if _, err := os.Stat(audioPath); err == nil {
+			return audioPath
+		}
 	}
 	return ""
 }
