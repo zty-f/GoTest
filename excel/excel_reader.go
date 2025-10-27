@@ -2,6 +2,8 @@ package excel
 
 import (
 	"fmt"
+	"io"
+	"net/http"
 	"reflect"
 	"strconv"
 	"strings"
@@ -13,16 +15,38 @@ import (
 // ExcelReader Excel读取器
 type ExcelReader struct {
 	filePath     string
+	reader       io.ReadSeeker
+	url          string
 	sheetName    string
 	headerRow    int // 表头行号，从1开始
 	dataStartRow int // 数据开始行号，从1开始
 	error        error
 }
 
-// NewExcelReader 创建新的Excel读取器
+// NewExcelReader 创建新的Excel读取器（从文件路径）
 func NewExcelReader(filePath string) *ExcelReader {
 	return &ExcelReader{
 		filePath:     filePath,
+		sheetName:    "Sheet1",
+		headerRow:    1,
+		dataStartRow: 2,
+	}
+}
+
+// NewExcelReaderFromReader 从io.ReadSeeker创建Excel读取器（文件流）
+func NewExcelReaderFromReader(reader io.ReadSeeker) *ExcelReader {
+	return &ExcelReader{
+		reader:       reader,
+		sheetName:    "Sheet1",
+		headerRow:    1,
+		dataStartRow: 2,
+	}
+}
+
+// NewExcelReaderFromURL 从URL创建Excel读取器
+func NewExcelReaderFromURL(url string) *ExcelReader {
+	return &ExcelReader{
+		url:          url,
 		sheetName:    "Sheet1",
 		headerRow:    1,
 		dataStartRow: 2,
@@ -64,6 +88,52 @@ func (r *ExcelReader) SetDataStartRow(row int) *ExcelReader {
 	return r
 }
 
+// openExcelFile 打开Excel文件，支持文件路径、文件流和URL三种方式
+func (r *ExcelReader) openExcelFile() (*excelize.File, error) {
+	if r.error != nil {
+		return nil, r.error
+	}
+
+	// 优先使用文件流
+	if r.reader != nil {
+		f, err := excelize.OpenReader(r.reader)
+		if err != nil {
+			return nil, fmt.Errorf("failed to open reader: %v", err)
+		}
+		return f, nil
+	}
+
+	// 其次使用URL
+	if r.url != "" {
+		resp, err := http.Get(r.url)
+		if err != nil {
+			return nil, fmt.Errorf("failed to download from URL: %v", err)
+		}
+		defer resp.Body.Close()
+
+		if resp.StatusCode != http.StatusOK {
+			return nil, fmt.Errorf("HTTP error: %s", resp.Status)
+		}
+
+		f, err := excelize.OpenReader(resp.Body)
+		if err != nil {
+			return nil, fmt.Errorf("failed to open from URL: %v", err)
+		}
+		return f, nil
+	}
+
+	// 最后使用文件路径
+	if r.filePath != "" {
+		f, err := excelize.OpenFile(r.filePath)
+		if err != nil {
+			return nil, fmt.Errorf("failed to open file: %v", err)
+		}
+		return f, nil
+	}
+
+	return nil, fmt.Errorf("no valid data source provided (file path, reader, or URL)")
+}
+
 // ReadToStruct 读取Excel数据到结构体切片
 func (r *ExcelReader) ReadToStruct(result interface{}) error {
 	if r.error != nil {
@@ -81,10 +151,10 @@ func (r *ExcelReader) ReadToStruct(result interface{}) error {
 		return fmt.Errorf("result must be a pointer to slice")
 	}
 
-	// 打开Excel文件
-	f, err := excelize.OpenFile(r.filePath)
+	// 打开Excel文件（支持文件路径、文件流和URL）
+	f, err := r.openExcelFile()
 	if err != nil {
-		return fmt.Errorf("failed to open file: %v", err)
+		return err
 	}
 	defer f.Close()
 
@@ -295,10 +365,10 @@ func (r *ExcelReader) ReadToMap() ([]map[string]string, error) {
 		return nil, r.error
 	}
 
-	// 打开Excel文件
-	f, err := excelize.OpenFile(r.filePath)
+	// 打开Excel文件（支持文件路径、文件流和URL）
+	f, err := r.openExcelFile()
 	if err != nil {
-		return nil, fmt.Errorf("failed to open file: %v", err)
+		return nil, err
 	}
 	defer f.Close()
 
