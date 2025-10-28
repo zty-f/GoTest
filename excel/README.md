@@ -4,14 +4,24 @@
 
 ## 功能特性
 
+### 读取功能
 - ✅ 支持将Excel数据解析到结构体切片
+- ✅ 支持从文件路径、文件流（io.ReadSeeker）和URL读取Excel
 - ✅ 支持Map方式读取Excel数据
 - ✅ 支持自定义表头行和数据开始行
 - ✅ 支持多种数据类型：字符串、整数、浮点数、布尔值、时间等
 - ✅ 支持自定义时间格式解析
 - ✅ 支持指针类型字段
 - ✅ 完整的错误处理
-- ✅ 丰富的测试用例
+
+### 导出功能
+- ✅ 支持将结构体切片导出为Excel文件
+- ✅ 支持自定义列顺序和表头
+- ✅ 支持使用excel标签作为表头
+- ✅ 支持自定义时间格式
+
+### 测试
+- ✅ 丰富的测试用例覆盖所有功能
 
 ## 安装依赖
 
@@ -37,6 +47,7 @@ type User struct {
 
 ### 2. 读取Excel到结构体
 
+#### 方式1: 从文件路径读取
 ```go
 var users []User
 err := excel.NewExcelReader("data.xlsx").
@@ -46,12 +57,42 @@ err := excel.NewExcelReader("data.xlsx").
 if err != nil {
     log.Fatal(err)
 }
+```
+
+#### 方式2: 从文件流读取（前端上传）
+```go
+import "bytes"
+
+// 假设fileBytes是前端上传的Excel文件字节流
+fileBytes, _ := os.ReadFile("data.xlsx")  // 实际中来自HTTP请求体
+reader := bytes.NewReader(fileBytes)
+
+var users []User
+err := excel.NewExcelReaderFromReader(reader).
+    SetSheet("用户信息").
+    ReadToStruct(&users)
+
+if err != nil {
+    log.Fatal(err)
+}
+```
+
+#### 方式3: 从URL读取
+```go
+var users []User
+err := excel.NewExcelReaderFromURL("http://example.com/data.xlsx").
+    SetSheet("用户信息").
+    ReadToStruct(&users)
+
+if err != nil {
+    log.Fatal(err)
+}
+```
 
 // 使用数据
 for _, user := range users {
     fmt.Printf("用户: %s, 年龄: %d, 薪资: %.2f\n", user.Name, user.Age, user.Salary)
 }
-```
 
 ### 3. Map方式读取
 
@@ -162,6 +203,44 @@ go test -bench=.
 
 查看 `example/main.go` 文件了解完整的使用示例。
 
+## 导出功能
+
+### 将结构体导出为Excel
+
+```go
+var users []User = []User{
+    {ID: 1, Name: "张三", Age: 25, Salary: 5000.5},
+    {ID: 2, Name: "李四", Age: 30, Salary: 6000.0},
+}
+
+// 基本用法：使用excel标签作为表头
+err := excel.NewStructExcelWriter(users).
+    UseTagHeaders().
+    TimeFormat("2006-01-02").
+    SavePath("export.xlsx").
+    Sheet("用户信息").
+    ToExcel().
+    Error
+
+// 自定义列和表头
+err := excel.NewStructExcelWriter(products).
+    Columns("ID", "Name", "Price").  // 指定导出的字段
+    Headers("产品ID", "产品名称", "价格").  // 自定义表头
+    SavePath("products.xlsx").
+    ToExcel().
+    Error
+
+// 支持指针切片
+var usersPtr []*User = []*User{
+    &User{ID: 1, Name: "张三", Age: 25},
+}
+err := excel.NewStructExcelWriter(usersPtr).
+    UseTagHeaders().
+    SavePath("export.xlsx").
+    ToExcel().
+    Error
+```
+
 ## 注意事项
 
 1. 确保Excel文件格式正确，表头和数据行清晰
@@ -169,6 +248,7 @@ go test -bench=.
 3. 时间格式要符合支持的标准格式
 4. 大文件读取时注意内存使用
 5. 建议在生产环境中添加适当的错误处理和日志记录
+6. URL读取需要网络访问权限，建议添加超时设置
 
 ## 许可证
 
