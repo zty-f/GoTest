@@ -4,9 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/spf13/cast"
+	"golang.org/x/sync/singleflight"
+	"log"
 	"math"
 	"regexp"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 )
@@ -178,4 +181,44 @@ func TestUnMarshal4(t *testing.T) {
 	fmt.Println(int64(math.Round(float64(60) / float64(31))))
 	fmt.Println(int64(math.Round(float64(60) / float64(43))))
 	fmt.Println(cast.ToInt64("")) // 0
+}
+
+/*
+SingleFlight可以将对同一条数据的并发请求进行合并，
+只允许一个请求访问数据库中的数据，这个请求获取到的数据结果与其他请求共享。
+*/
+// SingleFlight
+var g singleflight.Group
+
+// getDataFromDB:模拟从数据库中获取key=”my_key”的数据
+func getDataFromDB(key string) (string, error) {
+	// 使用singleflight.Do ()方法获取数据，仅执行一次
+	data, err, _ := g.Do(key, func() (interface{}, error) {
+		// 模拟众数据库中获取数据
+		log.Printf("get data for key:%s from database", key)
+		return "my_data", nil
+	})
+	if err != nil {
+		return "", err
+	}
+	return data.(string), nil
+}
+func TestStudent_Speak(t *testing.T) {
+	var wg sync.WaitGroup
+	reqCount := 1000
+	wg.Add(reqCount)
+	// 模拟100个并发请求
+	for i := 0; i < reqCount; i++ {
+		go func() {
+			defer wg.Done()
+			// 这100个并发请求都希望获取key="my_key"的数据
+			data, err := getDataFromDB("my_key")
+			if err != nil {
+				log.Print(err)
+			}
+			// 获取数据成功
+			log.Printf("I get data:%s for key:my_key", data)
+		}()
+	}
+	wg.Wait()
 }
