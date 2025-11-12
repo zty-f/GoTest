@@ -222,3 +222,8 @@ func TestStudent_Speak(t *testing.T) {
 	}
 	wg.Wait()
 }
+
+func TestIntStr(t *testing.T) {
+	x := int32(3)
+	fmt.Println(string(x))
+}
