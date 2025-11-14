@@ -6494,6 +6494,8 @@ message GetQuestionsRequest {
   QuestionOrder question_order = 6;
   // 是否视为一次练习；是，将在响应中返回新的一次练习信息；在答题提交时需要透传练习ID
   bool is_customized_practice = 7;
+  // 是否错题本：true：返回错题本题目；false：返回正常题目
+  bool is_error_book = 8;
 }
 
 message GetQuestionsResponse {
@@ -6505,6 +6507,21 @@ message GetQuestionsResponse {
   map<int32, MemoryTarget> memory_targets = 3;
   // 当前题目所归属的练习记录
   CustomizedPractice customized_practice = 4;
+}
+
+message GetErrorBookModuleListReq {
+  int64 course_id = 1;
+}
+
+message GetErrorBookModuleListRes {
+  repeated ErrBookModuleInfo infos = 1;
+}
+
+message ErrBookModuleInfo {
+  int64 id = 1;
+  string name = 2;
+  // 该模块错题次数
+  int32 error_cnt = 3;
 }
 
 message GetQuestionAnswerListRequest {
@@ -10747,6 +10764,13 @@ service ReadCampHttpService {
   rpc GetQuestions(GetQuestionsRequest) returns (GetQuestionsResponse) {
     option (google.api.http) = {
       post: '/base/readcamp/questions/list'
+    };
+  }
+  // 智能学习-获取错题模块列表
+  // `midware:"Auth"`
+  rpc GetErrorBookModuleList(GetErrorBookModuleListReq) returns (GetErrorBookModuleListRes) {
+    option (google.api.http) = {
+      post: '/base/readcamp/error_book/module/list'
     };
   }
   // 智能学习-试卷题目获取
