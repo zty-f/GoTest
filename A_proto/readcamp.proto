@@ -250,13 +250,15 @@ enum CourseLevel {
   level_L8 = 8;
   // 分销课、赠送课等他其他
   Level_L100 = 100;
+  // Pre 0
+  Level_Pre0 = 200;
 }
 
 message Course {
   int32 id = 1;
   // 课程名称
   string name = 3;
-  // 分级: 0:体验营, 1:L1, 2:L2, 3:L3, 4:L4, 5:L5, 6:L6, 7:L7, 100:L100
+  // 分级: 0:体验营, 1:L1, 2:L2, 3:L3, 4:L4, 5:L5, 6:L6, 7:L7, 100:L100 200:Pre0
   CourseLevel level = 4;
   // 课程描述
   string description = 5;
@@ -286,6 +288,17 @@ message Course {
   repeated string category_tags = 16;
   // 课程结业证书
   string cert_template_url = 17;
+  // 课程版本号
+  Version version = 18;
+}
+
+enum Version {
+  // Unknown 无效版本号
+  UnknownVersion = 0;
+  Version1 = 1; // v1.0
+  Version2 = 2; // v2.0
+  Version3 = 3; // v3.0
+  Version4 = 4; // v4.0
 }
 
 enum LectureStatus {
@@ -579,6 +592,12 @@ enum LectureModuleType {
   ModuleTypeTest             = 14;
   // 拓展阅读
   ExtendRead       = 15;
+  // 主动探索
+  Exploration = 16;
+  // 唱一唱
+  Sing = 17;
+  // 唱一唱KTV模式
+  SingKTV = 18;
 }
 
 message LectureModule {
@@ -790,6 +809,8 @@ message CourseCrtRequest {
   repeated string category_tags = 11;
   // 课程结业证书
   ImageCrtResource cert_template_picture = 12;
+  // 版本号
+  Version version = 13;
 }
 
 message CourseUptRequest {
@@ -821,6 +842,8 @@ message CourseUptRequest {
   CourseStatus status = 13;
   // 课程结业证书
   ImageCrtResource cert_template_picture = 14;
+  // 版本号
+  Version version = 15;
 }
 
 message CourseGetRequest {
@@ -863,6 +886,12 @@ message AdminCourseListRequest {
   string course_name = 4;
   // 筛选用户已开课程
   int64 uid = 5;
+  // 课程ID
+  int64 id = 6;
+  // 课程版本
+  int32 version = 7;
+  // 课程状态
+  CourseStatus status = 8;
 }
 
 message AdminCourseListResponse {
@@ -1168,6 +1197,8 @@ message BPAuthQRCodeReq {
     LISTEN_BEAR = 1;
     // 牛听听
     NIU_LISTEN = 2;
+    // 倾听者
+    LISTENEER = 3;
   }
   // 授权场景
   BPAuthScene auth_scene = 1;
@@ -1204,6 +1235,8 @@ message BPBatchReportUserStudyReq {
       LISTEN_BEAR = 1;
       // 牛听听
       NIU_LISTEN = 2;
+      // 倾听者
+      LISTENEER = 3;
     }
     enum StudyResourceType {
       UNKNOWN_RESOURCE_TYPE = 0;
@@ -2727,6 +2760,8 @@ message QueryOuterOrderReq {
   string teacher_op_name = 9;
   // 用户归属
   string user_teacher_op_name = 10;
+  // 是否已核销 1=未核销 2=已核销
+  int64 has_confirm_package = 11;
 }
 
 message QueryOuterOrderRes {
@@ -2880,6 +2915,8 @@ message OuterOrderInfo {
   OuterOrderTradeState trade_state = 4;
   // 订单skuid
   string sku_id = 5;
+  // 订单核销状态 1=未核销 2=已核销
+  int64 has_confirm_package = 6;
 }
 
 message OuterOrderDetail {
@@ -5845,11 +5882,21 @@ message Cert {
   int64 created_at = 8;
   // 更新时间戳
   int64 updated_at = 9;
+  // 证书类型
+  string cert_type = 10;
+  // 证书名称
+  string cert_name = 11;
+  // 活动证书的活动ID
+  int64 activity_id = 12;
 }
 
 message ValidateUserCertRequest {
   // 课程id
   int32 course_id = 1;
+  // 证书类型,默认course：课程结营证书;
+  string cert_type = 2;
+  // 活动ID
+  int64 activity_id = 3;
 }
 
 message ValidateUserCertResponse {
@@ -5868,6 +5915,10 @@ message UserCertCreateRequest {
   int32 course_id = 1;
   // 宝贝姓名
   string name = 2;
+  // 证书类型， 默认 course 结营证书
+  string cert_type = 3;
+  // 活动ID
+  int64 activity_id = 4;
 }
 
 message UserCertUploadSnapshotRequest {
@@ -5875,6 +5926,8 @@ message UserCertUploadSnapshotRequest {
   int32 cert_id = 1;
   // 证书图片uri
   string cert_uri = 2;
+  // 证书类型
+  string cert_type = 3;
 }
 
 message UserCertGetByCourseRequest {
@@ -5890,6 +5943,40 @@ message UserCertListRequest {
 message UserCertListResponse {
   // 证书信息
   repeated Cert items = 1;
+  int64 offset = 2;
+  int64 total = 3;
+  bool more = 4;
+}
+
+message UserCertListV2Req {
+  int64 offset = 1;
+  int64 limit = 2;
+}
+
+message CommonCert {
+  // 课程id
+  int32 course_id = 1;
+  // 证书名字
+  string cert_name = 2;
+  // 证书模版url
+  string cert_template_url = 3;
+  // 0: 未生成 1:已学完待生成 2:已生成
+  int32 user_cert_status = 4;
+  // 用户已生成的url
+  string user_cert_image_url = 5;
+  // 用户证书创建时间
+  int64 user_cert_created_at = 6;
+  // 证书类型 course:完课证书，activity_max_rank 活动证书，携带 activity_id
+  string cert_type = 7;
+  // 活动ID
+  int64 activity_id = 8;
+  // 证书编号
+  int64 cert_number = 9;
+}
+
+message UserCertListV2Response {
+  // 证书信息
+  repeated CommonCert items = 1;
   int64 offset = 2;
   int64 total = 3;
   bool more = 4;
@@ -6020,6 +6107,8 @@ message FuzzySearchWechatGroupResponse {
 message QueryWechatGroupRequest {
   int64 limit = 1;
   int64 offset = 2;
+  // 群名
+  string group_name = 3;
 }
 
 // 外部使用：获取单个群
@@ -9436,9 +9525,12 @@ enum StudyRecordSource {
   ListenBear = 2;
   // 牛听听
   NiuTingTing = 3;
+  // 倾听者
+  Listeneer = 4;
   // 牛听听本地听单
   NttLocalPlayList = 5;
 }
+
 message PlaylistGetReq {
   StudyRecordSource source = 1;
 }
@@ -10773,6 +10865,13 @@ service ReadCampHttpService {
   rpc UserCertList(UserCertListRequest) returns (UserCertListResponse) {
     option (google.api.http) = {
       post: '/base/readcamp/cert/list'
+    };
+  }
+  // 证书列表v2-获取用户全部证书，包含课程结营证书和活动证书；
+  // `midware:"Auth"`
+  rpc UserCertListV2(UserCertListV2Req) returns (UserCertListV2Response) {
+    option (google.api.http) = {
+      post: '/base/readcamp/v2/cert/list'
     };
   }
   // 结营证书-获取全部的课程证书
