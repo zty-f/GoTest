@@ -223,7 +223,52 @@ func TestStudent_Speak(t *testing.T) {
 	wg.Wait()
 }
 
+type Conf struct {
+	ID  int32 `json:"id"`
+	Cnt int64 `json:"cnt"`
+}
+
+var conf1s = []Conf{
+	{ID: 1, Cnt: 100},
+	{ID: 2, Cnt: 200},
+	{ID: 3, Cnt: 300},
+}
+
+var conf2s = []*Conf{
+	{ID: 1, Cnt: 100},
+	{ID: 2, Cnt: 200},
+	{ID: 3, Cnt: 300},
+}
+
 func TestIntStr(t *testing.T) {
 	x := int32(3)
-	fmt.Println(string(x))
+	fmt.Println(string(x))        //  Unicode字符
+	fmt.Println(cast.ToString(x)) // 3
+
+	a := conf1s[0]
+	fmt.Println(a)
+	a.Cnt = 99
+	fmt.Println(a)
+	fmt.Println(conf1s)
+
+	fmt.Println("----------")
+
+	b := conf2s[0]
+	fmt.Println(b)
+	b.Cnt = 999
+	fmt.Println(b)
+	fmt.Printf("%+v\n", conf2s[0])
+
+	fmt.Println("----------")
+
+	a1 := conf1s[1]
+	a2 := conf1s[1]
+	fmt.Printf("%p %p %p\n", &a1.Cnt, &a2.Cnt, &conf1s[1].Cnt) // 地址不相同
+	conf1s[1].Cnt = 888
+	fmt.Printf("%d %d %d\n", a1.Cnt, a2.Cnt, conf1s[1].Cnt) // 200 200 888 修改互不影响
+	b1 := conf2s[1]
+	b2 := conf2s[1]
+	fmt.Printf("%p %p %p\n", &b1.Cnt, &b2.Cnt, &conf2s[1].Cnt) // 地址相同
+	conf2s[1].Cnt = 888
+	fmt.Printf("%d %d %d\n", b1.Cnt, b2.Cnt, conf2s[1].Cnt) // 888 888 888 修改相互影响
 }
