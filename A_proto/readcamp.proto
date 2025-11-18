@@ -6529,6 +6529,8 @@ message GetQuestionAnswerListRequest {
   repeated int32 question_ids = 1;
   // 考卷记录id
   int64 user_exam_id = 2;
+  // 是否只返回最新的一次答题记录：默认false
+  bool is_return_new = 3;
 }
 
 message GetQuestionAnswerListResponse {
