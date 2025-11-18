@@ -6582,7 +6582,7 @@ message GetQuestionAnswerListResponse {
       // 全部单词 (用户语音里的内容)
       repeated string all_words = 4;
       // 音频
-      AudioCrtResource audio = 5;
+      AudioResource audio = 5;
     }
     // 口语表达
     // @inject_tag: json:"speaking_answer,omitempty"
