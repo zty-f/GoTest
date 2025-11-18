@@ -7,6 +7,7 @@ import (
 	"golang.org/x/sync/singleflight"
 	"log"
 	"math"
+	"math/rand"
 	"regexp"
 	"strings"
 	"sync"
@@ -271,4 +272,16 @@ func TestIntStr(t *testing.T) {
 	fmt.Printf("%p %p %p\n", &b1.Cnt, &b2.Cnt, &conf2s[1].Cnt) // 地址相同
 	conf2s[1].Cnt = 888
 	fmt.Printf("%d %d %d\n", b1.Cnt, b2.Cnt, conf2s[1].Cnt) // 888 888 888 修改相互影响
+}
+
+func TestRandom3(t *testing.T) {
+	// 随机获取10-120之间的随机数字  rand.Intn(x) 会返回一个[0,x)之间的随机整数
+	fmt.Println(rand.Intn(120-10+1) + 10)
+	fmt.Println(rand.Intn(120-10+1) + 10)
+	fmt.Println(rand.Intn(120-10+1) + 10)
+	fmt.Println(rand.Intn(120-10+1) + 10)
+	fmt.Println(rand.Intn(120-10+1) + 10)
+	fmt.Println(rand.Intn(120-10+1) + 10)
+	fmt.Println(rand.Intn(120-10+1) + 10)
+	fmt.Println(rand.Intn(120-10+1) + 10)
 }
