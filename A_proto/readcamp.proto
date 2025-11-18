@@ -6566,6 +6566,27 @@ message GetQuestionAnswerListResponse {
     repeated SpokenPracticeAnswer spoken_practice_answers = 5;
     // 答题时间
     int32 ct = 6;
+    // 是否正确
+    bool is_right = 7;
+    // 选择题答案
+    repeated int32 choice_answers = 8;
+    // 填空题、写作题等答案
+    string text_answer = 9;
+    message SpeakingExpressAnswer {
+      // 总分
+      int64 score = 1;
+      // 准确性得分
+      int64 accuracy_score = 2;
+      // 完整性得分
+      int64 integrity_score = 3;
+      // 全部单词 (用户语音里的内容)
+      repeated string all_words = 4;
+      // 音频
+      AudioCrtResource audio = 5;
+    }
+    // 口语表达
+    // @inject_tag: json:"speaking_answer,omitempty"
+    SpeakingExpressAnswer speaking_answer = 10;
   }
   repeated UserQuestion items = 1;
 }
