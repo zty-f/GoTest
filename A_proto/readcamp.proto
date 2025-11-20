@@ -33,6 +33,7 @@ message LectureStudyReportRequest {
   LectureInfo lecture_info = 1;
   // 来自哪个页面：inclass：上课页面；practice：磨耳朵页面
   string source = 2;
+  string oaid = 3;
 }
 
 message LectureStudyReportResponse {}

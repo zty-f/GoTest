@@ -3,6 +3,7 @@ package base
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/pkg/errors"
 	"github.com/spf13/cast"
 	"golang.org/x/sync/singleflight"
 	"log"
@@ -284,4 +285,19 @@ func TestRandom3(t *testing.T) {
 	fmt.Println(rand.Intn(120-10+1) + 10)
 	fmt.Println(rand.Intn(120-10+1) + 10)
 	fmt.Println(rand.Intn(120-10+1) + 10)
+}
+
+func TestError(t *testing.T) {
+	err := errors.Errorf("The callBack is mismatch.")
+	fmt.Println(err)
+	fmt.Println(err.Error())
+	if strings.Contains(err.Error(), "The callBack is mismatch") {
+		fmt.Println("contains")
+	}
+	err2 := errors.New("The callBack is mismatch.")
+	fmt.Println(err2)
+	fmt.Println(err2.Error())
+	if strings.Contains(err2.Error(), "The callBack is mismatch") {
+		fmt.Println("contains")
+	}
 }
