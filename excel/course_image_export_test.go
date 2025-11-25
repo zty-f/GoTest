@@ -2,6 +2,9 @@ package excel
 
 import (
 	"fmt"
+	_ "image/gif"
+	_ "image/jpeg"
+	_ "image/png"
 	"io"
 	"net/http"
 	"os"
@@ -158,11 +161,16 @@ func TestExportCourseImages(t *testing.T) {
 					t.Logf("插入图片失败 (行%d): %v", row, err)
 					imageURL := "https://readcamp.cdn.ipalfish.com/" + strings.TrimPrefix(lesson.URI, "/")
 					f.SetCellValue(sheetName, fmt.Sprintf("F%d", row), imageURL)
+					t.Logf("已设置URL作为备选: %s", imageURL)
+				} else {
+					// 插入成功，不设置单元格值（图片已插入）
+					t.Logf("图片插入成功 (行%d): %s", row, imagePath)
 				}
 			} else {
 				// 如果映射中没有，说明下载失败，显示URL
 				imageURL := "https://readcamp.cdn.ipalfish.com/" + strings.TrimPrefix(lesson.URI, "/")
 				f.SetCellValue(sheetName, fmt.Sprintf("F%d", row), imageURL)
+				t.Logf("图片未下载，设置URL (行%d): %s", row, imageURL)
 			}
 		} else {
 			f.SetCellValue(sheetName, fmt.Sprintf("F%d", row), "")
@@ -211,23 +219,50 @@ func downloadImageWithPath(client *http.Client, url, filePath string) (string, e
 		actualPath = strings.TrimSuffix(filePath, filepath.Ext(filePath)) + ext
 	}
 
+	// excelize 不支持 webp 格式，如果检测到 webp，使用 jpg 扩展名（但实际内容仍是 webp，可能会失败）
+	// 更好的做法是跳过 webp 或使用图片转换库
+	if ext == ".webp" {
+		fmt.Printf("警告: 检测到 webp 格式，excelize 可能不支持，将尝试使用 jpg 扩展名: %s\n", actualPath)
+		actualPath = strings.TrimSuffix(actualPath, ".webp") + ".jpg"
+		ext = ".jpg"
+	}
+
 	// 创建文件
 	file, err := os.Create(actualPath)
 	if err != nil {
 		return "", fmt.Errorf("创建文件失败: %v", err)
 	}
-	defer file.Close()
 
 	// 复制数据
 	_, err = io.Copy(file, resp.Body)
 	if err != nil {
+		file.Close()
+		os.Remove(actualPath) // 删除不完整的文件
 		return "", fmt.Errorf("写入文件失败: %v", err)
+	}
+
+	// 确保数据完全写入磁盘
+	if err := file.Sync(); err != nil {
+		file.Close()
+		os.Remove(actualPath)
+		return "", fmt.Errorf("同步文件失败: %v", err)
+	}
+
+	// 关闭文件
+	if err := file.Close(); err != nil {
+		os.Remove(actualPath)
+		return "", fmt.Errorf("关闭文件失败: %v", err)
 	}
 
 	// 验证下载的文件是否为有效图片
 	if !isValidImage(actualPath) {
-		return "", fmt.Errorf("下载的文件不是有效的图片格式")
+		os.Remove(actualPath) // 删除无效文件
+		return "", fmt.Errorf("下载的文件不是有效的图片格式: %s (Content-Type: %s)", actualPath, contentType)
 	}
+
+	// 获取文件信息用于调试
+	fileInfo, _ := os.Stat(actualPath)
+	fmt.Printf("图片下载成功: %s, 大小: %d bytes, 格式: %s\n", actualPath, fileInfo.Size(), ext)
 
 	return actualPath, nil
 }
@@ -273,32 +308,73 @@ func isValidImage(filePath string) bool {
 
 // insertImageToExcel 插入图片到Excel
 func insertImageToExcel(f *excelize.File, sheetName, cell, imagePath string) error {
+	// 将路径转换为绝对路径（excelize需要绝对路径）
+	absPath, err := filepath.Abs(imagePath)
+	if err != nil {
+		return fmt.Errorf("获取绝对路径失败: %v", err)
+	}
+
+	// 检查图片文件是否存在
+	fileInfo, err := os.Stat(absPath)
+	if os.IsNotExist(err) {
+		return fmt.Errorf("图片文件不存在: %s", absPath)
+	}
+	if err != nil {
+		return fmt.Errorf("获取文件信息失败: %v", err)
+	}
+
+	// 检查文件大小
+	if fileInfo.Size() == 0 {
+		return fmt.Errorf("图片文件为空: %s", absPath)
+	}
+
+	// 再次验证文件是否为有效图片
+	if !isValidImage(absPath) {
+		return fmt.Errorf("文件不是有效的图片格式: %s", absPath)
+	}
+
+	// 检查文件扩展名是否被 excelize 支持
+	ext := strings.ToLower(filepath.Ext(absPath))
+	supportedFormats := map[string]bool{
+		".jpg":  true,
+		".jpeg": true,
+		".png":  true,
+		".gif":  true,
+		".bmp":  true,
+	}
+	if !supportedFormats[ext] {
+		return fmt.Errorf("不支持的图片格式: %s (excelize 仅支持 jpg, png, gif, bmp)", ext)
+	}
+
 	// 设置行高以适应图片
 	_, row, err := excelize.CellNameToCoordinates(cell)
 	fmt.Printf("成功解析单元格坐标: %s -> 行: %d\n", cell, row)
 	if err != nil {
 		return fmt.Errorf("解析单元格坐标失败: %v", err)
 	}
-	f.SetRowHeight(sheetName, row, 56) // 设置行高为56.7点，约等于2cm
+	err = f.SetRowHeight(sheetName, row, 56)
+	if err != nil {
+		return fmt.Errorf("设置行高失败: %v", err)
+	} // 设置行高为56.7点，约等于2cm
 
-	fmt.Printf("尝试插入图片: %s\n", imagePath)
+	fmt.Printf("尝试插入图片: %s (绝对路径: %s)\n", imagePath, absPath)
 
-	// 使用文档中的标准方法插入图片
-	err = f.AddPicture(sheetName, cell, imagePath, &excelize.GraphicOptions{
+	// 使用文档中的标准方法插入图片（必须使用绝对路径）
+	err = f.AddPicture(sheetName, cell, absPath, &excelize.GraphicOptions{
 		ScaleX:          1.0,       // 不缩放，让AutoFit控制大小
 		ScaleY:          1.0,       // 不缩放，让AutoFit控制大小
 		OffsetX:         0,         // 无偏移，完全嵌入
 		OffsetY:         0,         // 无偏移，完全嵌入
-		LockAspectRatio: false,     // 锁定宽高比
+		LockAspectRatio: true,      // 锁定宽高比（修正为true）
 		AutoFit:         true,      // 自动适应单元格大小
 		Positioning:     "oneCell", // 固定在单个单元格内
 	})
 
 	if err != nil {
-		return fmt.Errorf("添加图片失败: %v", err)
+		return fmt.Errorf("添加图片失败: %v (路径: %s)", err, absPath)
 	}
 
-	fmt.Printf("成功插入图片: %s\n", imagePath)
+	fmt.Printf("成功插入图片: %s\n", absPath)
 	return nil
 }
 
