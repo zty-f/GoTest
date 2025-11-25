@@ -71,18 +71,76 @@ func TestExportCourseImages(t *testing.T) {
 	// 创建文件下载器
 	downloader := &http.Client{Timeout: 30 * time.Second}
 
+	// 第一步：先按课程分组下载所有图片到文件夹
+	// 创建映射：lesson的唯一标识 -> 图片路径
+	imagePathMap := make(map[string]string) // key: course_id + lecture_id, value: 图片路径
+
 	// 按课程分组
 	courseGroups := make(map[string][]CourseLesson)
 	for _, lesson := range lessons {
 		courseGroups[lesson.CourseName] = append(courseGroups[lesson.CourseName], lesson)
 	}
 
-	// 处理每一行数据
+	t.Logf("开始下载图片，共 %d 个课程", len(courseGroups))
+
+	// 按课程分组下载图片到文件夹
+	cnt := 0
+	for courseName, courseLessons := range courseGroups {
+		if courseName != "Tina家庭阅读营L1" {
+			continue
+		}
+		// 清理课程名称作为文件夹名
+		cleanCourseName := cleanFileName(courseName)
+		courseDir := filepath.Join(outputDir, cleanCourseName)
+
+		if err := os.MkdirAll(courseDir, 0755); err != nil {
+			t.Logf("创建课程文件夹失败: %v", err)
+			continue
+		}
+
+		// 下载该课程的所有课节图片
+		for _, lesson := range courseLessons {
+			if lesson.URI == "" {
+				continue
+			}
+			cnt++
+			if cnt > 10 {
+				break
+			}
+
+			// 拼接完整URL
+			imageURL := "https://readcamp.cdn.ipalfish.com/" + strings.TrimPrefix(lesson.URI, "/")
+
+			// 清理课节名称作为文件名
+			cleanLessonName := cleanFileName(lesson.LectureName)
+			// 先使用默认扩展名，下载时会根据Content-Type调整
+			imagePath := filepath.Join(courseDir, cleanLessonName+".jpg")
+
+			// 下载图片（函数会根据Content-Type自动调整扩展名）
+			actualImagePath, err := downloadImageWithPath(downloader, imageURL, imagePath)
+			if err != nil {
+				t.Logf("下载图片失败 (课程: %s, 课节: %s): %v", courseName, lesson.LectureName, err)
+			} else {
+				// 创建唯一标识：course_id + lecture_id
+				lessonKey := fmt.Sprintf("%s_%s", lesson.CourseID, lesson.LectureID)
+				imagePathMap[lessonKey] = actualImagePath
+				t.Logf("下载成功: %s -> %s", lesson.LectureName, actualImagePath)
+			}
+		}
+		if cnt > 10 {
+			break
+		}
+	}
+
+	t.Logf("图片下载完成，共下载 %d 张图片", len(imagePathMap))
+
+	// 第二步：处理每一行数据，从已下载的图片中读取并插入Excel
 	for rowIndex, lesson := range lessons {
 		row := rowIndex + 2 // 从第2行开始（第1行是表头）
 		if rowIndex == 10 {
 			break
 		}
+
 		// 写入所有字段
 		f.SetCellValue(sheetName, fmt.Sprintf("A%d", row), lesson.CourseID)
 		f.SetCellValue(sheetName, fmt.Sprintf("B%d", row), lesson.LectureNumber)
@@ -90,66 +148,26 @@ func TestExportCourseImages(t *testing.T) {
 		f.SetCellValue(sheetName, fmt.Sprintf("D%d", row), lesson.CourseName)
 		f.SetCellValue(sheetName, fmt.Sprintf("E%d", row), lesson.LectureName)
 
-		// 下载并插入图片到uri列（F列）
+		// 从映射中获取图片路径并插入Excel
 		if lesson.URI != "" {
-			// 拼接完整URL
-			imageURL := "https://readcamp.cdn.ipalfish.com/" + strings.TrimPrefix(lesson.URI, "/")
-
-			// 下载图片到临时文件
-			ext := filepath.Ext(imageURL)
-			if ext == "" {
-				ext = ".jpg"
-			}
-			tempImagePath := filepath.Join(outputDir, fmt.Sprintf("temp_%d%s", rowIndex, ext))
-			if err := downloadImage(downloader, imageURL, tempImagePath); err != nil {
-				t.Logf("下载图片失败 (行%d): %v, URL: %s", row, err, imageURL)
-				f.SetCellValue(sheetName, fmt.Sprintf("F%d", row), imageURL)
-			} else {
+			lessonKey := fmt.Sprintf("%s_%s", lesson.CourseID, lesson.LectureID)
+			imagePath, exists := imagePathMap[lessonKey]
+			if exists {
 				// 插入图片到Excel
-				if err := insertImageToExcel(f, sheetName, fmt.Sprintf("F%d", row), tempImagePath); err != nil {
+				if err := insertImageToExcel(f, sheetName, fmt.Sprintf("F%d", row), imagePath); err != nil {
 					t.Logf("插入图片失败 (行%d): %v", row, err)
+					imageURL := "https://readcamp.cdn.ipalfish.com/" + strings.TrimPrefix(lesson.URI, "/")
 					f.SetCellValue(sheetName, fmt.Sprintf("F%d", row), imageURL)
 				}
-				// 删除临时文件
-				// os.Remove(tempImagePath)
+			} else {
+				// 如果映射中没有，说明下载失败，显示URL
+				imageURL := "https://readcamp.cdn.ipalfish.com/" + strings.TrimPrefix(lesson.URI, "/")
+				f.SetCellValue(sheetName, fmt.Sprintf("F%d", row), imageURL)
 			}
 		} else {
 			f.SetCellValue(sheetName, fmt.Sprintf("F%d", row), "")
 		}
 	}
-
-	// 按课程分组下载图片到文件夹
-	// for courseName, courseLessons := range courseGroups {
-	// 	// 清理课程名称作为文件夹名
-	// 	cleanCourseName := cleanFileName(courseName)
-	// 	courseDir := filepath.Join(outputDir, cleanCourseName)
-	//
-	// 	if err := os.MkdirAll(courseDir, 0755); err != nil {
-	// 		t.Logf("创建课程文件夹失败: %v", err)
-	// 		continue
-	// 	}
-
-	// 下载该课程的所有课节图片
-	// for _, lesson := range courseLessons {
-	// 	if lesson.URI == "" {
-	// 		continue
-	// 	}
-	//
-	// 	// 拼接完整URL
-	// 	imageURL := "https://readcamp.cdn.ipalfish.com/" + strings.TrimPrefix(lesson.URI, "/")
-	//
-	// 	// 清理课节名称作为文件名
-	// 	cleanLessonName := cleanFileName(lesson.LectureName)
-	// 	imagePath := filepath.Join(courseDir, cleanLessonName+".jpg")
-	//
-	// 	// 下载图片
-	// 	if err := downloadImage(downloader, imageURL, imagePath); err != nil {
-	// 		t.Logf("下载图片失败 (课程: %s, 课节: %s): %v", courseName, lesson.LectureName, err)
-	// 	} else {
-	// 		t.Logf("下载成功: %s -> %s", lesson.LectureName, imagePath)
-	// 	}
-	// }
-	// }
 
 	// 保存Excel文件
 	if err := f.SaveAs(outputFile); err != nil {
@@ -161,32 +179,96 @@ func TestExportCourseImages(t *testing.T) {
 	t.Logf("图片文件夹: %s", outputDir)
 }
 
-// downloadImage 下载图片
-func downloadImage(client *http.Client, url, filePath string) error {
+// downloadImageWithPath 下载图片并返回实际的文件路径
+func downloadImageWithPath(client *http.Client, url, filePath string) (string, error) {
 	resp, err := client.Get(url)
 	if err != nil {
-		return fmt.Errorf("请求失败: %v", err)
+		return "", fmt.Errorf("请求失败: %v", err)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("HTTP错误: %d", resp.StatusCode)
+		return "", fmt.Errorf("HTTP错误: %d", resp.StatusCode)
+	}
+
+	// 从Content-Type获取图片格式
+	contentType := resp.Header.Get("Content-Type")
+	ext := getImageExtensionFromContentType(contentType)
+
+	// 如果从Content-Type无法确定，尝试从URL获取
+	if ext == "" {
+		urlExt := filepath.Ext(url)
+		if urlExt != "" {
+			ext = urlExt
+		} else {
+			ext = ".jpg" // 默认使用jpg
+		}
+	}
+
+	// 如果文件路径没有扩展名或扩展名不匹配，更新文件路径
+	actualPath := filePath
+	if filepath.Ext(filePath) != ext {
+		actualPath = strings.TrimSuffix(filePath, filepath.Ext(filePath)) + ext
 	}
 
 	// 创建文件
-	file, err := os.Create(filePath)
+	file, err := os.Create(actualPath)
 	if err != nil {
-		return fmt.Errorf("创建文件失败: %v", err)
+		return "", fmt.Errorf("创建文件失败: %v", err)
 	}
 	defer file.Close()
 
 	// 复制数据
 	_, err = io.Copy(file, resp.Body)
 	if err != nil {
-		return fmt.Errorf("写入文件失败: %v", err)
+		return "", fmt.Errorf("写入文件失败: %v", err)
 	}
 
-	return nil
+	// 验证下载的文件是否为有效图片
+	if !isValidImage(actualPath) {
+		return "", fmt.Errorf("下载的文件不是有效的图片格式")
+	}
+
+	return actualPath, nil
+}
+
+// getImageExtensionFromContentType 从Content-Type获取图片扩展名
+func getImageExtensionFromContentType(contentType string) string {
+	contentType = strings.ToLower(contentType)
+	switch {
+	case strings.Contains(contentType, "image/jpeg") || strings.Contains(contentType, "image/jpg"):
+		return ".jpg"
+	case strings.Contains(contentType, "image/png"):
+		return ".png"
+	case strings.Contains(contentType, "image/gif"):
+		return ".gif"
+	case strings.Contains(contentType, "image/bmp"):
+		return ".bmp"
+	case strings.Contains(contentType, "image/webp"):
+		return ".webp"
+	default:
+		return ""
+	}
+}
+
+// isValidImage 检查文件是否为有效的图片
+func isValidImage(filePath string) bool {
+	file, err := os.Open(filePath)
+	if err != nil {
+		return false
+	}
+	defer file.Close()
+
+	// 读取文件头部的几个字节来检测图片格式
+	buffer := make([]byte, 512)
+	_, err = file.Read(buffer)
+	if err != nil {
+		return false
+	}
+
+	// 检查常见的图片格式的文件头
+	contentType := http.DetectContentType(buffer)
+	return strings.HasPrefix(contentType, "image/")
 }
 
 // insertImageToExcel 插入图片到Excel
