@@ -2,6 +2,7 @@ package excel
 
 import (
 	"fmt"
+	"github.com/spf13/cast"
 	_ "image/gif"
 	_ "image/jpeg"
 	_ "image/png"
@@ -115,7 +116,7 @@ func TestExportCourseImages(t *testing.T) {
 			imageURL := "https://readcamp.cdn.ipalfish.com/" + strings.TrimPrefix(lesson.URI, "/")
 
 			// 清理课节名称作为文件名
-			cleanLessonName := cleanFileName(lesson.LectureName)
+			cleanLessonName := cast.ToString(lesson.LectureNumber) + "_" + cleanFileName(lesson.LectureName)
 			// 先使用默认扩展名，下载时会根据Content-Type调整
 			imagePath := filepath.Join(courseDir, cleanLessonName+".jpg")
 
@@ -308,16 +309,10 @@ func isValidImage(filePath string) bool {
 
 // insertImageToExcel 插入图片到Excel
 func insertImageToExcel(f *excelize.File, sheetName, cell, imagePath string) error {
-	// 将路径转换为绝对路径（excelize需要绝对路径）
-	absPath, err := filepath.Abs(imagePath)
-	if err != nil {
-		return fmt.Errorf("获取绝对路径失败: %v", err)
-	}
-
 	// 检查图片文件是否存在
-	fileInfo, err := os.Stat(absPath)
+	fileInfo, err := os.Stat(imagePath)
 	if os.IsNotExist(err) {
-		return fmt.Errorf("图片文件不存在: %s", absPath)
+		return fmt.Errorf("图片文件不存在: %s", imagePath)
 	}
 	if err != nil {
 		return fmt.Errorf("获取文件信息失败: %v", err)
@@ -325,16 +320,16 @@ func insertImageToExcel(f *excelize.File, sheetName, cell, imagePath string) err
 
 	// 检查文件大小
 	if fileInfo.Size() == 0 {
-		return fmt.Errorf("图片文件为空: %s", absPath)
+		return fmt.Errorf("图片文件为空: %s", imagePath)
 	}
 
 	// 再次验证文件是否为有效图片
-	if !isValidImage(absPath) {
-		return fmt.Errorf("文件不是有效的图片格式: %s", absPath)
+	if !isValidImage(imagePath) {
+		return fmt.Errorf("文件不是有效的图片格式: %s", imagePath)
 	}
 
 	// 检查文件扩展名是否被 excelize 支持
-	ext := strings.ToLower(filepath.Ext(absPath))
+	ext := strings.ToLower(filepath.Ext(imagePath))
 	supportedFormats := map[string]bool{
 		".jpg":  true,
 		".jpeg": true,
@@ -357,24 +352,24 @@ func insertImageToExcel(f *excelize.File, sheetName, cell, imagePath string) err
 		return fmt.Errorf("设置行高失败: %v", err)
 	} // 设置行高为56.7点，约等于2cm
 
-	fmt.Printf("尝试插入图片: %s (绝对路径: %s)\n", imagePath, absPath)
+	fmt.Printf("尝试插入图片: %s\n", imagePath)
 
-	// 使用文档中的标准方法插入图片（必须使用绝对路径）
-	err = f.AddPicture(sheetName, cell, absPath, &excelize.GraphicOptions{
+	// 使用文档中的标准方法插入图片（使用相对路径，与export包保持一致）
+	err = f.AddPicture(sheetName, cell, imagePath, &excelize.GraphicOptions{
 		ScaleX:          1.0,       // 不缩放，让AutoFit控制大小
 		ScaleY:          1.0,       // 不缩放，让AutoFit控制大小
 		OffsetX:         0,         // 无偏移，完全嵌入
 		OffsetY:         0,         // 无偏移，完全嵌入
-		LockAspectRatio: true,      // 锁定宽高比（修正为true）
+		LockAspectRatio: false,     // 锁定宽高比（与export包保持一致）
 		AutoFit:         true,      // 自动适应单元格大小
 		Positioning:     "oneCell", // 固定在单个单元格内
 	})
 
 	if err != nil {
-		return fmt.Errorf("添加图片失败: %v (路径: %s)", err, absPath)
+		return fmt.Errorf("添加图片失败: %v (路径: %s)", err, imagePath)
 	}
 
-	fmt.Printf("成功插入图片: %s\n", absPath)
+	fmt.Printf("成功插入图片: %s\n", imagePath)
 	return nil
 }
 
