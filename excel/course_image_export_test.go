@@ -88,11 +88,7 @@ func TestExportCourseImages(t *testing.T) {
 	t.Logf("开始下载图片，共 %d 个课程", len(courseGroups))
 
 	// 按课程分组下载图片到文件夹
-	cnt := 0
 	for courseName, courseLessons := range courseGroups {
-		if courseName != "Tina家庭阅读营L1" {
-			continue
-		}
 		// 清理课程名称作为文件夹名
 		cleanCourseName := cleanFileName(courseName)
 		courseDir := filepath.Join(outputDir, cleanCourseName)
@@ -106,10 +102,6 @@ func TestExportCourseImages(t *testing.T) {
 		for _, lesson := range courseLessons {
 			if lesson.URI == "" {
 				continue
-			}
-			cnt++
-			if cnt > 10 {
-				break
 			}
 
 			// 拼接完整URL
@@ -131,9 +123,6 @@ func TestExportCourseImages(t *testing.T) {
 				t.Logf("下载成功: %s -> %s", lesson.LectureName, actualImagePath)
 			}
 		}
-		if cnt > 10 {
-			break
-		}
 	}
 
 	t.Logf("图片下载完成，共下载 %d 张图片", len(imagePathMap))
@@ -141,9 +130,6 @@ func TestExportCourseImages(t *testing.T) {
 	// 第二步：处理每一行数据，从已下载的图片中读取并插入Excel
 	for rowIndex, lesson := range lessons {
 		row := rowIndex + 2 // 从第2行开始（第1行是表头）
-		if rowIndex == 10 {
-			break
-		}
 
 		// 写入所有字段
 		f.SetCellValue(sheetName, fmt.Sprintf("A%d", row), lesson.CourseID)
