@@ -59,6 +59,8 @@
             gap: 8px;
             flex-wrap: wrap;
             justify-content: center;
+            position: relative;
+            z-index: 10;
         }
 
         button {
@@ -70,6 +72,8 @@
             font-size: 15px;
             cursor: pointer;
             transition: transform 0.1s ease, opacity 0.2s ease;
+            position: relative;
+            z-index: 10;
         }
 
         button:active {
@@ -99,11 +103,12 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease;
+            z-index: 1;
         }
 
         #message.visible {
             opacity: 1;
-            pointer-events: auto;
+            pointer-events: none;
         }
 
         #message span {
@@ -124,7 +129,7 @@
     </div>
     <div id="message">
         点击开始游戏
-        <span>移动: WASD / 方向键 | 射击: 空格或 J | 暂停: P</span>
+        <span>移动: 鼠标 | 自动射击 | 暂停: P</span>
     </div>
     <div id="control-panel">
         <button id="start-btn">开始</button>
@@ -133,7 +138,7 @@
     </div>
     <div id="info-panel" class="panel">
         特性说明：星空背景、三种敌机、道具强化、最高分存档、暂停控制、碰撞反馈等。<br />
-        提示：保持连击提升分数，拾取蓝色道具提高火力，注意补充护盾。
+        提示：鼠标移动控制飞机，自动射击，拾取蓝色道具提高火力，注意补充护盾。
     </div>
 </div>
 
@@ -189,12 +194,15 @@
         lastShot: 0,
         spawnTimer: 0,
         powerTimer: 0,
+        mouseX: WIDTH / 2,
+        mouseY: HEIGHT - 80,
+        autoFire: true,
         player: {
             x: WIDTH / 2 - 20,
             y: HEIGHT - 80,
             w: 40,
             h: 50,
-            speed: 4,
+            speed: 6,
             lives: 3,
             invincible: 0,
         },
@@ -296,15 +304,24 @@
     function updatePlayer() {
         if (!gameState.running || gameState.paused) return;
         const { player } = gameState;
-        let dx = 0;
-        let dy = 0;
-        if (keyState["ArrowLeft"] || keyState["a"] || keyState["A"]) dx -= 1;
-        if (keyState["ArrowRight"] || keyState["d"] || keyState["D"]) dx += 1;
-        if (keyState["ArrowUp"] || keyState["w"] || keyState["W"]) dy -= 1;
-        if (keyState["ArrowDown"] || keyState["s"] || keyState["S"]) dy += 1;
-
-        player.x = Math.max(0, Math.min(WIDTH - player.w, player.x + dx * player.speed));
-        player.y = Math.max(0, Math.min(HEIGHT - player.h - 10, player.y + dy * player.speed));
+        
+        // 鼠标控制：平滑移动到鼠标位置
+        const targetX = gameState.mouseX - player.w / 2;
+        const targetY = gameState.mouseY - player.h / 2;
+        const dx = targetX - player.x;
+        const dy = targetY - player.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance > 1) {
+            const moveDistance = Math.min(distance, player.speed);
+            player.x += (dx / distance) * moveDistance;
+            player.y += (dy / distance) * moveDistance;
+        }
+        
+        // 限制在画布范围内
+        player.x = Math.max(0, Math.min(WIDTH - player.w, player.x));
+        player.y = Math.max(0, Math.min(HEIGHT - player.h - 10, player.y));
+        
         if (player.invincible > 0) player.invincible -= 1;
     }
 
@@ -437,27 +454,106 @@
             ctx.fill();
         });
 
-        // player
+        // player - 改进的飞机外观
         const { player } = gameState;
+        const centerX = player.x + player.w / 2;
+        const centerY = player.y + player.h / 2;
+        
         ctx.save();
         if (player.invincible > 0 && Math.floor(player.invincible / 10) % 2 === 0) {
             ctx.globalAlpha = 0.4;
         }
-        const gradient = ctx.createLinearGradient(player.x, player.y, player.x, player.y + player.h);
-        gradient.addColorStop(0, "#66faff");
-        gradient.addColorStop(1, "#0077ff");
-        ctx.fillStyle = gradient;
+        
+        // 引擎尾焰效果
+        const flameGradient = ctx.createRadialGradient(centerX, player.y + player.h, 0, centerX, player.y + player.h, 25);
+        flameGradient.addColorStop(0, "#ff6b00");
+        flameGradient.addColorStop(0.5, "#ffaa00");
+        flameGradient.addColorStop(1, "rgba(255, 170, 0, 0)");
+        ctx.fillStyle = flameGradient;
         ctx.beginPath();
-        ctx.moveTo(player.x + player.w / 2, player.y);
-        ctx.lineTo(player.x, player.y + player.h);
-        ctx.lineTo(player.x + player.w, player.y + player.h);
+        ctx.ellipse(centerX, player.y + player.h + 8, 8, 20, 0, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // 主机身 - 流线型设计
+        const bodyGradient = ctx.createLinearGradient(player.x, player.y, player.x, player.y + player.h);
+        bodyGradient.addColorStop(0, "#88ddff");
+        bodyGradient.addColorStop(0.3, "#4da6ff");
+        bodyGradient.addColorStop(0.7, "#0066cc");
+        bodyGradient.addColorStop(1, "#003d7a");
+        ctx.fillStyle = bodyGradient;
+        ctx.beginPath();
+        // 机头
+        ctx.moveTo(centerX, player.y);
+        // 左翼
+        ctx.lineTo(player.x + 5, player.y + player.h * 0.4);
+        ctx.lineTo(player.x, player.y + player.h * 0.6);
+        // 左引擎
+        ctx.lineTo(player.x - 3, player.y + player.h * 0.8);
+        ctx.lineTo(player.x + 8, player.y + player.h);
+        // 中心底部
+        ctx.lineTo(centerX, player.y + player.h);
+        // 右引擎
+        ctx.lineTo(player.x + player.w - 8, player.y + player.h);
+        ctx.lineTo(player.x + player.w + 3, player.y + player.h * 0.8);
+        // 右翼
+        ctx.lineTo(player.x + player.w, player.y + player.h * 0.6);
+        ctx.lineTo(player.x + player.w - 5, player.y + player.h * 0.4);
         ctx.closePath();
         ctx.fill();
+        
+        // 高光效果
+        const highlightGradient = ctx.createLinearGradient(player.x, player.y, player.x, player.y + player.h * 0.5);
+        highlightGradient.addColorStop(0, "rgba(255, 255, 255, 0.6)");
+        highlightGradient.addColorStop(1, "rgba(255, 255, 255, 0)");
+        ctx.fillStyle = highlightGradient;
+        ctx.beginPath();
+        ctx.moveTo(centerX - 8, player.y);
+        ctx.lineTo(centerX - 5, player.y + player.h * 0.3);
+        ctx.lineTo(centerX + 5, player.y + player.h * 0.3);
+        ctx.lineTo(centerX + 8, player.y);
+        ctx.closePath();
+        ctx.fill();
+        
+        // 驾驶舱窗口
+        ctx.fillStyle = "rgba(0, 50, 100, 0.8)";
+        ctx.beginPath();
+        ctx.arc(centerX, player.y + player.h * 0.25, 6, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "rgba(150, 220, 255, 0.6)";
+        ctx.beginPath();
+        ctx.arc(centerX, player.y + player.h * 0.25, 4, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // 机翼细节
+        ctx.strokeStyle = "rgba(100, 200, 255, 0.5)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(player.x + 8, player.y + player.h * 0.5);
+        ctx.lineTo(player.x - 2, player.y + player.h * 0.7);
+        ctx.moveTo(player.x + player.w - 8, player.y + player.h * 0.5);
+        ctx.lineTo(player.x + player.w + 2, player.y + player.h * 0.7);
+        ctx.stroke();
+        
         ctx.restore();
 
-        // bullets
-        ctx.fillStyle = "#9be7ff";
+        // bullets - 改进的子弹效果
         gameState.bullets.forEach((b) => {
+            // 外层光晕
+            const glowGradient = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r * 2);
+            glowGradient.addColorStop(0, "rgba(155, 231, 255, 0.8)");
+            glowGradient.addColorStop(0.5, "rgba(77, 166, 255, 0.4)");
+            glowGradient.addColorStop(1, "rgba(77, 166, 255, 0)");
+            ctx.fillStyle = glowGradient;
+            ctx.beginPath();
+            ctx.arc(b.x, b.y, b.r * 2, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // 核心
+            const coreGradient = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
+            coreGradient.addColorStop(0, "#ffffff");
+            coreGradient.addColorStop(0.5, "#9be7ff");
+            coreGradient.addColorStop(1, "#4da6ff");
+            ctx.fillStyle = coreGradient;
             ctx.beginPath();
             ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
             ctx.fill();
@@ -524,7 +620,10 @@
 
         updateStars();
         updatePlayer();
-        if (keyState[" "] || keyState["Space"] || keyState["j"] || keyState["J"]) fireBullet();
+        // 自动射击
+        if (gameState.autoFire) {
+            fireBullet();
+        }
         updateBullets();
         updateEnemies();
         updatePowerUps();
@@ -551,6 +650,9 @@
     function startGame() {
         if (gameState.running && gameState.player.lives > 0) return;
         resetGame();
+        // 初始化鼠标位置到飞机位置
+        gameState.mouseX = gameState.player.x + gameState.player.w / 2;
+        gameState.mouseY = gameState.player.y + gameState.player.h / 2;
         messageEl.classList.remove("visible");
         gameState.running = true;
         gameState.paused = false;
@@ -572,6 +674,17 @@
     });
     pauseBtn.addEventListener("click", pauseGame);
 
+    // 鼠标控制
+    canvas.addEventListener("mousemove", (e) => {
+        const rect = canvas.getBoundingClientRect();
+        gameState.mouseX = e.clientX - rect.left;
+        gameState.mouseY = e.clientY - rect.top;
+    });
+    
+    canvas.addEventListener("mouseenter", () => {
+        canvas.focus();
+    });
+    
     // 让canvas可以获得焦点
     canvas.addEventListener("click", () => {
         canvas.focus();
@@ -612,7 +725,7 @@
     canvas.addEventListener("keyup", handleKeyUp);
 
     messageEl.classList.add("visible");
-    messageEl.innerHTML = "点击开始游戏<span>移动: WASD / 方向键 | 射击: 空格或 J | 暂停: P</span>";
+    messageEl.innerHTML = "点击开始游戏<span>移动: 鼠标 | 自动射击 | 暂停: P</span>";
     updateUI();
     initStars();
 </script>
