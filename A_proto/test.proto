@@ -68,17 +68,52 @@ message UserStudyPlanInfoResp {
   string remind_time = 10;
 }
 
+message ClassHourRightsChangeData {
+  // 调整课时数对应的订单ID
+  int64 order_id = 1;
+  // 修改的支付课时数
+  int64 paid_num = 2;
+  // 修改的赠送课时数
+  int64 gift_num = 3;
+  // 变更类型，1：增加；2：减少
+  int64 change_type = 4;
+}
+
+message UserClassHourRightsChangeReq {
+  int64 uid = 1;
+  // 课时权益变更数据
+  repeated ClassHourRightsChangeData change_data = 2;
+  // 变更申请工单ID
+  string rid = 3;
+}
+
+message ClassHourRightsChangeRes{
+  int64 order_id = 1;
+  string msg = 2;
+  bool success = 3;
+}
+
+message UserClassHourRightsChangeRes {
+  repeated ClassHourRightsChangeRes items = 1;
+}
+
 service UserCenterHttpService {
-  // 用户-学习计划创建
-  rpc UserStudyPlanCreate(UserStudyPlanCreateReq) returns (UserStudyPlanInfoResp) {
+  // 【opapi】用户-课时权益变更申请
+  rpc UserClassHourRightsChange(UserClassHourRightsChangeReq) returns (UserClassHourRightsChangeRes) {
     option (google.api.http) = {
-      post: "/base/readcamp/user/studyplan/create"
+      post: "/readcampopapi/classroom/class_hour_rights/change"
     };
   }
-  // 用户-学习计划查询
-  rpc UserStudyPlanInfo(UserStudyPlanInfoReq) returns (UserStudyPlanInfoResp) {
-    option (google.api.http) = {
-      post: "/base/readcamp/user/studyplan/info"
-    };
-  }
+  //  // 用户-学习计划创建
+  //  rpc UserStudyPlanCreate(UserStudyPlanCreateReq) returns (UserStudyPlanInfoResp) {
+  //    option (google.api.http) = {
+  //      post: "/base/readcamp/user/studyplan/create"
+  //    };
+  //  }
+  //  // 用户-学习计划查询
+  //  rpc UserStudyPlanInfo(UserStudyPlanInfoReq) returns (UserStudyPlanInfoResp) {
+  //    option (google.api.http) = {
+  //      post: "/base/readcamp/user/studyplan/info"
+  //    };
+  //  }
 }
