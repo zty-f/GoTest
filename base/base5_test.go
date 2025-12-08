@@ -173,9 +173,16 @@ func TestUnMarshal4(t *testing.T) {
 	}
 	fmt.Printf("%+v\n", config)
 
-	fmt.Println(max(1, 3))
-	fmt.Println(max(5, 3))
-	fmt.Println(max(6, 3))
+	// max 函数辅助函数
+	maxInt := func(a, b int) int {
+		if a > b {
+			return a
+		}
+		return b
+	}
+	fmt.Println(maxInt(1, 3))
+	fmt.Println(maxInt(5, 3))
+	fmt.Println(maxInt(6, 3))
 	fmt.Println(2 / 1 * 3)
 	fmt.Println(2 * 1.00 / 2 * 3)
 	fmt.Println(1 * 1.00 / 2 * 3)
@@ -300,4 +307,5 @@ func TestError(t *testing.T) {
 	if strings.Contains(err2.Error(), "The callBack is mismatch") {
 		fmt.Println("contains")
 	}
+	fmt.Println(cast.ToInt64("1462281144979947520"))
 }
