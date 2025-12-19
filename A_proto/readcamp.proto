@@ -57,6 +57,8 @@ message UserStudyStatistics {
   int32 total_stars = 7;
   // 累计磨耳朵时长 (单位: s)
   int32 pratice_duration_secs = 8;
+  // 个人连胜天数
+  int32 personal_win_day_cnt = 9;
 }
 
 message GetUserStudyStatisticsDetailReq {
@@ -1355,6 +1357,8 @@ message UserLectureWithCourse {
   message ActivityInfo {
     // 排行榜增量经验
     int64 rank_incr_exp = 1;
+    // 当日首次连胜达成
+    bool personal_win = 2;
   }
   // 课节信息
   UserLecture user_lecture = 1;
@@ -2549,6 +2553,8 @@ message GetAppMainPageConfigResponse {
   int32 show_rank_state = 6;
   // 活动配置信息
   ActivityConf activity_conf = 7;
+  // 个人连胜展示状态 0:不展示，1:参加 2:不参加
+  int64 show_personal_win_state = 8;
 }
 
 message SetUserSettingsRequest {
@@ -9601,12 +9607,14 @@ message PlaylistGetRes {
 }
 
 message ActivityUserChangeReq {
-  // 活动id，排行榜=1
+  // 活动id，排行榜=1、个人连胜=2
   int64 activity_id = 1;
   // 用户id
   int64 uid = 2;
   // 动作 action 参加=1 退出=2
   int64 action_type = 3;
+  // 连胜天数设置
+  int64 win_day_goal = 4;
 }
 
 message ActivityRankUser {
@@ -9649,6 +9657,75 @@ message GetActivityRankRes {
   int64 end_ts = 2;
   // 倒计时(秒)
   int64 countdown_sec = 3;
+}
+
+message GetActivityPersonalWinInfoReq {}
+
+message GetActivityPersonalWinInfoResp {
+  // 个人连胜天数
+  int64 personal_win_day_cnt = 1;
+  // 激励文案
+  string praise_text = 2;
+}
+
+message GetPersonalWinCalendarReq {
+  // 时间区间范围 20251201,20251231
+  repeated int64 days_range = 1;
+}
+
+message PersonalWinCalendar {
+  // 日期-20000901
+  int64 date_day = 1;
+  // 连胜状态 0-未连胜 1-连胜 2-使用复活
+  int64 win_status = 2;
+}
+
+message GetPersonalWinCalendarResp {
+  // 个人连胜日历
+  repeated PersonalWinCalendar win_calendars = 1;
+  // 当月的的个人连胜天数
+  int64 win_day_cnt = 2;
+  // 当月的剩余连胜保持次数
+  int64 remain_win_keep_cnt = 3;
+  // 可以查看的日历起始时间 202510
+  int64 start_month = 4;
+  // 可以查看的日历结束时间 202512
+  int64 end_month = 5;
+}
+
+message GetActivityPersonalWinTipInfoReq {}
+
+message PersonalWinGoalInfo {
+  // 连胜目标天数
+  int64 day_cnt = 1;
+  // 连胜目标奖励类型 1-星币
+  int64 award_type = 2;
+  // 连胜目标奖励数量
+  int64 award_cnt = 3;
+}
+
+message GetActivityPersonalWinTipInfoResp {
+  // 个人连胜天数
+  int64 personal_win_day_cnt = 1;
+  // 激励文案
+  string praise_text = 2;
+  // 个人最近7天连胜日历信息
+  repeated PersonalWinCalendar win_calendars = 3;
+  // 新连胜目标信息-有则需要弹窗让用户选择
+  repeated PersonalWinGoalInfo new_win_goals = 4;
+  // 当前达成的连胜目标信息-有则需要弹窗提示用户已达成
+  repeated PersonalWinGoalInfo cur_win_goals = 5;
+}
+
+message GetMainPagePersonalWinInfoReq {}
+
+message GetMainPagePersonalWinInfoResp {
+  // 是否使用连胜保持功能
+  bool use_win_keep = 1;
+  // 剩余连胜保持次数
+  int64 remain_win_keep_cnt = 2;
+  // 提示文案
+  string tip_text = 3;
 }
 
 message AdminUpsertActivityReq {
@@ -11342,6 +11419,35 @@ service ReadCampHttpService {
   rpc GetActivityRank(GetActivityReq) returns (GetActivityRankRes) {
     option (google.api.http) = {
       post: '/base/readcamp/activity/rank/get'
+    };
+  }
+
+  // 用户-活动-个人连胜页信息
+  // `midware:"Auth"`
+  rpc GetActivityPersonalWinInfo(GetActivityPersonalWinInfoReq) returns (GetActivityPersonalWinInfoResp) {
+    option (google.api.http) = {
+      post: '/base/readcamp/activity/personal_win/info'
+    };
+  }
+  // 用户-活动-个人连胜日历信息
+  // `midware:"Auth"`
+  rpc GetActivityPersonalWinCalendar(GetPersonalWinCalendarReq) returns (GetPersonalWinCalendarResp) {
+    option (google.api.http) = {
+      post: '/base/readcamp/activity/personal_win/calendar'
+    };
+  }
+  // 用户-活动-个人连胜完成提示信息
+  // `midware:"Auth"`
+  rpc GetActivityPersonalWinTipInfo(GetActivityPersonalWinTipInfoReq) returns (GetActivityPersonalWinTipInfoResp) {
+    option (google.api.http) = {
+      post: '/base/readcamp/activity/personal_win/tip'
+    };
+  }
+  // 用户-活动-首页个人连胜相关信息
+  // `midware:"Auth"`
+  rpc GetMainPagePersonalWinInfo(GetMainPagePersonalWinInfoReq) returns (GetMainPagePersonalWinInfoResp) {
+    option (google.api.http) = {
+      post: '/base/readcamp/activity/personal_win/main_page_info'
     };
   }
 
