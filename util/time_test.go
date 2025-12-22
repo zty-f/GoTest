@@ -305,3 +305,15 @@ func TestIsValidTimeFormat(t *testing.T) {
 	fmt.Println(IsValidTimeFormat("18:60:00")) // false
 	fmt.Println(IsValidTimeFormat("18:00"))    // false
 }
+
+func TestGetTodayWeekMonday(t *testing.T) {
+	fmt.Println(GetTodayWeekMonday(time.Now()))
+	fmt.Println(GetTodayWeekMonday(time.Date(2025, 12, 23, 0, 0, 0, 0, time.Local)))
+	fmt.Println(GetTodayWeekMonday(time.Date(2025, 12, 24, 0, 0, 0, 0, time.Local)))
+	fmt.Println(GetTodayWeekMonday(time.Date(2025, 12, 25, 0, 0, 0, 0, time.Local)))
+	fmt.Println(GetTodayWeekMonday(time.Date(2025, 12, 26, 0, 0, 0, 0, time.Local)))
+	fmt.Println(GetTodayWeekMonday(time.Date(2025, 12, 27, 0, 0, 0, 0, time.Local)))
+	fmt.Println(GetTodayWeekMonday(time.Date(2025, 12, 28, 0, 0, 0, 0, time.Local)))
+	fmt.Println(GetTodayWeekMonday(time.Date(2025, 12, 29, 0, 0, 0, 0, time.Local)))
+	fmt.Println(time.Now().Hour())
+}

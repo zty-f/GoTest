@@ -5,6 +5,7 @@ import (
 	"math"
 	"math/rand"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 
@@ -607,4 +608,20 @@ func IsValidTimeFormat(timeStr string) bool {
 	regex := `^(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d$`
 	matched, _ := regexp.MatchString(regex, timeStr)
 	return matched
+}
+
+func GetTodayWeekMonday(t time.Time) int64 {
+	now := t.Local()
+	mondayOffset := map[time.Weekday]int{
+		time.Sunday:    6,
+		time.Monday:    0,
+		time.Tuesday:   1,
+		time.Wednesday: 2,
+		time.Thursday:  3,
+		time.Friday:    4,
+		time.Saturday:  5,
+	}
+	endDate := now.AddDate(0, 0, -mondayOffset[now.Weekday()])
+	dayTime, _ := strconv.ParseInt(endDate.Format("20060102"), 10, 64)
+	return dayTime
 }

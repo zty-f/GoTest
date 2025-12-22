@@ -9666,6 +9666,8 @@ message GetActivityPersonalWinInfoResp {
   int64 personal_win_day_cnt = 1;
   // 激励文案
   string praise_text = 2;
+  // 连胜目标信息
+  repeated PersonalWinGoalInfo win_goals = 3;
 }
 
 message GetPersonalWinCalendarReq {
