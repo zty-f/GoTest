@@ -317,3 +317,12 @@ func TestGetTodayWeekMonday(t *testing.T) {
 	fmt.Println(GetTodayWeekMonday(time.Date(2025, 12, 29, 0, 0, 0, 0, time.Local)))
 	fmt.Println(time.Now().Hour())
 }
+
+func TestGetTimeOfThisWeekStartAndEnd(t *testing.T) {
+	fmt.Println(GetTimeOfThisWeekStartAndEnd(time.Now()))
+	fmt.Println(GetTimeOfThisWeekStartAndEnd(time.Date(2025, 12, 23, 0, 0, 0, 0, time.Local)))
+	fmt.Println(GetTimeOfThisWeekStartAndEnd(time.Date(2025, 12, 24, 0, 0, 0, 0, time.Local)))
+	fmt.Println(GetTimeOfThisWeekStartAndEnd(time.Date(2025, 12, 25, 0, 0, 0, 0, time.Local)))
+	fmt.Println(GetTimeOfThisWeekStartAndEnd(time.Date(2025, 12, 26, 0, 0, 0, 0, time.Local)))
+	fmt.Println(GetTimeOfThisWeekStartAndEnd(time.Date(2025, 12, 30, 0, 0, 0, 0, time.Local)))
+}

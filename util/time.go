@@ -625,3 +625,27 @@ func GetTodayWeekMonday(t time.Time) int64 {
 	dayTime, _ := strconv.ParseInt(endDate.Format("20060102"), 10, 64)
 	return dayTime
 }
+
+func GetTimeOfThisWeekStartAndEnd(t time.Time) (int64, int64) {
+	mondayOffset := map[time.Weekday]int{
+		time.Sunday:    6,
+		time.Monday:    0,
+		time.Tuesday:   1,
+		time.Wednesday: 2,
+		time.Thursday:  3,
+		time.Friday:    4,
+		time.Saturday:  5,
+	}
+	mondayOffset2 := map[time.Weekday]int{
+		time.Sunday:    0,
+		time.Monday:    6,
+		time.Tuesday:   5,
+		time.Wednesday: 4,
+		time.Thursday:  3,
+		time.Friday:    2,
+		time.Saturday:  1,
+	}
+	beginDate := t.AddDate(0, 0, -mondayOffset[t.Weekday()])
+	endDate := t.AddDate(0, 0, mondayOffset2[t.Weekday()])
+	return cast.ToInt64(beginDate.Format("20060102")), cast.ToInt64(endDate.Format("20060102"))
+}

@@ -308,4 +308,17 @@ func TestError(t *testing.T) {
 		fmt.Println("contains")
 	}
 	fmt.Println(cast.ToInt64("1462281144979947520"))
+
+	fmt.Println(54 - 54%10)
+	personalWinDayCnt := 54
+	fmt.Println(personalWinDayCnt + 10 - personalWinDayCnt%10)
+	personalWinDayCnt = 80
+	fmt.Println(personalWinDayCnt + 10 - personalWinDayCnt%10)
+	personalWinDayCnt = 119
+	fmt.Println(personalWinDayCnt + 10 - personalWinDayCnt%10)
+
+	fmt.Println(20250923 / 100)
+	fmt.Println(20250123 / 100)
+	fmt.Println(20250407 / 100)
+	fmt.Println(0 / 100)
 }
