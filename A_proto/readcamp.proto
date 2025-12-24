@@ -59,6 +59,8 @@ message UserStudyStatistics {
   int32 pratice_duration_secs = 8;
   // 个人连胜天数
   int32 personal_win_day_cnt = 9;
+  // 今日是否完成连胜
+  bool is_win_today = 10;
 }
 
 message GetUserStudyStatisticsDetailReq {
