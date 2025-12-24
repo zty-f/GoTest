@@ -3,7 +3,10 @@ package util
 import (
 	"fmt"
 	"github.com/bytedance/sonic"
+	"math"
+	"math/rand"
 	"strings"
+	"time"
 )
 
 func InterfaceToString(i interface{}) string {
@@ -92,4 +95,21 @@ func PadLeftRight(str string, padChar rune, length int, isLeft bool) string {
 		return padding + str
 	}
 	return str + padding
+}
+
+func RandomStr(list []string) string {
+	if len(list) == 0 {
+		return ""
+	}
+	return list[rand.Intn(len(list))]
+}
+
+// GenerateRandomFloatBetween 生成指定范围内的一位小数
+func GenerateRandomFloatBetween(min, max int) float64 {
+	if min > max {
+		min, max = max, min
+	}
+	rand.Seed(time.Now().UnixNano())
+	randomFloat := float64(min) + rand.Float64()*(float64(max)-float64(min))
+	return math.Floor(randomFloat*10) / 10
 }

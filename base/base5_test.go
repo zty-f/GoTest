@@ -321,4 +321,29 @@ func TestError(t *testing.T) {
 	fmt.Println(20250123 / 100)
 	fmt.Println(20250407 / 100)
 	fmt.Println(0 / 100)
+
+	tt, _ := time.ParseInLocation("20060102", "20250923", time.Local)
+	fmt.Println(tt.Weekday())
+	fmt.Println(int64(tt.Weekday()))
+	tt, _ = time.ParseInLocation("20060102", "20251223", time.Local)
+	fmt.Println(tt.Weekday())
+	fmt.Println(int64(tt.Weekday()))
+	fmt.Println(cast.ToInt64(time.Time{}.Format("20060102")))
+}
+
+func RandomStr(list []string) string {
+	if len(list) == 0 {
+		return ""
+	}
+	return list[rand.Intn(len(list))]
+}
+
+func TestRandomStr(t *testing.T) {
+	fmt.Println(RandomStr([]string{"a", "b", "c"}))
+	fmt.Println(RandomStr([]string{"a", "b", "c"}))
+	fmt.Println(RandomStr([]string{"a", "b", "c"}))
+	fmt.Println(RandomStr([]string{"a", "b", "c"}))
+	fmt.Println(RandomStr([]string{"a", "b", "c"}))
+	fmt.Println(RandomStr([]string{"a", "b", "c"}))
+	fmt.Println(RandomStr([]string{"a", "b", "c"}))
 }
