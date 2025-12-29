@@ -346,4 +346,39 @@ func TestRandomStr(t *testing.T) {
 	fmt.Println(RandomStr([]string{"a", "b", "c"}))
 	fmt.Println(RandomStr([]string{"a", "b", "c"}))
 	fmt.Println(RandomStr([]string{"a", "b", "c"}))
+
+	var x []*Conf
+	x = nil
+	for i, conf := range x {
+		fmt.Println(i, conf)
+	}
+}
+
+type ActivityWinConf struct {
+	StartTs       int64 `json:"start_ts"`        // 活动开始时间
+	MonthRedoLife int64 `json:"month_redo_life"` // 每月可复活次数
+	// 连胜目标相关信息 大于最后一个则按照规律计算
+	GoalInfos []*GoalInfo `json:"goal_infos"` // 连胜目标相关信息
+}
+
+type GoalInfo struct {
+	DayCnt    int64 `json:"day_cnt"`    // 连胜目标天数
+	AwardType int64 `json:"award_type"` // 奖励类型 1-星币
+	AwardCnt  int64 `json:"award_cnt"`  // 奖励数量
+}
+
+func TestStrConf(t *testing.T) {
+	conf := &ActivityWinConf{
+		StartTs:       time.Now().Unix(),
+		MonthRedoLife: 2,
+		GoalInfos: []*GoalInfo{
+			{DayCnt: 7, AwardType: 1, AwardCnt: 10},
+			{DayCnt: 14, AwardType: 1, AwardCnt: 15},
+			{DayCnt: 30, AwardType: 1, AwardCnt: 30},
+		},
+	}
+	fmt.Printf("%+v\n", conf)
+	str, _ := json.Marshal(conf)
+	fmt.Println(string(str))
+	_ = "{\"start_ts\":1766576993,\"month_redo_life\":2,\"goal_infos\":[{\"day_cnt\":7,\"award_type\":1,\"award_cnt\":10},{\"day_cnt\":14,\"award_type\":1,\"award_cnt\":15},{\"day_cnt\":30,\"award_type\":1,\"award_cnt\":30}]}"
 }

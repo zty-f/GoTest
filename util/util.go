@@ -10,6 +10,7 @@ import (
 	"errors"
 	"fmt"
 	"math"
+	"math/rand"
 	"reflect"
 	"regexp"
 	"runtime/debug"
@@ -333,4 +334,11 @@ func SafeGo(ctx context.Context, fun func()) {
 		}
 	}(ctx)
 	fun()
+}
+
+func RandomArray[T any](list []T) T {
+	if len(list) == 0 {
+		return *new(T)
+	}
+	return list[rand.Intn(len(list))]
 }

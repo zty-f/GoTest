@@ -161,3 +161,20 @@ func TestExtractAndIncrementChineseWeek(t *testing.T) {
 		}
 	}
 }
+
+type Conf struct {
+	Id   int    `json:"id"`
+	Name string `json:"name"`
+}
+
+func TestRandomArray(t *testing.T) {
+	fmt.Println(RandomArray([]int{1, 2, 3, 4, 5}))
+	fmt.Println(RandomArray([]int{1, 2, 3, 4, 5}))
+	fmt.Println(RandomArray([]int{1, 2, 3, 4, 5}))
+	fmt.Println(RandomArray([]string{"a", "b", "c"}))
+	fmt.Println(RandomArray([]string{"a", "b", "c"}))
+	fmt.Println(RandomArray([]string{"a", "b", "c"}))
+	fmt.Println(RandomArray([]Conf{{Id: 1, Name: "a"}, {Id: 2, Name: "b"}, {Id: 3, Name: "c"}}))
+	fmt.Println(RandomArray([]Conf{{Id: 1, Name: "a"}, {Id: 2, Name: "b"}, {Id: 3, Name: "c"}}))
+	fmt.Println(RandomArray([]Conf{{Id: 1, Name: "a"}, {Id: 2, Name: "b"}, {Id: 3, Name: "c"}}))
+}
