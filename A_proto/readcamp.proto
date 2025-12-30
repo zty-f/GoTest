@@ -10011,7 +10011,8 @@ message AdminQwSendMessageReq {
 }
 
 message MsgContent {
-  string message_type = 1; // 消息类型：text, image, voice, video, file
+  // 消息类型：text, image, voice, video, file
+  string message_type = 1;
   // @inject_tag: json:"text,omitempty"
   QwMsgText text = 2;
   // @inject_tag: json:"image,omitempty"
