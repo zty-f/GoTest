@@ -381,4 +381,7 @@ func TestStrConf(t *testing.T) {
 	str, _ := json.Marshal(conf)
 	fmt.Println(string(str))
 	_ = "{\"start_ts\":1766576993,\"month_redo_life\":2,\"goal_infos\":[{\"day_cnt\":7,\"award_type\":1,\"award_cnt\":10},{\"day_cnt\":14,\"award_type\":1,\"award_cnt\":15},{\"day_cnt\":30,\"award_type\":1,\"award_cnt\":30}]}"
+
+	var newConf *ActivityWinConf
+	fmt.Printf("%+v\n", newConf)
 }

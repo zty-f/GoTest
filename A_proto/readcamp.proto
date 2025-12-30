@@ -9999,7 +9999,7 @@ message QwSendGroupInfo{
   // 老师账号
   string teacher = 1;
   // 发送用户学生列表
-  repeated string uids = 2;
+  repeated int64 uids = 2;
 }
 
 message AdminQwSendMessageReq {
