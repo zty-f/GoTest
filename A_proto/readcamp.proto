@@ -10040,6 +10040,9 @@ message QwMsgMedia {
   int64 play_length = 4;
   // @inject_tag: json:"thumbnail_url,omitempty"
   string thumbnail_url = 5; // 缩略图/封面图URL，主要用于视频消息的封面
+  // 上传文件时的内容类型 参考https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Content-Type
+  // @inject_tag: json:"content_type,omitempty"
+  string  content_type = 6;
 }
 
 message QwMsgFile {
@@ -10053,6 +10056,9 @@ message QwMsgFile {
   string filename = 4;
   // @inject_tag: json:"fileext,omitempty"
   string fileext = 5;
+  // 上传文件时的内容类型 参考https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Content-Type
+  // @inject_tag: json:"content_type,omitempty"
+  string  content_type = 6;
 }
 
 message AdminQwThirdRobotInfoReq {
