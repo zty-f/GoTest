@@ -9995,6 +9995,88 @@ message GetShopmallOrderInfoRes {
   }
 }
 
+message QwSendGroupInfo{
+  // 老师账号
+  string teacher = 1;
+  // 发送用户学生列表
+  repeated string uids = 2;
+}
+
+message AdminQwSendMessageReq {
+  // 发送渠道 1-企微官方 2-三方工具(鲸域)
+  int64 channel = 1;
+  // 发送分组信息
+  repeated QwSendGroupInfo groups = 2;
+  repeated MsgContent messages = 3; // 消息内容
+}
+
+message MsgContent {
+  string message_type = 1; // 消息类型：text, image, voice, video, file
+  // @inject_tag: json:"text,omitempty"
+  QwMsgText text = 2;
+  // @inject_tag: json:"image,omitempty"
+  QwMsgMedia image = 3;
+  // @inject_tag: json:"voice,omitempty"
+  QwMsgMedia voice = 4;
+  // @inject_tag: json:"video,omitempty"
+  QwMsgMedia video = 5;
+  QwMsgFile file = 6;
+}
+
+message QwMsgText {
+  // @inject_tag: json:"content,omitempty"
+  string content = 1;
+}
+
+message QwMsgMedia {
+  // @inject_tag: json:"filesize,omitempty"
+  int64 filesize = 1;
+  // @inject_tag: json:"url,omitempty"
+  string url = 2;
+  // @inject_tag: json:"md5sum,omitempty"
+  string md5sum = 3;
+  // @inject_tag: json:"play_length,omitempty"
+  int64 play_length = 4;
+  // @inject_tag: json:"thumbnail_url,omitempty"
+  string thumbnail_url = 5; // 缩略图/封面图URL，主要用于视频消息的封面
+}
+
+message QwMsgFile {
+  // @inject_tag: json:"filesize,omitempty"
+  int64 filesize = 1;
+  // @inject_tag: json:"url,omitempty"
+  string url = 2;
+  // @inject_tag: json:"md5sum,omitempty"
+  string md5sum = 3;
+  // @inject_tag: json:"filename,omitempty"
+  string filename = 4;
+  // @inject_tag: json:"fileext,omitempty"
+  string fileext = 5;
+}
+
+message AdminQwThirdRobotInfoReq {
+  // 三方工具机器人类型 1-鲸域
+  int64 robot_type = 1;
+  repeated string teachers = 2;
+}
+
+message QwThirdRobotInfo {
+  // 企微机器人ID
+  string robot_id = 1;
+  // 企微账户
+  string qw_account = 2;
+  // 头像
+  string avatar = 3;
+  // 名称
+  string name = 4;
+  // 企微机器人状态 0-未知 1-在线 2-离线
+  int64 status = 5;
+}
+
+message AdminQwThirdRobotInfoRes {
+  repeated QwThirdRobotInfo list = 1;
+}
+
 service ReadCampHttpService {
   // 阅读营-客户端申请发货
   // `midware:"Auth"`
@@ -12681,6 +12763,18 @@ service ReadCampHttpService {
   rpc AdminGetReferralActivityByScene(AdminGetReferralActivityBySceneReq) returns (ReferralActivity) {
     option (google.api.http) = {
       post: '/admin/base/readcamp/referral_activity/query_by_scene'
+    };
+  }
+  // 管理-企微群发信息
+  rpc AdminQwSendMessage(AdminQwSendMessageReq) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: '/admin/base/readcamp/qw/send_message'
+    };
+  }
+  // 管理-查询企微三方机器人状态信息
+  rpc AdminQwThirdRobotInfo(AdminQwThirdRobotInfoReq) returns (AdminQwThirdRobotInfoRes) {
+    option (google.api.http) = {
+      post: '/admin/base/readcamp/qw/third_robot_info'
     };
   }
 }
