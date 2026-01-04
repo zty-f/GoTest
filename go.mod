@@ -12,6 +12,7 @@ require (
 	github.com/gorilla/websocket v1.5.3
 	github.com/json-iterator/go v1.1.12
 	github.com/olivere/elastic/v7 v7.0.32
+	github.com/pkg/errors v0.9.1
 	github.com/samber/lo v1.49.1
 	github.com/spf13/cast v1.6.0
 	github.com/spf13/viper v1.13.0
@@ -21,6 +22,7 @@ require (
 	go.uber.org/atomic v1.9.0
 	go.uber.org/zap v1.21.0
 	golang.org/x/net v0.27.0
+	golang.org/x/sync v0.10.0
 	golang.org/x/time v0.0.0-20191024005414-555d28b269f0
 	google.golang.org/protobuf v1.31.0
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
@@ -60,7 +62,6 @@ require (
 	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.5 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/richardlehane/mscfb v1.0.4 // indirect
 	github.com/richardlehane/msoleps v1.0.3 // indirect
@@ -76,7 +77,6 @@ require (
 	go.uber.org/multierr v1.8.0 // indirect
 	golang.org/x/arch v0.11.0 // indirect
 	golang.org/x/crypto v0.25.0 // indirect
-	golang.org/x/sync v0.10.0 // indirect
 	golang.org/x/sys v0.26.0 // indirect
 	golang.org/x/text v0.21.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
