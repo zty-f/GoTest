@@ -385,3 +385,17 @@ func TestStrConf(t *testing.T) {
 	var newConf *ActivityWinConf
 	fmt.Printf("%+v\n", newConf)
 }
+
+func TestSplit2(t *testing.T) {
+	SnapshotUri := "readcamp/general/2a/d4/45bfa1f3b4ac10f20a50dd1b8fcb"
+	uriParts := strings.Split(SnapshotUri, "/")
+	curImgMd5 := uriParts[len(uriParts)-1]
+	fmt.Println(curImgMd5)
+
+	SnapshotUri2 := "0/img/2a/d4/45bfa1f3b4ac10f20a50dd1b8fcb"
+	uriParts2 := strings.Split(SnapshotUri2, "/")
+	curImgMd52 := uriParts[len(uriParts2)-1]
+	fmt.Println(curImgMd52)
+
+	fmt.Println(curImgMd5 == curImgMd52)
+}
