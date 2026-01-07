@@ -34,10 +34,10 @@ message SetQwAiTeacherInfoResp {
 message GetQwAiChatMsgListReq {
     // 企微用户id
     string external_userid = 1;
-    // 消息发送时间
-    int64 msgtime_begin = 2;
-    // 截止时间
-    int64 msgtime_end = 3;
+    // 消息发送时间 单位是s
+    int64 msg_begin = 2;
+    // 截止时间 单位是s
+    int64 msg_end = 3;
     // 查询最新记录数量
     int64 limit = 4;
 }
@@ -48,8 +48,8 @@ message GetQwAiChatMsgListResp {
 
 // 聊天消息
 message MsgInfo {
-  // 消息产生时间 (UNIX时间戳) 单位是ms(毫秒)
-  int64 msgtime = 1;
+  // 消息产生时间 单位是s
+  int64 msg_time = 1;
   // 消息内容
   string msg = 2;
   // 消息内容对应的AI回复
