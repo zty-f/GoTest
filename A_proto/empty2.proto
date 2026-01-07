@@ -35,7 +35,7 @@ message GetQwAiChatMsgListReq {
     // 企微用户id
     string external_userid = 1;
     // 消息发送时间
-    int64 msgtime = 2;
+    int64 msgtime_begin = 2;
     // 截止时间
     int64 msgtime_end = 3;
     // 查询最新记录数量
