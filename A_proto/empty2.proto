@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package usercenterapi;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+message GetQwAiTeacherInfoReq {
+    // 企微用户id
+    string external_userid = 1;
+}
+
+message GetQwAiTeacherInfoResp {
+  // 在线状态  0-未知 1-在线 2-离线
+  int64 online_status = 1;
+  // 是否全员开启托管
+  bool global_enable = 2;
+  // 当前会话用户是否开启托管
+  bool user_enable = 3;
+}
+
+message SetQwAiTeacherInfoReq {
+    // 企微用户id
+    string external_userid = 1;
+    // 修改类型 1-全局开启托管 2-当前会话用户开启托管
+    int64 op_type = 2;
+    // 是否开启托管
+    bool enable = 3;
+}
+
+message SetQwAiTeacherInfoResp {
+}
+
+message GetQwAiChatMsgListReq {
+    // 企微用户id
+    string external_userid = 1;
+    // 消息发送时间
+    int64 msgtime = 2;
+    // 截止时间
+    int64 msgtime_end = 3;
+    // 查询最新记录数量
+    int64 limit = 4;
+}
+
+message GetQwAiChatMsgListResp {
+    repeated MsgInfo items = 1;
+}
+
+// 聊天消息
+message MsgInfo {
+  // 消息产生时间 (UNIX时间戳) 单位是ms(毫秒)
+  int64 msgtime = 1;
+  // 消息内容
+  string msg = 2;
+  // 消息内容对应的AI回复
+  string reply = 3;
+}
+
+
+
+service UserCenterHttpService {
+  // 【api】查询当前老师AI助手相关信息
+  rpc GetQwAiTeacherInfo(GetQwAiTeacherInfoReq) returns(GetQwAiTeacherInfoResp) {
+    option (google.api.http) = {
+      post: "/readcampopapi/qw/ai/teacher_info"
+    };
+  }
+  // 【api】老师企微AI配置信息修改
+  rpc SetQwAiTeacherInfo(SetQwAiTeacherInfoReq) returns(SetQwAiTeacherInfoResp) {
+    option (google.api.http) = {
+      post: "/readcampopapi/qw/ai/teacher_info/set"
+    };
+  }
+  // 【api】查询当前会话用户AI助手聊天记录
+  rpc GetQwAiChatMsgList(GetQwAiChatMsgListReq) returns(GetQwAiChatMsgListResp) {
+    option (google.api.http) = {
+      post: "/readcampopapi/qw/ai/chat_msg/list"
+    };
+  }
+}
