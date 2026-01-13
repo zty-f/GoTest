@@ -399,3 +399,65 @@ func TestSplit2(t *testing.T) {
 
 	fmt.Println(curImgMd5 == curImgMd52)
 }
+
+type Conf1 struct {
+	Id   int64  `json:"id"`
+	Name string `json:"name"`
+}
+
+func TestUnmarshal(t *testing.T) {
+	conf := &Conf1{}
+	err := json.Unmarshal([]byte(`{"id":123,"name":"zty"}`), conf)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("%+v\n", conf)
+	SpecialPackageUtmSourceMap := map[int64]string{
+		660411800375556: "1000202",
+		691049570629888: "1000268",
+		691049548658944: "1000267",
+		700379330763010: "1000311",
+		702027600550148: "1000316",
+		714039100485888: "120052",
+		717005115625730: "1000350",
+		717004896217346: "1000349",
+		723085443864832: "1000363",
+	}
+	b, _ := json.Marshal(SpecialPackageUtmSourceMap)
+	fmt.Println(string(b))
+}
+
+type ReplyInfo struct {
+	Handoff         bool        `json:"handoff,omitempty"` // 是否需要人工介入
+	HandoffType     string      `json:"handoff_type,omitempty"`
+	Priority        string      `json:"priority,omitempty"`
+	RiskLevel       string      `json:"risk_level,omitempty"`
+	Tags            []string    `json:"tags,omitempty"`
+	Summary         string      `json:"summary,omitempty"` // ai总结用户的提问
+	NextAction      string      `json:"next_action,omitempty"`
+	SuggestedReply  string      `json:"suggested_reply,omitempty"` // 回复建议
+	AgentNotes      string      `json:"agent_notes,omitempty"`
+	UserText        string      `json:"user_text,omitempty"`
+	StudentId       string      `json:"student_id,omitempty"`
+	OrderId         string      `json:"order_id,omitempty"`
+	OrderStatus     string      `json:"order_status,omitempty"`
+	LogisticsStatus string      `json:"logistics_status,omitempty"`
+	DaysAfterPay    interface{} `json:"days_after_pay,omitempty"`
+	Channel         string      `json:"channel,omitempty"`
+}
+
+func TestMarshalReplyInfo(t *testing.T) {
+	replyInfo := &ReplyInfo{
+		Handoff:        true,
+		Summary:        "This is a summary.",
+		NextAction:     "Follow up",
+		SuggestedReply: "Suggested reply text.",
+	}
+	data, err := json.Marshal(replyInfo)
+	if err != nil {
+		fmt.Println("Error marshaling ReplyInfo:", err)
+		return
+	}
+	fmt.Println("Marshaled ReplyInfo:", string(data))
+}
