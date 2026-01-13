@@ -37,6 +37,7 @@ func DecodeEscapedString(escapedStr string) (string, error) {
 	return escapedStr, nil
 }
 
+// 测试八进制转义字符串解码
 func TestOctalEscapeToUTF8(t *testing.T) {
 	octalStr := "\\344\\271\\260\\344\\270\\215\\344\\271\\260" // "测试" 的八进制转义
 	utf8Str, err := OctalEscapeToUTF8(octalStr)
