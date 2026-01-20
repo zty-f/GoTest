@@ -9847,6 +9847,8 @@ message ExchangeGiftData {
   int64 exchange_num = 2;
   // 奖励信息列表
   repeated GiftInfo gift_list = 3;
+  // 用户当前类型奖励已兑换次数
+  int64 used_exchange_num = 4;
 }
 
 message UserExchangeGiftListRes {
@@ -9863,6 +9865,17 @@ message UserGiftExchangeReq {
 
 message UserGiftExchangeRes {
 }
+
+message AdminUserExchangeGiftInfoReq {
+  // 请求信息年月-例：202506
+  string year_month = 1;
+}
+
+message AdminUserExchangeGiftInfoRes {
+  // 奖励信息列表
+  repeated ExchangeGiftData items = 1;
+}
+
 
 message VerifyCodeReq {
   // 验证码
@@ -12782,6 +12795,12 @@ service ReadCampHttpService {
   rpc AdminQwThirdRobotInfo(AdminQwThirdRobotInfoReq) returns (AdminQwThirdRobotInfoRes) {
     option (google.api.http) = {
       post: '/admin/base/readcamp/qw/third_robot_info'
+    };
+  }
+  // 管理-转介绍-查询用户兑换信息
+  rpc AdminUserExchangeGiftInfo(AdminUserExchangeGiftInfoReq) returns (AdminUserExchangeGiftInfoRes) {
+    option (google.api.http) = {
+      post: '/admin/base/readcamp/user_exchange_gift/info'
     };
   }
 }
