@@ -9869,6 +9869,7 @@ message UserGiftExchangeRes {
 message AdminUserExchangeGiftInfoReq {
   // 请求信息年月-例：202506
   string year_month = 1;
+  int64 uid = 2;
 }
 
 message AdminUserExchangeGiftInfoRes {
