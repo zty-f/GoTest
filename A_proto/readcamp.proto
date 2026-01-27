@@ -9739,12 +9739,118 @@ message AdminUpsertActivityReq {
   string name = 2;
   // 状态 0:初始化 1:上线 2:下线
   int64 state = 3;
-  // 活动类型 1-长期活动
+  // 活动类型 1-长期活动 2-抽奖活动
   int64 activity_type = 4;
   // 配置信息
   string conf = 5;
-  // 用户筛选配置
+  // 用户筛选配置 活动人群配置 多个使用英文逗号分隔
   string user_query_conf = 6;
+  // 开始时间
+  int64 start_ts = 7;
+  // 结束时间
+  int64 end_ts = 8;
+  // 奖品池配置
+  repeated ActRewardInfo reward_infos = 9;
+  // 抽奖规则配置
+  repeated LotteryRuleInfo lottery_rule_infos = 10;
+  // 兜底权益列表
+  repeated ActRewardInfo default_reward_infos = 11;
+}
+
+message ActRewardInfo {
+  // 权益id
+  int64 gift_id = 1;
+  // 权益价值 1-高价值 2-中价值 3-低价值
+  int64 gift_value = 2;
+  // 枚举类型 1:开课 2:星币 3:实物 下面权限详细信息只在列表接口返回
+  int32 gift_type = 3;
+  // 描述
+  string gift_desc = 4;
+  // 具体配置 类型为开课时,存储开课信息课程id逗号分隔. 实物时为商品id，星币时为星币数
+  string details = 5;
+  // 上架状态 1: 未上架, 2:已上架
+  int32 status = 6;
+  // 权益兑换开始时间戳-秒
+  int64 start_at = 7;
+  // 权益兑换结束时间戳-秒
+  int64 end_at = 8;
+  // 权益库存
+  int64 stock = 9;
+  // 权益品类/类目 1-图书 2-电子产品 3-课程 4-积分 5-玩具 6-周边 7-文体用品
+  int32 category = 10;
+  // 是否支持重复兑换 0代表可以重复 1代表不可以重复 其余代表重复次数
+  int64 change_num = 11;
+  // 权益对应的商品名称
+  string gift_name = 12;
+  // 权益对应的商品图片
+  string gift_image = 13;
+}
+
+message LotteryRuleInfo {
+  // 规则标识 人群包ID
+  string tag = 1;
+  // 高价值奖品中奖概率
+  double high_value_prob = 2;
+  // 中价值奖品中奖概率
+  double mid_value_prob = 3;
+  // 低价值奖品中奖概率
+  double low_value_prob = 4;
+}
+
+message AdminActivityListReq {
+  // 活动类型 1-长期活动 2-抽奖活动
+  int64 activity_type = 1;
+  int64 offset = 2;
+  int64 limit = 3;
+}
+
+message AdminActivityListRes {
+  repeated AdminUpsertActivityReq activity_infos = 1;
+  int64 total = 2;
+  bool more = 3;
+  int64 offset = 4;
+}
+
+message AdminActivityTaskRuleListReq {
+  int64 activity_id = 1;
+}
+
+message AdminActivityTaskRuleListRes {
+  message TaskRuleInfo {
+    // 规则ID
+    int64 id = 1;
+    // 名称
+    string name = 2;
+    // 描述信息-对外活动名称
+    string description = 3;
+    // 规则类型-对应具体的任务完成条件
+    string rule_type = 4;
+    // 完成者发放奖励次数
+    int64 award_cnt = 5;
+    // 推荐人发放奖励次数
+    int64 ref_award_cnt = 6;
+  }
+  repeated TaskRuleInfo task_rule_infos = 1;
+}
+
+message AdminUpsertActivityTaskRuleReq {
+  // 新增时不需要
+  int64 id = 1;
+  // 名称
+  string name = 3;
+  // 描述信息-对外活动名称
+  string description = 4;
+  // 规则类型-对应具体的任务完成条件
+  string rule_type = 5;
+  // 完成者发放奖励次数
+  int64 award_cnt = 6;
+  // 推荐人发放奖励次数
+  int64 ref_award_cnt = 7;
+}
+
+message AdminDeleteActivityTaskRuleReq {
+  // 规则ID
+  int64 id = 1;
 }
 
 message AdminAddActivityUserReq {
@@ -12772,6 +12878,30 @@ service ReadCampHttpService {
   rpc AdminUpsertActivity(AdminUpsertActivityReq) returns (google.protobuf.Empty){
     option (google.api.http) = {
       post: '/admin/base/readcamp/activity/upsert'
+    };
+  }
+  // 管理-活动-查询活动列表
+  rpc AdminActivityList(AdminActivityListReq) returns (AdminActivityListRes) {
+    option (google.api.http) = {
+      post: '/admin/base/readcamp/activity/list'
+    };
+  }
+  // 管理-活动-任务规则列表
+  rpc AdminActivityTaskRuleList(AdminActivityTaskRuleListReq) returns (AdminActivityTaskRuleListRes) {
+    option (google.api.http) = {
+      post: '/admin/base/readcamp/activity/task_rule/list'
+    };
+  }
+  // 管理-活动-任务规则新增编辑
+  rpc AdminUpsertActivityTaskRule(AdminUpsertActivityTaskRuleReq) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: '/admin/base/readcamp/activity/task_rule/upsert'
+    };
+  }
+  // 管理-活动-任务规则删除
+  rpc AdminDeleteActivityTaskRule(AdminDeleteActivityTaskRuleReq) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: '/admin/base/readcamp/activity/task_rule/delete'
     };
   }
   // 管理-线索-查询线索绑定渠道
