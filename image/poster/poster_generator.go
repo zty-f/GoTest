@@ -8,7 +8,7 @@ import (
 	_ "image/draw"
 	"image/png"
 	"io"
-	"math"
+	_ "math"
 	"net/http"
 	"strconv"
 	"strings"
@@ -184,14 +184,14 @@ func (pg *PosterGenerator) GeneratePoster(
 	if userName != "" && userInfo != nil {
 		if userInfo.HasOpenFormalCourse || !userInfo.IsNovice {
 			dc.SetRGB255(85, 85, 85) // #555555
-			if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Light.ttc", 24); err != nil {
+			if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 24); err != nil {
 				// 如果加载系统字体失败，使用默认字体
 				dc.SetFontFace(pg.font)
 			}
 			dc.DrawString(userName, 450, 386)
 		} else if !userInfo.HasOpenFormalCourse {
 			dc.SetRGB255(85, 85, 85)
-			if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Light.ttc", 24); err != nil {
+			if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 24); err != nil {
 				dc.SetFontFace(pg.font)
 			}
 			dc.DrawString(userName, 450, 402)
@@ -202,24 +202,26 @@ func (pg *PosterGenerator) GeneratePoster(
 	if userInfo != nil && userInfo.Avatar != "" {
 		avatarImg, err := loadImageFromURL(userInfo.Avatar)
 		if err == nil {
-			var avatarY float64
+			var avatarDrawY float64
 			var textY float64
 
 			if userInfo.HasOpenFormalCourse || !userInfo.IsNovice {
-				avatarY = float64(pg.config.QRCodeY) + 406
+				// 前端：arc(80, y + 406, 38) 和 drawImage(avatar, 40, y + 370, 80, 80)
+				avatarDrawY = float64(pg.config.QRCodeY) + 370 // 绘制起始Y
 				textY = float64(pg.config.QRCodeY) + 426
 			} else {
-				avatarY = float64(pg.config.QRCodeY) + 480
+				// 前端：arc(80, y + 480, 38) 和 drawImage(avatar, 40, y + 444, 80, 80)
+				avatarDrawY = float64(pg.config.QRCodeY) + 444 // 绘制起始Y
 				textY = float64(pg.config.QRCodeY) + 500
 			}
 
-			// 绘制圆形头像
-			circleAvatar := makeCircleImage(avatarImg, 38)
-			dc.DrawImageAnchored(circleAvatar, 80, int(avatarY), 0.5, 0.5)
+			// 绘制圆形头像 (80x80)
+			circleAvatar := makeCircleImage(avatarImg, 40) // 半径40，直径80
+			dc.DrawImage(circleAvatar, 40, int(avatarDrawY))
 
 			// 绘制用户名
 			dc.SetRGBA(1, 1, 1, 1) // 白色
-			if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Light.ttc", 24); err != nil {
+			if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 24); err != nil {
 				dc.SetFontFace(pg.font)
 			}
 			dc.DrawString(userInfo.Name, 130, textY)
@@ -232,56 +234,58 @@ func (pg *PosterGenerator) GeneratePoster(
 		dc.SetRGB255(51, 51, 51) // #333333
 
 		// 已读天数
-		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Light.ttc", 26); err != nil {
+		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 26); err != nil {
 			dc.SetFontFace(pg.font)
 		}
 		dc.DrawStringAnchored("已读天数", 140, 1070, 0.5, 0.5)
 
-		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Light.ttc", 52); err != nil {
+		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 52); err != nil {
 			dc.SetFontFace(loadFont(52))
 		}
 		dayCountStr := fmt.Sprintf("%d", studyStats.DayCount)
 		dc.DrawStringAnchored(dayCountStr, 140, 1130, 0.5, 0.5)
 
 		dayWidth, _ := dc.MeasureString(dayCountStr)
-		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Light.ttc", 26); err != nil {
+		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 26); err != nil {
 			dc.SetFontFace(pg.font)
 		}
-		dc.DrawString("天", 140+dayWidth/2+10, 1130)
+		dc.DrawString("天", 160+dayWidth/2, 1130)
 
 		// 已读本数
 		dc.DrawStringAnchored("已读本数", 360, 1070, 0.5, 0.5)
 
-		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Light.ttc", 52); err != nil {
+		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 52); err != nil {
 			dc.SetFontFace(loadFont(52))
 		}
 		bookCountStr := fmt.Sprintf("%d", studyStats.BookCount)
 		dc.DrawStringAnchored(bookCountStr, 360, 1130, 0.5, 0.5)
 
 		bookWidth, _ := dc.MeasureString(bookCountStr)
-		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Light.ttc", 26); err != nil {
+		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 26); err != nil {
 			dc.SetFontFace(pg.font)
 		}
-		dc.DrawString("本", 360+bookWidth/2+10, 1130)
+		dc.DrawString("本", 380+bookWidth/2, 1130)
 
 		// 累计阅读
 		dc.DrawStringAnchored("累计阅读", 580, 1070, 0.5, 0.5)
 
-		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Light.ttc", 52); err != nil {
+		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 52); err != nil {
 			dc.SetFontFace(loadFont(52))
 		}
 		totalVocabStr := unitConverter(studyStats.TotalVocabulary)
 		dc.DrawStringAnchored(totalVocabStr, 580, 1130, 0.5, 0.5)
 
 		vocabWidth, _ := dc.MeasureString(totalVocabStr)
-		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Light.ttc", 26); err != nil {
+		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 26); err != nil {
 			dc.SetFontFace(pg.font)
 		}
 		unit := "词"
+		unitX := 600 + vocabWidth/2
 		if studyStats.TotalVocabulary >= 10000 {
 			unit = "万词"
+			unitX = 610 + vocabWidth/2
 		}
-		dc.DrawString(unit, 580+vocabWidth/2+10, 1130)
+		dc.DrawString(unit, unitX, 1130)
 	}
 
 	// 5. 绘制二维码
@@ -374,18 +378,9 @@ func makeCircleImage(src image.Image, radius int) image.Image {
 	dc.DrawCircle(float64(radius), float64(radius), float64(radius))
 	dc.Clip()
 
-	// 缩放并绘制原图
-	srcBounds := src.Bounds()
-	srcW := srcBounds.Dx()
-	srcH := srcBounds.Dy()
-
-	// 计算缩放比例
-	scale := float64(size) / math.Max(float64(srcW), float64(srcH))
-	newW := int(float64(srcW) * scale)
-	newH := int(float64(srcH) * scale)
-
-	resized := resizeImage(src, newW, newH)
-	dc.DrawImageAnchored(resized, radius, radius, 0.5, 0.5)
+	// 缩放原图到圆形大小
+	resized := resizeImage(src, size, size)
+	dc.DrawImage(resized, 0, 0)
 
 	return dc.Image()
 }
