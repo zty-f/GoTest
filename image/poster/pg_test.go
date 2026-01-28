@@ -9,36 +9,36 @@ import (
 
 // 示例用法
 func TestPG(t *testing.T) {
-	// 二维码尺寸 (与前端一致)
-	qrCodeSize := &QRCodeSize{
-		Width:  500,
-		Height: 500,
-	}
-
-	// 画布配置 (与前端一致)
-	canvasConfig := &PosterConfig{
-		Width:   750,
-		Height:  1334,
-		QRCodeX: 370,
-		QRCodeY: 550,
-	}
+	// // 二维码尺寸 (与前端一致)
+	// qrCodeSize := &QRCodeSize{
+	// 	Width:  500,
+	// 	Height: 500,
+	// }
+	//
+	// // 画布配置 (与前端一致)
+	// canvasConfig := &PosterConfig{
+	// 	Width:   750,
+	// 	Height:  1334,
+	// 	QRCodeX: 370,
+	// 	QRCodeY: 550,
+	// }
 
 	// 创建海报生成器
-	generator := NewPosterGenerator(canvasConfig, qrCodeSize)
+	generator := NewPosterGenerator(nil, nil)
 
 	// 生成海报示例
 	userInfo := &UserInfo{
 		ID:                  12345,
 		Avatar:              "https://qnyb00.cdn.ipalfish.com/0/img/98/c5/599722f5301deb1d80b957334850",
-		Name:                "测试用户",
+		Name:                "zruler",
 		HasOpenFormalCourse: true,
 		IsNovice:            false,
 	}
 
 	studyStats := &StudyStatistics{
-		DayCount:        30,
+		DayCount:        23,
 		BookCount:       15,
-		TotalVocabulary: 12500,
+		TotalVocabulary: 365,
 	}
 
 	// 生成海报（需要真实的图片 URL）

@@ -65,7 +65,7 @@ type PosterGenerator struct {
 	font       font.Face
 }
 
-// DefaultPosterConfig 默认海报配置
+// DefaultPosterConfig 默认海报配置（与前端defaultSize一致）
 var DefaultPosterConfig = PosterConfig{
 	Width:   750,
 	Height:  1334,
@@ -73,10 +73,11 @@ var DefaultPosterConfig = PosterConfig{
 	QRCodeY: 550,
 }
 
-// DefaultQRCodeSize 默认二维码尺寸
+// DefaultQRCodeSize 默认二维码尺寸（nil表示不使用特定尺寸）
+// 前端默认不传 codeSize 参数，所以这里应该是 0
 var DefaultQRCodeSize = QRCodeSize{
-	Width:  500,
-	Height: 500,
+	Width:  190,
+	Height: 190,
 }
 
 // NewPosterGenerator 创建海报生成器
@@ -89,7 +90,7 @@ func NewPosterGenerator(config *PosterConfig, qrCodeSize *QRCodeSize) *PosterGen
 	}
 
 	// 加载字体
-	fontFace := loadFont(24)
+	fontFace := loadFont(26)
 
 	return &PosterGenerator{
 		config:     *config,
@@ -173,27 +174,28 @@ func (pg *PosterGenerator) GeneratePoster(
 	// 创建画布
 	dc := gg.NewContext(pg.config.Width, pg.config.Height)
 
-	// 1. 绘制背景图
+	// 1. 绘制背景图（缩放到画布大小）
 	bgImg, err := loadImageFromURL(backgroundURL)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load background image: %v", err)
 	}
-	dc.DrawImage(bgImg, 0, 0)
+	// 前端: cxt.drawImage(bgImg, 0, 0, w, h) - 将背景缩放到画布大小
+	resizedBg := resizeImage(bgImg, pg.config.Width, pg.config.Height)
+	dc.DrawImage(resizedBg, 0, 0)
 
 	// 2. 绘制用户名（如果有）
 	if userName != "" && userInfo != nil {
+		dc.SetRGB255(85, 85, 85) // #555555
+		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 24); err != nil {
+			// 如果加载系统字体失败，使用默认字体
+			dc.SetFontFace(pg.font)
+		}
+
 		if userInfo.HasOpenFormalCourse || !userInfo.IsNovice {
-			dc.SetRGB255(85, 85, 85) // #555555
-			if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 24); err != nil {
-				// 如果加载系统字体失败，使用默认字体
-				dc.SetFontFace(pg.font)
-			}
+			// 前端: fillText(name, 450, 386) - 左对齐，基线坐标
 			dc.DrawString(userName, 450, 386)
 		} else if !userInfo.HasOpenFormalCourse {
-			dc.SetRGB255(85, 85, 85)
-			if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 24); err != nil {
-				dc.SetFontFace(pg.font)
-			}
+			// 前端: fillText(name, 450, 402) - 左对齐，基线坐标
 			dc.DrawString(userName, 450, 402)
 		}
 	}
@@ -237,55 +239,73 @@ func (pg *PosterGenerator) GeneratePoster(
 		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 26); err != nil {
 			dc.SetFontFace(pg.font)
 		}
-		dc.DrawStringAnchored("已读天数", 140, 1070, 0.5, 0.5)
+		// 前端: textAlign='center', fillText('已读天数', 140, 1070)
+		// 手动计算居中位置：x - width/2
+		text1 := "已读天数"
+		w1, _ := dc.MeasureString(text1)
+		dc.DrawString(text1, 140-w1/2, 1070)
 
 		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 52); err != nil {
 			dc.SetFontFace(loadFont(52))
 		}
 		dayCountStr := fmt.Sprintf("%d", studyStats.DayCount)
-		dc.DrawStringAnchored(dayCountStr, 140, 1130, 0.5, 0.5)
-
+		// 前端: fillText(day_count, 140, 1130) - textAlign仍是center
 		dayWidth, _ := dc.MeasureString(dayCountStr)
+		dc.DrawString(dayCountStr, 140-dayWidth/2, 1130)
+
+		// 绘制"天"
 		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 26); err != nil {
 			dc.SetFontFace(pg.font)
 		}
-		dc.DrawString("天", 160+dayWidth/2, 1130)
+		// 前端: fillText('天', 160 + parseInt(day.width/2), 1130) - textAlign仍是center!
+		tianX := 160 + float64(int(dayWidth/2))
+		tianW, _ := dc.MeasureString("天")
+		dc.DrawString("天", tianX-tianW/2, 1130)
 
 		// 已读本数
-		dc.DrawStringAnchored("已读本数", 360, 1070, 0.5, 0.5)
+		text2 := "已读本数"
+		w2, _ := dc.MeasureString(text2)
+		dc.DrawString(text2, 360-w2/2, 1070)
 
 		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 52); err != nil {
 			dc.SetFontFace(loadFont(52))
 		}
 		bookCountStr := fmt.Sprintf("%d", studyStats.BookCount)
-		dc.DrawStringAnchored(bookCountStr, 360, 1130, 0.5, 0.5)
-
 		bookWidth, _ := dc.MeasureString(bookCountStr)
+		dc.DrawString(bookCountStr, 360-bookWidth/2, 1130)
+
 		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 26); err != nil {
 			dc.SetFontFace(pg.font)
 		}
-		dc.DrawString("本", 380+bookWidth/2, 1130)
+		// 前端: fillText('本', 380 + parseInt(num.width/2), 1130) - textAlign仍是center!
+		benX := 380 + float64(int(bookWidth/2))
+		benW, _ := dc.MeasureString("本")
+		dc.DrawString("本", benX-benW/2, 1130)
 
 		// 累计阅读
-		dc.DrawStringAnchored("累计阅读", 580, 1070, 0.5, 0.5)
+		text3 := "累计阅读"
+		w3, _ := dc.MeasureString(text3)
+		dc.DrawString(text3, 580-w3/2, 1070)
 
 		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 52); err != nil {
 			dc.SetFontFace(loadFont(52))
 		}
 		totalVocabStr := unitConverter(studyStats.TotalVocabulary)
-		dc.DrawStringAnchored(totalVocabStr, 580, 1130, 0.5, 0.5)
-
 		vocabWidth, _ := dc.MeasureString(totalVocabStr)
+		dc.DrawString(totalVocabStr, 580-vocabWidth/2, 1130)
+
 		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 26); err != nil {
 			dc.SetFontFace(pg.font)
 		}
 		unit := "词"
-		unitX := 600 + vocabWidth/2
+		unitX := 600.0 + float64(int(vocabWidth/2))
 		if studyStats.TotalVocabulary >= 10000 {
 			unit = "万词"
-			unitX = 610 + vocabWidth/2
+			unitX = 610.0 + float64(int(vocabWidth/2))
 		}
-		dc.DrawString(unit, unitX, 1130)
+		// 前端: fillText('词/万词', 600/610 + parseInt(words.width/2), 1130) - textAlign仍是center!
+		unitW, _ := dc.MeasureString(unit)
+		dc.DrawString(unit, unitX-unitW/2, 1130)
 	}
 
 	// 5. 绘制二维码
@@ -295,16 +315,12 @@ func (pg *PosterGenerator) GeneratePoster(
 	}
 
 	// 缩放二维码到 200x200
-	resizedQR := resizeImage(qrImg, 200, 200)
+	resizedQR := resizeImage(qrImg, pg.qrCodeSize.Width, pg.qrCodeSize.Height)
 
 	// 计算二维码位置
+	// 前端: if (codeSize) { x + 175, y + 590 } else { x + 145, y + 490 }
 	qrX := pg.config.QRCodeX + 175
 	qrY := pg.config.QRCodeY + 590
-
-	if pg.qrCodeSize.Width == 0 {
-		qrX = pg.config.QRCodeX + 145
-		qrY = pg.config.QRCodeY + 490
-	}
 
 	dc.DrawImage(resizedQR, qrX, qrY)
 
