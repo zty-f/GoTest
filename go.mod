@@ -6,9 +6,11 @@ require (
 	github.com/bytedance/sonic v1.14.1
 	github.com/confluentinc/confluent-kafka-go v1.9.2
 	github.com/eclipse/paho.mqtt.golang v1.5.0
+	github.com/fogleman/gg v1.3.0
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/gocarina/gocsv v0.0.0-20240520201108-78e41c74b4b1
+	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
 	github.com/gorilla/websocket v1.5.3
 	github.com/json-iterator/go v1.1.12
 	github.com/olivere/elastic/v7 v7.0.32
@@ -21,6 +23,7 @@ require (
 	github.com/xuri/excelize/v2 v2.8.0
 	go.uber.org/atomic v1.9.0
 	go.uber.org/zap v1.21.0
+	golang.org/x/image v0.11.0
 	golang.org/x/net v0.27.0
 	golang.org/x/sync v0.10.0
 	golang.org/x/time v0.0.0-20191024005414-555d28b269f0
