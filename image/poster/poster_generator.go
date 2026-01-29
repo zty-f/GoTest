@@ -2,8 +2,10 @@ package poster
 
 import (
 	"bytes"
+	_ "embed"
 	"encoding/base64"
 	"fmt"
+	"golang.org/x/image/font/gofont/goregular"
 	"image"
 	_ "image/draw"
 	"image/png"
@@ -16,7 +18,6 @@ import (
 	"github.com/fogleman/gg"
 	"github.com/golang/freetype/truetype"
 	"golang.org/x/image/font"
-	"golang.org/x/image/font/gofont/goregular"
 )
 
 // PosterConfig 海报配置
@@ -99,11 +100,19 @@ func NewPosterGenerator(config *PosterConfig, qrCodeSize *QRCodeSize) *PosterGen
 	}
 }
 
+//go:embed wqy-microhei.ttc
+var chineseFontData []byte
+
 // loadFont 加载字体
 func loadFont(size float64) font.Face {
-	f, err := truetype.Parse(goregular.TTF)
+	// 优先使用嵌入的中文字体
+	f, err := truetype.Parse(chineseFontData)
 	if err != nil {
-		panic(err)
+		// fallback 到英文字体
+		f, err = truetype.Parse(goregular.TTF)
+		if err != nil {
+			panic(err)
+		}
 	}
 	face := truetype.NewFace(f, &truetype.Options{
 		Size: size,
@@ -186,7 +195,7 @@ func (pg *PosterGenerator) GeneratePoster(
 	// 2. 绘制用户名（如果有）
 	if userName != "" && userInfo != nil {
 		dc.SetRGB255(85, 85, 85) // #555555
-		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 24); err != nil {
+		if err := dc.LoadFontFace("wqy-microhei.ttc", 24); err != nil {
 			// 如果加载系统字体失败，使用默认字体
 			dc.SetFontFace(pg.font)
 		}
@@ -223,9 +232,7 @@ func (pg *PosterGenerator) GeneratePoster(
 
 			// 绘制用户名
 			dc.SetRGBA(1, 1, 1, 1) // 白色
-			if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 24); err != nil {
-				dc.SetFontFace(pg.font)
-			}
+			dc.SetFontFace(loadFont(24))
 			dc.DrawString(userInfo.Name, 130, textY)
 		}
 	}
@@ -236,7 +243,7 @@ func (pg *PosterGenerator) GeneratePoster(
 		dc.SetRGB255(51, 51, 51) // #333333
 
 		// 已读天数
-		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 26); err != nil {
+		if err := dc.LoadFontFace("wqy-microhei.ttc", 26); err != nil {
 			dc.SetFontFace(pg.font)
 		}
 		// 前端: textAlign='center', fillText('已读天数', 140, 1070)
@@ -245,7 +252,7 @@ func (pg *PosterGenerator) GeneratePoster(
 		w1, _ := dc.MeasureString(text1)
 		dc.DrawString(text1, 140-w1/2, 1070)
 
-		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 52); err != nil {
+		if err := dc.LoadFontFace("wqy-microhei.ttc", 52); err != nil {
 			dc.SetFontFace(loadFont(52))
 		}
 		dayCountStr := fmt.Sprintf("%d", studyStats.DayCount)
@@ -254,7 +261,7 @@ func (pg *PosterGenerator) GeneratePoster(
 		dc.DrawString(dayCountStr, 140-dayWidth/2, 1130)
 
 		// 绘制"天"
-		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 26); err != nil {
+		if err := dc.LoadFontFace("wqy-microhei.ttc", 26); err != nil {
 			dc.SetFontFace(pg.font)
 		}
 		// 前端: fillText('天', 160 + parseInt(day.width/2), 1130) - textAlign仍是center!
@@ -267,14 +274,14 @@ func (pg *PosterGenerator) GeneratePoster(
 		w2, _ := dc.MeasureString(text2)
 		dc.DrawString(text2, 360-w2/2, 1070)
 
-		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 52); err != nil {
+		if err := dc.LoadFontFace("wqy-microhei.ttc", 52); err != nil {
 			dc.SetFontFace(loadFont(52))
 		}
 		bookCountStr := fmt.Sprintf("%d", studyStats.BookCount)
 		bookWidth, _ := dc.MeasureString(bookCountStr)
 		dc.DrawString(bookCountStr, 360-bookWidth/2, 1130)
 
-		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 26); err != nil {
+		if err := dc.LoadFontFace("wqy-microhei.ttc", 26); err != nil {
 			dc.SetFontFace(pg.font)
 		}
 		// 前端: fillText('本', 380 + parseInt(num.width/2), 1130) - textAlign仍是center!
@@ -287,14 +294,14 @@ func (pg *PosterGenerator) GeneratePoster(
 		w3, _ := dc.MeasureString(text3)
 		dc.DrawString(text3, 580-w3/2, 1070)
 
-		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 52); err != nil {
+		if err := dc.LoadFontFace("wqy-microhei.ttc", 52); err != nil {
 			dc.SetFontFace(loadFont(52))
 		}
 		totalVocabStr := unitConverter(studyStats.TotalVocabulary)
 		vocabWidth, _ := dc.MeasureString(totalVocabStr)
 		dc.DrawString(totalVocabStr, 580-vocabWidth/2, 1130)
 
-		if err := dc.LoadFontFace("/System/Library/Fonts/STHeiti Medium.ttc", 26); err != nil {
+		if err := dc.LoadFontFace("wqy-microhei.ttc", 26); err != nil {
 			dc.SetFontFace(pg.font)
 		}
 		unit := "词"
