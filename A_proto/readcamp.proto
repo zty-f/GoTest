@@ -61,6 +61,8 @@ message UserStudyStatistics {
   int32 personal_win_day_cnt = 9;
   // 今日是否完成连胜
   bool is_win_today = 10;
+  // 昨天是否使用连胜复活
+  bool use_win_keep = 11;
 }
 
 message GetUserStudyStatisticsDetailReq {
