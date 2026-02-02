@@ -2566,6 +2566,60 @@ message SetUserSettingsRequest {
   int32 user_memory_target_recall_num = 2;
   // 记忆素材新学数量阈值('记忆素材复习数量阈值'和'记忆素材新学数量阈值'需同时设置)
   int32 user_memory_target_new_num = 3;
+  // 课程ID，可选参数。未传或为0：设置通用阈值（兼容老客户端）；传了具体课程ID：设置该课程的阈值
+  int32 course_id = 4;
+}
+
+// 获取课程维度的记忆素材配置
+message GetCourseMemoryTargetConfigRequest {
+  // 课程ID，必填
+  int32 course_id = 1;
+}
+
+message GetCourseMemoryTargetConfigResponse {
+  // 该课程的复习数量阈值
+  int32 user_memory_target_recall_num = 1;
+  // 该课程的新学数量阈值
+  int32 user_memory_target_new_num = 2;
+  // 待学习数量（课程总数 - 已掌握数）
+  int32 remaining_count = 3;
+  // 预计学完日期，格式：2019-09-10
+  string estimated_completion_date = 4;
+}
+
+// 单词学习状态枚举
+enum MemoryTargetLearnStatus {
+  // 不筛选
+  UnlimitLearnStatus = 0;
+  // 已学单词
+  LEARNED = 1;
+  // 未学单词
+  UNLEARNED = 2;
+}
+
+// 查询课程记忆素材列表请求
+message CourseMemoryTargetListRequest {
+  // 课程ID，必填
+  int32 course_id = 1;
+  // 学习状态：
+  MemoryTargetLearnStatus learn_status = 2;
+  // 限制返回数量，默认20，最大100
+  int32 limit = 3;
+  // 偏移量，默认0
+  int32 offset = 4;
+}
+
+message CourseMemoryTargetListResponse {
+  // 单词列表
+  repeated MemoryTarget memory_target = 1;
+  // 是否有更多数据
+  bool more = 2;
+  // 数据总数（当前查询条件下的已学或未学总数）
+  int64 total = 3;
+  // 下一次请求的 offset
+  int64 offset = 4;
+  // 课程下 memory_target 总数（课程所有单词总数）
+  int64 course_total = 5;
 }
 
 message GetUserTeacherResponse {
@@ -8068,6 +8122,7 @@ message UserKetWordLearnDetailResponse {
 
 
 
+
 message InviteActivity {
   int32 id = 1;
   // 名称
@@ -10771,6 +10826,20 @@ service ReadCampHttpService {
   rpc SetUserSettings(SetUserSettingsRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: '/base/readcamp/user_settings/set'
+    };
+  }
+  // 用户-获取课程记忆素材配置
+  // `midware:"Auth"`
+  rpc GetCourseMemoryTargetConfig(GetCourseMemoryTargetConfigRequest) returns (GetCourseMemoryTargetConfigResponse) {
+    option (google.api.http) = {
+      post: '/base/readcamp/course_memory_target/config/get'
+    };
+  }
+  // 用户-查询课程记忆素材列表（已学/未学）
+  // `midware:"Auth"`
+  rpc CourseMemoryTargetList(CourseMemoryTargetListRequest) returns (CourseMemoryTargetListResponse) {
+    option (google.api.http) = {
+      post: '/base/readcamp/course_memory_target/list'
     };
   }
   // 磨耳朵-获取课程列表
