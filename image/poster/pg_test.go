@@ -31,14 +31,14 @@ func TestPG(t *testing.T) {
 		ID:                  12345,
 		Avatar:              "https://qnyb00.cdn.ipalfish.com/0/img/98/c5/599722f5301deb1d80b957334850",
 		Name:                "zruler",
-		HasOpenFormalCourse: true,
+		HasOpenFormalCourse: false,
 		IsNovice:            false,
 	}
 
 	studyStats := &StudyStatistics{
-		DayCount:        23,
-		BookCount:       15,
-		TotalVocabulary: 365,
+		DayCount:        0,
+		BookCount:       0,
+		TotalVocabulary: 0,
 	}
 
 	// 生成海报（需要真实的图片 URL）
@@ -47,7 +47,7 @@ func TestPG(t *testing.T) {
 		"https://readcamp.cdn.ipalfish.com/readcamp/general/c1/ce/a8a6872c7754a13166cd6e0031cf",
 		userInfo,
 		studyStats,
-		"小明妈妈",
+		"",
 	)
 	if err != nil {
 		fmt.Printf("Generate poster error: %v\n", err)
