@@ -1146,6 +1146,7 @@ message LectureListResponse {
 message GetUserCoursesRequest {
   int64 offset = 1;
   int64 limit = 2;
+  bool with_booklist = 3;
 }
 
 message BPLecture {
@@ -1173,6 +1174,7 @@ message BPGetUserLectureListRequest {
   int64 offset = 1;
   int64 limit = 2;
   int32 course_id = 3;
+  int32 booklist_id = 4; // 书单ID
 }
 
 message BPGetUserLectureListResponse {
@@ -1325,6 +1327,10 @@ message BPGetUserCoursesResponse {
     ImageResource front_picture = 5;
     // 课程类型：1：正价课(level=1/2/3/4)，2：体验课(level=0)，3：分销课(level=100)，4：赠送课(level=100)， 5：拓课包
     int32 course_type = 6;
+    // 返回的item类型，course 课程， booklist 书单
+    string content_type = 7;
+    // 书单ID
+    int64 booklist_id = 8;
   }
   // 课程信息
   repeated BPUserCourse items = 1;
@@ -8706,6 +8712,8 @@ message AdminCRMUserReq {
   int64 poster_join_month = 32;
   // 转介绍参与次数, 默认-1
   int64 poster_join_num = 33;
+  // 年龄
+  repeated string age_list = 34;
 }
 message AdminCRMUserRes {
   message RemarkInfo {
@@ -8819,6 +8827,8 @@ message AdminCRMUserRes {
     string koc_refer_sale_account = 44;
     // 转介绍活动信息
     repeated ReferralInfo referral_infos= 45;
+    // 年龄
+    string age = 46;
   }
   int64 offset = 1;
   int64 total = 2;
@@ -10077,6 +10087,8 @@ message ShopmallGiftInfo {
   int64 cashprice = 8;
   // 原价,单位分
   int64 originprice = 9;
+  // sku 库存
+  map<string,int64> sku_freecnt = 10;
 }
 
 message ListShopmallGiftInfoReq {
