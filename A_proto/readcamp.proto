@@ -9922,6 +9922,80 @@ message AdminDeleteActivityTaskRuleReq {
   int64 id = 1;
 }
 
+message LotteryActivityInfoQueryReq {
+   // 活动id
+   int64 activity_id = 1;
+}
+
+message TaskRuleShowInfo {
+  // 规则ID
+  int64 id = 1;
+  // 名称
+  string name = 2;
+  // 规则类型-对应具体的任务完成条件
+  string rule_type = 3;
+  // 完成者发放奖励次数
+  int64 award_cnt = 4;
+  // 推荐人发放奖励次数
+  int64 ref_award_cnt = 5;
+  // 奖励信息
+  string reward_info = 6;
+  // 奖励发放形式 0：完成自动发放 1：手动领取
+  int64 reward_type = 7;
+}
+
+message LotteryActivityInfoQueryRes {
+  // 活动id
+  int64 activity_id = 1;
+  // 活动名称
+  string name = 2;
+  // 状态 0:初始化 1:上线 2:下线
+  int64 state = 3;
+  // 活动类型 1-长期活动 2-抽奖活动
+  int64 activity_type = 4;
+  // 开始时间
+  int64 start_ts = 5;
+  // 结束时间
+  int64 end_ts = 6;
+  // 奖品池列表信息
+  repeated ActRewardInfo reward_infos = 7;
+  // 剩余抽奖次数
+  int64 remain_lottery_cnt = 8;
+  // 任务规则列表信息
+  repeated TaskRuleShowInfo task_rule_infos = 9;
+}
+
+message LotteryActivityDrawReq {
+  // 活动id
+  int64 activity_id = 1;
+}
+
+message LotteryActivityDrawRes {
+  // 奖励信息
+  ActRewardInfo reward_info = 1;
+}
+
+message LotteryActivityDetailQueryReq {
+  // 活动id
+  int64 activity_id = 1;
+  // 明细类型 1：抽奖次数明细 2：抽奖中奖明细
+  int64 detail_type = 2;
+}
+
+message LotteryActivityDetailQueryRes {
+  message LotteryDrawDetailInfo {
+    // 奖励明细名称
+    string name = 1;
+    // 奖励获取时间
+    int64 ts = 2;
+    // 明细详情 次数明细：抽奖次数 中奖明细：发放状态: 1:未兑换 2：已兑换
+    string detail = 3;
+    // 抽奖奖励信息
+    ActRewardInfo reward_info = 4;
+  }
+  repeated LotteryDrawDetailInfo draw_detail_infos = 1;
+}
+
 message AdminAddActivityUserReq {
   int64 activity_id = 1;
   repeated int64 uids = 2;
@@ -11482,6 +11556,27 @@ service ReadCampHttpService {
   rpc GetPosterUploadList(GetPosterUploadListRequest) returns (PosterUploadListResp) {
     option (google.api.http) = {
       post: '/base/readcamp/poster/upload/list'
+    };
+  }
+  // 用户-抽奖活动信息查询
+  // `midware:"Auth"`
+  rpc LotteryActivityInfoQuery(LotteryActivityInfoQueryReq) returns (LotteryActivityInfoQueryRes) {
+    option (google.api.http) = {
+      post: '/base/readcamp/lottery/act_info'
+    };
+  }
+  // 用户-抽奖活动抽奖
+  // `midware:"Auth"`
+  rpc LotteryActivityDraw(LotteryActivityDrawReq) returns (LotteryActivityDrawRes) {
+    option (google.api.http) = {
+      post: '/base/readcamp/lottery/act_draw'
+    };
+  }
+  // 用户-抽奖活动明细数据
+  // `midware:"Auth"`
+  rpc LotteryActivityDetailQuery(LotteryActivityDetailQueryReq) returns (LotteryActivityDetailQueryRes) {
+    option (google.api.http) = {
+      post: '/base/readcamp/lottery/act_detail'
     };
   }
   // 用户-课节跟读模块的录音
