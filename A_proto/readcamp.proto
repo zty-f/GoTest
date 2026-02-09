@@ -9923,8 +9923,8 @@ message AdminDeleteActivityTaskRuleReq {
 }
 
 message LotteryActivityInfoQueryReq {
-   // 活动id
-   int64 activity_id = 1;
+  // 活动id
+  int64 activity_id = 1;
 }
 
 message TaskRuleShowInfo {
