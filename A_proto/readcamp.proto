@@ -9958,7 +9958,7 @@ message LotteryActivityInfoQueryRes {
   // 结束时间
   int64 end_ts = 6;
   // 奖品池列表信息
-  repeated ActRewardInfo reward_infos = 7;
+  repeated GiftInfo reward_infos = 7;
   // 剩余抽奖次数
   int64 remain_lottery_cnt = 8;
   // 任务规则列表信息
@@ -9972,7 +9972,7 @@ message LotteryActivityDrawReq {
 
 message LotteryActivityDrawRes {
   // 奖励信息
-  ActRewardInfo reward_info = 1;
+  GiftInfo reward_info = 1;
 }
 
 message LotteryActivityDetailQueryReq {
@@ -9991,9 +9991,19 @@ message LotteryActivityDetailQueryRes {
     // 明细详情 次数明细：抽奖次数 中奖明细：发放状态: 1:未兑换 2：已兑换
     string detail = 3;
     // 抽奖奖励信息
-    ActRewardInfo reward_info = 4;
+    GiftInfo reward_info = 4;
   }
   repeated LotteryDrawDetailInfo draw_detail_infos = 1;
+}
+
+message LotteryActivityPrizeExchangeReq {
+  // 活动id
+  int64 activity_id = 1;
+  // 奖励id
+  int64 gift_id = 2;
+}
+
+message LotteryActivityPrizeExchangeRes {
 }
 
 message AdminAddActivityUserReq {
@@ -11577,6 +11587,13 @@ service ReadCampHttpService {
   rpc LotteryActivityDetailQuery(LotteryActivityDetailQueryReq) returns (LotteryActivityDetailQueryRes) {
     option (google.api.http) = {
       post: '/base/readcamp/lottery/act_detail'
+    };
+  }
+  // 用户-抽奖活动奖品兑换
+  // `midware:"Auth"`
+  rpc LotteryActivityPrizeExchange(LotteryActivityPrizeExchangeReq) returns (LotteryActivityPrizeExchangeRes) {
+    option (google.api.http) = {
+      post: '/base/readcamp/lottery/prize_exchange'
     };
   }
   // 用户-课节跟读模块的录音
