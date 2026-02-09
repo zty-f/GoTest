@@ -9984,14 +9984,16 @@ message LotteryActivityDetailQueryReq {
 
 message LotteryActivityDetailQueryRes {
   message LotteryDrawDetailInfo {
+    // 明细id
+    int64 id = 1;
     // 奖励明细名称
-    string name = 1;
+    string name = 2;
     // 奖励获取时间
-    int64 ts = 2;
+    int64 ts = 3;
     // 明细详情 次数明细：抽奖次数 中奖明细：发放状态: 1:未兑换 2：已兑换
-    string detail = 3;
+    string detail = 4;
     // 抽奖奖励信息
-    GiftInfo reward_info = 4;
+    GiftInfo reward_info = 5;
   }
   repeated LotteryDrawDetailInfo draw_detail_infos = 1;
 }
@@ -10001,6 +10003,8 @@ message LotteryActivityPrizeExchangeReq {
   int64 activity_id = 1;
   // 奖励id
   int64 gift_id = 2;
+  // 奖励明细id
+  int64 detail_id = 3;
 }
 
 message LotteryActivityPrizeExchangeRes {
