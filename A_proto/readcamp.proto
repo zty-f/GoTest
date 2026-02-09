@@ -9940,7 +9940,7 @@ message TaskRuleShowInfo {
   int64 ref_award_cnt = 5;
   // 奖励信息
   string reward_info = 6;
-  // 奖励发放形式 0：完成自动发放 1：手动领取
+  // 奖励发放形式 0：完成自动发放 1：手动领取-未获得 2：手动领取-待领取
   int64 reward_type = 7;
 }
 
