@@ -120,12 +120,135 @@ message GetTeacherWorkbenchInfoResp {
   repeated TodoTaskInfo task_infos = 5;
 }
 
+message TodoTaskConfigReq {
+  // 任务类型
+  int64 task_type = 1;
+}
+
+message TodoTaskConfInfo {
+  message TaskInfo {
+    // 任务id
+    int64 task_id = 1;
+    // 任务名称
+    string task_name = 2;
+  }
+  // 任务类型
+  int64 task_type = 1;
+  // 任务类型名称
+  string task_type_name = 2;
+  // 类型下的任务列表信息
+  repeated TaskInfo task_list = 3;
+}
+
+message TodoTaskConfigResp {
+  // 待办任务配置信息列表
+  repeated TodoTaskConfInfo list = 1;
+}
+
+message TodoTaskListReq {
+  // 学员id、手机号、昵称
+  string any_key = 1;
+  int64 offset = 2;
+  int64 limit = 3;
+  repeated string teacher_op_names = 4;
+  // 加微状态 1：未加微 2:已加微 3:已删微
+  repeated int64 add_qw_state = 5;
+  // 任务生成时间 [xx,xx]
+  repeated int64 ct_time_range = 6;
+  // 任务截止时间 [xx,xx]
+  repeated int64 deadline_time_range = 7;
+  // 任务完成状态 1：未完成 2:已完成 3:超时完成
+  int64 finish_status = 8;
+  // 任务id列表
+  repeated int64 task_ids = 9;
+}
+
+message UserTaskData {
+  message CRMUser {
+    int64 user_id = 1;
+    // 用户名
+    string name = 2;
+    // 微信名
+    string qw_name= 3;
+    // 微信备注
+    string qw_remark = 4;
+    // 分配时间
+    int64 assign_ts= 5;
+    // 标签
+    repeated string tags = 6;
+    // 线索归属
+    string teacher_opname = 7;
+    // 微信头像
+    string qw_avatar = 8;
+    // 手机号
+    string phone = 9;
+    // 地址-省市
+    string address = 10;
+    // 年龄
+    string age = 11;
+  }
+  // 用户信息
+  CRMUser user = 1;
+  // 任务id
+  int64 task_id = 2;
+  // 任务名称
+  string task_name = 3;
+  // 任务生成时间
+  int64 ct_ts = 4;
+  // 任务截止时间
+  int64 deadline_ts = 5;
+  // 任务完成状态 1：未完成 2:已完成 3:超时完成
+  int64 finish_status = 6;
+}
+
+message TodoTaskListResp {
+  // 待办任务列表
+  repeated UserTaskData list = 1;
+}
+
+message CreateTodoTaskReq {
+  // 用户id
+  int64 uid = 1;
+  // 任务类型
+  int64 task_type = 2;
+  // 任务名称
+  string task_name = 3;
+  // 任务状态 1：未完成 2:已完成 3:超时完成
+  int64 finish_status = 4;
+  // 任务完成时间
+  int64 finish_ts = 5;
+  // 任务创建时间
+  int64 create_ts = 6;
+  // 任务完成者
+  string completer = 7;
+}
+
+message CreateTodoTaskResp {
+}
 
 service UserCenterHttpService {
   // 【api】班主任工作台信息查询
   rpc GetTeacherWorkbenchInfo(GetTeacherWorkbenchInfoReq) returns(GetTeacherWorkbenchInfoResp) {
     option (google.api.http) = {
       post: "/readcampopapi/teacher/workbench_info"
+    };
+  }
+  // 【api】待办任务配置信息查询
+  rpc GetTodoTaskConfig(TodoTaskConfigReq) returns(TodoTaskConfigResp) {
+    option (google.api.http) = {
+      post: "/readcampopapi/teacher/todo_task/config"
+    };
+  }
+  // 【api】待办任务列表查询
+  rpc GetTodoTaskList(TodoTaskListReq) returns(TodoTaskListResp) {
+    option (google.api.http) = {
+      post: "/readcampopapi/teacher/todo_task/list"
+    };
+  }
+  // 【api】待办任务创建
+  rpc CreateTodoTask(CreateTodoTaskReq) returns(CreateTodoTaskResp) {
+    option (google.api.http) = {
+      post: "/readcampopapi/teacher/todo_task/create"
     };
   }
 }
