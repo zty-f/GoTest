@@ -5,91 +5,127 @@ package usercenterapi;
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 
-message GetQwMsgListReq {
-  // 聊天类型 1-单聊 2-群聊
-  int32 chat_type = 1;
-  // 会话对象1
-  string from_account = 2;
-  // 会话对象2
-  string to_account = 3;
-  // 消息发送时间
-  int64 msgtime = 4;
-  // 消息类型
-  string msg_type = 5;
-  // 截止时间
-  int64 msgtime_end = 9;
+message GetTeacherWorkbenchInfoReq {
+  // 查询月份 202601
+  int64 month = 1;
+  // 查询学习阶段 1未付费,2付费在读,3全额退费,4部分退在读,5付费毕业
+  int64 stage = 2;
 }
 
-message GetQwMsgListResp {
-  repeated MsgInfo items = 1;
+message WorkBenchTopInfo {
+  // 参与课程用户数
+  int64 attend_course_num = 1;
+  // 参与课程用户数占比
+  float attend_course_ratio = 2;
+  // 完成课程用户数
+  int64 finish_course_num = 3;
+  // 完成课程用户数占比
+  float finish_course_ratio = 4;
+  // 24小时加微数
+  int64 add_wechat_num_24h = 5;
+  // 24小时加微数占比
+  float add_wechat_num_24h_ratio = 6;
+  // 24小时定级数
+  int64 set_level_num_24h = 7;
+  // 24小时定级数占比
+  float set_level_num_24h_ratio = 8;
+  // 48小时发书数
+  int64 send_book_num_48h = 9;
+  // 48小时发书数占比
+  float send_book_num_48h_ratio = 10;
+  // 海报审核通过数
+  int64 poster_pass_num = 11;
+  // 海报审核通过数占比
+  float poster_pass_ratio = 12;
+  // 转介绍领课数
+  int64 referral_get_course_num = 13;
+  // 转介绍领课数占比
+  float referral_get_course_ratio = 14;
+  // 首单退款用户数
+  int64 first_refund_num = 15;
+  // 首单退款用户数占比
+  float first_refund_num_ratio = 16;
+  // 10分钟内回复率
+  float reply_10min_ratio = 17;
+  // 30分钟内回复率
+  float reply_30min_ratio = 18;
 }
 
-// 聊天消息
-message MsgInfo {
-  // 企业id
-  string corp_id = 1;
-  // 聊天类型
-  int32 chat_type = 2;
-  // 消息类型
-  string msg_type = 3;
-  // 消息发起者account
-  string from_account = 4;
-  // 消息接受者account
-  string to_account = 5;
-  // 消息产生时间 (UNIX时间戳) 单位是ms(毫秒)
-  int64 msgtime = 6;
-  // 消息内容
-  string content = 7;
-  // 消息ID
-  string msgid = 8;
+message TodoTaskChartInfo {
+  // 待办任务名称
+  string task_name = 1;
+  // 已完成数量
+  int64 finish_num = 2;
+  // 超时完成数量
+  int64 timeout_finish_num = 3;
+  // 24小时完成率
+  float finish_ratio_24h = 4;
 }
 
-message QwAIChatReq {
-  // 聊天请求内容文本
-  repeated string msg_list = 1;
-  // 消息接受者account
-  string to_account = 2;
+// 各阶段学员信息
+message StateInfos {
+  message StateInfo {
+    // 状态类型 1未付费,2付费在读,3全额退费,4部分退在读,5付费毕业
+    int64 state = 1;
+    // 状态人员数量
+    float user_num = 2;
+  }
+  // 全部人员数
+  int64 total_user_num = 1;
+  // 各阶段信息列表
+  repeated StateInfo state_infos = 2;
 }
 
-message QwAIChatRes {
-  // 聊天会话id
-  string conversation_id = 1;
-  // 聊天消息id
-  string  message_id = 2;
-  // 回复内容
-  string content = 3;
-  // 消息创建时间
-  int64 create_time = 4;
+message TodoTaskInfo {
+  message TaskStatInfo {
+    // 任务id
+    int64 task_id = 1;
+    // 任务名称
+    string task_name = 2;
+    // 任务总数
+    int64 total_num = 3;
+    // 已完成数量
+    int64 finish_num = 4;
+    // 未完成数量
+    int64 unfinish_num = 5;
+    // 超时完成数
+    int64 timeout_finish_num = 6;
+  }
+  // 任务类型
+  int64 task_type = 1;
+  // 任务类型名称
+  string task_type_name = 2;
+  // 待办任务统计信息列表
+  repeated TaskStatInfo task_stat_list = 3;
 }
 
-message QwAiMsgOpRep {
-  // 聊天消息id
-  string  message_id = 1;
-  // 操作类型 1:踩 2：复制 3：一键转发
-  int64 op_type = 2;
-}
-
-message QwAiMsgOpResp {
+message GetTeacherWorkbenchInfoResp {
+  message ModuleInfo {
+    // 模块id
+    int64 id = 1;
+    // 模块名称
+    string name = 2;
+    // 模块对应的用户数量
+    int64 user_num = 3;
+  }
+  // 工作台顶部信息
+  WorkBenchTopInfo top_info = 1;
+  // 待办任务图表信息
+  repeated TodoTaskChartInfo todo_task_chart_list = 2;
+  // 各阶段学员信息
+  StateInfos state_info = 3;
+  // 模块信息列表
+  repeated ModuleInfo module_infos = 4;
+  // 待办任务信息
+  repeated TodoTaskInfo task_infos = 5;
 }
 
 
 service UserCenterHttpService {
-  // 【api】查询用户最近消息列表
-  rpc GetQwMsgList(GetQwMsgListReq) returns(GetQwMsgListResp) {
+  // 【api】班主任工作台信息查询
+  rpc GetTeacherWorkbenchInfo(GetTeacherWorkbenchInfoReq) returns(GetTeacherWorkbenchInfoResp) {
     option (google.api.http) = {
-      post: "/readcampopapi/qw/msg/list"
-    };
-  }
-  // 【api】AI聊天
-  rpc QwAIChat(QwAIChatReq) returns(QwAIChatRes) {
-    option (google.api.http) = {
-      post: "/readcampopapi/qw/ai/chat"
-    };
-  }
-  // 【api】AI消息操作
-  rpc QwAiMsgOp(QwAiMsgOpRep) returns(QwAiMsgOpResp) {
-    option (google.api.http) = {
-      post: "/readcampopapi/qw/ai/msg_op"
+      post: "/readcampopapi/teacher/workbench_info"
     };
   }
 }
