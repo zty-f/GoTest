@@ -5,76 +5,97 @@ package usercenterapi;
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 
-message GetQwAiTeacherInfoReq {
-    // 企微用户id
-    string external_userid = 1;
+// 达人数据
+message DarenDataInfo {
+  // 主键id
+  int64 id = 1;
+  // 达人id
+  string did = 2;
+  // 达人平台
+  int64 platform = 3;
+  // 达人名称
+  string name = 4;
+  // 操作人
+  string oper = 5;
+  // 备注信息
+  string remark = 6;
+  // 创建时间
+  int64 ct = 7;
+  // 更新时间
+  int64 ut = 8;
 }
 
-message GetQwAiTeacherInfoResp {
-  // 在线状态  0-未知 1-在线 2-离线
-  int64 online_status = 1;
-  // 是否全员开启托管
-  bool global_enable = 2;
-  // 当前会话用户是否开启托管
-  bool user_enable = 3;
+// 新增/编辑达人信息请求
+message UpsertDarenDataReq {
+  // 主键id，编辑时传入，新增时不传
+  int64 id = 1;
+  // 达人id
+  string did = 2;
+  // 达人平台
+  int64 platform = 3;
+  // 达人名称
+  string name = 4;
+  // 备注信息
+  string remark = 5;
 }
 
-message SetQwAiTeacherInfoReq {
-    // 企微用户id
-    string external_userid = 1;
-    // 修改类型 1-全局开启托管 2-当前会话用户开启托管
-    int64 op_type = 2;
-    // 是否开启托管
-    bool enable = 3;
+// 新增/编辑达人信息响应
+message UpsertDarenDataRes {
+  // 主键id
+  int64 id = 1;
 }
 
-message SetQwAiTeacherInfoResp {
+// 达人列表查询请求
+message ListDarenDataReq {
+  // 达人id（精确匹配）
+  string did = 1;
+  // 达人平台
+  int64 platform = 2;
+  // 达人名称（模糊匹配）
+  string name = 3;
+  // 分页大小
+  int64 limit = 4;
+  // 分页偏移
+  int64 offset = 5;
 }
 
-message GetQwAiChatMsgListReq {
-    // 企微用户id
-    string external_userid = 1;
-    // 消息发送时间 单位是s
-    int64 msg_begin = 2;
-    // 截止时间 单位是s
-    int64 msg_end = 3;
-    // 查询最新记录数量
-    int64 limit = 4;
+// 达人列表查询响应
+message ListDarenDataRes {
+  repeated DarenDataInfo items = 1;
+  int64 total = 2;
+  int64 offset = 3;
+  bool more = 4;
 }
 
-message GetQwAiChatMsgListResp {
-    repeated MsgInfo items = 1;
+// 达人删除请求
+message DeleteDarenDataReq {
+  // 主键id
+  int64 id = 1;
 }
 
-// 聊天消息
-message MsgInfo {
-  // 消息产生时间 单位是s
-  int64 msg_time = 1;
-  // 消息内容
-  string msg = 2;
-  // 消息内容对应的AI回复
-  string reply = 3;
+// 达人删除响应
+message DeleteDarenDataRes {
 }
 
 
 
 service UserCenterHttpService {
-  // 【api】查询当前老师AI助手相关信息
-  rpc GetQwAiTeacherInfo(GetQwAiTeacherInfoReq) returns(GetQwAiTeacherInfoResp) {
+  // 【api】达人信息新增/编辑
+  rpc UpsertDarenData(UpsertDarenDataReq) returns(UpsertDarenDataRes) {
     option (google.api.http) = {
-      post: "/readcampopapi/qw/ai/teacher_info"
+      post: "/readcampopapi/daren/upsert"
     };
   }
-  // 【api】老师企微AI配置信息修改
-  rpc SetQwAiTeacherInfo(SetQwAiTeacherInfoReq) returns(SetQwAiTeacherInfoResp) {
+  // 【api】达人列表查询
+  rpc ListDarenData(ListDarenDataReq) returns(ListDarenDataRes) {
     option (google.api.http) = {
-      post: "/readcampopapi/qw/ai/teacher_info/set"
+      post: "/readcampopapi/daren/list"
     };
   }
-  // 【api】查询当前会话用户AI助手聊天记录
-  rpc GetQwAiChatMsgList(GetQwAiChatMsgListReq) returns(GetQwAiChatMsgListResp) {
+  // 【api】达人删除
+  rpc DeleteDarenData(DeleteDarenDataReq) returns(DeleteDarenDataRes) {
     option (google.api.http) = {
-      post: "/readcampopapi/qw/ai/chat_msg/list"
+      post: "/readcampopapi/daren/delete"
     };
   }
 }

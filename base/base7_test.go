@@ -1,6 +1,7 @@
 package base
 
 import (
+	"encoding/json"
 	"fmt"
 	"testing"
 	"time"
@@ -41,4 +42,11 @@ type BigDataDemo struct {
 	FirstRefundNumRatio    float64 `json:"first_refund_num_ratio"`    // 首单退款用户数占比
 	Reply10MinRatio        float64 `json:"reply_10min_ratio"`         // 10分钟内回复率
 	Reply30MinRatio        float64 `json:"reply_30min_ratio"`         // 30分钟内回复率
+}
+
+func TestBigDataDemo(t *testing.T) {
+	x := BigDataDemo{}
+	marshal, _ := json.Marshal(x)
+	fmt.Println(string(marshal))
+
 }
