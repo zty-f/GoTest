@@ -65,4 +65,11 @@ func TestBigDataDemo(t *testing.T) {
 	y := Data{}
 	json.Unmarshal(marshal, &y)
 	fmt.Println(y)
+
+	a := int64(3)
+	b := int64(4)
+	z := a / b
+	fmt.Println(z)
+	m := float32(a) / float32(b)
+	fmt.Println(m)
 }
