@@ -10,6 +10,8 @@ message GetTeacherWorkbenchInfoReq {
   int64 month = 1;
   // 查询学习阶段 1未付费,2付费在读,3全额退费,4部分退在读,5付费毕业
   int64 stage = 2;
+  // 操作人
+  string opuser = 3;
 }
 
 message WorkBenchTopInfo {
@@ -123,6 +125,8 @@ message GetTeacherWorkbenchInfoResp {
 message TodoTaskConfigReq {
   // 任务类型
   int64 task_type = 1;
+  // 操作人
+  string opuser = 2;
 }
 
 message TodoTaskConfInfo {
@@ -161,6 +165,8 @@ message TodoTaskListReq {
   int64 finish_status = 8;
   // 任务id列表
   repeated int64 task_ids = 9;
+  // 操作人
+  string opuser = 10;
 }
 
 message UserTaskData {
@@ -221,6 +227,8 @@ message CreateTodoTaskReq {
   int64 create_ts = 6;
   // 任务完成者
   string completer = 7;
+  // 操作人
+  string opuser = 8;
 }
 
 message CreateTodoTaskResp {
