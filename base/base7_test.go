@@ -44,9 +44,25 @@ type BigDataDemo struct {
 	Reply30MinRatio        float64 `json:"reply_30min_ratio"`         // 30分钟内回复率
 }
 
+type Data struct {
+	A int64 `json:"a"`
+	*BigDataDemo
+	Ct int64 `json:"ct"`
+}
+
 func TestBigDataDemo(t *testing.T) {
-	x := BigDataDemo{}
+	x := Data{
+		A: 1,
+		BigDataDemo: &BigDataDemo{
+			TeacherName:       "teacher1",
+			AttendCourseNum:   100,
+			AttendCourseRatio: 0.5,
+		},
+		Ct: Apple,
+	}
 	marshal, _ := json.Marshal(x)
 	fmt.Println(string(marshal))
-
+	y := Data{}
+	json.Unmarshal(marshal, &y)
+	fmt.Println(y)
 }
