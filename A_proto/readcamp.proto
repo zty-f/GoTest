@@ -8840,7 +8840,7 @@ message AdminCRMUserRes {
 message AdminCRMUserFollowUpEditReq {
   int64 user_id = 1;
   // 备注类型 1:课前 2:课后 3:其他
-  int32 remark_type =2;
+  repeated int64 remark_type =2;
   // 备注内容
   string content = 3;
   // 意向度 5:决定购买 4:意向高 3:意向一般 2:暂无意向 1:未接通
