@@ -5,258 +5,138 @@ package usercenterapi;
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 
-message GetTeacherWorkbenchInfoReq {
-  // 查询月份 202601
-  int64 month = 1;
-  // 查询学习阶段 1未付费,2付费在读,3全额退费,4部分退在读,5付费毕业
-  int64 stage = 2;
-  // 操作人
-  string opuser = 3;
+message RecommendStudyCourseReq {
 }
 
-message WorkBenchTopInfo {
-  // 参与课程用户数
-  int64 attend_course_num = 1;
-  // 参与课程用户数占比
-  float attend_course_ratio = 2;
-  // 完成课程用户数
-  int64 finish_course_num = 3;
-  // 完成课程用户数占比
-  float finish_course_ratio = 4;
-  // 24小时加微数
-  int64 add_wechat_num_24h = 5;
-  // 24小时加微数占比
-  float add_wechat_num_24h_ratio = 6;
-  // 24小时定级数
-  int64 set_level_num_24h = 7;
-  // 24小时定级数占比
-  float set_level_num_24h_ratio = 8;
-  // 48小时发书数
-  int64 send_book_num_48h = 9;
-  // 48小时发书数占比
-  float send_book_num_48h_ratio = 10;
-  // 海报审核通过数
-  int64 poster_pass_num = 11;
-  // 海报审核通过数占比
-  float poster_pass_ratio = 12;
-  // 转介绍领课数
-  int64 referral_get_course_num = 13;
-  // 转介绍领课数占比
-  float referral_get_course_ratio = 14;
-  // 首单退款用户数
-  int64 first_refund_num = 15;
-  // 首单退款用户数占比
-  float first_refund_num_ratio = 16;
-  // 10分钟内回复率
-  float reply_10min_ratio = 17;
-  // 30分钟内回复率
-  float reply_30min_ratio = 18;
+message InteractionConf {
+  repeated InteractionPointConf points_conf = 1;
 }
 
-message TodoTaskChartInfo {
-  // 待办任务名称
-  string task_name = 1;
-  // 已完成数量
-  int64 finish_num = 2;
-  // 超时完成数量
-  int64 timeout_finish_num = 3;
-  // 24小时完成率
-  float finish_ratio_24h = 4;
+message InteractionPointConf {
+  // 点位的唯一标识，用于增删改
+  int32 id = 1;
+  // 点位信息，单位：ms
+  int32 point_ms = 2;
+  // 点位的内容信息
+  string content = 3;
+  // 点位配置类型， 用户录音：recording，选择题：multiple_choice
+  string type = 4;
+  // type = recording 时的配置
+  InteractionRecordingConf recording_conf = 5;
+  // type = multiple_choice 时的配置，可能为 null
+  InteractionMultipleChoiceConf multiple_choice_conf = 6;
+  // type = drag_completion
+  InteractionDragConf drag_completion_conf = 7;
+  // type = multiple_choice_new
+  InteractionMultipleChoiceNewConf multiple_choice_new_conf = 8;
 }
 
-// 各阶段学员信息
-message StateInfos {
-  message StateInfo {
-    // 状态类型 1未付费,2付费在读,3全额退费,4部分退在读,5付费毕业
-    int64 state = 1;
-    // 状态人员数量
-    float user_num = 2;
-  }
-  // 全部人员数
-  int64 total_user_num = 1;
-  // 各阶段信息列表
-  repeated StateInfo state_infos = 2;
+message Lecture {
+  int32 id = 1;
+  // 课节名称
+  string name = 2;
+  // 课节描述：RAZ
+  string description = 3;
+  // 课节头图信息
+  ImageResource front_picture = 4;
+  // 课程id
+  int32 course_id = 5;
+  // 导读资源信息
+  MediaResource guide_resource = 6;
+  // 原音资源信息
+  MediaResource original_resource = 7;
+  // 已学习量
+  int32 studied_number = 8;
+  // 已作废，优先使用 UserLecture 中的 status 字段。课节状态: 1: 锁定, 2: 可用(已解锁), 3: 不可用
+  LectureStatus status = 9;
+  // 创建时间
+  int64 created_at = 10;
+  // 更新时间
+  int64 updated_at = 11;
+  // 课节编号
+  int32 lecture_number = 12;
+  // 词汇量
+  int32 vocabulary = 13;
+  // 难度
+  string grade = 14;
+  // 套系
+  string series = 15;
+  // 蓝思值
+  string lexile = 16;
+  // 标签列表
+  repeated string tag_list = 17;
+  // 适合年龄
+  string ages = 18;
+  // 条形码
+  string bar_code = 19;
+  // 喜欢人数
+  int32 like_number = 20;
+  // 学习人数。进入此课节的人数。区别于上面的 studied_number，后者代表已「学完」此课节的人数。
+  int32 study_number = 21;
+  // 评价人数。此课节总评价数，即使有些评论是仅自己可见
+  int32 checkin_number = 22;
+  // 课节级别，合法的level是0-4，其中0是导学课，非这个范围的level说明该课节没有级别概念
+  int32 level = 23;
+  // 绘本跟读资源的id
+  int64 book_id = 24;
+  // 「练一练」绘本 id
+  int64 lianyilian_book_id = 25;
+  // 「玩一玩」绘本 id
+  int64 wanyiwan_book_id = 26;
+  // 新词数量
+  int64 new_words = 27;
+  // 导读的交互讲解配置，为 null 代表没有此配置
+  InteractionConf guide_interaction_conf = 28;
+  // wpm 对应的文本信息
+  string wpm = 29;
+  // 是否存在题目练习
+  bool has_questions = 30;
+  // 是否展示口语表达
+  bool has_speaking_express = 31;
+  // 课节别名
+  string alias_name = 32;
+  // 课节编号别名
+  string alias_lecture_num = 33;
+  // 是否展示创意写作
+  bool has_creative_write = 34;
+  // 自拼规则
+  string zp_rule = 35;
 }
 
-message TodoTaskInfo {
-  message TaskStatInfo {
-    // 任务id
-    int64 task_id = 1;
-    // 任务名称
-    string task_name = 2;
-    // 任务总数
-    int64 total_num = 3;
-    // 已完成数量
-    int64 finish_num = 4;
-    // 未完成数量
-    int64 unfinish_num = 5;
-    // 超时完成数
-    int64 timeout_finish_num = 6;
-  }
-  // 任务类型
-  int64 task_type = 1;
-  // 任务类型名称
-  string task_type_name = 2;
-  // 待办任务统计信息列表
-  repeated TaskStatInfo task_stat_list = 3;
+message UserLecture {
+  Lecture lecture = 1;
+  // 学习进度：0-100
+  int32 studyed_rate = 2;
+  // 就目前的设计来看，studyed_rate >= 95 算完成。这个由后端来判断，方便后续逻辑变更。
+  bool is_study_finish = 3;
+  // 学习次数
+  int32 study_count = 4;
+  // 已废弃，优先使用 status 字段（status 为 1 未购买，不为 1 已购买）。是否购买。未购买的话，lecture.Resource 为 null
+  bool owned = 5;
+  // 已学习完成次数
+  int32 finished_count = 6;
+  // 导读课播放进度（单位：s）
+  int32 guide_play_pos = 7;
+  // 当前用户看到的课节状态：1：未购买；2：资源未ready；3：未解锁；4：可上课；5：已下架
+  int32 status = 8;
+  // 可选，当 status == 3 时有效。解锁时间戳。
+  int64 unlock_timestamp = 9;
+  // 是否喜欢
+  bool liked = 10;
+  // 使用哪个版本上课。0：默认版本；1: 22.09.21体验课改版版本
+  int32 inclass_version = 11;
 }
 
-message GetTeacherWorkbenchInfoResp {
-  message ModuleInfo {
-    // 模块id
-    int64 id = 1;
-    // 模块名称
-    string name = 2;
-    // 模块对应的用户数量
-    int64 user_num = 3;
-  }
-  // 工作台顶部信息
-  WorkBenchTopInfo top_info = 1;
-  // 待办任务图表信息
-  repeated TodoTaskChartInfo todo_task_chart_list = 2;
-  // 各阶段学员信息
-  StateInfos state_info = 3;
-  // 模块信息列表
-  repeated ModuleInfo module_infos = 4;
-  // 待办任务信息
-  repeated TodoTaskInfo task_infos = 5;
-}
-
-message TodoTaskConfigReq {
-  // 任务类型
-  int64 task_type = 1;
-  // 操作人
-  string opuser = 2;
-}
-
-message TodoTaskConfInfo {
-  message TaskInfo {
-    // 任务id
-    int64 task_id = 1;
-    // 任务名称
-    string task_name = 2;
-  }
-  // 任务类型
-  int64 task_type = 1;
-  // 任务类型名称
-  string task_type_name = 2;
-  // 类型下的任务列表信息
-  repeated TaskInfo task_list = 3;
-}
-
-message TodoTaskConfigResp {
-  // 待办任务配置信息列表
-  repeated TodoTaskConfInfo list = 1;
-}
-
-message TodoTaskListReq {
-  // 学员id、手机号、昵称
-  string any_key = 1;
-  int64 offset = 2;
-  int64 limit = 3;
-  repeated string teacher_op_names = 4;
-  // 加微状态 1：未加微 2:已加微 3:已删微
-  repeated int64 add_qw_state = 5;
-  // 任务生成时间 [xx,xx]
-  repeated int64 ct_time_range = 6;
-  // 任务截止时间 [xx,xx]
-  repeated int64 deadline_time_range = 7;
-  // 任务完成状态 1：未完成 2:已完成 3:超时完成
-  int64 finish_status = 8;
-  // 任务id列表
-  repeated int64 task_ids = 9;
-  // 操作人
-  string opuser = 10;
-}
-
-message UserTaskData {
-  message CRMUser {
-    int64 user_id = 1;
-    // 用户名
-    string name = 2;
-    // 微信名
-    string qw_name= 3;
-    // 微信备注
-    string qw_remark = 4;
-    // 分配时间
-    int64 assign_ts= 5;
-    // 标签
-    repeated string tags = 6;
-    // 线索归属
-    string teacher_opname = 7;
-    // 微信头像
-    string qw_avatar = 8;
-    // 手机号
-    string phone = 9;
-    // 地址-省市
-    string address = 10;
-    // 年龄
-    string age = 11;
-  }
-  // 用户信息
-  CRMUser user = 1;
-  // 任务id
-  int64 task_id = 2;
-  // 任务名称
-  string task_name = 3;
-  // 任务生成时间
-  int64 ct_ts = 4;
-  // 任务截止时间
-  int64 deadline_ts = 5;
-  // 任务完成状态 1：未完成 2:已完成 3:超时完成
-  int64 finish_status = 6;
-}
-
-message TodoTaskListResp {
-  // 待办任务列表
-  repeated UserTaskData list = 1;
-}
-
-message CreateTodoTaskReq {
-  // 用户id
-  int64 uid = 1;
-  // 任务类型
-  int64 task_type = 2;
-  // 任务名称
-  string task_name = 3;
-  // 任务状态 1：未完成 2:已完成 3:超时完成
-  int64 finish_status = 4;
-  // 任务完成时间
-  int64 finish_ts = 5;
-  // 任务创建时间
-  int64 create_ts = 6;
-  // 任务完成者
-  string completer = 7;
-  // 操作人
-  string opuser = 8;
-}
-
-message CreateTodoTaskResp {
+message RecommendStudyCourseResp {
+  // 待复习的课节列表
+  repeated UserLecture lectures = 1;
 }
 
 service UserCenterHttpService {
-  // 【api】班主任工作台信息查询
-  rpc GetTeacherWorkbenchInfo(GetTeacherWorkbenchInfoReq) returns(GetTeacherWorkbenchInfoResp) {
-    option (google.api.http) = {
-      post: "/readcampopapi/teacher/workbench_info"
-    };
-  }
-  // 【api】待办任务配置信息查询
-  rpc GetTodoTaskConfig(TodoTaskConfigReq) returns(TodoTaskConfigResp) {
-    option (google.api.http) = {
-      post: "/readcampopapi/teacher/todo_task/config"
-    };
-  }
-  // 【api】待办任务列表查询
-  rpc GetTodoTaskList(TodoTaskListReq) returns(TodoTaskListResp) {
-    option (google.api.http) = {
-      post: "/readcampopapi/teacher/todo_task/list"
-    };
-  }
-  // 【api】待办任务创建
-  rpc CreateTodoTask(CreateTodoTaskReq) returns(CreateTodoTaskResp) {
-    option (google.api.http) = {
-      post: "/readcampopapi/teacher/todo_task/create"
-    };
-  }
+    // 用户-学习任务中心推荐课程信息
+    rpc RecommendStudyCourse(RecommendStudyCourseReq) returns (RecommendStudyCourseResp) {
+      option (google.api.http) = {
+        post: "/base/readcamp/study_task_center/recom_course"
+      };
+    }
 }
