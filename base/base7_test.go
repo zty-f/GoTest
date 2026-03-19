@@ -3,8 +3,11 @@ package base
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 	"testing"
 	"time"
+
+	"github.com/spf13/cast"
 )
 
 func TestDebug(t *testing.T) {
@@ -72,4 +75,44 @@ func TestBigDataDemo(t *testing.T) {
 	fmt.Println(z)
 	m := float32(a) / float32(b)
 	fmt.Println(m)
+}
+
+func TestRound(t *testing.T) {
+	baseTarget := int64(124)
+	difficultyCoef := float64(0.432)
+	res := int64(math.Round(float64(baseTarget) * difficultyCoef))
+	fmt.Println(res)
+	res2 := cast.ToString(math.Round(float64(baseTarget) * difficultyCoef))
+	fmt.Println(res2)
+}
+
+type PP struct {
+	Age  int64  `json:"age"`
+	Name string `json:"name"`
+}
+
+func TestPoints(t *testing.T) {
+	x := []*PP{
+		{
+			Age:  18,
+			Name: "zty",
+		},
+		{
+			Age:  20,
+			Name: "zty2",
+		},
+	}
+	var y *PP
+	for _, v := range x {
+		if v.Age == 18 {
+			y = v
+			break
+		}
+	}
+	fmt.Printf("y:%v\n", y)
+	y.Name = "zty3"
+	fmt.Printf("y:%v\n", y)
+	for _, v := range x {
+		fmt.Printf("x:%v\n", v)
+	}
 }
