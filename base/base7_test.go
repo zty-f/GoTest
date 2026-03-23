@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"math"
+	"strings"
 	"testing"
 	"time"
 
@@ -115,4 +116,7 @@ func TestPoints(t *testing.T) {
 	for _, v := range x {
 		fmt.Printf("x:%v\n", v)
 	}
+
+	split := strings.Split("", ",")
+	fmt.Printf("%v\n", split)
 }
