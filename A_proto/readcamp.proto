@@ -38,7 +38,9 @@ message LectureStudyReportRequest {
 
 message LectureStudyReportResponse {}
 
-message GetUserStudyStatisticsRequest {}
+message GetUserStudyStatisticsRequest {
+  repeated string category_tags = 1; // 中英文分类
+}
 
 message UserStudyStatistics {
   // 累计阅读量（单位：本）
@@ -83,7 +85,9 @@ message UserStudyStatisticsDetail {
   int32 read_duration = 5;
 }
 
-message GetUserStudyStatisticsShareRequest {}
+message GetUserStudyStatisticsShareRequest {
+  repeated string category_tags = 1; // 中英文分类
+}
 
 message GetUserStudyStatisticsShareResponse{
   // 名人名言
@@ -3358,6 +3362,8 @@ message MedalResource {
   ImageResource static_img = 1;
   // 动态图
   AnimationResource dynamic_img = 2;
+  // 分享链接
+  string share_link = 3;
 }
 
 message Medal {
@@ -9369,6 +9375,8 @@ message UserReadRecordLearnInfoReq {
   int64 limit = 4;
   // 支持筛选课程分类
   repeated string category_tags = 5;
+  // 1=当日，2=当周，3=当月
+  int32  timeRangeType = 6;
 }
 
 message UserReadRecordLearnInfoRes {
@@ -9384,6 +9392,8 @@ message UserReadRecordLearnInfoRes {
   repeated PraticeBookInfo practice_book_infos = 5;
   bool more = 6;
   int64 offset = 7;
+  // 单词量
+  int64 word_num = 8;
 }
 
 message LearnLectureItem {

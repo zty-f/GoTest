@@ -1,10 +1,22 @@
-[
-  {
-    "id": "trial_first_guide",
-    "name": "体验课第一次听讲解90%"
-  },
-  {
-    "id": "poster_first_pass",
-    "name": "好友首次参与邀请有礼"
-  }
-]
+{
+  "teacher_name": "zhangtianyong26331",
+  "attend_course_num": 85,
+  "attend_course_ratio": 0.85,
+  "finish_course_num": 67,
+  "finish_course_ratio": 0.67,
+  "add_wechat_num_24h": 12,
+  "add_wechat_num_24h_ratio": 0.63,
+  "set_level_num_24h": 9,
+  "set_level_num_24h_ratio": 0.75,
+  "send_book_num_48h": 18,
+  "send_book_num_48h_ratio": 0.72,
+  "poster_pass_num": 7,
+  "poster_pass_ratio": 0.58,
+  "referral_get_course_num": 5,
+  "referral_get_course_ratio": 0.25,
+  "first_refund_num": 2,
+  "first_refund_num_ratio": 0.029,
+  "reply_10min_ratio": 0.92,
+  "reply_30min_ratio": 0.98,
+  "ct": 1774323662
+}
