@@ -6475,6 +6475,8 @@ message CallUserRequest {
   int64 user_id = 1;
   // 线路选择  1、2、3 代表 线路1,2,3
   int32 call_show_type = 2;
+  // 外呼业务 1-阅读营 2-小班课
+  int64 business_id = 3;
 }
 
 message CallUserResponse {
