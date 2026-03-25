@@ -1,22 +1,38 @@
-{
-  "teacher_name": "zhangtianyong26331",
-  "attend_course_num": 85,
-  "attend_course_ratio": 0.85,
-  "finish_course_num": 67,
-  "finish_course_ratio": 0.67,
-  "add_wechat_num_24h": 12,
-  "add_wechat_num_24h_ratio": 0.63,
-  "set_level_num_24h": 9,
-  "set_level_num_24h_ratio": 0.75,
-  "send_book_num_48h": 18,
-  "send_book_num_48h_ratio": 0.72,
-  "poster_pass_num": 7,
-  "poster_pass_ratio": 0.58,
-  "referral_get_course_num": 5,
-  "referral_get_course_ratio": 0.25,
-  "first_refund_num": 2,
-  "first_refund_num_ratio": 0.029,
-  "reply_10min_ratio": 0.92,
-  "reply_30min_ratio": 0.98,
-  "ct": 1774323662
-}
+[
+  {
+    "task_type": 1002,
+    "name": "阅读新书籍",
+    "target": 5,
+    "reward": {
+      "reward_type": 1,
+      "detail": "100"
+    }
+  },
+  {
+    "task_type": 1002,
+    "name": "阅读新书籍",
+    "target": 10,
+    "reward": {
+      "reward_type": 2,
+      "detail": "200"
+    }
+  },
+  {
+    "task_type": 1005,
+    "name": "学习天数",
+    "target": 5,
+    "reward": {
+      "reward_type": 1,
+      "detail": "50"
+    }
+  },
+  {
+    "task_type": 1005,
+    "name": "学习天数",
+    "target": 10,
+    "reward": {
+      "reward_type": 2,
+      "detail": "100"
+    }
+  }
+]
