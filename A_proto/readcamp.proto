@@ -5846,6 +5846,8 @@ message UserDKAwardStatusResponse {
   int32 formal_task_finished_cnt = 6;
   // 海报创建时间
   int64 poster_ct = 7;
+  // 转介绍参与剩余次数
+  int64 referral_remain_cnt = 8;
 }
 
 message AdminUploadStudyPlanImageRequest {
