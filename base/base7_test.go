@@ -120,3 +120,19 @@ func TestPoints(t *testing.T) {
 	split := strings.Split("", ",")
 	fmt.Printf("%v\n", split)
 }
+
+type Time struct {
+	ID         int64     `json:"id"`
+	CreateTime time.Time `json:"create_time"`
+}
+
+func TestTimeAdd(t *testing.T) {
+	today := time.Now().AddDate(0, 0, -2)
+	fmt.Println(time.Now().Format("2006-01-02 15:04:05"))
+	fmt.Println(today)
+	fmt.Println(time.Time{}.IsZero())
+	tt := Time{
+		ID: 1,
+	}
+	fmt.Println(tt.CreateTime.IsZero())
+}

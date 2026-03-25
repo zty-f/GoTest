@@ -65,6 +65,8 @@ message UserStudyStatistics {
   bool is_win_today = 10;
   // 昨天是否使用连胜复活
   bool use_win_keep = 11;
+  // 单词学习量
+  bool word_count = 12;
 }
 
 message GetUserStudyStatisticsDetailReq {
