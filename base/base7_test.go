@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math"
 	"strings"
+	"test/util"
 	"testing"
 	"time"
 
@@ -135,4 +136,8 @@ func TestTimeAdd(t *testing.T) {
 		ID: 1,
 	}
 	fmt.Println(tt.CreateTime.IsZero())
+
+	x := []int{1, 3, 4, 4, 5}
+	fmt.Println(x[:5])
+	fmt.Println(util.GetDayStartTime(time.Now().AddDate(0, 0, -90)))
 }
