@@ -3609,6 +3609,8 @@ message LogisticsOrderInfo {
   int64 gid = 11;
   // 赠品延迟发货时间,默认0
   int64 delay_sec = 12;
+  // 申请发货人信息
+  string apply_send_oper = 13;
 }
 
 // 换绑 outerorder skuid
