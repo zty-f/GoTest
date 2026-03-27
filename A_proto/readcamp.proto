@@ -5778,6 +5778,8 @@ message AdminPosterUploadListResponse {
   repeated AdminPosterRecord cur_poster_record = 2;
   // 可补卡海报信息列表-历史周
   repeated AdminPosterRecord pre_poster_record = 3;
+  // 转介绍获取参与剩余次数
+  int64 referral_remain_cnt = 4;
 }
 
 message AdminPosterRecord {
@@ -8296,6 +8298,8 @@ message PosterUploadListResp {
   int64 redo_num = 1;
   // 可补卡海报信息列表
   repeated PosterRecord poster_record = 2;
+  // 转介绍获取参与剩余次数
+  int64 referral_remain_cnt = 3;
 }
 
 message PosterRecord {
