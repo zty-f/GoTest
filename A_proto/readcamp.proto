@@ -8735,6 +8735,8 @@ message AdminCRMUserReq {
   int64 poster_join_num = 33;
   // 年龄
   repeated string age_list = 34;
+  // 企微标签
+  repeated string QwTagIdList = 35;
 }
 message AdminCRMUserRes {
   message RemarkInfo {
@@ -8850,6 +8852,8 @@ message AdminCRMUserRes {
     repeated ReferralInfo referral_infos= 45;
     // 年龄
     string age = 46;
+    // 企微标签
+    repeated string QwTagIdList = 47;
   }
   int64 offset = 1;
   int64 total = 2;
