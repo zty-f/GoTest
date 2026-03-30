@@ -80,9 +80,9 @@ func TestBigDataDemo(t *testing.T) {
 }
 
 func TestRound(t *testing.T) {
-	baseTarget := int64(124)
+	baseTarget := int64(500)
 	difficultyCoef := float64(0.432)
-	res := int64(math.Round(float64(baseTarget) * difficultyCoef))
+	res := int64(math.Round(float64(baseTarget)*difficultyCoef)) % 10
 	fmt.Println(res)
 	res2 := cast.ToString(math.Round(float64(baseTarget) * difficultyCoef))
 	fmt.Println(res2)

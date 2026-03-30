@@ -1,38 +1,56 @@
 [
   {
     "task_type": 1002,
-    "name": "阅读新书籍",
-    "target": 5,
+    "name": "每周阅读1本新书",
+    "target": 1,
     "reward": {
       "reward_type": 1,
-      "detail": "100"
+      "detail": "10"
     }
   },
   {
     "task_type": 1002,
-    "name": "阅读新书籍",
+    "name": "每周阅读5本新书",
+    "target": 5,
+    "reward": {
+      "reward_type": 1,
+      "detail": "60"
+    }
+  },
+  {
+    "task_type": 1002,
+    "name": "每周阅读10本新书",
     "target": 10,
     "reward": {
-      "reward_type": 2,
-      "detail": "200"
+      "reward_type": 1,
+      "detail": "150"
     }
   },
   {
     "task_type": 1005,
-    "name": "学习天数",
-    "target": 5,
+    "name": "阅读2天",
+    "target": 2,
     "reward": {
       "reward_type": 1,
+      "detail": "20"
+    }
+  },
+  {
+    "task_type": 1005,
+    "name": "阅读4天",
+    "target": 4,
+    "reward": {
+      "reward_type": 2,
       "detail": "50"
     }
   },
   {
     "task_type": 1005,
-    "name": "学习天数",
-    "target": 10,
+    "name": "阅读7天",
+    "target": 7,
     "reward": {
       "reward_type": 2,
-      "detail": "100"
+      "detail": "150"
     }
   }
 ]
