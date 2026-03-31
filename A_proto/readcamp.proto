@@ -8736,7 +8736,7 @@ message AdminCRMUserReq {
   // 年龄
   repeated string age_list = 34;
   // 企微标签
-  repeated string QwTagIdList = 35;
+  repeated string qw_tag_id_list = 35;
 }
 message AdminCRMUserRes {
   message RemarkInfo {
@@ -8853,7 +8853,7 @@ message AdminCRMUserRes {
     // 年龄
     string age = 46;
     // 企微标签
-    repeated string QwTagIdList = 47;
+    repeated string qw_tag_id_list = 47;
   }
   int64 offset = 1;
   int64 total = 2;
