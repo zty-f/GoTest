@@ -9768,6 +9768,8 @@ message GetActivityPersonalWinInfoResp {
   string praise_text = 2;
   // 连胜目标信息
   repeated PersonalWinGoalInfo win_goals = 3;
+  // 新连胜目标信息-有则可以让用户选择
+  repeated PersonalWinGoalInfo new_win_goals = 4;
 }
 
 message GetPersonalWinCalendarReq {
