@@ -94,7 +94,7 @@
           "ageMin": 5,
           "ageMax": 7,
           "weights": {
-            "explanation": 1,
+            "explanation": 2,
             "originalAudio": 2,
             "practice": 1,
             "readAloud": 1,
@@ -107,7 +107,7 @@
           "ageMin": 8,
           "ageMax": 999,
           "weights": {
-            "explanation": 1,
+            "explanation": 2,
             "originalAudio": 2,
             "practice": 2,
             "readAloud": 2,
@@ -137,7 +137,7 @@
           "ageMin": 5,
           "ageMax": 7,
           "weights": {
-            "explanation": 1,
+            "explanation": 2,
             "originalAudio": 2,
             "practice": 1,
             "readAloud": 1,
@@ -150,7 +150,7 @@
           "ageMin": 8,
           "ageMax": 999,
           "weights": {
-            "explanation": 1,
+            "explanation": 2,
             "originalAudio": 2,
             "practice": 2,
             "readAloud": 2,
@@ -180,7 +180,7 @@
           "ageMin": 5,
           "ageMax": 7,
           "weights": {
-            "explanation": 1,
+            "explanation": 2,
             "originalAudio": 2,
             "practice": 1,
             "readAloud": 1,
@@ -193,7 +193,7 @@
           "ageMin": 8,
           "ageMax": 999,
           "weights": {
-            "explanation": 1,
+            "explanation": 2,
             "originalAudio": 2,
             "practice": 2,
             "readAloud": 2,
@@ -210,10 +210,10 @@
           "ageMin": 0,
           "ageMax": 6,
           "weights": {
-            "explanation": 1,
+            "explanation": 2,
             "originalAudio": 2,
             "practice": 1,
-            "readAloud": 1,
+            "readAloud": 0,
             "intelligentWrite": 0,
             "creativeWrite": 0
           }
@@ -223,10 +223,10 @@
           "ageMin": 7,
           "ageMax": 999,
           "weights": {
-            "explanation": 1,
+            "explanation": 2,
             "originalAudio": 2,
             "practice": 2,
-            "readAloud": 1,
+            "readAloud": 2,
             "intelligentWrite": 1,
             "creativeWrite": 0
           }
@@ -243,8 +243,8 @@
             "explanation": 1,
             "originalAudio": 2,
             "practice": 1,
-            "readAloud": 1,
-            "intelligentWrite": 1,
+            "readAloud": 0,
+            "intelligentWrite": 0,
             "creativeWrite": 0
           }
         },
@@ -253,11 +253,11 @@
           "ageMin": 8,
           "ageMax": 999,
           "weights": {
-            "explanation": 1,
+            "explanation": 2,
             "originalAudio": 2,
-            "practice": 1,
-            "readAloud": 1,
-            "intelligentWrite": 1,
+            "practice": 2,
+            "readAloud": 2,
+            "intelligentWrite": 2,
             "creativeWrite": 0
           }
         }
@@ -283,11 +283,11 @@
           "ageMin": 9,
           "ageMax": 999,
           "weights": {
-            "explanation": 1,
+            "explanation": 2,
             "originalAudio": 2,
-            "practice": 1,
-            "readAloud": 1,
-            "intelligentWrite": 1,
+            "practice": 2,
+            "readAloud": 2,
+            "intelligentWrite": 2,
             "creativeWrite": 0
           }
         }

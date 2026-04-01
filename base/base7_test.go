@@ -141,3 +141,19 @@ func TestTimeAdd(t *testing.T) {
 	fmt.Println(x[:5])
 	fmt.Println(util.GetDayStartTime(time.Now().AddDate(0, 0, -90)))
 }
+
+func FormatResultNum(num int64) int64 {
+	if num <= 10 {
+		return num
+	}
+	return num - num%10
+}
+
+func TestStudent_Speak2(t *testing.T) {
+	fmt.Println(FormatResultNum(1))
+	fmt.Println(FormatResultNum(4))
+	fmt.Println(FormatResultNum(7))
+	fmt.Println(FormatResultNum(123))
+	fmt.Println(FormatResultNum(14))
+	fmt.Println(FormatResultNum(26))
+}
