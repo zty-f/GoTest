@@ -334,8 +334,8 @@
             "originalAudio": 2,
             "practice": 1,
             "readAloud": 1,
-            "intelligentWrite": 1,
-            "creativeWrite": 0
+            "intelligentWrite": 0,
+            "creativeWrite": 1
           }
         },
         {
@@ -347,8 +347,8 @@
             "originalAudio": 2,
             "practice": 1,
             "readAloud": 1,
-            "intelligentWrite": 1,
-            "creativeWrite": 0
+            "intelligentWrite": 0,
+            "creativeWrite": 1
           }
         }
       ]

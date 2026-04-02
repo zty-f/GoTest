@@ -157,3 +157,21 @@ func TestStudent_Speak2(t *testing.T) {
 	fmt.Println(FormatResultNum(14))
 	fmt.Println(FormatResultNum(26))
 }
+
+type Mm struct {
+	Marks []string `json:"marks"`
+}
+
+func TestMm(t *testing.T) {
+	x := Mm{
+		Marks: []string{"A", "B", "C"},
+	}
+	marshal, _ := json.Marshal(x)
+	fmt.Println(string(marshal))
+	fmt.Println(x.Marks)
+	ss := "{\"marks\":[\"low_value_users\"]}"
+	var y Mm
+	err := json.Unmarshal([]byte(ss), &y)
+	fmt.Println(err)
+	fmt.Println(y.Marks)
+}
