@@ -4372,6 +4372,8 @@ message AdminUserSearchResponse {
     string phone = 8;
     // teacher roles
     repeated string teacher_roles = 9;
+    // 用户企微id
+    string external_user_id = 10;
   }
   message Course {
     int32 id = 1;
