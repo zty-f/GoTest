@@ -717,6 +717,7 @@ message GetDynamicUtmSourceReq {
   string oaid = 1;
   string imei = 2;
   string h_ch = 3;
+  string caid = 4;
 }
 message GetDynamicUtmSourceRes {
   string utm_source = 1;
