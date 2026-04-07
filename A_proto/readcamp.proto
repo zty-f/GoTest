@@ -2551,6 +2551,30 @@ message GetUserStudyingLectureRequest {}
 
 message GetAppMainPageConfigRequest {}
 
+// 用户反馈选项配置
+message FeedbackOptionConfig {
+  // 选项代码
+  string option_code = 1;
+  // 选项名称
+  string option_name = 2;
+  // 是否允许自定义输入
+  bool allow_custom_input = 3;
+  // 是否允许文件上传
+  bool allow_file_upload = 4;
+  // 允许的文件类型: image, video
+  repeated string allowed_file_types = 5;
+}
+
+// 用户反馈场景配置
+message FeedbackScenarioConfig {
+  // 场景代码
+  string scenario_code = 1;
+  // 场景名称
+  string scenario_name = 2;
+  // 反馈选项列表
+  repeated FeedbackOptionConfig options = 3;
+}
+
 message GetAppMainPageConfigResponse {
   message ActivityConf {
     // 排行榜讲解完成经验
@@ -2572,6 +2596,8 @@ message GetAppMainPageConfigResponse {
   ActivityConf activity_conf = 7;
   // 个人连胜展示状态 0:不展示，1:参加 2:不参加
   int64 show_personal_win_state = 8;
+  // 用户反馈配置
+  map<string, FeedbackScenarioConfig> user_feedback_config = 9;
 }
 
 message SetUserSettingsRequest {
