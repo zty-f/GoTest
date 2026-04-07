@@ -174,4 +174,8 @@ func TestMm(t *testing.T) {
 	err := json.Unmarshal([]byte(ss), &y)
 	fmt.Println(err)
 	fmt.Println(y.Marks)
+	t1 := time.Now()
+	t2 := util.GetDayStartTime(time.Now().Add(-30 * 24 * time.Hour))
+	fmt.Println(t2)
+	fmt.Println(t1)
 }
