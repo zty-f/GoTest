@@ -194,7 +194,6 @@ CREATE TABLE `readcamp_task_gift_record` (
   `task_id`   BIGINT   NOT NULL             COMMENT '任务ID',
   `node_id`   BIGINT   NOT NULL DEFAULT 0   COMMENT '节点ID 0=任务级奖励',
   `gift_id`   BIGINT   NOT NULL             COMMENT '奖励权益ID',
-  `gift_type` INT      NOT NULL DEFAULT 1   COMMENT '1=任务奖励 2=节点奖励',
   `state`     INT      NOT NULL DEFAULT 1   COMMENT '1=待领取 2=已领取',
   `ct`        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ut`        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -207,7 +206,6 @@ CREATE TABLE `readcamp_task_gift_record` (
 **字段说明：**
 - `node_id=0`：任务级奖励，由 `readcamp_task.gift_id` 触发
 - `node_id>0`：节点级奖励，由 `readcamp_task_node.gift_id` 触发
-- `gift_type`：冗余字段，便于按奖励来源单独查询，不用每次 JOIN 判断
 - `uk_uid_task_node`：唯一键防重复发放，同一用户同一任务/节点奖励只发一次
 - 状态流转：任务/节点完成 → 写入 `state=1`（已发放）→ 用户在 APP 领取 → 更新 `state=2`（已领取）
 
@@ -363,9 +361,6 @@ type ReadcampUserNodeProgress struct {
 const (
     tableReadcampTaskGiftRecord = "readcamp_task_gift_record"
 
-    GiftTypeTask = 1 // 任务级奖励（完成整个任务触发）
-    GiftTypeNode = 2 // 节点级奖励（完成单个节点触发）
-
     GiftStateIssued  = 1 // 已发放（待用户领取）
     GiftStateClaimed = 2 // 已领取
 )
@@ -376,7 +371,6 @@ type ReadcampTaskGiftRecord struct {
     TaskId   int64     `json:"task_id"   bdb:"task_id"`
     NodeId   int64     `json:"node_id"   bdb:"node_id"`   // 0=任务级奖励
     GiftId   int64     `json:"gift_id"   bdb:"gift_id"`
-    GiftType int       `json:"gift_type" bdb:"gift_type"` // 1=任务奖励 2=节点奖励
     State    int       `json:"state"     bdb:"state"`     // 1=已发放 2=已领取
     Ct       time.Time `json:"ct"        bdb:"ct"`
     Ut       time.Time `json:"ut"        bdb:"ut"`
@@ -611,14 +605,14 @@ func (h *WatchVideoHandler) CheckCompletion(ctx context.Context, node *ReadcampT
         ├─ 更新 readcamp_user_node_progress（cur_value / state / finish_time）
         │
         ├─ 若节点完成 且 node.gift_id > 0：
-        │    └─ InsertOne readcamp_task_gift_record（gift_type=2, state=1）
+        │    └─ InsertOne readcamp_task_gift_record（state=1）
         │         ↑ uk_uid_task_node 防重，ignore duplicate key error
         │
         ├─ node_done++ → UpdateById readcamp_user_task_progress
         ├─ checkTaskDone() → COUNT 存活节点 vs node_done
         │
         └─ 任务完成 且 task.gift_id > 0：
-             └─ InsertOne readcamp_task_gift_record（node_id=0, gift_type=1, state=1）
+             └─ InsertOne readcamp_task_gift_record（node_id=0, state=1）
                   + 更新 readcamp_user_task_progress.state=2 + finish_time
 ```
 
