@@ -184,7 +184,149 @@ CREATE TABLE `readcamp_user_node_progress` (
 
 ---
 
-## 三、核心设计
+## 三、Go 结构体定义
+
+> 严格对应 DDL 字段，标签格式 `json:"xxx" bdb:"xxx"`，参照 repository 包现有规范。
+
+### 3.1 ReadcampTask
+
+```go
+const (
+    tableReadcampTask = "readcamp_task"
+
+    TaskTypeCombo  = 1 // 组合任务
+    TaskTypeSingle = 2 // 单项任务
+
+    TaskStateOpen  = 1 // 开启（APP 可见）
+    TaskStateClose = 2 // 关闭（APP 不可见）
+)
+
+type ReadcampTask struct {
+    Id        int64     `json:"id"         bdb:"id"`         // 任务ID
+    Name      string    `json:"name"       bdb:"name"`       // 任务名称
+    Desc      string    `json:"desc"       bdb:"desc"`       // 任务描述
+    TaskType  int       `json:"task_type"  bdb:"task_type"`  // 1=组合任务 2=单项任务
+    StartTime time.Time `json:"start_time" bdb:"start_time"` // 开始时间
+    EndTime   time.Time `json:"end_time"   bdb:"end_time"`   // 结束时间
+    State     int       `json:"state"      bdb:"state"`      // 1=开启 2=关闭
+    UserConf  string    `json:"user_conf"  bdb:"user_conf"`  // 参与人群ID "1,2,3"
+    GiftId    int64     `json:"gift_id"    bdb:"gift_id"`    // 奖励权益ID 0=无
+    Ct        time.Time `json:"ct"         bdb:"ct"`
+    Ut        time.Time `json:"ut"         bdb:"ut"`
+}
+
+// TaskStatus 运行时计算，不存库
+type TaskStatus int
+
+const (
+    TaskStatusNotStarted TaskStatus = 1 // 未开始
+    TaskStatusInProgress TaskStatus = 2 // 进行中
+    TaskStatusEnded      TaskStatus = 3 // 已结束
+)
+
+func (t *ReadcampTask) ComputeStatus() TaskStatus {
+    now := time.Now()
+    if now.Before(t.StartTime) {
+        return TaskStatusNotStarted
+    }
+    if t.EndTime.IsZero() || !now.After(t.EndTime) {
+        return TaskStatusInProgress
+    }
+    return TaskStatusEnded
+}
+```
+
+### 3.2 ReadcampTaskModule
+
+```go
+const tableReadcampTaskModule = "readcamp_task_module"
+
+type ReadcampTaskModule struct {
+    Id     int64     `json:"id"      bdb:"id"`
+    TaskId int64     `json:"task_id" bdb:"task_id"` // 所属任务ID
+    Title  string    `json:"title"   bdb:"title"`   // 模块标题 限10汉字
+    Sort   int       `json:"sort"    bdb:"sort"`
+    Ct     time.Time `json:"ct"      bdb:"ct"`
+    Ut     time.Time `json:"ut"      bdb:"ut"`
+}
+```
+
+### 3.3 ReadcampTaskNode
+
+```go
+const (
+    tableReadcampTaskNode = "readcamp_task_node"
+
+    NodeTypeWatchVideo = 1 // 看视频
+    NodeTypeRead       = 2 // 阅读
+    NodeTypeCheckIn    = 3 // 打卡
+    NodeTypeHomework   = 4 // 完成作业
+)
+
+type ReadcampTaskNode struct {
+    Id       int64     `json:"id"        bdb:"id"`
+    TaskId   int64     `json:"task_id"   bdb:"task_id"`   // 所属任务ID（冗余）
+    ModuleId int64     `json:"module_id" bdb:"module_id"` // 所属模块ID，单项任务=0
+    Title    string    `json:"title"     bdb:"title"`     // 节点标题
+    Desc     string    `json:"desc"      bdb:"desc"`      // 节点描述
+    NodeType int       `json:"node_type" bdb:"node_type"` // 节点类型
+    Conf     string    `json:"conf"      bdb:"conf"`      // 类型专属配置 JSON string
+    Target   int       `json:"target"    bdb:"target"`    // 目标完成量（次数/秒）
+    GiftId   int64     `json:"gift_id"   bdb:"gift_id"`   // 节点奖励ID 0=无
+    Sort     int       `json:"sort"      bdb:"sort"`
+    Ct       time.Time `json:"ct"        bdb:"ct"`
+    Ut       time.Time `json:"ut"        bdb:"ut"`
+}
+```
+
+### 3.4 ReadcampUserTaskProgress
+
+```go
+const (
+    tableReadcampUserTaskProgress = "readcamp_user_task_progress"
+
+    UserTaskStateInProgress = 1 // 进行中
+    UserTaskStateFinished   = 2 // 已完成
+)
+
+type ReadcampUserTaskProgress struct {
+    Id         int64      `json:"id"          bdb:"id"`
+    Uid        int64      `json:"uid"         bdb:"uid"`
+    TaskId     int64      `json:"task_id"     bdb:"task_id"`
+    State      int        `json:"state"       bdb:"state"`       // 1=进行中 2=已完成
+    NodeDone   int        `json:"node_done"   bdb:"node_done"`   // 已完成节点数
+    FinishTime *time.Time `json:"finish_time" bdb:"finish_time"` // 完成时间
+    Ct         time.Time  `json:"ct"          bdb:"ct"`
+    Ut         time.Time  `json:"ut"          bdb:"ut"`
+}
+```
+
+### 3.5 ReadcampUserNodeProgress
+
+```go
+const (
+    tableReadcampUserNodeProgress = "readcamp_user_node_progress"
+
+    UserNodeStateInProgress = 1 // 进行中
+    UserNodeStateFinished   = 2 // 已完成
+)
+
+type ReadcampUserNodeProgress struct {
+    Id         int64      `json:"id"          bdb:"id"`
+    Uid        int64      `json:"uid"         bdb:"uid"`
+    TaskId     int64      `json:"task_id"     bdb:"task_id"`   // 冗余
+    NodeId     int64      `json:"node_id"     bdb:"node_id"`
+    CurValue   int        `json:"cur_value"   bdb:"cur_value"` // 当前完成量
+    State      int        `json:"state"       bdb:"state"`     // 1=进行中 2=已完成
+    FinishTime *time.Time `json:"finish_time" bdb:"finish_time"`
+    Ct         time.Time  `json:"ct"          bdb:"ct"`
+    Ut         time.Time  `json:"ut"          bdb:"ut"`
+}
+```
+
+---
+
+## 四、核心逻辑设计
 
 ### 4.1 单项 vs 组合任务的保存逻辑
 
@@ -192,35 +334,85 @@ CREATE TABLE `readcamp_user_node_progress` (
 保存任务（Service 层）：
 
 task_type = 1（组合任务）：
-  1. 写入 readcamp_task
-  2. diff modules → 新增/更新 readcamp_task_module，删除不在列表中的
-  3. 每个 module diff nodes → 新增/更新 readcamp_task_node(module_id=module.id)
-  4. 统计 node_count = sum(module.node_count)，回写 readcamp_task
+  1. 写入/更新 readcamp_task
+  2. diff modules：
+       id=0 → InsertOne readcamp_task_module
+       id>0 → UpdateById readcamp_task_module
+       前端未传的旧 module.id → DeleteById（级联删其下所有 node）
+  3. 每个 module diff nodes：
+       id=0 → InsertOne readcamp_task_node (module_id=module.id)
+       id>0 → UpdateById readcamp_task_node
+       前端未传的旧 node.id → DeleteById
 
 task_type = 2（单项任务）：
-  1. 写入 readcamp_task
-  2. diff nodes → 新增/更新 readcamp_task_node(module_id=0)
-  3. node_count = len(nodes)，回写 readcamp_task
+  1. 写入/更新 readcamp_task
+  2. diff nodes（module_id 固定=0）：
+       id=0 → InsertOne readcamp_task_node
+       id>0 → UpdateById readcamp_task_node
+       前端未传的旧 node.id → DeleteById
 
-diff 策略：传入 id=0 新建；id>0 更新；前端不传的旧 id = 已删除 → DeleteById
-（不全删重建，保留用户进度数据）
+diff 原则：不全删重建，保留用户进度数据；
+已有进度的 node 被删除时，对应进度记录保留（历史数据），不影响完成判断（按当前存活节点 COUNT）。
+```
+
+**查询任务详情时的分支处理：**
+
+```go
+func (s *TaskService) Detail(ctx context.Context, taskID int64) (*TaskDetailResp, error) {
+    task, _ := s.taskRepo.GetOne(ctx, QueryReadcampTask{Id: taskID})
+    resp := buildBaseResp(task) // 填充 name/desc/state/gift_id/user_conf 等
+
+    switch task.TaskType {
+    case TaskTypeCombo:
+        modules, _ := s.moduleRepo.BatchGet(ctx, QueryReadcampTaskModule{TaskId: taskID})
+        allNodes, _ := s.nodeRepo.BatchGet(ctx, QueryReadcampTaskNode{TaskId: taskID})
+        nodesByModule := groupByModuleId(allNodes)
+        for _, m := range modules {
+            resp.Modules = append(resp.Modules, buildModuleResp(m, nodesByModule[m.Id]))
+        }
+    case TaskTypeSingle:
+        // module_id=0 的节点直接挂任务
+        nodes, _ := s.nodeRepo.BatchGet(ctx, QueryReadcampTaskNode{TaskId: taskID, ModuleId: 0})
+        resp.Nodes = buildNodeRespList(nodes)
+    }
+    return resp, nil
+}
 ```
 
 ---
 
-### 4.2 子任务策略模式（NodeHandler）
+### 4.2 任务完成判断
+
+`readcamp_user_task_progress` 不存 `node_total`，完成判断时实时查询当前存活节点数：
+
+```go
+func (s *ProgressService) checkTaskDone(ctx context.Context, p *ReadcampUserTaskProgress) (bool, error) {
+    // 查该任务当前存活的节点总数
+    total, err := s.nodeRepo.Count(ctx, QueryReadcampTaskNode{TaskId: p.TaskId})
+    if err != nil {
+        return false, err
+    }
+    return int64(p.NodeDone) >= total, nil
+}
+```
+
+---
+
+### 4.3 子任务策略模式（NodeHandler）
 
 新增子任务类型 = 新增一个文件 + 注册，**核心调度逻辑零改动**。
 
 ```go
-// NodeHandler 每种子任务类型实现此接口
+// NodeHandler 每种节点类型实现此接口
 type NodeHandler interface {
     Type() int
-    ValidateConf(conf string) error   // 保存时校验 conf JSON
+    // ValidateConf 保存时校验 conf JSON 合法性
+    ValidateConf(conf string) error
+    // CheckCompletion 判断用户是否满足完成条件，返回是否完成及当前完成量
     CheckCompletion(ctx context.Context, node *ReadcampTaskNode, uid int64) (done bool, curVal int, err error)
 }
 
-// NodeRegistry 策略注册表
+// NodeRegistry 策略注册表（初始化时注入）
 type NodeRegistry struct {
     m map[int]NodeHandler
 }
@@ -232,6 +424,11 @@ func NewNodeRegistry(handlers []NodeHandler) *NodeRegistry {
     }
     return r
 }
+
+func (r *NodeRegistry) Get(nodeType int) (NodeHandler, bool) {
+    h, ok := r.m[nodeType]
+    return h, ok
+}
 ```
 
 **示例：看视频 Handler**
@@ -239,10 +436,12 @@ func NewNodeRegistry(handlers []NodeHandler) *NodeRegistry {
 ```go
 type WatchVideoConf struct {
     VideoId     int64 `json:"video_id"`
-    MinDuration int   `json:"min_duration"` // 秒
+    MinDuration int   `json:"min_duration"` // 单位秒
 }
 
-type WatchVideoHandler struct{ videoRepo VideoRepo }
+type WatchVideoHandler struct {
+    videoRepo VideoRepo
+}
 
 func (h *WatchVideoHandler) Type() int { return NodeTypeWatchVideo }
 
@@ -268,12 +467,23 @@ func (h *WatchVideoHandler) CheckCompletion(ctx context.Context, node *ReadcampT
 }
 ```
 
+**注册示例：**
+
+```go
+registry := NewNodeRegistry([]NodeHandler{
+    &WatchVideoHandler{videoRepo: videoRepo},
+    &ReadHandler{readRepo: readRepo},
+    &CheckInHandler{checkInRepo: checkInRepo},
+    // 新增类型：追加此处，不动其他代码
+})
+```
+
 ---
 
-### 4.3 进度更新链路（事件驱动，与核心业务解耦）
+### 4.4 进度更新链路（事件驱动）
 
 ```
-学员行为（看完视频/完成阅读）
+学员行为（看完视频/完成阅读/打卡）
         │
         ▼
   业务系统发 Event（MQ）
@@ -281,21 +491,23 @@ func (h *WatchVideoHandler) CheckCompletion(ctx context.Context, node *ReadcampT
         ▼
   ProgressConsumer.Handle(event)
         │
-        ├─ 查询用户关联的进行中任务
-        ├─ 找到对应 node_id
+        ├─ 查询用户进行中的任务列表（readcamp_user_task_progress，state=1）
+        ├─ 匹配对应 node_id（readcamp_task_node，by task_id + node_type）
         ├─ NodeRegistry.Get(node_type).CheckCompletion()
-        ├─ 更新 readcamp_user_node_progress
-        ├─ 判断主任务是否全部完成（node_done == node_total）
-        └─ 完成 → 更新 readcamp_user_task_progress.state=2 + 发放奖励
+        ├─ 更新 readcamp_user_node_progress（cur_value / state / finish_time）
+        ├─ 若节点完成：node_done++ → UpdateById readcamp_user_task_progress
+        ├─ checkTaskDone() → COUNT 存活节点 vs node_done
+        └─ 任务完成 → state=2 + finish_time + 按 gift_id 发放奖励
 ```
 
 ---
 
-## 四、API 设计
+## 五、API 设计
 
-> 统一返回：`{ "ret": 0, "msg": "ok", "data": {} }`
+> 统一返回：`{"ret": 0, "msg": "ok", "data": {}}`
+> 时间字段格式：`"2006-01-02 15:04:05"`，`end_time` 传空字符串表示永久有效。
 
-### 4.1 CRM 后台接口
+### 5.1 CRM 后台接口
 
 #### 任务列表
 ```
@@ -304,13 +516,13 @@ POST /admin/readcamp/task/list
 ```json
 // Request
 {
-  "keyword":           "关键词（任务名/ID）",
-  "task_type":         0,
-  "task_status":       0,
-  "start_time_begin":  "2026-01-01 00:00:00",
-  "start_time_end":    "2026-12-31 23:59:59",
-  "page":              1,
-  "size":              50
+  "keyword":          "关键词（任务名/ID 模糊）",
+  "task_type":        0,
+  "task_status":      0,
+  "start_time_begin": "2026-01-01 00:00:00",
+  "start_time_end":   "2026-12-31 23:59:59",
+  "page":             1,
+  "size":             50
 }
 
 // Response data
@@ -320,6 +532,7 @@ POST /admin/readcamp/task/list
     {
       "id":          1,
       "name":        "新手任务",
+      "desc":        "完成后可领取体验课礼包",
       "task_type":   1,
       "task_status": 2,
       "node_count":  5,
@@ -332,6 +545,10 @@ POST /admin/readcamp/task/list
 }
 ```
 
+> `node_count` 为查询时 COUNT `readcamp_task_node` 所得，非存储字段。
+
+---
+
 #### 保存任务（创建/编辑通用）
 ```
 POST /admin/readcamp/task/save
@@ -342,11 +559,12 @@ POST /admin/readcamp/task/save
 {
   "id":           0,
   "name":         "新手成长之路",
+  "desc":         "完成全部任务解锁专属奖励",
   "task_type":    1,
   "start_time":   "2026-04-01 00:00:00",
   "end_time":     "",
   "audience_ids": [1, 2],
-  "reward_id":    3,
+  "gift_id":      3,
   "modules": [
     {
       "id":    0,
@@ -357,10 +575,10 @@ POST /admin/readcamp/task/save
           "id":        0,
           "node_type": 1,
           "title":     "观看入门视频",
+          "desc":      "观看完整视频即可完成",
           "conf":      { "video_id": 101, "min_duration": 60 },
           "target":    1,
-          "jump_type": 1,
-          "jump_url":  "/h5/video/101",
+          "gift_id":   0,
           "sort":      1
         }
       ]
@@ -374,81 +592,104 @@ POST /admin/readcamp/task/save
 {
   "id":           0,
   "name":         "每日打卡",
+  "desc":         "坚持打卡赢奖励",
   "task_type":    2,
   "start_time":   "2026-04-01 00:00:00",
   "end_time":     "2026-04-30 23:59:59",
   "audience_ids": [1],
-  "reward_id":    0,
+  "gift_id":      0,
   "nodes": [
     {
       "id":        0,
       "node_type": 3,
       "title":     "完成今日打卡",
+      "desc":      "每天打卡一次",
       "conf":      { "check_in_type": "daily", "day_index": 1 },
       "target":    1,
-      "jump_type": 1,
-      "jump_url":  "/h5/checkin",
+      "gift_id":   0,
       "sort":      1
     }
   ]
 }
 ```
 
+> `audience_ids` 在 Service 层序列化为 `user_conf`（逗号分隔字符串）后写库。
+
+---
+
 #### 其他后台接口
 
 | Path | 功能 | 关键参数 |
 |------|------|---------|
-| `POST /admin/readcamp/task/detail` | 任务详情（含模块/子任务） | `{"id": 1}` |
-| `POST /admin/readcamp/task/toggle` | 开关切换 | `{"id": 1, "state": 0}` |
-| `POST /admin/readcamp/task/delete` | 逻辑删除（state=2） | `{"id": 1}` |
+| `POST /admin/readcamp/task/detail` | 任务详情（含模块/节点） | `{"id": 1}` |
+| `POST /admin/readcamp/task/toggle` | 开关切换（开启/关闭） | `{"id": 1, "state": 2}` |
+| `POST /admin/readcamp/task/delete` | 删除任务 | `{"id": 1}` |
 | `POST /admin/readcamp/task/preview` | 获取预览二维码 URL | `{"id": 1}` |
-| `POST /admin/readcamp/reward/search` | 搜索奖励权益（联想下拉） | `{"keyword": ""}` |
+| `POST /admin/readcamp/gift/search` | 搜索奖励权益（联想下拉） | `{"keyword": ""}` |
 
-### 4.2 学员端接口
+---
+
+### 5.2 学员端接口
 
 | Path | 功能 |
 |------|------|
 | `POST /api/readcamp/task/list` | 当前用户可见任务列表（含进度） |
-| `POST /api/readcamp/task/detail` | 任务详情（含子任务进度） |
-| `POST /api/readcamp/task/node/report` | 上报子任务完成行为（触发进度检查） |
+| `POST /api/readcamp/task/detail` | 任务详情（含节点进度） |
+| `POST /api/readcamp/task/node/report` | 上报节点完成行为（触发进度更新） |
 
 ---
 
-## 五、目录结构
+## 六、目录结构
 
 ```
 readcamp/task/
 ├── handler/
-│   ├── admin.go         # 后台 handler
-│   └── app.go           # 学员端 handler
+│   ├── admin.go         # 后台 handler（任务 CRUD、开关、预览）
+│   └── app.go           # 学员端 handler（任务列表、详情、进度上报）
 ├── service/
-│   ├── task.go          # 任务 CRUD，按 task_type 分支处理
+│   ├── task.go          # 任务保存/查询，按 task_type 分支处理
 │   └── progress.go      # 进度更新、完成判断、奖励发放
 ├── strategy/
-│   ├── registry.go      # NodeRegistry
-│   ├── watch_video.go
-│   ├── read.go
-│   └── check_in.go
+│   ├── registry.go      # NodeRegistry + NodeHandler 接口
+│   ├── watch_video.go   # NodeTypeWatchVideo
+│   ├── read.go          # NodeTypeRead
+│   └── check_in.go      # NodeTypeCheckIn
 └── types/
-    ├── req.go
-    └── resp.go
+    ├── req.go           # 请求结构体（SaveTaskReq / ListTaskReq 等）
+    └── resp.go          # 响应结构体（TaskDetailResp / TaskListItem 等）
 ```
 
-> Repo 层文件放在 `readcamp/service/repository/` 下，与现有文件同目录，命名规范保持一致：
-> - `readcamp_task.go`
-> - `readcamp_task_module.go`
-> - `readcamp_task_node.go`
-> - `readcamp_user_task_progress.go`
-> - `readcamp_user_node_progress.go`
+**Repo 层**放在 `readcamp/service/repository/` 下，与现有文件同目录：
+
+| 文件 | 对应表 |
+|------|--------|
+| `readcamp_task.go` | `readcamp_task` |
+| `readcamp_task_module.go` | `readcamp_task_module` |
+| `readcamp_task_node.go` | `readcamp_task_node` |
+| `readcamp_user_task_progress.go` | `readcamp_user_task_progress` |
+| `readcamp_user_node_progress.go` | `readcamp_user_node_progress` |
 
 ---
 
-## 六、扩展性说明
+## 七、扩展性说明
 
-| 扩展点 | 方式 |
+| 扩展点 | 方案 |
 |--------|------|
-| 新增子任务类型 | 实现 `NodeHandler` 接口 + 注册，不改表 |
-| 多业务线复用 | `readcamp_task` 加 `biz_type` 字段，按 biz_type 路由不同 Registry |
-| 不同人群不同目标 | V1 建独立任务；V2 可在 `conf` 扩展 `target_by_audience` |
+| **新增节点类型** | 实现 `NodeHandler` 接口，注册到 `NodeRegistry`；`conf` 字段存 JSON，不改表结构 |
+| **节点级奖励** | 已预留 `readcamp_task_node.gift_id`，发放逻辑在 `progress.go` 中按需扩展 |
+| **多业务线复用** | `readcamp_task` 加 `biz_type` 字段，Service 层按 biz_type 路由不同 `NodeRegistry` 实例 |
+| **不同人群不同目标** | V1：为不同人群建独立任务；V2：`conf` 扩展 `"target_by_audience":{"1":1,"2":2}` |
 
 ---
+
+## 八、一期开发范围
+
+| 优先级 | 功能 | 涉及表 |
+|--------|------|--------|
+| P0 | 任务 CRUD（组合+单项） | `readcamp_task` + `readcamp_task_module` + `readcamp_task_node` |
+| P0 | 任务列表搜索 / 状态计算 / 开关 | `readcamp_task` |
+| P0 | 学员端任务详情（含节点进度） | `readcamp_user_task_progress` + `readcamp_user_node_progress` |
+| P1 | 节点完成上报（看视频/打卡） | `strategy/*` + `progress.go` |
+| P1 | 任务/节点奖励发放 | `gift_id` 引用外部权益系统 |
+| P2 | 预览二维码生成 | — |
+| P2 | 班主任进度查看 | `readcamp_user_task_progress` |
