@@ -640,7 +640,7 @@ POST /admin/readcamp/task/save
   "task_type":    1,
   "start_time":   "2026-04-01 00:00:00",
   "end_time":     "",
-  "audience_ids": [1, 2],
+  "audience_ids": ["1", "2"],
   "gift_id":      3,
   "modules": [
     {
@@ -673,7 +673,7 @@ POST /admin/readcamp/task/save
   "task_type":    2,
   "start_time":   "2026-04-01 00:00:00",
   "end_time":     "2026-04-30 23:59:59",
-  "audience_ids": [1],
+  "audience_ids": ["1", "2"],
   "gift_id":      0,
   "nodes": [
     {
@@ -701,55 +701,9 @@ POST /admin/readcamp/task/save
 | `POST /admin/readcamp/task/detail` | 任务详情（含模块/节点） | `{"id": 1}` |
 | `POST /admin/readcamp/task/toggle` | 开关切换（开启/关闭） | `{"id": 1, "state": 2}` |
 | `POST /admin/readcamp/task/delete` | 删除任务 | `{"id": 1}` |
-| `POST /admin/readcamp/task/preview` | 获取预览二维码 URL | `{"id": 1}` |
-| `POST /admin/readcamp/gift/search` | 搜索奖励权益（联想下拉） | `{"keyword": ""}` |
 
----
 
-### 5.2 学员端接口
-
-| Path | 功能 |
-|------|------|
-| `POST /api/readcamp/task/list` | 当前用户可见任务列表（含进度） |
-| `POST /api/readcamp/task/detail` | 任务详情（含节点进度） |
-| `POST /api/readcamp/task/node/report` | 上报节点完成行为（触发进度更新） |
-
----
-
-## 六、目录结构
-
-```
-readcamp/task/
-├── handler/
-│   ├── admin.go         # 后台 handler（任务 CRUD、开关、预览）
-│   └── app.go           # 学员端 handler（任务列表、详情、进度上报）
-├── service/
-│   ├── task.go          # 任务保存/查询，按 task_type 分支处理
-│   └── progress.go      # 进度更新、完成判断、奖励发放
-├── strategy/
-│   ├── registry.go      # NodeRegistry + NodeHandler 接口
-│   ├── watch_video.go   # NodeTypeWatchVideo
-│   ├── read.go          # NodeTypeRead
-│   └── check_in.go      # NodeTypeCheckIn
-└── types/
-    ├── req.go           # 请求结构体（SaveTaskReq / ListTaskReq 等）
-    └── resp.go          # 响应结构体（TaskDetailResp / TaskListItem 等）
-```
-
-**Repo 层**放在 `readcamp/service/repository/` 下，与现有文件同目录：
-
-| 文件 | 对应表 |
-|------|--------|
-| `readcamp_task.go` | `readcamp_task` |
-| `readcamp_task_module.go` | `readcamp_task_module` |
-| `readcamp_task_node.go` | `readcamp_task_node` |
-| `readcamp_user_task_progress.go` | `readcamp_user_task_progress` |
-| `readcamp_user_node_progress.go` | `readcamp_user_node_progress` |
-| `readcamp_task_gift_record.go` | `readcamp_task_gift_record` |
-
----
-
-## 七、扩展性说明
+## 六、扩展性说明
 
 | 扩展点 | 方案 |
 |--------|------|
