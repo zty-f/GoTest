@@ -760,6 +760,43 @@ POST /admin/readcamp/task/save
 | `POST /admin/readcamp/task/toggle` | 开关切换（开启/关闭） | `{"id": 1, "state": 2}` |
 | `POST /admin/readcamp/task/delete` | 删除任务 | `{"id": 1}` |
 
+---
+
+### 5.2 RPC 接口（基础服务对外暴露）
+
+> 任务中心作为基础服务，通过 RPC 对上层服务（CRM 后台、APP 服务、行为上报服务、班主任服务）统一暴露能力。上层 HTTP 接口调用 RPC，任务服务本身不直接依赖外部权益系统。
+
+```protobuf
+service TaskService {
+
+  // ─── 任务管理（CRM 后台调用）───────────────────────────────────
+
+  // 保存任务：id=0 为创建，id>0 为编辑，组合/单项通用
+  rpc SaveTask(SaveTaskReq) returns (SaveTaskResp);
+
+  // 任务列表：分页 + 多条件筛选，task_status 由 start_time/end_time 计算
+  rpc TaskList(TaskListReq) returns (TaskListResp);
+
+  // 任务详情：含全部模块/节点，按 task_type 分支组装
+  rpc TaskDetail(TaskDetailReq) returns (TaskDetailResp);
+
+  // 开关切换：state=1 开启 / state=2 关闭
+  rpc ToggleTask(ToggleTaskReq) returns (CommonResp);
+
+  // 删除任务（逻辑删除）
+  rpc DeleteTask(DeleteTaskReq) returns (CommonResp);
+
+  // 领取奖励：更新 state=2，调用基础服务里面的方法发送奖励
+  rpc ClaimGift(ClaimGiftReq) returns (ClaimGiftResp);
+
+  // ─── 进度上报（行为系统 / MQ 消费者调用）────────────────────────
+
+  // 上报节点行为事件：任务服务内部路由 NodeHandler → 更新进度 → 写奖励记录
+  // 幂等：重复上报安全，唯一键防重
+  rpc ReportNodeEvent(ReportNodeEventReq) returns (ReportNodeEventResp);
+}
+```
+
 
 ## 六、扩展性说明
 
