@@ -777,7 +777,7 @@ service TaskService {
   // 任务列表：分页 + 多条件筛选，task_status 由 start_time/end_time 计算
   rpc TaskList(TaskListReq) returns (TaskListResp);
 
-  // 任务详情：含全部模块/节点，按 task_type 分支组装
+  // 任务详情（管理端）：含全部模块/节点结构，不含用户进度
   rpc TaskDetail(TaskDetailReq) returns (TaskDetailResp);
 
   // 开关切换：state=1 开启 / state=2 关闭
@@ -786,7 +786,19 @@ service TaskService {
   // 删除任务（逻辑删除）
   rpc DeleteTask(DeleteTaskReq) returns (CommonResp);
 
-  // 领取奖励：更新 state=2，调用基础服务里面的方法发送奖励
+  // ─── 学员端（APP 服务调用）───────────────────────────────────
+
+  // 学员任务列表：返回用户可见的任务及进度摘要
+  // - query_type=1：进行中的任务（readcamp_user_task_progress.state=1）
+  // - query_type=2：已参与的全部任务（有进度记录的）
+  // - query_type=3：可参与的任务（人群命中 + 任务开启 + 时间进行中，含未开始进度的）
+  rpc GetUserTaskList(GetUserTaskListReq) returns (GetUserTaskListResp);
+
+  // 学员任务详情：指定 task_id，返回任务结构 + 该用户各节点完整进度
+  // APP 任务详情页的核心接口
+  rpc GetUserTaskDetail(GetUserTaskDetailReq) returns (GetUserTaskDetailResp);
+
+  // 领取奖励：更新 state=2，调用基础服务里面的方法发放奖励
   rpc ClaimGift(ClaimGiftReq) returns (ClaimGiftResp);
 
   // ─── 进度上报（行为系统 / MQ 消费者调用）────────────────────────
@@ -794,6 +806,79 @@ service TaskService {
   // 上报节点行为事件：任务服务内部路由 NodeHandler → 更新进度 → 写奖励记录
   // 幂等：重复上报安全，唯一键防重
   rpc ReportNodeEvent(ReportNodeEventReq) returns (ReportNodeEventResp);
+}
+```
+
+---
+
+#### 关键 message 说明
+
+**`GetUserTaskListReq / Resp`**
+
+```protobuf
+message GetUserTaskListReq {
+  int64 uid        = 1;
+  int32 biz_type   = 2;
+  int32 query_type = 3; // 1=进行中 2=已参与 3=可参与
+  int32 page       = 4;
+  int32 size       = 5;
+}
+
+message UserTaskItem {
+  int64  task_id     = 1;
+  string name        = 2;
+  int32  task_type   = 3; // 1=组合 2=单项
+  int32  task_status = 4; // 1=未开始 2=进行中 3=已结束（运行时计算）
+  int32  node_done   = 5; // 已完成节点数（无进度记录则为0）
+  int32  node_total  = 6; // 当前存活节点总数
+  int64  gift_id     = 7; // 0=无任务级奖励
+  string start_time  = 8;
+  string end_time    = 9;
+}
+```
+
+**`GetUserTaskDetailReq / Resp`**
+
+```protobuf
+message GetUserTaskDetailReq {
+  int64 uid     = 1;
+  int64 task_id = 2;
+}
+
+// 节点 + 用户进度合并返回，APP 一次请求拿到渲染所需全部数据
+message UserNodeItem {
+  int64  node_id    = 1;
+  int64  module_id  = 2;
+  string title      = 3;
+  string desc       = 4;
+  int32  node_type  = 5;
+  string conf       = 6;
+  int32  target     = 7;
+  int64  gift_id    = 8;
+  int32  sort       = 9;
+  // 用户进度（无记录时为默认值）
+  int32  cur_value  = 10; // 当前完成量
+  int32  state      = 11; // 1=进行中 2=已完成
+  string finish_time = 12;
+}
+```
+
+**`ReportNodeEventReq / Resp`**
+
+```protobuf
+message ReportNodeEventReq {
+  int64  uid        = 1;
+  int32  biz_type   = 2;
+  int32  node_type  = 3;
+  string event_data = 4; // 行为附加数据 JSON，由 NodeHandler 自行解析
+                         // 例：{"video_id":101,"watched_seconds":90}
+}
+
+message ReportNodeEventResp {
+  bool  node_done  = 1; // 是否触发节点完成
+  bool  task_done  = 2; // 是否触发任务完成
+  // 新产生的待领取奖励，可用于 APP 弹窗提示
+  repeated int64 gift_record_ids = 3;
 }
 ```
 
