@@ -184,6 +184,34 @@ CREATE TABLE `readcamp_user_node_progress` (
 
 ---
 
+### 2.6 奖励发放领取记录表 `readcamp_task_gift_record`
+
+```sql
+CREATE TABLE `readcamp_task_gift_record` (
+  `id`        BIGINT   NOT NULL AUTO_INCREMENT,
+  `uid`       BIGINT   NOT NULL             COMMENT '学员UID',
+  `task_id`   BIGINT   NOT NULL             COMMENT '任务ID',
+  `node_id`   BIGINT   NOT NULL DEFAULT 0   COMMENT '节点ID 0=任务级奖励',
+  `gift_id`   BIGINT   NOT NULL             COMMENT '奖励权益ID',
+  `gift_type` INT      NOT NULL DEFAULT 1   COMMENT '1=任务奖励 2=节点奖励',
+  `state`     INT      NOT NULL DEFAULT 1   COMMENT '1=待领取 2=已领取',
+  `ct`        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ut`        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_uid_task_node` (`uid`, `task_id`, `node_id`),
+  KEY `idx_uid_state` (`uid`, `state`)
+) ENGINE=InnoDB COMMENT='任务奖励发放领取记录';
+```
+
+**字段说明：**
+- `node_id=0`：任务级奖励，由 `readcamp_task.gift_id` 触发
+- `node_id>0`：节点级奖励，由 `readcamp_task_node.gift_id` 触发
+- `gift_type`：冗余字段，便于按奖励来源单独查询，不用每次 JOIN 判断
+- `uk_uid_task_node`：唯一键防重复发放，同一用户同一任务/节点奖励只发一次
+- 状态流转：任务/节点完成 → 写入 `state=1`（已发放）→ 用户在 APP 领取 → 更新 `state=2`（已领取）
+
+---
+
 ## 三、Go 结构体定义
 
 > 严格对应 DDL 字段，标签格式 `json:"xxx" bdb:"xxx"`，参照 repository 包现有规范。
@@ -321,6 +349,32 @@ type ReadcampUserNodeProgress struct {
     FinishTime *time.Time `json:"finish_time" bdb:"finish_time"`
     Ct         time.Time  `json:"ct"          bdb:"ct"`
     Ut         time.Time  `json:"ut"          bdb:"ut"`
+}
+```
+
+### 3.6 ReadcampTaskGiftRecord
+
+```go
+const (
+    tableReadcampTaskGiftRecord = "readcamp_task_gift_record"
+
+    GiftTypeTask = 1 // 任务级奖励（完成整个任务触发）
+    GiftTypeNode = 2 // 节点级奖励（完成单个节点触发）
+
+    GiftStateIssued  = 1 // 已发放（待用户领取）
+    GiftStateClaimed = 2 // 已领取
+)
+
+type ReadcampTaskGiftRecord struct {
+    Id       int64     `json:"id"        bdb:"id"`
+    Uid      int64     `json:"uid"       bdb:"uid"`
+    TaskId   int64     `json:"task_id"   bdb:"task_id"`
+    NodeId   int64     `json:"node_id"   bdb:"node_id"`   // 0=任务级奖励
+    GiftId   int64     `json:"gift_id"   bdb:"gift_id"`
+    GiftType int       `json:"gift_type" bdb:"gift_type"` // 1=任务奖励 2=节点奖励
+    State    int       `json:"state"     bdb:"state"`     // 1=已发放 2=已领取
+    Ct       time.Time `json:"ct"        bdb:"ct"`
+    Ut       time.Time `json:"ut"        bdb:"ut"`
 }
 ```
 
@@ -495,9 +549,32 @@ registry := NewNodeRegistry([]NodeHandler{
         ├─ 匹配对应 node_id（readcamp_task_node，by task_id + node_type）
         ├─ NodeRegistry.Get(node_type).CheckCompletion()
         ├─ 更新 readcamp_user_node_progress（cur_value / state / finish_time）
-        ├─ 若节点完成：node_done++ → UpdateById readcamp_user_task_progress
+        │
+        ├─ 若节点完成 且 node.gift_id > 0：
+        │    └─ InsertOne readcamp_task_gift_record（gift_type=2, state=1）
+        │         ↑ uk_uid_task_node 防重，ignore duplicate key error
+        │
+        ├─ node_done++ → UpdateById readcamp_user_task_progress
         ├─ checkTaskDone() → COUNT 存活节点 vs node_done
-        └─ 任务完成 → state=2 + finish_time + 按 gift_id 发放奖励
+        │
+        └─ 任务完成 且 task.gift_id > 0：
+             └─ InsertOne readcamp_task_gift_record（node_id=0, gift_type=1, state=1）
+                  + 更新 readcamp_user_task_progress.state=2 + finish_time
+```
+
+**学员端领取奖励流程（APP 侧）：**
+
+```
+用户点击"领取奖励"
+        │
+        ▼
+  查询 readcamp_task_gift_record（uid + task_id，state=1）
+        │
+        ▼
+  调用外部权益系统发放 gift_id
+        │
+        ▼
+  UpdateById state=2（已领取）
 ```
 
 ---
@@ -668,6 +745,7 @@ readcamp/task/
 | `readcamp_task_node.go` | `readcamp_task_node` |
 | `readcamp_user_task_progress.go` | `readcamp_user_task_progress` |
 | `readcamp_user_node_progress.go` | `readcamp_user_node_progress` |
+| `readcamp_task_gift_record.go` | `readcamp_task_gift_record` |
 
 ---
 
@@ -676,7 +754,6 @@ readcamp/task/
 | 扩展点 | 方案 |
 |--------|------|
 | **新增节点类型** | 实现 `NodeHandler` 接口，注册到 `NodeRegistry`；`conf` 字段存 JSON，不改表结构 |
-| **节点级奖励** | 已预留 `readcamp_task_node.gift_id`，发放逻辑在 `progress.go` 中按需扩展 |
 | **多业务线复用** | `readcamp_task` 加 `biz_type` 字段，Service 层按 biz_type 路由不同 `NodeRegistry` 实例 |
 | **不同人群不同目标** | V1：为不同人群建独立任务；V2：`conf` 扩展 `"target_by_audience":{"1":1,"2":2}` |
 
@@ -690,6 +767,7 @@ readcamp/task/
 | P0 | 任务列表搜索 / 状态计算 / 开关 | `readcamp_task` |
 | P0 | 学员端任务详情（含节点进度） | `readcamp_user_task_progress` + `readcamp_user_node_progress` |
 | P1 | 节点完成上报（看视频/打卡） | `strategy/*` + `progress.go` |
-| P1 | 任务/节点奖励发放 | `gift_id` 引用外部权益系统 |
+| P1 | 奖励发放（任务级 + 节点级） | `readcamp_task_gift_record` |
+| P1 | 学员端奖励领取 | `readcamp_task_gift_record` |
 | P2 | 预览二维码生成 | — |
 | P2 | 班主任进度查看 | `readcamp_user_task_progress` |
