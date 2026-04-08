@@ -59,6 +59,7 @@ Task                             Task
 ```sql
 CREATE TABLE `readcamp_task` (
   `id`           BIGINT       NOT NULL AUTO_INCREMENT         COMMENT '任务ID 自增主键',
+  `biz_type`     INT          NOT NULL DEFAULT 1              COMMENT '业务线 1=阅读营 2=小班课 ...',
   `name`         VARCHAR(100) NOT NULL DEFAULT ''             COMMENT '任务名称',
   `desc`         VARCHAR(256) NOT NULL DEFAULT ''             COMMENT '任务描述',
   `task_type`    INT          NOT NULL DEFAULT 1              COMMENT '任务类型 1=组合任务 2=单项任务',
@@ -70,7 +71,7 @@ CREATE TABLE `readcamp_task` (
   `ct`           DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `ut`           DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
-  KEY `idx_ct`        (`ct`),
+  KEY `idx_biz_ct`    (`biz_type`, `ct`),
   KEY `idx_task_type` (`task_type`, `state`)
 ) ENGINE=InnoDB COMMENT='任务主表';
 ```
@@ -96,7 +97,7 @@ CREATE TABLE `readcamp_task_module` (
   `id`         BIGINT      NOT NULL AUTO_INCREMENT     COMMENT '模块ID',
   `task_id`    BIGINT      NOT NULL                    COMMENT '所属任务ID',
   `title`      VARCHAR(48) NOT NULL DEFAULT ''         COMMENT '模块标题 限10个汉字',
-  `sort`       INT         NOT NULL DEFAULT 0          COMMENT '排序 升序',
+  `sort`       INT         NOT NULL DEFAULT 0          COMMENT '排序 从大到小',
   `ct`         DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ut`         DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -122,7 +123,7 @@ CREATE TABLE `readcamp_task_node` (
   `conf`      LONGTEXT     NOT NULL                  COMMENT '任务节点类型专属配置 JSON',
   `target`    INT          NOT NULL DEFAULT 1        COMMENT '目标完成量（次数/秒）看情况使用',
   `gift_id`   BIGINT       NOT NULL DEFAULT 0        COMMENT '奖励权益ID 0=无奖励',
-  `sort`      INT          NOT NULL DEFAULT 0        COMMENT '排序 升序',
+  `sort`      INT          NOT NULL DEFAULT 0        COMMENT '排序 从大到小',
   `ct`        DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ut`        DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -222,6 +223,9 @@ CREATE TABLE `readcamp_task_gift_record` (
 const (
     tableReadcampTask = "readcamp_task"
 
+    BizTypeReadCamp = 1 // 阅读营
+    BizTypeClassRoom = 2 // 小班课（示例，按需扩展）
+
     TaskTypeCombo  = 1 // 组合任务
     TaskTypeSingle = 2 // 单项任务
 
@@ -231,6 +235,7 @@ const (
 
 type ReadcampTask struct {
     Id        int64     `json:"id"         bdb:"id"`         // 任务ID
+    BizType   int       `json:"biz_type"   bdb:"biz_type"`   // 业务线
     Name      string    `json:"name"       bdb:"name"`       // 任务名称
     Desc      string    `json:"desc"       bdb:"desc"`       // 任务描述
     TaskType  int       `json:"task_type"  bdb:"task_type"`  // 1=组合任务 2=单项任务
@@ -452,9 +457,10 @@ func (s *ProgressService) checkTaskDone(ctx context.Context, p *ReadcampUserTask
 
 ---
 
-### 4.3 子任务策略模式（NodeHandler）
+### 4.3 子任务策略模式（NodeHandler）& 多业务线路由
 
 新增子任务类型 = 新增一个文件 + 注册，**核心调度逻辑零改动**。
+接入新业务线 = 为该业务线构建独立 `NodeRegistry`，挂载到 `TaskService`，**不改已有业务逻辑**。
 
 ```go
 // NodeHandler 每种节点类型实现此接口
@@ -466,7 +472,7 @@ type NodeHandler interface {
     CheckCompletion(ctx context.Context, node *ReadcampTaskNode, uid int64) (done bool, curVal int, err error)
 }
 
-// NodeRegistry 策略注册表（初始化时注入）
+// NodeRegistry 单业务线的节点策略注册表
 type NodeRegistry struct {
     m map[int]NodeHandler
 }
@@ -485,7 +491,72 @@ func (r *NodeRegistry) Get(nodeType int) (NodeHandler, bool) {
 }
 ```
 
-**示例：看视频 Handler**
+**TaskService 持有多业务线 Registry Map，按 `biz_type` 路由：**
+
+```go
+type TaskService struct {
+    registries map[int]*NodeRegistry // key: biz_type
+    taskRepo   ReadcampTaskRepo
+    moduleRepo ReadcampTaskModuleRepo
+    nodeRepo   ReadcampTaskNodeRepo
+}
+
+// getRegistry 按 biz_type 取对应注册表，不存在则返回 error
+func (s *TaskService) getRegistry(bizType int) (*NodeRegistry, error) {
+    r, ok := s.registries[bizType]
+    if !ok {
+        return nil, fmt.Errorf("unsupported biz_type: %d", bizType)
+    }
+    return r, nil
+}
+```
+
+**初始化时为每个业务线构建独立 Registry：**
+
+```go
+func NewTaskService(taskRepo ReadcampTaskRepo, ...) *TaskService {
+    return &TaskService{
+        registries: map[int]*NodeRegistry{
+            BizTypeReadCamp: NewNodeRegistry([]NodeHandler{
+                &WatchVideoHandler{videoRepo: videoRepo},
+                &ReadHandler{readRepo: readRepo},
+                &CheckInHandler{checkInRepo: checkInRepo},
+            }),
+            // 接入新业务线：在此追加，完全不动已有逻辑
+            // BizTypeClassRoom: NewNodeRegistry([]NodeHandler{
+            //     &MathExerciseHandler{exerciseRepo: exerciseRepo},
+            //     &CheckInHandler{checkInRepo: checkInRepo}, // 公共类型可复用
+            // }),
+        },
+        taskRepo:   taskRepo,
+        moduleRepo: moduleRepo,
+        nodeRepo:   nodeRepo,
+    }
+}
+```
+
+**保存任务时按 `biz_type` 校验节点类型合法性：**
+
+```go
+func (s *TaskService) Save(ctx context.Context, req *SaveTaskReq) error {
+    registry, err := s.getRegistry(req.BizType)
+    if err != nil {
+        return err
+    }
+    for _, node := range req.AllNodes() { // 组合/单项通用
+        handler, ok := registry.Get(node.NodeType)
+        if !ok {
+            return fmt.Errorf("biz_type=%d 不支持节点类型 node_type=%d", req.BizType, node.NodeType)
+        }
+        if err := handler.ValidateConf(node.Conf); err != nil {
+            return err
+        }
+    }
+    // ... 写库逻辑
+}
+```
+
+**示例：看视频 Handler（仅阅读营使用）**
 
 ```go
 type WatchVideoConf struct {
@@ -519,17 +590,6 @@ func (h *WatchVideoHandler) CheckCompletion(ctx context.Context, node *ReadcampT
     }
     return watched >= c.MinDuration, watched, nil
 }
-```
-
-**注册示例：**
-
-```go
-registry := NewNodeRegistry([]NodeHandler{
-    &WatchVideoHandler{videoRepo: videoRepo},
-    &ReadHandler{readRepo: readRepo},
-    &CheckInHandler{checkInRepo: checkInRepo},
-    // 新增类型：追加此处，不动其他代码
-})
 ```
 
 ---
@@ -594,6 +654,7 @@ POST /admin/readcamp/task/list
 // Request
 {
   "keyword":          "关键词（任务名/ID 模糊）",
+  "biz_type":         1,
   "task_type":        0,
   "task_status":      0,
   "start_time_begin": "2026-01-01 00:00:00",
@@ -608,6 +669,7 @@ POST /admin/readcamp/task/list
   "list": [
     {
       "id":          1,
+      "biz_type":    1,
       "name":        "新手任务",
       "desc":        "完成后可领取体验课礼包",
       "task_type":   1,
@@ -635,6 +697,7 @@ POST /admin/readcamp/task/save
 ```json
 {
   "id":           0,
+  "biz_type":     1,
   "name":         "新手成长之路",
   "desc":         "完成全部任务解锁专属奖励",
   "task_type":    1,
@@ -668,6 +731,7 @@ POST /admin/readcamp/task/save
 ```json
 {
   "id":           0,
+  "biz_type":     1,
   "name":         "每日打卡",
   "desc":         "坚持打卡赢奖励",
   "task_type":    2,
@@ -707,8 +771,9 @@ POST /admin/readcamp/task/save
 
 | 扩展点 | 方案 |
 |--------|------|
-| **新增节点类型** | 实现 `NodeHandler` 接口，注册到 `NodeRegistry`；`conf` 字段存 JSON，不改表结构 |
-| **多业务线复用** | `readcamp_task` 加 `biz_type` 字段，Service 层按 biz_type 路由不同 `NodeRegistry` 实例 |
+| **新增节点类型** | 实现 `NodeHandler` 接口，注册到对应业务线的 `NodeRegistry`；`conf` 字段存 JSON，不改表结构 |
+| **接入新业务线** | `readcamp_task.biz_type` 区分数据；`NewTaskService` 中为新 `biz_type` 构建独立 `NodeRegistry`；已有业务线逻辑不受影响，详见 §4.3 |
+| **公共节点类型跨业务线复用** | 同一个 `NodeHandler` 实例可注册到多个 `NodeRegistry`，如 `CheckInHandler` 阅读营和小班课均可使用 |
 | **不同人群不同目标** | V1：为不同人群建独立任务；V2：`conf` 扩展 `"target_by_audience":{"1":1,"2":2}` |
 
 ---
