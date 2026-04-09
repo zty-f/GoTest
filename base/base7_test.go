@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"math"
+	"net/url"
 	"strings"
 	"test/util"
 	"testing"
@@ -178,4 +179,7 @@ func TestMm(t *testing.T) {
 	t2 := util.GetDayStartTime(time.Now().Add(-30 * 24 * time.Hour))
 	fmt.Println(t2)
 	fmt.Println(t1)
+
+	query, err := url.ParseQuery("adid=0&oaid=00000000-0000-0000-0000-000000000000&caid=4ff0e6816d3af8e53878b91c720a7cfb_20250325,dbc755a07175c7cd1fc81ea3e15744f5_20230330&timestamp=797412021675&actionType=ACTIVE&ip=0.0.0.0&ipalfish_device_id=879AC2B7-B8D1-4C03-A19C-45A21EF3366D&h_dt=1&channel=appstore")
+	fmt.Println(query)
 }

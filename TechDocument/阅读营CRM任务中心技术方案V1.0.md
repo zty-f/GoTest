@@ -58,21 +58,21 @@ Task                             Task
 
 ```sql
 CREATE TABLE `readcamp_task` (
-  `id`           BIGINT       NOT NULL AUTO_INCREMENT         COMMENT '任务ID 自增主键',
-  `biz_type`     INT          NOT NULL DEFAULT 1              COMMENT '业务线 1=阅读营 2=小班课 ...',
-  `name`         VARCHAR(100) NOT NULL DEFAULT ''             COMMENT '任务名称',
-  `desc`         VARCHAR(256) NOT NULL DEFAULT ''             COMMENT '任务描述',
-  `task_type`    INT          NOT NULL DEFAULT 1              COMMENT '任务类型 1=组合任务 2=单项任务',
-  `start_time`   DATETIME     NOT NULL                        COMMENT '开始时间',
-  `end_time`     DATETIME     NOT NULL                        COMMENT '结束时间',
-  `state`        INT          NOT NULL DEFAULT 2              COMMENT '状态 1=开启 2=关闭',
-  `user_conf`    TEXT         NOT NULL                        COMMENT '参与人群配置 1,2,3,...',
-  `gift_id`      BIGINT       NOT NULL DEFAULT 0              COMMENT '奖励权益ID 0=无奖励',
-  `ct`           DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `ut`           DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`),
-  KEY `idx_biz_ct`    (`biz_type`, `ct`),
-  KEY `idx_task_type` (`task_type`, `state`)
+                                 `id`           BIGINT       NOT NULL AUTO_INCREMENT         COMMENT '任务ID 自增主键',
+                                 `biz_type`     INT          NOT NULL DEFAULT 1              COMMENT '业务线 1=阅读营 2=小班课 ...',
+                                 `name`         VARCHAR(100) NOT NULL DEFAULT ''             COMMENT '任务名称',
+                                 `desc`         VARCHAR(256) NOT NULL DEFAULT ''             COMMENT '任务描述',
+                                 `task_type`    INT          NOT NULL DEFAULT 1              COMMENT '任务类型 1=组合任务 2=单项任务',
+                                 `start_time`   DATETIME     NOT NULL                        COMMENT '开始时间',
+                                 `end_time`     DATETIME     NOT NULL                        COMMENT '结束时间',
+                                 `state`        INT          NOT NULL DEFAULT 2              COMMENT '状态 1=开启 2=关闭',
+                                 `user_conf`    TEXT         NOT NULL                        COMMENT '参与人群配置 1,2,3,...',
+                                 `gift_id`      BIGINT       NOT NULL DEFAULT 0              COMMENT '奖励权益ID 0=无奖励',
+                                 `ct`           DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                 `ut`           DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                                 PRIMARY KEY (`id`),
+                                 KEY `idx_biz_ct`    (`biz_type`, `ct`),
+                                 KEY `idx_task_type` (`task_type`, `state`)
 ) ENGINE=InnoDB COMMENT='任务主表';
 ```
 
@@ -94,14 +94,14 @@ CREATE TABLE `readcamp_task` (
 
 ```sql
 CREATE TABLE `readcamp_task_module` (
-  `id`         BIGINT      NOT NULL AUTO_INCREMENT     COMMENT '模块ID',
-  `task_id`    BIGINT      NOT NULL                    COMMENT '所属任务ID',
-  `title`      VARCHAR(48) NOT NULL DEFAULT ''         COMMENT '模块标题 限10个汉字',
-  `sort`       INT         NOT NULL DEFAULT 0          COMMENT '排序 从大到小',
-  `ct`         DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `ut`         DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `idx_task_id` (`task_id`)
+                                        `id`         BIGINT      NOT NULL AUTO_INCREMENT     COMMENT '模块ID',
+                                        `task_id`    BIGINT      NOT NULL                    COMMENT '所属任务ID',
+                                        `title`      VARCHAR(48) NOT NULL DEFAULT ''         COMMENT '模块标题 限10个汉字',
+                                        `sort`       INT         NOT NULL DEFAULT 0          COMMENT '排序 从大到小',
+                                        `ct`         DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                        `ut`         DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                        PRIMARY KEY (`id`),
+                                        KEY `idx_task_id` (`task_id`)
 ) ENGINE=InnoDB COMMENT='任务模块表（组合任务专用）';
 ```
 
@@ -114,21 +114,21 @@ CREATE TABLE `readcamp_task_module` (
 
 ```sql
 CREATE TABLE `readcamp_task_node` (
-  `id`        BIGINT       NOT NULL AUTO_INCREMENT   COMMENT '任务节点ID',
-  `task_id`   BIGINT       NOT NULL                  COMMENT '所属任务ID（冗余）',
-  `module_id` BIGINT       NOT NULL DEFAULT 0        COMMENT '所属模块ID 单项任务固定=0',
-  `title`     VARCHAR(100) NOT NULL DEFAULT ''       COMMENT '任务节点标题',
-  `desc`      VARCHAR(256) NOT NULL DEFAULT ''       COMMENT '任务节点描述',
-  `node_type` INT          NOT NULL DEFAULT 1        COMMENT '任务节点类型 见枚举',
-  `conf`      LONGTEXT     NOT NULL                  COMMENT '任务节点类型专属配置 JSON',
-  `target`    INT          NOT NULL DEFAULT 1        COMMENT '目标完成量（次数/秒）看情况使用',
-  `gift_id`   BIGINT       NOT NULL DEFAULT 0        COMMENT '奖励权益ID 0=无奖励',
-  `sort`      INT          NOT NULL DEFAULT 0        COMMENT '排序 从大到小',
-  `ct`        DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `ut`        DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `idx_task_id`   (`task_id`),
-  KEY `idx_module_id` (`module_id`)
+                                      `id`        BIGINT       NOT NULL AUTO_INCREMENT   COMMENT '任务节点ID',
+                                      `task_id`   BIGINT       NOT NULL                  COMMENT '所属任务ID（冗余）',
+                                      `module_id` BIGINT       NOT NULL DEFAULT 0        COMMENT '所属模块ID 单项任务固定=0',
+                                      `title`     VARCHAR(100) NOT NULL DEFAULT ''       COMMENT '任务节点标题',
+                                      `desc`      VARCHAR(256) NOT NULL DEFAULT ''       COMMENT '任务节点描述',
+                                      `node_type` INT          NOT NULL DEFAULT 1        COMMENT '任务节点类型 见枚举',
+                                      `conf`      LONGTEXT     NOT NULL                  COMMENT '任务节点类型专属配置 JSON',
+                                      `target`    INT          NOT NULL DEFAULT 1        COMMENT '目标完成量（次数/秒）看情况使用',
+                                      `gift_id`   BIGINT       NOT NULL DEFAULT 0        COMMENT '奖励权益ID 0=无奖励',
+                                      `sort`      INT          NOT NULL DEFAULT 0        COMMENT '排序 从大到小',
+                                      `ct`        DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                      `ut`        DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                      PRIMARY KEY (`id`),
+                                      KEY `idx_task_id`   (`task_id`),
+                                      KEY `idx_module_id` (`module_id`)
 ) ENGINE=InnoDB COMMENT='任务节点表（组合/单项通用）';
 ```
 
@@ -148,17 +148,17 @@ CREATE TABLE `readcamp_task_node` (
 
 ```sql
 CREATE TABLE `readcamp_user_task_progress` (
-  `id`          BIGINT   NOT NULL AUTO_INCREMENT,
-  `uid`         BIGINT   NOT NULL             COMMENT '学员UID',
-  `task_id`     BIGINT   NOT NULL             COMMENT '任务ID',
-  `state`       INT      NOT NULL DEFAULT 1   COMMENT '1=进行中 2=已完成',
-  `node_done`   INT      NOT NULL DEFAULT 0   COMMENT '已完成子任务数',
-  `finish_time` DATETIME                      COMMENT '任务完成时间',
-  `ct`          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `ut`          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_uid_task`  (`uid`, `task_id`),
-  KEY `idx_task_state` (`task_id`, `state`)
+                                               `id`          BIGINT   NOT NULL AUTO_INCREMENT,
+                                               `uid`         BIGINT   NOT NULL             COMMENT '学员UID',
+                                               `task_id`     BIGINT   NOT NULL             COMMENT '任务ID',
+                                               `state`       INT      NOT NULL DEFAULT 1   COMMENT '1=进行中 2=已完成',
+                                               `node_done`   INT      NOT NULL DEFAULT 0   COMMENT '已完成子任务数',
+                                               `finish_time` DATETIME                      COMMENT '任务完成时间',
+                                               `ct`          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                               `ut`          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                               PRIMARY KEY (`id`),
+                                               UNIQUE KEY `uk_uid_task`  (`uid`, `task_id`),
+                                               KEY `idx_task_state` (`task_id`, `state`)
 ) ENGINE=InnoDB COMMENT='用户主任务进度';
 ```
 
@@ -168,18 +168,18 @@ CREATE TABLE `readcamp_user_task_progress` (
 
 ```sql
 CREATE TABLE `readcamp_user_node_progress` (
-  `id`          BIGINT   NOT NULL AUTO_INCREMENT,
-  `uid`         BIGINT   NOT NULL             COMMENT '学员UID',
-  `task_id`     BIGINT   NOT NULL             COMMENT '任务ID（冗余，按任务查全量进度用）',
-  `node_id`     BIGINT   NOT NULL             COMMENT '任务节点ID',
-  `cur_value`   INT      NOT NULL DEFAULT 0   COMMENT '当前完成量（次数/秒）',
-  `state`       INT      NOT NULL DEFAULT 1   COMMENT '1=进行中 2=已完成',
-  `finish_time` DATETIME                      COMMENT '完成时间',
-  `ct`          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `ut`          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_uid_node`  (`uid`, `node_id`),
-  KEY `idx_uid_task`  (`uid`, `task_id`)
+                                               `id`          BIGINT   NOT NULL AUTO_INCREMENT,
+                                               `uid`         BIGINT   NOT NULL             COMMENT '学员UID',
+                                               `task_id`     BIGINT   NOT NULL             COMMENT '任务ID（冗余，按任务查全量进度用）',
+                                               `node_id`     BIGINT   NOT NULL             COMMENT '任务节点ID',
+                                               `cur_value`   INT      NOT NULL DEFAULT 0   COMMENT '当前完成量（次数/秒）',
+                                               `state`       INT      NOT NULL DEFAULT 1   COMMENT '1=进行中 2=已完成',
+                                               `finish_time` DATETIME                      COMMENT '完成时间',
+                                               `ct`          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                               `ut`          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                               PRIMARY KEY (`id`),
+                                               UNIQUE KEY `uk_uid_node`  (`uid`, `node_id`),
+                                               KEY `idx_uid_task`  (`uid`, `task_id`)
 ) ENGINE=InnoDB COMMENT='用户子任务进度';
 ```
 
@@ -189,17 +189,17 @@ CREATE TABLE `readcamp_user_node_progress` (
 
 ```sql
 CREATE TABLE `readcamp_task_gift_record` (
-  `id`        BIGINT   NOT NULL AUTO_INCREMENT,
-  `uid`       BIGINT   NOT NULL             COMMENT '学员UID',
-  `task_id`   BIGINT   NOT NULL             COMMENT '任务ID',
-  `node_id`   BIGINT   NOT NULL DEFAULT 0   COMMENT '节点ID 0=任务级奖励',
-  `gift_id`   BIGINT   NOT NULL             COMMENT '奖励权益ID',
-  `state`     INT      NOT NULL DEFAULT 1   COMMENT '1=待领取 2=已领取',
-  `ct`        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `ut`        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_uid_task_node` (`uid`, `task_id`, `node_id`),
-  KEY `idx_uid_state` (`uid`, `state`)
+                                             `id`        BIGINT   NOT NULL AUTO_INCREMENT,
+                                             `uid`       BIGINT   NOT NULL             COMMENT '学员UID',
+                                             `task_id`   BIGINT   NOT NULL             COMMENT '任务ID',
+                                             `node_id`   BIGINT   NOT NULL DEFAULT 0   COMMENT '节点ID 0=任务级奖励',
+                                             `gift_id`   BIGINT   NOT NULL             COMMENT '奖励权益ID',
+                                             `state`     INT      NOT NULL DEFAULT 1   COMMENT '1=待领取 2=已领取',
+                                             `ct`        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                             `ut`        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                             PRIMARY KEY (`id`),
+                                             UNIQUE KEY `uk_uid_task_node` (`uid`, `task_id`, `node_id`),
+                                             KEY `idx_uid_state` (`uid`, `state`)
 ) ENGINE=InnoDB COMMENT='任务奖励发放领取记录';
 ```
 
@@ -213,39 +213,47 @@ CREATE TABLE `readcamp_task_gift_record` (
 
 ### 2.7 用户节点行为事件明细表 `readcamp_user_node_event_log`
 
-> **用途一（核心）**：存储 `ReportNodeEventReq.event_id` 实现幂等去重——同一 `event_id` 重复上报时 `uk_event_id` 报唯一键冲突，直接 ignore，`cur_value` 不会被重复累加。
+> 只记录**行为本身**（uid + node_type + value），不绑定具体 task_id / node_id。
+> 消费方根据 uid + node_type 匹配用户进行中的任务节点，实现一次行为推动多个任务进度。
 >
-> **用途二**：保留每次行为的原始记录，支持进度回溯、异常排查、数据分析（如"某节点每日完成人数"）。
+> **用途一（核心）**：`uk_event_id` 幂等去重——同一 `event_id` 重复上报直接 ignore，进度不会被重复累加。
+>
+> **用途二**：原始行为记录，支持进度回溯、异常排查、数据分析（如"某类型节点每日完成人数"）。
 
 **DDL：**
 
 ```sql
 CREATE TABLE `readcamp_user_node_event_log` (
-  `id`        BIGINT      NOT NULL AUTO_INCREMENT,
-  `event_id`  VARCHAR(64) NOT NULL DEFAULT '' COMMENT '幂等键，由上报方生成，全局唯一',
-  `uid`       BIGINT      NOT NULL            COMMENT '学员UID',
-  `task_id`   BIGINT      NOT NULL            COMMENT '任务ID',
-  `node_id`   BIGINT      NOT NULL            COMMENT '节点ID',
-  `node_type` INT         NOT NULL DEFAULT 0  COMMENT '节点类型，冗余方便按类型分析',
-  `value`     BIGINT      NOT NULL DEFAULT 0  COMMENT '本次上报的事件量（次数/秒）',
-  `ct`        DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '事件发生时间',
+  `id`          BIGINT      NOT NULL AUTO_INCREMENT,
+  `event_id`    VARCHAR(64) NOT NULL DEFAULT '' COMMENT '幂等键，由上报方生成，全局唯一',
+  `uid`         BIGINT      NOT NULL            COMMENT '学员UID',
+  `node_type`   INT         NOT NULL DEFAULT 0  COMMENT '节点类型，见枚举',
+  `value`       BIGINT      NOT NULL DEFAULT 0  COMMENT '事件量（次数/秒）',
+  `finish_time` DATETIME    NOT NULL            COMMENT '行为完成时间',
+  `ct`          DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '写入时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_event_id`  (`event_id`),
-  KEY        `idx_uid_node` (`uid`, `node_id`, `ct`)
-) ENGINE=InnoDB COMMENT='用户节点行为事件明细（幂等日志）';
+  UNIQUE KEY `uk_event_id`       (`event_id`),
+  KEY        `idx_uid_node_type` (`uid`, `node_type`, `ct`)
+) ENGINE=InnoDB COMMENT='用户行为完成事件记录（幂等日志）';
 ```
 
 **与进度表的关系：**
 
 ```
-ReportNodeEvent 调用链路（加入幂等）：
+ReportNodeEvent 调用链路：
 
-1. INSERT IGNORE INTO readcamp_user_node_event_log (event_id, ...)
-   → 影响行数 = 0：说明重复上报，直接返回（幂等）
-   → 影响行数 = 1：首次上报，继续
+1. INSERT IGNORE INTO readcamp_user_node_event_log (event_id, uid, node_type, value, finish_time)
+   → affected = 0：重复上报，直接返回（幂等）
+   → affected = 1：首次，继续
 
-2. 更新 readcamp_user_node_progress.cur_value += value
-3. 若节点完成 → 写奖励记录、累计 node_done、检查任务完成
+2. BatchGet readcamp_user_task_progress WHERE uid=? AND state=InProgress
+   → 拿到用户所有进行中的任务
+
+3. FOR EACH taskProgress:
+     BatchGet readcamp_task_node WHERE task_id=? AND node_type=?
+     FOR EACH node: applyNodeEvent(uid, value, taskProgress, node)
+       → 更新 readcamp_user_node_progress（cur_value / state / finish_time）
+       → 若节点完成 → 写奖励记录、node_done++、检查任务完成
 ```
 
 ---
@@ -419,15 +427,16 @@ type ReadcampTaskGiftRecord struct {
 ```go
 const tableReadcampUserNodeEventLog = "readcamp_user_node_event_log"
 
+// ReadcampUserNodeEventLog 用户行为完成事件记录（幂等日志）。
+// 只记录行为本身，不绑定具体任务/节点 ID。
 type ReadcampUserNodeEventLog struct {
-    Id       int64     `json:"id"        bdb:"id"`
-    EventId  string    `json:"event_id"  bdb:"event_id"`  // 幂等键
-    Uid      int64     `json:"uid"       bdb:"uid"`
-    TaskId   int64     `json:"task_id"   bdb:"task_id"`
-    NodeId   int64     `json:"node_id"   bdb:"node_id"`
-    NodeType int64     `json:"node_type" bdb:"node_type"` // 冗余
-    Value    int64     `json:"value"     bdb:"value"`     // 本次事件量
-    Ct       time.Time `json:"ct"        bdb:"ct"`
+    Id         int64     `json:"id"          bdb:"id"`
+    EventId    string    `json:"event_id"    bdb:"event_id"`    // 幂等键
+    Uid        int64     `json:"uid"         bdb:"uid"`
+    NodeType   int64     `json:"node_type"   bdb:"node_type"`   // 节点类型
+    Value      int64     `json:"value"       bdb:"value"`       // 事件量
+    FinishTime time.Time `json:"finish_time" bdb:"finish_time"` // 行为完成时间
+    Ct         time.Time `json:"ct"          bdb:"ct"`
 }
 ```
 
@@ -648,30 +657,38 @@ func (h *WatchVideoHandler) CheckCompletion(ctx context.Context, node *ReadcampT
 学员行为（看完视频/完成阅读/打卡）
         │
         ▼
-  业务系统发 Event（MQ），携带唯一 event_id
+  业务系统发 Event（MQ），携带唯一 event_id + node_type + value
         │
         ▼
   ProgressConsumer.Handle(event)
         │
-        ├─ INSERT IGNORE INTO readcamp_user_node_event_log (event_id, uid, task_id, node_id, ...)
-        │    ├─ 影响行数 = 0 → 重复事件，直接 return（幂等）
-        │    └─ 影响行数 = 1 → 首次，继续处理
+        ├─ INSERT IGNORE INTO readcamp_user_node_event_log (event_id, uid, node_type, value, finish_time)
+        │    ├─ affected = 0 → 重复事件，直接 return（幂等）
+        │    └─ affected = 1 → 首次，继续处理
         │
-        ├─ 查询用户进行中的任务列表（readcamp_user_task_progress，state=1）
-        ├─ 匹配对应 node_id（readcamp_task_node，by task_id + node_type）
-        ├─ NodeRegistry.Get(node_type).CheckCompletion()
-        ├─ 更新 readcamp_user_node_progress（cur_value / state / finish_time）
+        ├─ BatchGet readcamp_user_task_progress WHERE uid=? AND state=InProgress
+        │    └─ 拿到用户所有进行中的任务列表
         │
-        ├─ 若节点完成 且 node.gift_id > 0：
-        │    └─ InsertOne readcamp_task_gift_record（state=1）
-        │         ↑ uk_uid_task_node 防重，ignore duplicate key error
-        │
-        ├─ node_done++ → UpdateById readcamp_user_task_progress
-        ├─ checkTaskDone() → COUNT 存活节点 vs node_done
-        │
-        └─ 任务完成 且 task.gift_id > 0：
-             └─ InsertOne readcamp_task_gift_record（node_id=0, state=1）
-                  + 更新 readcamp_user_task_progress.state=2 + finish_time
+        └─ FOR EACH taskProgress（进行中的任务）:
+             │
+             ├─ BatchGet readcamp_task_node WHERE task_id=? AND node_type=?
+             │    └─ 找到该任务中匹配本次行为类型的节点
+             │
+             └─ FOR EACH node（匹配节点）: applyNodeEvent
+                  │
+                  ├─ UpsertProgress readcamp_user_node_progress
+                  ├─ cur_value += value，判断 nodeDone = cur_value >= target
+                  │
+                  ├─ 若节点完成 且 node.gift_id > 0：
+                  │    └─ InsertOne readcamp_task_gift_record（state=1）
+                  │         ↑ uk_uid_task_node 防重，ignore duplicate key error
+                  │
+                  ├─ node_done++ → UpdateById readcamp_user_task_progress
+                  ├─ checkTaskDone() → COUNT 存活节点 vs node_done
+                  │
+                  └─ 任务完成 且 task.gift_id > 0：
+                       └─ InsertOne readcamp_task_gift_record（node_id=0, state=1）
+                            + 更新 readcamp_user_task_progress.state=2 + finish_time
 ```
 
 **学员端领取奖励流程（APP 侧）：**
