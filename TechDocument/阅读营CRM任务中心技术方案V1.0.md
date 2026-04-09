@@ -48,7 +48,7 @@ Task                             Task
 
 ## 二、数据模型设计
 
-> 共 **4 张表**。命名规范参照 repository 包现有表：时间字段统一 `time.Time`（`ct`=创建时间、`ut`=更新时间），状态字段统一 `state`，JSON 配置字段统一 `conf`，无 `is_deleted`（通过 `state` 软删除）。
+> 共 **7 张表**。命名规范参照 repository 包现有表：时间字段统一 `time.Time`（`ct`=创建时间、`ut`=更新时间），状态字段统一 `state`，JSON 配置字段统一 `conf`，无 `is_deleted`（通过 `state` 软删除）。
 
 ---
 
@@ -211,7 +211,44 @@ CREATE TABLE `readcamp_task_gift_record` (
 
 ---
 
-## 三、Go 结构体定义
+### 2.7 用户节点行为事件明细表 `readcamp_user_node_event_log`
+
+> **用途一（核心）**：存储 `ReportNodeEventReq.event_id` 实现幂等去重——同一 `event_id` 重复上报时 `uk_event_id` 报唯一键冲突，直接 ignore，`cur_value` 不会被重复累加。
+>
+> **用途二**：保留每次行为的原始记录，支持进度回溯、异常排查、数据分析（如"某节点每日完成人数"）。
+
+**DDL：**
+
+```sql
+CREATE TABLE `readcamp_user_node_event_log` (
+  `id`        BIGINT      NOT NULL AUTO_INCREMENT,
+  `event_id`  VARCHAR(64) NOT NULL DEFAULT '' COMMENT '幂等键，由上报方生成，全局唯一',
+  `uid`       BIGINT      NOT NULL            COMMENT '学员UID',
+  `task_id`   BIGINT      NOT NULL            COMMENT '任务ID',
+  `node_id`   BIGINT      NOT NULL            COMMENT '节点ID',
+  `node_type` INT         NOT NULL DEFAULT 0  COMMENT '节点类型，冗余方便按类型分析',
+  `value`     BIGINT      NOT NULL DEFAULT 0  COMMENT '本次上报的事件量（次数/秒）',
+  `ct`        DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '事件发生时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_event_id`  (`event_id`),
+  KEY        `idx_uid_node` (`uid`, `node_id`, `ct`)
+) ENGINE=InnoDB COMMENT='用户节点行为事件明细（幂等日志）';
+```
+
+**与进度表的关系：**
+
+```
+ReportNodeEvent 调用链路（加入幂等）：
+
+1. INSERT IGNORE INTO readcamp_user_node_event_log (event_id, ...)
+   → 影响行数 = 0：说明重复上报，直接返回（幂等）
+   → 影响行数 = 1：首次上报，继续
+
+2. 更新 readcamp_user_node_progress.cur_value += value
+3. 若节点完成 → 写奖励记录、累计 node_done、检查任务完成
+```
+
+---
 
 > 严格对应 DDL 字段，标签格式 `json:"xxx" bdb:"xxx"`，参照 repository 包现有规范。
 
@@ -374,6 +411,23 @@ type ReadcampTaskGiftRecord struct {
     State    int       `json:"state"     bdb:"state"`     // 1=已发放 2=已领取
     Ct       time.Time `json:"ct"        bdb:"ct"`
     Ut       time.Time `json:"ut"        bdb:"ut"`
+}
+```
+
+### 3.7 ReadcampUserNodeEventLog
+
+```go
+const tableReadcampUserNodeEventLog = "readcamp_user_node_event_log"
+
+type ReadcampUserNodeEventLog struct {
+    Id       int64     `json:"id"        bdb:"id"`
+    EventId  string    `json:"event_id"  bdb:"event_id"`  // 幂等键
+    Uid      int64     `json:"uid"       bdb:"uid"`
+    TaskId   int64     `json:"task_id"   bdb:"task_id"`
+    NodeId   int64     `json:"node_id"   bdb:"node_id"`
+    NodeType int64     `json:"node_type" bdb:"node_type"` // 冗余
+    Value    int64     `json:"value"     bdb:"value"`     // 本次事件量
+    Ct       time.Time `json:"ct"        bdb:"ct"`
 }
 ```
 
@@ -594,10 +648,14 @@ func (h *WatchVideoHandler) CheckCompletion(ctx context.Context, node *ReadcampT
 学员行为（看完视频/完成阅读/打卡）
         │
         ▼
-  业务系统发 Event（MQ）
+  业务系统发 Event（MQ），携带唯一 event_id
         │
         ▼
   ProgressConsumer.Handle(event)
+        │
+        ├─ INSERT IGNORE INTO readcamp_user_node_event_log (event_id, uid, task_id, node_id, ...)
+        │    ├─ 影响行数 = 0 → 重复事件，直接 return（幂等）
+        │    └─ 影响行数 = 1 → 首次，继续处理
         │
         ├─ 查询用户进行中的任务列表（readcamp_user_task_progress，state=1）
         ├─ 匹配对应 node_id（readcamp_task_node，by task_id + node_type）
@@ -653,13 +711,15 @@ POST /admin/readcamp/task/list
   "task_status":      0,
   "start_time_begin": "2026-01-01 00:00:00",
   "start_time_end":   "2026-12-31 23:59:59",
-  "page":             1,
-  "size":             50
+  "limit":            50,
+  "offset":           0
 }
 
 // Response data
 {
-  "total": 100,
+  "total":  100,
+  "offset": 50,
+  "more":   true,
   "list": [
     {
       "id":          1,
@@ -783,7 +843,7 @@ service TaskService {
   // 开关切换：state=1 开启 / state=2 关闭
   rpc ToggleTask(ToggleTaskReq) returns (CommonResp);
 
-  // 删除任务（逻辑删除）
+  // 删除任务（物理删除，级联删除模块和节点）
   rpc DeleteTask(DeleteTaskReq) returns (CommonResp);
 
   // ─── 学员端（APP 服务调用）───────────────────────────────────
@@ -827,7 +887,7 @@ service TaskService {
 | P0 | 任务 CRUD（组合+单项） | `readcamp_task` + `readcamp_task_module` + `readcamp_task_node` |
 | P0 | 任务列表搜索 / 状态计算 / 开关 | `readcamp_task` |
 | P0 | 学员端任务详情（含节点进度） | `readcamp_user_task_progress` + `readcamp_user_node_progress` |
-| P1 | 节点完成上报（看视频/打卡） | `strategy/*` + `progress.go` |
+| P1 | 节点完成上报（看视频/打卡）+ 幂等去重 | `readcamp_user_node_event_log` + `strategy/*` + `progress.go` |
 | P1 | 奖励发放（任务级 + 节点级） | `readcamp_task_gift_record` |
 | P1 | 学员端奖励领取 | `readcamp_task_gift_record` |
 | P2 | 预览二维码生成 | — |
