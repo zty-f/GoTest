@@ -94,14 +94,14 @@ CREATE TABLE `readcamp_task` (
 
 ```sql
 CREATE TABLE `readcamp_task_module` (
-                                        `id`         BIGINT      NOT NULL AUTO_INCREMENT     COMMENT '模块ID',
-                                        `task_id`    BIGINT      NOT NULL                    COMMENT '所属任务ID',
-                                        `title`      VARCHAR(48) NOT NULL DEFAULT ''         COMMENT '模块标题 限10个汉字',
-                                        `sort`       INT         NOT NULL DEFAULT 0          COMMENT '排序 从大到小',
-                                        `ct`         DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                        `ut`         DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                                        PRIMARY KEY (`id`),
-                                        KEY `idx_task_id` (`task_id`)
+  `id`         BIGINT      NOT NULL AUTO_INCREMENT     COMMENT '模块ID',
+  `task_id`    BIGINT      NOT NULL                    COMMENT '所属任务ID',
+  `title`      VARCHAR(48) NOT NULL DEFAULT ''         COMMENT '模块标题 限10个汉字',
+  `sort`       INT         NOT NULL DEFAULT 0          COMMENT '排序 从大到小',
+  `ct`         DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ut`         DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_task_id` (`task_id`)
 ) ENGINE=InnoDB COMMENT='任务模块表（组合任务专用）';
 ```
 
@@ -114,21 +114,21 @@ CREATE TABLE `readcamp_task_module` (
 
 ```sql
 CREATE TABLE `readcamp_task_node` (
-                                      `id`        BIGINT       NOT NULL AUTO_INCREMENT   COMMENT '任务节点ID',
-                                      `task_id`   BIGINT       NOT NULL                  COMMENT '所属任务ID（冗余）',
-                                      `module_id` BIGINT       NOT NULL DEFAULT 0        COMMENT '所属模块ID 单项任务固定=0',
-                                      `title`     VARCHAR(100) NOT NULL DEFAULT ''       COMMENT '任务节点标题',
-                                      `desc`      VARCHAR(256) NOT NULL DEFAULT ''       COMMENT '任务节点描述',
-                                      `node_type` INT          NOT NULL DEFAULT 1        COMMENT '任务节点类型 见枚举',
-                                      `conf`      LONGTEXT     NOT NULL                  COMMENT '任务节点类型专属配置 JSON',
-                                      `target`    INT          NOT NULL DEFAULT 1        COMMENT '目标完成量（次数/秒）看情况使用',
-                                      `gift_id`   BIGINT       NOT NULL DEFAULT 0        COMMENT '奖励权益ID 0=无奖励',
-                                      `sort`      INT          NOT NULL DEFAULT 0        COMMENT '排序 从大到小',
-                                      `ct`        DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                      `ut`        DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                                      PRIMARY KEY (`id`),
-                                      KEY `idx_task_id`   (`task_id`),
-                                      KEY `idx_module_id` (`module_id`)
+  `id`        BIGINT       NOT NULL AUTO_INCREMENT   COMMENT '任务节点ID',
+  `task_id`   BIGINT       NOT NULL                  COMMENT '所属任务ID（冗余）',
+  `module_id` BIGINT       NOT NULL DEFAULT 0        COMMENT '所属模块ID 单项任务固定=0',
+  `title`     VARCHAR(100) NOT NULL DEFAULT ''       COMMENT '任务节点标题',
+  `desc`      VARCHAR(256) NOT NULL DEFAULT ''       COMMENT '任务节点描述',
+  `node_type` INT          NOT NULL DEFAULT 1        COMMENT '任务节点类型 见枚举',
+  `conf`      LONGTEXT     NOT NULL                  COMMENT '任务节点类型专属配置 JSON',
+  `target`    INT          NOT NULL DEFAULT 1        COMMENT '目标完成量（次数/秒）看情况使用',
+  `gift_id`   BIGINT       NOT NULL DEFAULT 0        COMMENT '奖励权益ID 0=无奖励',
+  `sort`      INT          NOT NULL DEFAULT 0        COMMENT '排序 从大到小',
+  `ct`        DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ut`        DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_task_id`   (`task_id`),
+  KEY `idx_module_id` (`module_id`)
 ) ENGINE=InnoDB COMMENT='任务节点表（组合/单项通用）';
 ```
 
@@ -147,21 +147,24 @@ CREATE TABLE `readcamp_task_node` (
 | 9         | 商城兑换       | {}                                 |
 |           |                |                                    |
 
+
+
+
 ### 2.4 用户任务进度表 `readcamp_user_task_progress`
 
 ```sql
 CREATE TABLE `readcamp_user_task_progress` (
-                                               `id`          BIGINT   NOT NULL AUTO_INCREMENT,
-                                               `uid`         BIGINT   NOT NULL             COMMENT '学员UID',
-                                               `task_id`     BIGINT   NOT NULL             COMMENT '任务ID',
-                                               `state`       INT      NOT NULL DEFAULT 1   COMMENT '1=进行中 2=已完成',
-                                               `node_done`   INT      NOT NULL DEFAULT 0   COMMENT '已完成子任务数',
-                                               `finish_time` DATETIME                      COMMENT '任务完成时间',
-                                               `ct`          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                               `ut`          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                                               PRIMARY KEY (`id`),
-                                               UNIQUE KEY `uk_uid_task`  (`uid`, `task_id`),
-                                               KEY `idx_task_state` (`task_id`, `state`)
+  `id`          BIGINT   NOT NULL AUTO_INCREMENT,
+  `uid`         BIGINT   NOT NULL             COMMENT '学员UID',
+  `task_id`     BIGINT   NOT NULL             COMMENT '任务ID',
+  `state`       INT      NOT NULL DEFAULT 1   COMMENT '1=进行中 2=已完成',
+  `node_done`   INT      NOT NULL DEFAULT 0   COMMENT '已完成子任务数',
+  `finish_time` DATETIME                      COMMENT '任务完成时间',
+  `ct`          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ut`          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_uid_task`  (`uid`, `task_id`),
+  KEY `idx_task_state` (`task_id`, `state`)
 ) ENGINE=InnoDB COMMENT='用户主任务进度';
 ```
 
@@ -171,18 +174,18 @@ CREATE TABLE `readcamp_user_task_progress` (
 
 ```sql
 CREATE TABLE `readcamp_user_node_progress` (
-                                               `id`          BIGINT   NOT NULL AUTO_INCREMENT,
-                                               `uid`         BIGINT   NOT NULL             COMMENT '学员UID',
-                                               `task_id`     BIGINT   NOT NULL             COMMENT '任务ID（冗余，按任务查全量进度用）',
-                                               `node_id`     BIGINT   NOT NULL             COMMENT '任务节点ID',
-                                               `cur_value`   INT      NOT NULL DEFAULT 0   COMMENT '当前完成量（次数/秒）',
-                                               `state`       INT      NOT NULL DEFAULT 1   COMMENT '1=进行中 2=已完成',
-                                               `finish_time` DATETIME                      COMMENT '完成时间',
-                                               `ct`          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                               `ut`          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                                               PRIMARY KEY (`id`),
-                                               UNIQUE KEY `uk_uid_node`  (`uid`, `node_id`),
-                                               KEY `idx_uid_task`  (`uid`, `task_id`)
+  `id`          BIGINT   NOT NULL AUTO_INCREMENT,
+  `uid`         BIGINT   NOT NULL             COMMENT '学员UID',
+  `task_id`     BIGINT   NOT NULL             COMMENT '任务ID（冗余，按任务查全量进度用）',
+  `node_id`     BIGINT   NOT NULL             COMMENT '任务节点ID',
+  `cur_value`   INT      NOT NULL DEFAULT 0   COMMENT '当前完成量（次数/秒）',
+  `state`       INT      NOT NULL DEFAULT 1   COMMENT '1=进行中 2=已完成',
+  `finish_time` DATETIME                      COMMENT '完成时间',
+  `ct`          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ut`          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_uid_node`  (`uid`, `node_id`),
+  KEY `idx_uid_task`  (`uid`, `task_id`)
 ) ENGINE=InnoDB COMMENT='用户子任务进度';
 ```
 
@@ -192,17 +195,17 @@ CREATE TABLE `readcamp_user_node_progress` (
 
 ```sql
 CREATE TABLE `readcamp_task_gift_record` (
-                                             `id`        BIGINT   NOT NULL AUTO_INCREMENT,
-                                             `uid`       BIGINT   NOT NULL             COMMENT '学员UID',
-                                             `task_id`   BIGINT   NOT NULL             COMMENT '任务ID',
-                                             `node_id`   BIGINT   NOT NULL DEFAULT 0   COMMENT '节点ID 0=任务级奖励',
-                                             `gift_id`   BIGINT   NOT NULL             COMMENT '奖励权益ID',
-                                             `state`     INT      NOT NULL DEFAULT 1   COMMENT '1=待领取 2=已领取',
-                                             `ct`        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                             `ut`        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                                             PRIMARY KEY (`id`),
-                                             UNIQUE KEY `uk_uid_task_node` (`uid`, `task_id`, `node_id`),
-                                             KEY `idx_uid_state` (`uid`, `state`)
+  `id`        BIGINT   NOT NULL AUTO_INCREMENT,
+  `uid`       BIGINT   NOT NULL             COMMENT '学员UID',
+  `task_id`   BIGINT   NOT NULL             COMMENT '任务ID',
+  `node_id`   BIGINT   NOT NULL DEFAULT 0   COMMENT '节点ID 0=任务级奖励',
+  `gift_id`   BIGINT   NOT NULL             COMMENT '奖励权益ID',
+  `state`     INT      NOT NULL DEFAULT 1   COMMENT '1=待领取 2=已领取',
+  `ct`        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ut`        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_uid_task_node` (`uid`, `task_id`, `node_id`),
+  KEY `idx_uid_state` (`uid`, `state`)
 ) ENGINE=InnoDB COMMENT='任务奖励发放领取记录';
 ```
 
@@ -336,10 +339,15 @@ type ReadcampTaskModule struct {
 const (
     tableReadcampTaskNode = "readcamp_task_node"
 
-    NodeTypeWatchVideo = 1 // 看视频
-    NodeTypeRead       = 2 // 阅读
-    NodeTypeCheckIn    = 3 // 打卡
-    NodeTypeHomework   = 4 // 完成作业
+    NodeTypePractice      int64 = 1 // 做练习
+    NodeTypeReadBook      int64 = 2 // 读绘本
+    NodeTypeWatchVideo    int64 = 3 // 看视频
+    NodeTypeAddWeChat     int64 = 4 // 添加班主任微信
+    NodeTypeConfirmAddr   int64 = 5 // 确认收货地址
+    NodeTypeOpenNotify    int64 = 6 // 打开App通知
+    NodeTypeShare         int64 = 7 // 分享
+    NodeTypeJoinChallenge int64 = 8 // 参加挑战赛
+    NodeTypeMallExchange  int64 = 9 // 商城兑换
 )
 
 type ReadcampTaskNode struct {
@@ -525,44 +533,45 @@ func (s *ProgressService) checkTaskDone(ctx context.Context, p *ReadcampUserTask
 ```go
 // NodeHandler 每种节点类型实现此接口
 type NodeHandler interface {
-    Type() int
+    Type() int64
     // ValidateConf 保存时校验 conf JSON 合法性
     ValidateConf(conf string) error
-    // CheckCompletion 判断用户是否满足完成条件，返回是否完成及当前完成量
-    CheckCompletion(ctx context.Context, node *ReadcampTaskNode, uid int64) (done bool, curVal int, err error)
+    // CalcProgress 根据当前进度和本次事件量计算新的 cur_value 及是否完成节点
+    // conf: 节点 conf 字段; curValue: 当前累计值; value: 本次事件量; target: 目标值
+    CalcProgress(conf string, curValue, value, target int64) (newCurValue int64, done bool)
 }
 
 // NodeRegistry 单业务线的节点策略注册表
 type NodeRegistry struct {
-    m map[int]NodeHandler
-}
-
-func NewNodeRegistry(handlers []NodeHandler) *NodeRegistry {
-    r := &NodeRegistry{m: make(map[int]NodeHandler)}
-    for _, h := range handlers {
-        r.m[h.Type()] = h
-    }
-    return r
-}
-
-func (r *NodeRegistry) Get(nodeType int) (NodeHandler, bool) {
-    h, ok := r.m[nodeType]
-    return h, ok
+    m map[int64]NodeHandler
 }
 ```
+
+**各类型的 CalcProgress 语义：**
+
+| node_type | 类型             | CalcProgress 语义                               |
+|-----------|-----------------|------------------------------------------------|
+| 1         | 做练习           | 累加：`cur_value + value >= target`            |
+| 2         | 读绘本           | 累加：同上                                      |
+| 3         | 看视频           | 取最大值：`max(cur_value, value) >= target`（value=观看百分比，target=finish_ratio）|
+| 4         | 添加班主任微信   | 一次性：`value > 0 → done=true, cur_value=1`   |
+| 5         | 确认收货地址     | 一次性：同上                                    |
+| 6         | 打开App通知      | 一次性：同上                                    |
+| 7         | 分享             | 累加                                            |
+| 8         | 参加挑战赛       | 累加                                            |
+| 9         | 商城兑换         | 累加                                            |
 
 **TaskService 持有多业务线 Registry Map，按 `biz_type` 路由：**
 
 ```go
-type TaskService struct {
-    registries map[int]*NodeRegistry // key: biz_type
-    taskRepo   ReadcampTaskRepo
-    moduleRepo ReadcampTaskModuleRepo
-    nodeRepo   ReadcampTaskNodeRepo
+type taskSvc struct {
+    registries     map[int64]*NodeRegistry // key: biz_type
+    taskRepo       ReadcampTaskRepo
+    // ... 其他 repo
 }
 
 // getRegistry 按 biz_type 取对应注册表，不存在则返回 error
-func (s *TaskService) getRegistry(bizType int) (*NodeRegistry, error) {
+func (s *taskSvc) getRegistry(bizType int64) (*NodeRegistry, error) {
     r, ok := s.registries[bizType]
     if !ok {
         return nil, fmt.Errorf("unsupported biz_type: %d", bizType)
@@ -574,81 +583,43 @@ func (s *TaskService) getRegistry(bizType int) (*NodeRegistry, error) {
 **初始化时为每个业务线构建独立 Registry：**
 
 ```go
-func NewTaskService(taskRepo ReadcampTaskRepo, ...) *TaskService {
-    return &TaskService{
-        registries: map[int]*NodeRegistry{
-            BizTypeReadCamp: NewNodeRegistry([]NodeHandler{
-                &WatchVideoHandler{videoRepo: videoRepo},
-                &ReadHandler{readRepo: readRepo},
-                &CheckInHandler{checkInRepo: checkInRepo},
-            }),
+func NewTaskSvc() TaskSvc {
+    return &taskSvc{
+        registries: map[int64]*NodeRegistry{
+            BizTypeReadCamp: newReadCampRegistry(),
             // 接入新业务线：在此追加，完全不动已有逻辑
-            // BizTypeClassRoom: NewNodeRegistry([]NodeHandler{
-            //     &MathExerciseHandler{exerciseRepo: exerciseRepo},
-            //     &CheckInHandler{checkInRepo: checkInRepo}, // 公共类型可复用
-            // }),
+            // BizTypeClassRoom: newClassRoomRegistry(),
         },
-        taskRepo:   taskRepo,
-        moduleRepo: moduleRepo,
-        nodeRepo:   nodeRepo,
+        // ... repo 注入
     }
 }
 ```
 
-**保存任务时按 `biz_type` 校验节点类型合法性：**
+**SaveTask 按 `biz_type` 校验节点类型合法性和 conf：**
 
 ```go
-func (s *TaskService) Save(ctx context.Context, req *SaveTaskReq) error {
-    registry, err := s.getRegistry(req.BizType)
-    if err != nil {
-        return err
+registry, err := s.getRegistry(req.BizType)
+if err != nil { return nil, err }
+for _, node := range collectAllNodes(req) {
+    handler, ok := registry.Get(node.NodeType)
+    if !ok {
+        return nil, fmt.Errorf("biz_type=%d 不支持节点类型 node_type=%d", req.BizType, node.NodeType)
     }
-    for _, node := range req.AllNodes() { // 组合/单项通用
-        handler, ok := registry.Get(node.NodeType)
-        if !ok {
-            return fmt.Errorf("biz_type=%d 不支持节点类型 node_type=%d", req.BizType, node.NodeType)
-        }
-        if err := handler.ValidateConf(node.Conf); err != nil {
-            return err
-        }
+    if err := handler.ValidateConf(node.Conf); err != nil {
+        return nil, err
     }
-    // ... 写库逻辑
 }
 ```
 
-**示例：看视频 Handler（仅阅读营使用）**
+**applyNodeEvent 使用 handler 的 CalcProgress（handler 为 nil 时降级为累加逻辑）：**
 
 ```go
-type WatchVideoConf struct {
-    VideoId     int64 `json:"video_id"`
-    MinDuration int   `json:"min_duration"` // 单位秒
-}
-
-type WatchVideoHandler struct {
-    videoRepo VideoRepo
-}
-
-func (h *WatchVideoHandler) Type() int { return NodeTypeWatchVideo }
-
-func (h *WatchVideoHandler) ValidateConf(conf string) error {
-    var c WatchVideoConf
-    if err := json.Unmarshal([]byte(conf), &c); err != nil {
-        return err
-    }
-    if c.VideoId <= 0 {
-        return errors.New("video_id 不能为空")
-    }
-    return nil
-}
-
-func (h *WatchVideoHandler) CheckCompletion(ctx context.Context, node *ReadcampTaskNode, uid int64) (bool, int, error) {
-    var c WatchVideoConf
-    _ = json.Unmarshal([]byte(node.Conf), &c)
-    watched, err := h.videoRepo.GetWatchedSeconds(ctx, uid, c.VideoId)
-    if err != nil {
-        return false, 0, err
-    }
-    return watched >= c.MinDuration, watched, nil
+var newCurValue int64
+var nodeDone bool
+if handler != nil {
+newCurValue, nodeDone = handler.CalcProgress(node.Conf, nodeProgress.CurValue, value, node.Target)
+} else {
+newCurValue, nodeDone = accumulationCalcProgress(nodeProgress.CurValue, value, node.Target)
 }
 ```
 
