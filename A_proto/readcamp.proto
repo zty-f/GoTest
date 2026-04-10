@@ -9952,6 +9952,8 @@ message GetActivityPersonalWinTipInfoResp {
   repeated PersonalWinGoalInfo new_win_goals = 4;
   // 当前达成的连胜目标信息-有则需要弹窗提示用户已达成
   repeated PersonalWinGoalInfo cur_win_goals = 5;
+  // 激励音频
+  string praise_audio = 6;
 }
 
 message GetMainPagePersonalWinInfoReq {}
