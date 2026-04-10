@@ -132,17 +132,20 @@ CREATE TABLE `readcamp_task_node` (
 ) ENGINE=InnoDB COMMENT='任务节点表（组合/单项通用）';
 ```
 
-**`conf` 各类型示例：**
+## **行为各类型示例：**
 
-| node_type | 类型 | conf 示例 |
-|-----------|------|-----------|
-| 1 | 看视频 | `{"video_id":101,"min_duration":60}` 单位秒 |
-| 2 | 阅读   | `{"article_id":201,"min_read_seconds":120}` |
-| 3 | 打卡   | `{"check_in_type":"daily","day_index":1}` |
-| 4 | 完成作业 | `{"homework_type":"write","lesson_id":301}` |
-| … | 可扩展 | 新增类型只加枚举+注册 Handler，不改表结构 |
-
----
+| node_type | 类型           | conf 示例                          |
+| --------- | -------------- | ---------------------------------- |
+| 1         | 做练习         | {"practice_list":[1,2,4]}          |
+| 2         | 读绘本         | {"book_list":[1,2,4]}              |
+| 3         | 看视频         | {"video_url":"","finish_ratio":80} |
+| 4         | 添加班主任微信 | {}                                 |
+| 5         | 确认收货地址   | {}                                 |
+| 6         | 打开App通知    | {}                                 |
+| 7         | 分享           | {}                                 |
+| 8         | 参加挑战赛     | {}                                 |
+| 9         | 商城兑换       | {}                                 |
+|           |                |                                    |
 
 ### 2.4 用户任务进度表 `readcamp_user_task_progress`
 
