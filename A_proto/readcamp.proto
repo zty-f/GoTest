@@ -652,6 +652,116 @@ message GetLectureModulesRes {
   repeated LectureModule modules = 1;
 }
 
+// ==================== LectureWord 课节单词相关 ====================
+
+message LectureWord {
+  // 课节ID
+  int64 lecture_id = 1;
+  // 单词文本
+  string word = 2;
+}
+
+// 单词状态枚举
+enum WordStatus {
+  UNKNOWN_WORD_STATUS = 0;
+  WordStatus_NORMAL  = 100;
+  WordStatus_DELETED  = 200;
+}
+
+// 单词详细信息
+message WordInfo {
+  // 词库ID
+  int64 libid = 1;
+  // 英文单词
+  string worden = 2;
+  // 中文释义
+  string wordcn = 3;
+  // 美式发音URL
+  string wordvoice = 4;
+  // 单词状态
+  WordStatus wordstatus = 5;
+  // 美式音标
+  string phonetic = 6;
+  // 前缀
+  string prefix = 7;
+  // 后缀
+  string suffix = 8;
+  // 图片URL
+  string image_url = 9;
+  // 音节
+  string syllables = 10;
+  // 词根
+  string root_word = 11;
+  // 词性
+  string part_of_speech = 12;
+  // 前缀含义
+  string prefix_meaning = 13;
+  // 后缀含义
+  string suffix_meaning = 14;
+  // 词根含义
+  string root_word_meaning = 15;
+  // 混合含义
+  string mixture_meaning = 16;
+  // 英式发音URL
+  string wordvoice_uk = 17;
+  // 英式音标
+  string phonetic_uk = 18;
+  // 短语
+  string phrases = 19;
+}
+
+// 课节单词列表请求
+message AdminLectureWordListRequest {
+  // 课节ID
+  int64 lecture_id = 1;
+  // 单词搜索（模糊匹配）
+  string word = 2;
+  // 分页参数
+  int64 offset = 3;
+  int64 limit = 4;
+
+}
+
+// 课节单词列表响应
+message AdminLectureWordListResponse {
+  repeated LectureWord lecture_words = 1;
+  int64 offset = 2;
+  int64 total = 3;
+  bool more = 4;
+  // 当页单词信息 map
+  map<string, WordInfo> word_map = 5;
+}
+
+// 批量插入课节单词请求
+message BatchAddLectureWordsRequest {
+  int64 lecture_id = 1;
+  repeated string word = 2;
+}
+
+// 批量插入课节单词响应
+message BatchAddLectureWordsResponse {
+  // 成功数量
+  int32 success_count = 1;
+  // 失败数量
+  int32 failure_count = 2;
+  // 跳过数量
+  int32 skipped_count = 3;
+  // 错误信息列表
+  repeated string error_messages = 4;
+}
+
+// 批量删除课节单词请求
+message BatchDeleteLectureWordsRequest {
+  // 课节ID
+  int64 lecture_id = 1;
+  // 单词ID列表
+  repeated string word = 2;
+}
+
+// 批量删除课节单词响应
+message BatchDeleteLectureWordsResponse {
+}
+
 message AppLectureModule {
   message AppLectureModuleIcon {
     // 左上角
@@ -2558,12 +2668,6 @@ message FeedbackOptionConfig {
   string option_code = 1;
   // 选项名称
   string option_name = 2;
-  // 是否允许自定义输入
-  bool allow_custom_input = 3;
-  // 是否允许文件上传
-  bool allow_file_upload = 4;
-  // 允许的文件类型: image, video
-  repeated string allowed_file_types = 5;
 }
 
 // 用户反馈场景配置
@@ -12021,6 +12125,24 @@ service ReadCampHttpService {
   rpc GetLectureModules(GetLectureModulesReq) returns (GetLectureModulesRes) {
     option (google.api.http) = {
       post: '/admin/base/readcamp/lecture_module/list'
+    };
+  }
+  // 管理-课节单词-列表查询（带分页和单词搜索）
+  rpc AdminLectureWordList(AdminLectureWordListRequest) returns (AdminLectureWordListResponse) {
+    option (google.api.http) = {
+      post: '/admin/base/readcamp/lecture_word/list'
+    };
+  }
+  // 管理-课节单词-批量添加
+  rpc BatchAddLectureWords(BatchAddLectureWordsRequest) returns (BatchAddLectureWordsResponse) {
+    option (google.api.http) = {
+      post: '/admin/base/readcamp/lecture_word/batch_add'
+    };
+  }
+  // 管理-课节单词-批量删除
+  rpc BatchDeleteLectureWords(BatchDeleteLectureWordsRequest) returns (BatchDeleteLectureWordsResponse) {
+    option (google.api.http) = {
+      post: '/admin/base/readcamp/lecture_word/batch_delete'
     };
   }
   // 管理-审计日志-列表
