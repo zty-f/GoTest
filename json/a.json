@@ -1,0 +1,395 @@
+{
+  "levelStudyData": {
+    "1": {
+      "level": 1,
+      "explanation": 8,
+      "originalAudio": 2,
+      "practice": 3,
+      "readAloud": 5,
+      "intelligentWrite": 0,
+      "creativeWrite": 0
+    },
+    "2": {
+      "level": 2,
+      "explanation": 10,
+      "originalAudio": 2,
+      "practice": 3,
+      "readAloud": 6,
+      "intelligentWrite": 0,
+      "creativeWrite": 0
+    },
+    "3": {
+      "level": 3,
+      "explanation": 12,
+      "originalAudio": 3,
+      "practice": 3,
+      "readAloud": 6,
+      "intelligentWrite": 2,
+      "creativeWrite": 0
+    },
+    "4": {
+      "level": 4,
+      "explanation": 15,
+      "originalAudio": 4,
+      "practice": 3,
+      "readAloud": 8,
+      "intelligentWrite": 2,
+      "creativeWrite": 0
+    },
+    "5": {
+      "level": 5,
+      "explanation": 20,
+      "originalAudio": 6,
+      "practice": 3,
+      "readAloud": 8,
+      "intelligentWrite": 2,
+      "creativeWrite": 0
+    },
+    "6": {
+      "level": 6,
+      "explanation": 23,
+      "originalAudio": 8,
+      "practice": 5,
+      "readAloud": 10,
+      "intelligentWrite": 2,
+      "creativeWrite": 0
+    },
+    "7": {
+      "level": 7,
+      "explanation": 25,
+      "originalAudio": 8,
+      "practice": 5,
+      "readAloud": 10,
+      "intelligentWrite": 2,
+      "creativeWrite": 0
+    },
+    "8": {
+      "level": 8,
+      "explanation": 28,
+      "originalAudio": 10,
+      "practice": 6,
+      "readAloud": 10,
+      "intelligentWrite": 0,
+      "creativeWrite": 20
+    }
+  },
+  "levelAgeData": {
+    "1":{
+      "ageGroups": [
+        {
+          "type": "small",
+          "ageMin": 0,
+          "ageMax": 4,
+          "weights": {
+            "explanation": 2,
+            "originalAudio": 4,
+            "practice": 1,
+            "readAloud": 0,
+            "intelligentWrite": 0,
+            "creativeWrite": 0,
+            "seriesJingDuNum": 0,
+            "seriesZiPinNum": 0
+          }
+        },
+        {
+          "type": "suitable",
+          "ageMin": 5,
+          "ageMax": 7,
+          "weights": {
+            "explanation": 2,
+            "originalAudio": 2,
+            "practice": 1,
+            "readAloud": 1,
+            "intelligentWrite": 0,
+            "creativeWrite": 0,
+            "seriesJingDuNum": 1,
+            "seriesZiPinNum": 1
+          }
+        },
+        {
+          "type": "big",
+          "ageMin": 8,
+          "ageMax": 999,
+          "weights": {
+            "explanation": 2,
+            "originalAudio": 2,
+            "practice": 2,
+            "readAloud": 2,
+            "intelligentWrite": 0,
+            "creativeWrite": 0,
+            "seriesJingDuNum": 1,
+            "seriesZiPinNum": 2
+          }
+        }
+      ]
+    },
+    "2":{
+      "ageGroups": [
+        {
+          "type": "small",
+          "ageMin": 0,
+          "ageMax": 4,
+          "weights": {
+            "explanation": 2,
+            "originalAudio": 4,
+            "practice": 1,
+            "readAloud": 0,
+            "intelligentWrite": 0,
+            "creativeWrite": 0,
+            "seriesJingDuNum": 0,
+            "seriesZiPinNum": 0
+          }
+        },
+        {
+          "type": "suitable",
+          "ageMin": 5,
+          "ageMax": 7,
+          "weights": {
+            "explanation": 2,
+            "originalAudio": 2,
+            "practice": 1,
+            "readAloud": 1,
+            "intelligentWrite": 0,
+            "creativeWrite": 0,
+            "seriesJingDuNum": 0,
+            "seriesZiPinNum": 1
+          }
+        },
+        {
+          "type": "big",
+          "ageMin": 8,
+          "ageMax": 999,
+          "weights": {
+            "explanation": 2,
+            "originalAudio": 2,
+            "practice": 2,
+            "readAloud": 2,
+            "intelligentWrite": 0,
+            "creativeWrite": 0,
+            "seriesJingDuNum": 1,
+            "seriesZiPinNum": 2
+          }
+        }
+      ]
+    },
+    "3":{
+      "ageGroups": [
+        {
+          "type": "small",
+          "ageMin": 0,
+          "ageMax": 4,
+          "weights": {
+            "explanation": 2,
+            "originalAudio": 4,
+            "practice": 1,
+            "readAloud": 0,
+            "intelligentWrite": 0,
+            "creativeWrite": 0,
+            "seriesJingDuNum": 0,
+            "seriesZiPinNum": 0
+          }
+        },
+        {
+          "type": "suitable",
+          "ageMin": 5,
+          "ageMax": 7,
+          "weights": {
+            "explanation": 2,
+            "originalAudio": 2,
+            "practice": 1,
+            "readAloud": 1,
+            "intelligentWrite": 1,
+            "creativeWrite": 0,
+            "seriesJingDuNum": 0,
+            "seriesZiPinNum": 1
+          }
+        },
+        {
+          "type": "big",
+          "ageMin": 8,
+          "ageMax": 999,
+          "weights": {
+            "explanation": 2,
+            "originalAudio": 2,
+            "practice": 2,
+            "readAloud": 2,
+            "intelligentWrite": 1,
+            "creativeWrite": 0,
+            "seriesJingDuNum": 1,
+            "seriesZiPinNum": 2
+          }
+        }
+      ]
+    },
+    "4":{
+      "ageGroups": [
+        {
+          "type": "small",
+          "ageMin": 0,
+          "ageMax": 6,
+          "weights": {
+            "explanation": 2,
+            "originalAudio": 2,
+            "practice": 1,
+            "readAloud": 0,
+            "intelligentWrite": 0,
+            "creativeWrite": 0,
+            "seriesJingDuNum": 0,
+            "seriesZiPinNum": 1
+          }
+        },
+        {
+          "type": "suitable",
+          "ageMin": 7,
+          "ageMax": 999,
+          "weights": {
+            "explanation": 2,
+            "originalAudio": 2,
+            "practice": 2,
+            "readAloud": 2,
+            "intelligentWrite": 1,
+            "creativeWrite": 0,
+            "seriesJingDuNum": 1,
+            "seriesZiPinNum": 2
+          }
+        }
+      ]
+    },
+    "5":{
+      "ageGroups": [
+        {
+          "type": "small",
+          "ageMin": 0,
+          "ageMax": 7,
+          "weights": {
+            "explanation": 1,
+            "originalAudio": 2,
+            "practice": 1,
+            "readAloud": 0,
+            "intelligentWrite": 0,
+            "creativeWrite": 0,
+            "seriesJingDuNum": 0,
+            "seriesZiPinNum": 1
+          }
+        },
+        {
+          "type": "suitable",
+          "ageMin": 8,
+          "ageMax": 999,
+          "weights": {
+            "explanation": 2,
+            "originalAudio": 2,
+            "practice": 2,
+            "readAloud": 2,
+            "intelligentWrite": 2,
+            "creativeWrite": 0,
+            "seriesJingDuNum": 1,
+            "seriesZiPinNum": 2
+          }
+        }
+      ]
+    },
+    "6":{
+      "ageGroups": [
+        {
+          "type": "small",
+          "ageMin": 0,
+          "ageMax": 8,
+          "weights": {
+            "explanation": 1,
+            "originalAudio": 2,
+            "practice": 1,
+            "readAloud": 1,
+            "intelligentWrite": 1,
+            "creativeWrite": 0,
+            "seriesJingDuNum": 0,
+            "seriesZiPinNum": 1
+          }
+        },
+        {
+          "type": "suitable",
+          "ageMin": 9,
+          "ageMax": 999,
+          "weights": {
+            "explanation": 2,
+            "originalAudio": 2,
+            "practice": 2,
+            "readAloud": 2,
+            "intelligentWrite": 2,
+            "creativeWrite": 0,
+            "seriesJingDuNum": 1,
+            "seriesZiPinNum": 2
+          }
+        }
+      ]
+    },
+    "7":{
+      "ageGroups": [
+        {
+          "type": "small",
+          "ageMin": 0,
+          "ageMax": 6,
+          "weights": {
+            "explanation": 1,
+            "originalAudio": 2,
+            "practice": 1,
+            "readAloud": 1,
+            "intelligentWrite": 1,
+            "creativeWrite": 0,
+            "seriesJingDuNum": 0,
+            "seriesZiPinNum": 1
+          }
+        },
+        {
+          "type": "suitable",
+          "ageMin": 7,
+          "ageMax": 999,
+          "weights": {
+            "explanation": 1,
+            "originalAudio": 2,
+            "practice": 1,
+            "readAloud": 1,
+            "intelligentWrite": 1,
+            "creativeWrite": 0,
+            "seriesJingDuNum": 1,
+            "seriesZiPinNum": 2
+          }
+        }
+      ]
+    },
+    "8":{
+      "ageGroups": [
+        {
+          "type": "small",
+          "ageMin": 0,
+          "ageMax": 6,
+          "weights": {
+            "explanation": 1,
+            "originalAudio": 2,
+            "practice": 1,
+            "readAloud": 1,
+            "intelligentWrite": 0,
+            "creativeWrite": 1,
+            "seriesJingDuNum": 0,
+            "seriesZiPinNum": 1
+          }
+        },
+        {
+          "type": "suitable",
+          "ageMin": 7,
+          "ageMax": 999,
+          "weights": {
+            "explanation": 1,
+            "originalAudio": 2,
+            "practice": 1,
+            "readAloud": 1,
+            "intelligentWrite": 0,
+            "creativeWrite": 1,
+            "seriesJingDuNum": 1,
+            "seriesZiPinNum": 2
+          }
+        }
+      ]
+    }
+  }
+}
