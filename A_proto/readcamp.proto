@@ -34,6 +34,8 @@ message LectureStudyReportRequest {
   // 来自哪个页面：inclass：上课页面；practice：磨耳朵页面
   string source = 2;
   string oaid = 3;
+  //场景id，表示课节学习的唯一id
+  string scene_id = 4;
 }
 
 message LectureStudyReportResponse {}
@@ -1191,6 +1193,8 @@ message LectureBatchUnlockResponse {
 message LectureGetRequest {
   // 课节id
   int32 lecture_id = 1;
+  //场景id，表示课节学习的唯一id
+  string scene_id = 2;
 }
 
 message LikeLectureRequest{
@@ -1486,6 +1490,8 @@ message UserLectureWithCourse {
     int64 rank_incr_exp = 1;
     // 当日首次连胜达成
     bool personal_win = 2;
+    // 下发红心数
+    int64 issue_life_num = 3;
   }
   // 课节信息
   UserLecture user_lecture = 1;
@@ -3352,6 +3358,8 @@ message ReportRecordingRequest {
   int32 finished_rate = 10;
   // 绘本跟读，一个book包含多少pages数量
   int32 total_pages = 11;
+  //场景id，表示课节学习的唯一id
+  string scene_id = 12;
 }
 
 message LectureFollowMeItem {
@@ -5340,6 +5348,8 @@ message ReportUserLectureExerciseRequest {
   int32 lecture_id = 2;
   // 完成的进度：0-100，由 已完成的页数 / 总页数 计算得到
   int32 finished_rate = 3;
+  //场景id，表示课节学习的唯一id
+  string scene_id = 4;
 }
 
 message GetUserLectureProgressRequest {
