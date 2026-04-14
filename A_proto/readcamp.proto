@@ -4532,7 +4532,7 @@ message AdminUserSearchResponse {
     bool can_change_course = 9;
   }
   message Order {
-    // 订单号
+    // 站内订单号
     string id = 1;
     // 套餐 id
     string package_id = 2;
@@ -4548,6 +4548,8 @@ message AdminUserSearchResponse {
     int64 created_at = 7;
     // 订单备注信息
     string remark = 8;
+    // 站外订单id
+    string outer_order_id = 9;
   }
   // TODO：转移到外部使用
   message UserConversionCourseDetail {
