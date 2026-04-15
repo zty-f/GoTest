@@ -9915,6 +9915,10 @@ message GetActivityPersonalWinInfoResp {
   repeated PersonalWinGoalInfo win_goals = 3;
   // 新连胜目标信息-有则可以让用户选择
   repeated PersonalWinGoalInfo new_win_goals = 4;
+  // 按钮文案 为空则不展示按钮
+  string btn_text = 5;
+  // 跳转地址
+  string jump_url = 6;
 }
 
 message GetPersonalWinCalendarReq {
