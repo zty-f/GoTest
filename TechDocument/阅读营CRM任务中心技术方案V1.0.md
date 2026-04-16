@@ -58,21 +58,21 @@ Task                             Task
 
 ```sql
 CREATE TABLE `readcamp_task` (
-                                 `id`           BIGINT       NOT NULL AUTO_INCREMENT         COMMENT '任务ID 自增主键',
-                                 `biz_type`     INT          NOT NULL DEFAULT 1              COMMENT '业务线 1=阅读营 2=小班课 ...',
-                                 `name`         VARCHAR(100) NOT NULL DEFAULT ''             COMMENT '任务名称',
-                                 `desc`         VARCHAR(256) NOT NULL DEFAULT ''             COMMENT '任务描述',
-                                 `task_type`    INT          NOT NULL DEFAULT 1              COMMENT '任务类型 1=组合任务 2=单项任务',
-                                 `start_time`   DATETIME     NOT NULL                        COMMENT '开始时间',
-                                 `end_time`     DATETIME     NOT NULL                        COMMENT '结束时间',
-                                 `state`        INT          NOT NULL DEFAULT 2              COMMENT '状态 1=开启 2=关闭',
-                                 `user_conf`    TEXT         NOT NULL                        COMMENT '参与人群配置 1,2,3,...',
-                                 `gift_id`      BIGINT       NOT NULL DEFAULT 0              COMMENT '奖励权益ID 0=无奖励',
-                                 `ct`           DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-                                 `ut`           DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-                                 PRIMARY KEY (`id`),
-                                 KEY `idx_biz_ct`    (`biz_type`, `ct`),
-                                 KEY `idx_task_type` (`task_type`, `state`)
+  `id`           BIGINT       NOT NULL AUTO_INCREMENT         COMMENT '任务ID 自增主键',
+  `biz_type`     INT          NOT NULL DEFAULT 1              COMMENT '业务线 1=阅读营 2=小班课 ...',
+  `name`         VARCHAR(100) NOT NULL DEFAULT ''             COMMENT '任务名称',
+  `description`         VARCHAR(256) NOT NULL DEFAULT ''             COMMENT '任务描述',
+  `task_type`    INT          NOT NULL DEFAULT 1              COMMENT '任务类型 1=组合任务 2=单项任务',
+  `start_time`   DATETIME     NOT NULL                        COMMENT '开始时间',
+  `end_time`     DATETIME     NOT NULL                        COMMENT '结束时间',
+  `state`        INT          NOT NULL DEFAULT 2              COMMENT '状态 1=开启 2=关闭',
+  `user_conf`    TEXT         NOT NULL                        COMMENT '参与人群配置 1,2,3,...',
+  `gift_id`      BIGINT       NOT NULL DEFAULT 0              COMMENT '奖励权益ID 0=无奖励',
+  `ct`           DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `ut`           DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_biz_ct`    (`biz_type`, `ct`),
+  KEY `idx_task_type` (`task_type`, `state`)
 ) ENGINE=InnoDB COMMENT='任务主表';
 ```
 
@@ -118,7 +118,7 @@ CREATE TABLE `readcamp_task_node` (
   `task_id`   BIGINT       NOT NULL                  COMMENT '所属任务ID（冗余）',
   `module_id` BIGINT       NOT NULL DEFAULT 0        COMMENT '所属模块ID 单项任务固定=0',
   `title`     VARCHAR(100) NOT NULL DEFAULT ''       COMMENT '任务节点标题',
-  `desc`      VARCHAR(256) NOT NULL DEFAULT ''       COMMENT '任务节点描述',
+  `description`      VARCHAR(256) NOT NULL DEFAULT ''       COMMENT '任务节点描述',
   `node_type` INT          NOT NULL DEFAULT 1        COMMENT '任务节点类型 见枚举',
   `conf`      LONGTEXT     NOT NULL                  COMMENT '任务节点类型专属配置 JSON',
   `target`    INT          NOT NULL DEFAULT 1        COMMENT '目标完成量（次数/秒）看情况使用',
@@ -133,19 +133,19 @@ CREATE TABLE `readcamp_task_node` (
 ```
 
 ## **行为各类型示例：**
-
-| node_type | 类型           | conf 示例                          |
-| --------- | -------------- | ---------------------------------- |
-| 1         | 做练习         | {"practice_list":[1,2,4]}          |
-| 2         | 读绘本         | {"book_list":[1,2,4]}              |
-| 3         | 看视频         | {"video_url":"","finish_ratio":80} |
-| 4         | 添加班主任微信 | {}                                 |
-| 5         | 确认收货地址   | {}                                 |
-| 6         | 打开App通知    | {}                                 |
-| 7         | 分享           | {}                                 |
-| 8         | 参加挑战赛     | {}                                 |
-| 9         | 商城兑换       | {}                                 |
-|           |                |                                    |
+skip_type 1=原生 2=h5
+| node_type | 类型           | conf 示例                                                         |
+| --------- | -------------- |-----------------------------------------------------------------|
+| 1         | 做练习         | {"practice_list":[1,2,4],"skip_type": 1, "ski_url":""}          |
+| 2         | 听讲解         | {"book_list":[1,2,4],"skip_type": 1, "ski_url":""}              |
+| 3         | 看视频         | {"video_url":"","finish_ratio":80,"skip_type": 1, "ski_url":""} |
+| 4         | 添加班主任微信 | {"skip_type": 2, "ski_url":""}                                  |
+| 5         | 确认收货地址   | {"skip_type": 2, "ski_url":""}                                  |
+| 6         | 打开App通知    | {"skip_type": 2, "ski_url":""}                                  |
+| 7         | 转介绍分享           | {"skip_type": 2, "ski_url":""}                                  |
+| 8         | 参加挑战赛     | {"skip_type": 2, "ski_url":""}                                  |
+| 9         | 商城兑换       | {"skip_type": 2, "ski_url":""}                                  |
+|           |                |                                                                 |
 
 
 
@@ -340,12 +340,12 @@ const (
     tableReadcampTaskNode = "readcamp_task_node"
 
     NodeTypePractice      int64 = 1 // 做练习
-    NodeTypeReadBook      int64 = 2 // 读绘本
+    NodeTypeReadBook      int64 = 2 // 听讲解
     NodeTypeWatchVideo    int64 = 3 // 看视频
     NodeTypeAddWeChat     int64 = 4 // 添加班主任微信
     NodeTypeConfirmAddr   int64 = 5 // 确认收货地址
     NodeTypeOpenNotify    int64 = 6 // 打开App通知
-    NodeTypeShare         int64 = 7 // 分享
+    NodeTypeShare         int64 = 7 // 转介绍分享
     NodeTypeJoinChallenge int64 = 8 // 参加挑战赛
     NodeTypeMallExchange  int64 = 9 // 商城兑换
 )
@@ -547,19 +547,21 @@ type NodeRegistry struct {
 }
 ```
 
-**各类型的 CalcProgress 语义：**
+**各类型的 conf 结构和 CalcProgress 语义：**
 
-| node_type | 类型             | CalcProgress 语义                               |
-|-----------|-----------------|------------------------------------------------|
-| 1         | 做练习           | 累加：`cur_value + value >= target`            |
-| 2         | 读绘本           | 累加：同上                                      |
-| 3         | 看视频           | 取最大值：`max(cur_value, value) >= target`（value=观看百分比，target=finish_ratio）|
-| 4         | 添加班主任微信   | 一次性：`value > 0 → done=true, cur_value=1`   |
-| 5         | 确认收货地址     | 一次性：同上                                    |
-| 6         | 打开App通知      | 一次性：同上                                    |
-| 7         | 分享             | 累加                                            |
-| 8         | 参加挑战赛       | 累加                                            |
-| 9         | 商城兑换         | 累加                                            |
+> 所有类型的 conf 均包含 `skip_type`（1=原生 2=h5）和 `ski_url`（跳转地址，空串=无跳转）。
+
+| node_type | 类型             | conf 专属字段                              | CalcProgress 语义 |
+|-----------|-----------------|------------------------------------------|------------------|
+| 1         | 做练习           | `practice_list: []int64`（必填）          | 累加 |
+| 2         | 读绘本           | `book_list: []int64`（必填）              | 累加 |
+| 3         | 看视频           | `video_url: string`（必填）、`finish_ratio: int64`（1-100，必填）| `max(cur, value) >= target` |
+| 4         | 添加班主任微信   | 无专属字段                                | 一次性：`value > 0 → done` |
+| 5         | 确认收货地址     | 无专属字段                                | 一次性 |
+| 6         | 打开App通知      | 无专属字段                                | 一次性 |
+| 7         | 分享             | 无专属字段                                | 累加 |
+| 8         | 参加挑战赛       | 无专属字段                                | 累加 |
+| 9         | 商城兑换         | 无专属字段                                | 累加 |
 
 **TaskService 持有多业务线 Registry Map，按 `biz_type` 路由：**
 
@@ -617,9 +619,9 @@ for _, node := range collectAllNodes(req) {
 var newCurValue int64
 var nodeDone bool
 if handler != nil {
-newCurValue, nodeDone = handler.CalcProgress(node.Conf, nodeProgress.CurValue, value, node.Target)
+    newCurValue, nodeDone = handler.CalcProgress(node.Conf, nodeProgress.CurValue, value, node.Target)
 } else {
-newCurValue, nodeDone = accumulationCalcProgress(nodeProgress.CurValue, value, node.Target)
+    newCurValue, nodeDone = accumulationCalcProgress(nodeProgress.CurValue, value, node.Target)
 }
 ```
 
