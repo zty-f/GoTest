@@ -47,6 +47,17 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="/var/folders/46/4dnwwcms16lc8ndmxvb0rchh0000gn/T/leetcode/editor/cn/[3532]针对图的路径存在性查询 I.go">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="/var/folders/46/4dnwwcms16lc8ndmxvb0rchh0000gn/T/leetcode/editor/cn/doc/content/[3532]针对图的路径存在性查询 I.md" />
+              <option name="frontendQuestionId" value="leetcode.cn3532" />
+              <option name="host" value="leetcode.cn" />
+              <option name="path" value="/var/folders/46/4dnwwcms16lc8ndmxvb0rchh0000gn/T/leetcode/editor/cn/[3532]针对图的路径存在性查询 I.go" />
+              <option name="titleSlug" value="path-existence-queries-in-a-graph-i" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="/var/folders/46/4dnwwcms16lc8ndmxvb0rchh0000gn/T/leetcode/editor/cn/[94]二叉树的中序遍历.go">
           <value>
             <LeetcodeEditor>
@@ -110,6 +121,39 @@
               <option name="host" value="leetcode.cn" />
               <option name="path" value="/var/folders/46/4dnwwcms16lc8ndmxvb0rchh0000gn/T/leetcode/editor/cn/[面试题 01.04]回文排列.go" />
               <option name="titleSlug" value="palindrome-permutation-lcci" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="/var/folders/46/4dnwwcms16lc8ndmxvb0rchh0000gn/T/leetcode/editor/cn/[面试题 01.05]一次编辑.go">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="/var/folders/46/4dnwwcms16lc8ndmxvb0rchh0000gn/T/leetcode/editor/cn/doc/content/[面试题 01.05]一次编辑.md" />
+              <option name="frontendQuestionId" value="leetcode.cn面试题 01.05" />
+              <option name="host" value="leetcode.cn" />
+              <option name="path" value="/var/folders/46/4dnwwcms16lc8ndmxvb0rchh0000gn/T/leetcode/editor/cn/[面试题 01.05]一次编辑.go" />
+              <option name="titleSlug" value="one-away-lcci" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="/var/folders/46/4dnwwcms16lc8ndmxvb0rchh0000gn/T/leetcode/editor/cn/[面试题 01.06]字符串压缩.go">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="/var/folders/46/4dnwwcms16lc8ndmxvb0rchh0000gn/T/leetcode/editor/cn/doc/content/[面试题 01.06]字符串压缩.md" />
+              <option name="frontendQuestionId" value="leetcode.cn面试题 01.06" />
+              <option name="host" value="leetcode.cn" />
+              <option name="path" value="/var/folders/46/4dnwwcms16lc8ndmxvb0rchh0000gn/T/leetcode/editor/cn/[面试题 01.06]字符串压缩.go" />
+              <option name="titleSlug" value="compress-string-lcci" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="/var/folders/46/4dnwwcms16lc8ndmxvb0rchh0000gn/T/leetcode/editor/cn/[面试题 01.07]旋转矩阵.go">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="/var/folders/46/4dnwwcms16lc8ndmxvb0rchh0000gn/T/leetcode/editor/cn/doc/content/[面试题 01.07]旋转矩阵.md" />
+              <option name="frontendQuestionId" value="leetcode.cn面试题 01.07" />
+              <option name="host" value="leetcode.cn" />
+              <option name="path" value="/var/folders/46/4dnwwcms16lc8ndmxvb0rchh0000gn/T/leetcode/editor/cn/[面试题 01.07]旋转矩阵.go" />
+              <option name="titleSlug" value="rotate-matrix-lcci" />
             </LeetcodeEditor>
           </value>
         </entry>
