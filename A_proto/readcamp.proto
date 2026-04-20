@@ -10053,6 +10053,7 @@ message AdminActivityListReq {
   int64 activity_type = 1;
   int64 offset = 2;
   int64 limit = 3;
+  repeated int64 activity_type_list = 4;
 }
 
 message AdminActivityListRes {
@@ -10547,6 +10548,68 @@ message AdminQwThirdRobotInfoRes {
   repeated QwThirdRobotInfo list = 1;
 }
 
+// 获取学习报告请求
+message GetUserLearningReportRequest {
+  // 报告类型：1-周报, 2-月报
+  int32 report_type = 1;
+  // 年份
+  int32 year = 2;
+  // 周期：周报为周数，月报为月份
+  int32 period = 3;
+}
+
+// 维度指标
+message DimensionMetricProto {
+  // 目标值
+  int64 target_value = 1;
+  // 实际值
+  int64 actual_value = 2;
+  // 单位
+  string unit = 3;
+  // 建议
+  repeated string suggestion = 4;
+}
+
+// 周报数据
+message StudyRecordReportProto {
+  // 报告生成时间
+  int64 generated_at = 1;
+  // 用户名
+  string user_name = 2;
+  // 级别
+  int64 level = 3;
+  // 生日
+  int64 birthday = 4;
+  // 综合得分
+  int32 overall_score = 5;
+  // 评价
+  string evaluation = 6;
+  // 新书数量
+  DimensionMetricProto new_book_nums = 7;
+  // 累计磨耳朵时长
+  DimensionMetricProto total_listening_duration = 8;
+  // 累计学习时长
+  DimensionMetricProto total_study_duration = 9;
+  // 有效学习天数
+  DimensionMetricProto effective_study_days = 10;
+  // 听讲解完成次数
+  DimensionMetricProto explanation_count = 11;
+  // 听原音完成次数
+  DimensionMetricProto origin_count = 12;
+  // 练一练完成次数
+  DimensionMetricProto lian_yi_lian = 13;
+  // 给学生的建议
+  repeated string student_suggestions = 14;
+  // 给家长的建议
+  repeated string parent_suggestions = 15;
+}
+
+// 获取学习报告响应
+message GetUserLearningReportResponse {
+  // 周报数据（report_type=1时返回）
+  StudyRecordReportProto weekly_report = 1;
+}
+
 service ReadCampHttpService {
   // 阅读营-客户端申请发货
   // `midware:"Auth"`
@@ -10637,6 +10700,13 @@ service ReadCampHttpService {
   rpc GetUserStudyStatisticsDetail(GetUserStudyStatisticsDetailReq) returns (UserStudyStatisticsDetail) {
     option (google.api.http) = {
       post: '/base/readcamp/user_study/statistics/detail'
+    };
+  }
+  // 用户-获取学习报告（周报/月报）
+  // `midware:"Auth"`
+  rpc GetUserLearningReport(GetUserLearningReportRequest) returns (GetUserLearningReportResponse) {
+    option (google.api.http) = {
+      post: '/base/readcamp/user/learning_report/get'
     };
   }
   // 用户-获取用户老师相关信息
