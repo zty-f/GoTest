@@ -4086,6 +4086,19 @@ message SkuPackageGiftConf {
   repeated int64 gift_package_ids = 2;
   // 赠送延迟时间,传延迟多少秒 1d：86400
   int64 delay_sec = 3;
+  // 配置列表
+  repeated SkuPackageGiftConfItem items = 4;
+}
+
+message SkuPackageGiftConfItem {
+  // 绑定达人id
+  repeated string daren_ids = 1;
+  // 赠送套餐id
+  repeated int64 gift_package_ids = 2;
+  // 赠送延迟时间,传延迟多少秒 1d：86400
+  int64 delay_sec = 3;
+  // 渠道
+  string utm_source = 4;
 }
 
 message ListSkuPackageMappingRequest {
