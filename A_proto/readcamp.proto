@@ -7647,6 +7647,8 @@ message ClockInApplication {
   int64 finish_day = 13;
   // 是否已设置优先进行
   bool priority = 14;
+  // 是否有实体奖牌复活机会
+  bool has_real_replacement = 15;
 }
 
 message ClockInApplicationListRequest {
