@@ -9241,6 +9241,8 @@ message SceneConfig {
   int64 ut = 19;
   // id
   int32 id = 20;
+  // 难度选择列表
+  repeated int64 difficulty_choices = 21;
 }
 message AdminClockInSceneConfigListRes {
   repeated SceneConfig items = 1;
@@ -9285,6 +9287,8 @@ message AdminClockInSceneConfigEditReq {
   int64 medal_sku = 17;
   // 奖牌商品 id
   int64 medal_gid = 18;
+  // 难度选择列表
+  repeated int64 difficulty_choices = 19;
 }
 
 message BindOuterOrderReq {
