@@ -188,3 +188,22 @@ func TestTimeAdd2(t *testing.T) {
 	x := []int{1, 3, 4, 4, 5}
 	fmt.Println(x[:5])
 }
+
+func TestSliceReplace(t *testing.T) {
+	x := [][]string{
+		{""},
+		{"1", ""},
+		{"2"},
+	}
+	dempMap := make(map[string]bool)
+	for _, v := range x {
+		for _, e := range v {
+			if _, ok := dempMap[e]; ok {
+				fmt.Printf("repeat:%v\n", e)
+				continue
+			}
+			dempMap[e] = true
+		}
+	}
+	fmt.Println(x)
+}
