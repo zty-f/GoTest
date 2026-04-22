@@ -206,4 +206,7 @@ func TestSliceReplace(t *testing.T) {
 		}
 	}
 	fmt.Println(x)
+	y := 21
+	s := "jdnnfjfj"
+	fmt.Println(fmt.Sprintf(s, y))
 }
