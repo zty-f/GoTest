@@ -210,3 +210,34 @@ func TestSliceReplace(t *testing.T) {
 	s := "jdnnfjfj"
 	fmt.Println(fmt.Sprintf(s, y))
 }
+
+func setZeroes(matrix [][]int) {
+	seti := make(map[int]struct{})
+	setj := make(map[int]struct{})
+	m, n := len(matrix), len(matrix[0])
+	for i := 0; i < m; i++ {
+		for j := 0; j < n; j++ {
+			if matrix[i][j] == 0 {
+				seti[i] = struct{}{}
+				setj[j] = struct{}{}
+			}
+		}
+	}
+	for i := 0; i < m; i++ {
+		for j := 0; j < n; j++ {
+			if _, ok := seti[i]; ok {
+				matrix[i][j] = 0
+				continue
+			}
+			if _, ok := setj[j]; ok {
+				matrix[i][j] = 0
+				continue
+			}
+		}
+	}
+}
+
+// s1 = "ttlewaterbottlewaterbo", s2 = "tlewaterbot"
+func isFlipedString(s1 string, s2 string) bool {
+	return len(s1) == len(s2) && strings.Contains(s1+s1, s2)
+}
