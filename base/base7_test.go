@@ -283,3 +283,38 @@ func removeDuplicateNodes2(head *ListNode2) *ListNode2 {
 	}
 	return head
 }
+
+// 找出单向链表中倒数第 k 个节点。返回该节点的值。
+// 输入： 1->2->3->4->5 和 k = 2
+// 输出： 4
+// 1、先遍历链表，统计链表长度h
+// 2、计算倒数第k个节点的索引x = h - k
+// 3、遍历链表，直到索引为x，返回该节点的值
+func kthToLast1(head *ListNode2, k int) int {
+	h := 0
+	cur := head
+	for cur != nil {
+		h++
+		cur = cur.Next
+	}
+	x := h - k
+	for x > 0 {
+		head = head.Next
+		x--
+	}
+	return head.Val
+}
+
+// 2、快慢指针 快指针先走k步，慢指针再走，快指针走到头时，慢指针就走到倒数第k个节点
+func kthToLast2(head *ListNode2, k int) int {
+	i, j := head, head
+	for k > 0 {
+		k--
+		i = i.Next
+	}
+	for i != nil {
+		i = i.Next
+		j = j.Next
+	}
+	return j.Val
+}
