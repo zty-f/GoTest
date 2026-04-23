@@ -241,3 +241,45 @@ func setZeroes(matrix [][]int) {
 func isFlipedString(s1 string, s2 string) bool {
 	return len(s1) == len(s2) && strings.Contains(s1+s1, s2)
 }
+
+type ListNode2 struct {
+	Val  int
+	Next *ListNode2
+}
+
+// 输入：[1, 1, 1, 1, 2]
+// 输出：[1, 2]
+// 输入：[1, 2, 3, 3, 2, 1]
+// 输出：[1, 2, 3]  移除重复元素，保留第一个出现的节点
+// O(n) 时间复杂度 O(n) 空间复杂度
+func removeDuplicateNodes1(head *ListNode2) *ListNode2 {
+	set := make(map[int]struct{})
+	pre, cur := head, head
+	for cur != nil {
+		if _, ok := set[cur.Val]; !ok {
+			set[cur.Val] = struct{}{}
+			pre = cur
+		} else {
+			pre.Next = cur.Next // 删除cur节点
+		}
+		cur = cur.Next
+	}
+	return head
+}
+
+// O(n^2) 时间复杂度 O(1) 空间复杂度 两次循环遍历，判断下一个节点是否和当前相同，相同则删除下一个节点
+func removeDuplicateNodes2(head *ListNode2) *ListNode2 {
+	pre := head
+	for pre != nil {
+		cur := pre
+		for cur.Next != nil {
+			if cur.Next.Val == pre.Val {
+				cur.Next = cur.Next.Next // 删除cur节点
+			} else {
+				cur = cur.Next
+			}
+		}
+		pre = pre.Next
+	}
+	return head
+}
