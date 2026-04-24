@@ -318,3 +318,33 @@ func kthToLast2(head *ListNode2, k int) int {
 	}
 	return j.Val
 }
+
+// 假定已知链表的某一个中间节点，请实现一种算法，将该节点从链表中删除。
+//
+// 例如，传入节点 c（位于单向链表 a->b->c->d->e->f 中），将其删除后，剩余链表为 a->b->d->e->f
+func deleteNode(node *ListNode2) {
+	// 复制下一个节点的值到当前节点
+	node.Val = node.Next.Val
+	node.Next = node.Next.Next
+}
+
+// 输入：head = [1,4,3,2,5,2], x = 3
+// 输出：[1,2,2,4,3,5]
+// 拆分链表，小于x的节点在大于等于x的节点之前，保持相对顺序不变
+func partition(head *ListNode2, x int) *ListNode2 {
+	small, big := &ListNode2{}, &ListNode2{}
+	a, b := small, big
+	for head != nil {
+		if head.Val < x {
+			small.Next = head
+			small = small.Next
+		} else {
+			big.Next = head
+			big = big.Next
+		}
+		head = head.Next
+	}
+	big.Next = nil // 将 big 链表的最后一个节点的 Next 指针置为 nil，避免循环引用
+	small.Next = b.Next
+	return a.Next
+}
