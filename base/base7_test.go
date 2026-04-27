@@ -348,3 +348,90 @@ func partition(head *ListNode2, x int) *ListNode2 {
 	small.Next = b.Next
 	return a.Next
 }
+
+// 输入：(7 -> 1 -> 6) + (5 -> 9 -> 2)，即617 + 295
+// 输出：2 -> 1 -> 9，即912  反向存储，每个节点只存储一个数字，链表头节点是最低有效位
+func addTwoNumbers(l1 *ListNode2, l2 *ListNode2) *ListNode2 {
+	res := &ListNode2{}
+	pre := res
+	for l1 != nil || l2 != nil {
+		sum := pre.Val
+		if l1 != nil {
+			sum += l1.Val
+			l1 = l1.Next
+		}
+		if l2 != nil {
+			sum += l2.Val
+			l2 = l2.Next
+		}
+		pre.Val = sum % 10
+		if l1 != nil || l2 != nil || sum/10 > 0 {
+			pre.Next = &ListNode2{
+				Val: sum / 10,
+			}
+			pre = pre.Next
+		}
+	}
+	return res
+}
+
+// 输入：(6 -> 1 -> 7) + (2 -> 9 -> 5)，即617 + 295
+// 输出：9 -> 1 -> 2，即912 正向存储，每个节点只存储一个数字，链表头节点是最高有效位
+// 可以放入栈中，先出栈的节点就是最低有效位，最后出栈的节点就是最高有效位
+// 也可以先翻转链表，然后遍历链表，计算和
+func addTwoNumbers2(l1 *ListNode2, l2 *ListNode2) *ListNode2 {
+	res := &ListNode2{}
+	pre := res
+	for l1 != nil || l2 != nil {
+		sum := pre.Val
+		if l1 != nil {
+			sum += l1.Val
+			l1 = l1.Next
+		}
+		if l2 != nil {
+			sum += l2.Val
+			l2 = l2.Next
+		}
+		pre.Val = sum % 10
+		if l1 != nil || l2 != nil || sum/10 > 0 {
+			pre.Next = &ListNode2{
+				Val: sum / 10,
+			}
+			pre = pre.Next
+		}
+	}
+	return res
+}
+
+// 9 -> 1 -> 2 -> 3 ------> 3 -> 2 -> 1 -> 9
+func reverseList2(head *ListNode2) *ListNode2 {
+	var pre *ListNode2
+	var cur = head
+	for cur != nil {
+		next := cur.Next
+		cur.Next = pre
+		pre = cur
+		cur = next
+	}
+	return pre
+}
+
+func TestReverseList(t *testing.T) {
+	head := &ListNode2{
+		Val: 9,
+		Next: &ListNode2{
+			Val: 1,
+			Next: &ListNode2{
+				Val: 2,
+				Next: &ListNode2{
+					Val: 3,
+				},
+			},
+		},
+	}
+	res := reverseList2(head)
+	for res != nil {
+		println(res.Val)
+		res = res.Next
+	}
+}
