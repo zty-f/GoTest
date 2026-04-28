@@ -435,3 +435,83 @@ func TestReverseList(t *testing.T) {
 		res = res.Next
 	}
 }
+
+// 123 132 213 231 312 321
+// 全排列实现1-通过回溯交换元素实现
+func TestArray全排列Alg(t *testing.T) {
+	x := []int64{1, 2, 3}
+	res := make([][]int64, 0)
+	length := len(x)
+	var df func(i int)
+	df = func(i int) {
+		if i == length-1 {
+			tmp := make([]int64, 3)
+			copy(tmp, x)
+			res = append(res, tmp)
+		}
+		for j := i; j < length; j++ {
+			swap(x, i, j)
+			df(i + 1)
+			swap(x, j, i)
+		}
+	}
+	df(0)
+	for _, v := range res {
+		fmt.Println(v)
+	}
+}
+
+func swap(x []int64, i, j int) {
+	x[i], x[j] = x[j], x[i]
+}
+
+// 123 132 213 231 312 321
+// 全排列实现2-通过模拟填位实现，把未出现的补位到列表
+// TestArray全排列Alg2 使用回溯法（backtracking）生成数组的全排列
+// 核心思路：通过递归逐步选取元素，用 map 记录已使用的元素来避免重复选取，
+// 当排列长度等于原数组长度时收集结果，递归返回时撤销选择（回溯）
+func TestArray全排列Alg2(t *testing.T) {
+	// 待排列的原始数组
+	nums := []int{5, 4, 6, 2}
+	// res 存储所有排列结果，每个元素是一个完整的排列（int切片）
+	res := make([][]int, 0)
+	// uq 用作"已使用"标记集合，key 为已选取的数字，value 用空结构体节省内存
+	uq := make(map[int]struct{})
+	// tmp 是当前正在构建的排列路径
+	tmp := make([]int, 0)
+	// 声明递归函数 df（dfs 深度优先搜索），参数 tmp 为当前排列路径
+	var df func(tmp []int)
+	df = func(tmp []int) {
+		// 递归终止条件：当前排列长度等于原数组长度，说明已选取所有元素，得到一个完整排列
+		if len(tmp) == len(nums) {
+			// 必须深拷贝 tmp，因为 tmp 底层数组会在回溯时被修改
+			tt := make([]int, len(nums))
+			copy(tt, tmp)
+			// 将这个完整排列加入结果集
+			res = append(res, tt)
+			return
+		}
+		// 遍历原数组中的每个数字，尝试将其加入当前排列
+		for _, num := range nums {
+			// 检查该数字是否已被使用（是否在 uq 集合中）
+			if _, ok := uq[num]; !ok {
+				// 标记该数字为"已使用"
+				uq[num] = struct{}{}
+				// 将该数字追加到当前排列路径中
+				tmp = append(tmp, num)
+				// 递归进入下一层，继续选取下一个数字
+				df(tmp)
+				// 回溯：撤销选择，将最后加入的数字从路径中移除
+				tmp = tmp[0 : len(tmp)-1]
+				// 回溯：将该数字从"已使用"集合中删除，使其可被后续分支重新选取
+				delete(uq, num)
+			}
+		}
+	}
+	// 从空路径开始启动递归，生成所有排列
+	df(tmp)
+	// 遍历并打印所有排列结果
+	for _, v := range res {
+		fmt.Println(v)
+	}
+}
