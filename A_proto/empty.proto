@@ -30,8 +30,6 @@ message FriendWinInfo {
 message GetUserFriendListReq {
   int64 limit = 1;
   int64 offset = 2;
-  // 用户ID-不传默认为当前登录用户/传值代表查询指定用户
-  int64 uid = 3;
 }
 
 message FollowUserInfo {
