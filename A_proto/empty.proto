@@ -12,19 +12,25 @@ message GetActivityFriendWinInfoReq {
 message GetActivityFriendWinInfoResp {
   // 连胜被邀请列表
   repeated FriendWinInfo invite_list = 1;
+  // 连胜邀请列表
+  repeated FriendWinInfo my_invite_list = 2;
   // 连胜进行中列表-我的流程中的用户
-  repeated FriendWinInfo progress_list = 2;
+  repeated FriendWinInfo progress_list = 3;
 }
 
 message FriendWinInfo {
   // 用户ID
   int64 uid = 1;
+  // 用户昵称
+  string name = 2;
+  // 用户头像
+  string avatar = 3;
   // 连胜次数
-  int64 win_count = 2;
+  int64 win_count = 4;
   // 邀请状态 1:邀请中 2:进行中
-  int64 status = 3;
+  int64 status = 5;
   // 今日是否完成连胜
-  bool is_win_today = 4;
+  bool is_win_today = 6;
 }
 
 message GetUserFriendListReq {
@@ -47,7 +53,6 @@ message GetUserFriendListResp {
   int64 offset = 1;
   int64 total = 2;
   bool more = 3;
-  // 关注/粉丝列表
   repeated FollowUserInfo list = 4;
 }
 

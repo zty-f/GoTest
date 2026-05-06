@@ -9989,9 +9989,35 @@ message GetActivityPersonalWinTipInfoResp {
   repeated PersonalWinGoalInfo cur_win_goals = 5;
   // 激励音频
   string praise_audio = 6;
+  // 友情连胜提示信息-有则展示
+  FriendsWinInfo friends_win_info = 7;
+}
+
+message FriendsWinInfo {
+  // 当前用户
+  WinUserInfo current_user = 1;
+  // 该用户的友情连胜信息列表
+  repeated WinUserInfo friend_win_list = 2;
 }
 
 message GetMainPagePersonalWinInfoReq {}
+
+message WinUserInfo {
+  // 用户ID
+  int64 uid = 1;
+  // 用户昵称
+  string name = 2;
+  // 用户头像
+  string avatar = 3;
+  // 和指定用户友情连胜天数
+  int64 friend_win_day_cnt = 4;
+  // 个人连胜天数
+  int64 personal_win_day_cnt = 5;
+  // 提示文案
+  string tip_text = 6;
+  // 当日是否完成连胜
+  bool is_win_today = 7;
+}
 
 message GetMainPagePersonalWinInfoResp {
   // 是否使用连胜保持功能
@@ -10000,6 +10026,12 @@ message GetMainPagePersonalWinInfoResp {
   int64 remain_win_keep_cnt = 2;
   // 提示文案
   string tip_text = 3;
+  // 友情连胜邀请列表
+  repeated WinUserInfo win_invite_list = 4;
+  // 友情连胜结束列表
+  repeated WinUserInfo win_end_list = 5;
+  // 好友连胜目标达成列表
+  repeated WinUserInfo win_goal_list = 6;
 }
 
 message AdminUpsertActivityReq {
