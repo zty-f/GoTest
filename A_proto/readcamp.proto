@@ -9996,6 +9996,8 @@ message GetActivityPersonalWinTipInfoResp {
 message FriendsWinInfo {
   // 该用户的友情连胜信息列表
   repeated WinUserInfo friend_win_list = 1;
+  // 展示文案
+  string tip_text = 2;
 }
 
 message GetMainPagePersonalWinInfoReq {}
