@@ -9994,10 +9994,8 @@ message GetActivityPersonalWinTipInfoResp {
 }
 
 message FriendsWinInfo {
-  // 当前用户
-  WinUserInfo current_user = 1;
   // 该用户的友情连胜信息列表
-  repeated WinUserInfo friend_win_list = 2;
+  repeated WinUserInfo friend_win_list = 1;
 }
 
 message GetMainPagePersonalWinInfoReq {}
