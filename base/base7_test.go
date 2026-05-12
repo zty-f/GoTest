@@ -515,3 +515,12 @@ func TestArray全排列Alg2(t *testing.T) {
 		fmt.Println(v)
 	}
 }
+
+func TestFormat3(t *testing.T) {
+	x := "那个%s拒绝实际上几十年%d天"
+	if strings.Contains(x, "%d") {
+		x = fmt.Sprintf(x, 8, "张三")
+	}
+
+	println(x)
+}

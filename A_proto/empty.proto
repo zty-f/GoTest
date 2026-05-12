@@ -67,6 +67,21 @@ message UserFriendWinChangeResp {
 
 }
 
+message SendPushTipReq {
+  // 发送提醒用户ID
+  int64 uid = 1;
+  // 提示类型 1-友情连胜提醒 2-目标达成恭喜 值为0时使用下面的标题和文案，有值使用系统内置文案
+  int64 tip_type = 2;
+  // 提示标题
+  string tip_title = 3;
+  // 提示文案
+  string tip_text = 4;
+}
+
+message SendPushTipResp {
+
+}
+
 service UserCenterHttpService {
     // 用户-友情连胜页信息
     rpc GetActivityFriendWinInfo(GetActivityFriendWinInfoReq) returns (GetActivityFriendWinInfoResp) {
@@ -84,6 +99,12 @@ service UserCenterHttpService {
     rpc UserFriendWinChange(UserFriendWinChangeReq) returns (UserFriendWinChangeResp) {
       option (google.api.http) = {
         post: "/base/readcamp/user/friend_win/change"
+      };
+    }
+    // 用户-发送提示通知
+    rpc SendPushTip(SendPushTipReq) returns (SendPushTipResp) {
+      option (google.api.http) = {
+        post: "/base/readcamp/user/send_push_tip"
       };
     }
 }
