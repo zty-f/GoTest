@@ -111,3 +111,25 @@ func TestJudgeList(t *testing.T) {
 		pre = pre.Next
 	}
 }
+
+// listA = [4,1,8,4,5], listB = [5,0,1,8,4,5]
+// [0,9,1,2,4], listB = [3,2,4]
+func getIntersectionNode(headA, headB *ListNode) *ListNode {
+	if headA == nil || headB == nil {
+		return nil
+	}
+	pA, pB := headA, headB
+	for pA != pB {
+		if pA == nil {
+			pA = headB
+		} else {
+			pA = pA.Next
+		}
+		if pB == nil {
+			pB = headA
+		} else {
+			pB = pB.Next
+		}
+	}
+	return pA
+}
