@@ -3750,6 +3750,8 @@ message LogisticsOrderInfo {
   int64 delay_sec = 12;
   // 申请发货人信息
   string apply_send_oper = 13;
+  // 商品类型 0-实物商品，25-申请实物，50-教材，75-WePay，80-订单赠送，85-广告位，90-虚拟商品
+  int32 item_type = 14;
 }
 
 // 换绑 outerorder skuid
@@ -3760,6 +3762,14 @@ message ChangeOuterOrderSkuReq {
   string old_sku_id = 4;
 }
 
+message RefundDetail {
+  // 退款金额，单位：分
+  int32 refund_price = 1;
+  // 退款时间，单位：秒
+  int64 refund_ts = 2;
+  // 退款来源-工单id
+  string refund_source = 3;
+}
 
 // 销售单分配详情
 message SaleOrderAssignItem {
@@ -3812,6 +3822,7 @@ message SaleOrderAssignItem {
   OrderStatus order_status = 6;
   repeated LogisticsOrderInfo logistics_order_info = 7;
   SaleOrderCourseInfo course_info = 8;
+  repeated RefundDetail refund_info = 9;
 }
 
 message SaleOrderCourseInfo {

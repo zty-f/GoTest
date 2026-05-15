@@ -82,29 +82,124 @@ message SendPushTipResp {
 
 }
 
+message LogisticsOrderInfo {
+  // 物流单订单id
+  int64 eid = 1;
+  // 物流id
+  string logistics_id = 2;
+  // 包裹名
+  string package_name = 3;
+  // 物流公司，如中通
+  string ems_name = 4;
+  // 物流单状态：1: 待确认地址；2：出库中，3：暂无物流信息；4：在路上，5：已签收，6：问题件，7：已取消
+  int32 status = 5;
+  // 不同物流单类型：1-4，目前一个主订单（sale_order）包含4种物流单类型，也可以理解为批次，可被用于缓发。
+  int32 order_type = 6;
+  // 当前订单的级别：1-4
+  int32 level = 7;
+  // 异常信息，没有则为空
+  string exception_msg = 8;
+  // 状态描述
+  string status_desc = 9;
+  // 物流单的备注信息，与主订单的区别在于，会包含换货的问题
+  string remark = 10;
+  // 商品id
+  int64 gid = 11;
+  // 赠品延迟发货时间,默认0
+  int64 delay_sec = 12;
+  // 申请发货人信息
+  string apply_send_oper = 13;
+}
+
+message LogisticsAddressInfo {
+  // 收件人名字
+  string username = 1;
+  // 收件手机号
+  string phonenumber = 2;
+  // 省份
+  string province = 3;
+  // 城市
+  string city = 4;
+  // 区
+  string area = 5;
+  // 门牌号地址
+  string address = 6;
+  // 更新时间
+  int64 ut = 7;
+}
+
+message SaleOrderCourseInfo {
+  repeated int64 open_course_ids = 1;
+  repeated int64 noopen_course_ids = 2;
+  // 完课数
+  int64 finish_count = 3;
+  // 分类完课信息
+  map<string, int64> finish_count_by_type = 4;
+}
+
+message RefundDetail {
+  // 退款金额，单位：分
+  int32 refund_price = 1;
+  // 退款时间，单位：秒
+  int64 refund_ts = 2;
+  // 退款来源-工单id
+  string refund_source = 3;
+}
+
+// 销售单分配详情
+message SaleOrderAssignItem {
+  message OrderStatus {
+    // 一个map，如：运输中: 4, 未导出：2
+    map<string, int32> order_status_info = 1;
+    // 异常个数，单独拿了出来，需要标红显示
+    int32 exception_count = 2;
+  }
+  message OrderInfo {
+    // 商品名
+    string item_name = 1;
+    // 支付金额，单位：分
+    int32 price = 2;
+    // 订单id
+    string order_id = 3;
+    // 支付方式：微信，支付宝
+    string pay_type = 4;
+    // 下单时间，单位：秒
+    int64 pay_ts = 5;
+    // 当前订单状态:0初始化状态；20: 订单已完成 -10:部分退款；-20:子订单全部退款
+    int32 status = 6;
+    // 退款金额
+    int32 refund_price = 7;
+    // 套餐id
+    int64 package_id = 8;
+    // 站外订单id
+    string out_order_id = 9;
+    // 站外订单时间
+    int64 out_order_pay_ts = 10;
+    // 套餐名称
+    string package_desc = 11;
+  }
+  OrderInfo order_info = 1;
+  LogisticsAddressInfo address_info = 2;
+  OrderStatus order_status = 3;
+  repeated LogisticsOrderInfo logistics_order_info = 4;
+  SaleOrderCourseInfo course_info = 5;
+  repeated RefundDetail refund_details = 6;
+}
+
+message QueryUserOrderTabInfoReq {
+  // 用户ID
+  int64 uid = 1;
+}
+
+message QueryUserOrderTabInfoResp {
+  repeated SaleOrderAssignItem items = 1;
+}
+
 service UserCenterHttpService {
-    // 用户-友情连胜页信息
-    rpc GetActivityFriendWinInfo(GetActivityFriendWinInfoReq) returns (GetActivityFriendWinInfoResp) {
+    // 后台-查询用户订单综合信息
+    rpc QueryUserOrderTabInfo(QueryUserOrderTabInfoReq) returns (QueryUserOrderTabInfoResp) {
       option (google.api.http) = {
-        post: "/base/readcamp/activity/friend_win/info"
-      };
-    }
-    // 用户-互关好友列表
-    rpc GetUserFriendList(GetUserFriendListReq) returns (GetUserFriendListResp) {
-      option (google.api.http) = {
-        post: "/base/readcamp/user/friend/list"
-      };
-    }
-    // 用户-友情连胜关系变更
-    rpc UserFriendWinChange(UserFriendWinChangeReq) returns (UserFriendWinChangeResp) {
-      option (google.api.http) = {
-        post: "/base/readcamp/user/friend_win/change"
-      };
-    }
-    // 用户-发送提示通知
-    rpc SendPushTip(SendPushTipReq) returns (SendPushTipResp) {
-      option (google.api.http) = {
-        post: "/base/readcamp/user/send_push_tip"
+        post: "admin/base/readcamp/user/user_search_order_tab"
       };
     }
 }
