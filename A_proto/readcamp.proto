@@ -6310,6 +6310,8 @@ message AdminGetWechatGroupResponse {
     string group_nickname = 1;
     // 企微id
     string external_user_id = 2;
+    // 群成员类型。1:企业成员 2:外部联系人
+    int32 member_type = 3;
   }
   repeated WechatGroupMember members = 4;
 }
