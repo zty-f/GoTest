@@ -798,6 +798,25 @@ message GetAppLectureModulesReq {
   LectureModuleType lecture_module_type = 3;
 }
 
+message GetInteractionKtvModulesReq {
+  enum LearnStatus {
+    Unknown = 0;
+    Learned = 1; // 已学
+    Unlearned = 2; // 未学
+  }
+  int64 limit = 1;
+  int64 offset = 2;
+  LearnStatus learn_status = 3; // 筛选学习状态
+}
+
+message GetInteractionKtvModulesRes {
+  repeated AppLectureModule modules = 1;
+  map<int64, LectureBaseInfo> lectures = 2;// 关联的课节信息
+  int64 offset = 3;
+  int64 total = 4;
+  bool more = 5;
+}
+
 message GetAppLectureModulesRes {
   repeated AppLectureModule modules = 1;
 }
@@ -10953,6 +10972,13 @@ service ReadCampHttpService {
   rpc GetAppLectureModules(GetAppLectureModulesReq) returns (GetAppLectureModulesRes) {
     option (google.api.http) = {
       post: '/base/readcamp/lecture/modules/list'
+    };
+  }
+  // 用户-全娃K歌-课节模块列表
+  // `midware:"Auth"`
+  rpc GetInteractionKtvModules(GetInteractionKtvModulesReq) returns (GetInteractionKtvModulesRes) {
+    option (google.api.http) = {
+      post: '/base/readcamp/interaction_ktv/module/list'
     };
   }
   // 用户-课节模块-上报模块学习进度
