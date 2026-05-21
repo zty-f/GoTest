@@ -4556,6 +4556,8 @@ message AdminUserSearchResponse {
     repeated string teacher_roles = 9;
     // 用户企微id
     string external_user_id = 10;
+    // 用户定级信息
+    int64 user_level = 11;
   }
   message Course {
     int32 id = 1;
