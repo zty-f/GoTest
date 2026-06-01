@@ -20,6 +20,7 @@ message LectureStudyReportRequest {
       UNKNOWNStudyContentType = 0;
       DAODU = 1;
       YUANSHENG = 2;
+      LearnCartoons = 3; // 听动画
     }
     // 哪一节课的id
     uint32 lecture_id = 1;
@@ -498,6 +499,8 @@ message Lecture {
   bool has_creative_write = 34;
   // 自拼规则
   string zp_rule = 35;
+  // 听动画资源
+  MediaResource learn_cartoons = 36;
 }
 
 message BookListLectureDetail {
@@ -572,6 +575,8 @@ message BookListLectureDetail {
   string zp_rule = 35;
   // 用户是否喜欢
   bool liked = 36;
+  // 听动画资源-启蒙阶段磨耳朵
+  MediaResource learn_cartoons = 37;
 }
 
 
@@ -613,6 +618,14 @@ enum LectureModuleType {
   Sing = 17;
   // 唱一唱KTV模式
   SingKTV = 18;
+  // 重命名替换 icon 部分
+  WatchVideo = 19; // 看一看
+  Listen     = 20; // 听一听
+  XiaoXiaoLe = 21; // 消消乐游戏
+
+  InteractionKTV = 22; // 互动舞台-K歌
+  WatchCartoons = 23; // 看动画
+  LearnCartoons = 24; // 学动画
 }
 
 message LectureModule {
@@ -815,6 +828,7 @@ message GetInteractionKtvModulesRes {
   int64 offset = 3;
   int64 total = 4;
   bool more = 5;
+  map<int64, int64> learn_status_cnt = 6; // 按学习状态统计
 }
 
 message GetAppLectureModulesRes {
@@ -1287,6 +1301,9 @@ message GetUserCoursesRequest {
   int64 offset = 1;
   int64 limit = 2;
   bool with_booklist = 3;
+  repeated int64 level = 4; // 课程等级筛选
+  repeated CourseType course_type = 5; // 课程类型筛选
+  repeated string category_tags = 6; // 课程标签筛选中英文
 }
 
 message BPLecture {
@@ -1447,11 +1464,16 @@ message UserCourse {
 }
 
 message GetUserCoursesResponse {
+  message CourseSetting {
+    int64 course_id = 1;
+    repeated UserDynamicSetting settings = 2; // 用户课程配置
+  }
   // 课程信息
   repeated UserCourse items = 1;
   int64 offset = 2;
   int64 total = 3;
   bool more = 4;
+  map<int64, CourseSetting> user_course_setting = 6;
 }
 
 message BPGetUserCoursesResponse {
@@ -1518,6 +1540,8 @@ message UserLectureWithCourse {
   UserCourse user_course = 2;
   // 活动信息
   ActivityInfo activity_info = 3;
+  // 用户课节配置
+  map<string,string> user_course_setting = 4;
 }
 
 message GetUserLecturesResponse {
@@ -2527,12 +2551,19 @@ message UserCourseDetail {
   int64 offset = 3;
   int64 total = 4;
   bool more = 5;
+  map<string, string> user_course_setting = 6; // 用户课程配置
 }
 
 message ListPracticeCoursesRequest {}
 
 message ListPracticeCoursesResponse {
+  message CourseSetting {
+    int64 course_id = 1;
+    repeated UserDynamicSetting settings = 2; // 用户课程配置
+  }
+
   repeated Course courses = 1;
+  map<int64, CourseSetting> user_course_setting = 2; // 用户课程配置
 }
 
 message ListPracticeLecturesRequest {
@@ -2612,6 +2643,8 @@ message ListPracticeLecturesBaseInfoResponse {
     bool liked = 2;
     // 当前用户看到的课节状态：1：未购买；2：资源未ready；3：未解锁；4：可上课；5：已下架
     int32 status = 3;
+    // 听动画资源
+    MediaResource learn_cartoons = 4;
   }
   repeated Item lectures = 1;
   int64 offset = 2;
@@ -2739,6 +2772,17 @@ message SetUserSettingsRequest {
   int32 user_memory_target_new_num = 3;
   // 课程ID，可选参数。未传或为0：设置通用阈值（兼容老客户端）；传了具体课程ID：设置该课程的阈值
   int32 course_id = 4;
+}
+
+message UserDynamicSetting {
+  string conf_key = 1;
+  string conf_val = 2;
+}
+
+message SetUserDynamicSettingRequest {
+  string conf_key = 1;
+  string conf_val = 2;
+  int64 course_id = 3;
 }
 
 // 获取课程维度的记忆素材配置
@@ -11274,6 +11318,13 @@ service ReadCampHttpService {
   rpc SetUserSettings(SetUserSettingsRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: '/base/readcamp/user_settings/set'
+    };
+  }
+  // 用户-动态配置设置
+  // `midware:"Auth"`
+  rpc SetUserDynamicSetting(SetUserDynamicSettingRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: '/base/readcamp/user/dynamic/settings/set'
     };
   }
   // 用户-获取课程记忆素材配置
