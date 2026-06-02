@@ -7729,6 +7729,8 @@ message ClockInApplication {
   bool has_real_replacement = 15;
   // 剩余可以重复挑战次数
   int64 redo_num = 16;
+  // 当前是否是完成后重复挑战
+  bool is_redo = 17;
 }
 
 message ClockInApplicationListRequest {
