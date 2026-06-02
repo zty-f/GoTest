@@ -7727,6 +7727,8 @@ message ClockInApplication {
   bool priority = 14;
   // 是否有实体奖牌复活机会
   bool has_real_replacement = 15;
+  // 剩余可以重复挑战次数
+  int64 redo_num = 16;
 }
 
 message ClockInApplicationListRequest {
@@ -9323,6 +9325,8 @@ message SceneConfig {
   int32 id = 20;
   // 难度选择列表
   repeated int64 difficulty_choices = 21;
+  // 可以重复挑战次数
+  int64 redo_num = 22;
 }
 message AdminClockInSceneConfigListRes {
   repeated SceneConfig items = 1;
@@ -9369,6 +9373,8 @@ message AdminClockInSceneConfigEditReq {
   int64 medal_gid = 18;
   // 难度选择列表
   repeated int64 difficulty_choices = 19;
+  // 可以重复挑战次数
+  int64 redo_num = 20;
 }
 
 message BindOuterOrderReq {
