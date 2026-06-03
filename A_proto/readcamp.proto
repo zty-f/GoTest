@@ -7731,6 +7731,8 @@ message ClockInApplication {
   int64 redo_num = 16;
   // 当前是否是完成后重复挑战
   bool is_redo = 17;
+  // 第几次挑战
+  int32 clock_count = 18;
 }
 
 message ClockInApplicationListRequest {
