@@ -9122,6 +9122,8 @@ message AdminCRMUserFollowUpEditReq {
   int64 finish_state =  7;
   // 备注类型列表
   repeated int64 remark_type_list = 8;
+  // 图片url列表
+  repeated string pic_urls = 9;
 }
 
 message AdminCRMUserFollowUpListReq {
@@ -9147,6 +9149,10 @@ message AdminCRMUserFollowUpListRes {
     string teacher_opname = 9;
     // 完成状态 1=未完成 2=完成
     int64 finish_state =  10;
+    // 备注类型列表
+    repeated int64 remark_type_list = 11;
+    // 图片url列表
+    repeated string pic_urls = 12;
   }
   int64 offset = 1;
   int64 total = 2;
