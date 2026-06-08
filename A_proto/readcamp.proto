@@ -6501,6 +6501,14 @@ message WechatGroupStatistics {
   int32 last_month_tinglixiong_read_count = 9;
   // 本月听力熊阅读本数
   int32 this_month_tinglixiong_read_count = 10;
+  // 上月群活跃人数
+  int64 last_month_group_active_user_num = 11;
+  // 上月群聊消息数
+  int64 last_month_group_msg_num = 12;
+  // 本月群活跃人数
+  int64 this_month_group_active_user_num = 13;
+  // 本月群聊消息数
+  int64 this_month_group_msg_num = 14;
 }
 
 message WechatGroup {
