@@ -4173,6 +4173,8 @@ message SkuPackageGiftConfItem {
   int64 delay_sec = 3;
   // 渠道
   string utm_source = 4;
+  // KocID
+  string koc_id = 5;
 }
 
 message ListSkuPackageMappingRequest {
