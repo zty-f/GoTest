@@ -524,3 +524,132 @@ func TestFormat3(t *testing.T) {
 
 	println(x)
 }
+
+func detectCycle(head *ListNode) *ListNode {
+	if head == nil || head.Next == nil {
+		return nil
+	}
+	slow, fast := head, head
+	for fast != nil && fast.Next != nil {
+		slow = slow.Next
+		fast = fast.Next.Next
+		if slow == fast {
+			slow = head
+			for slow != fast {
+				slow = slow.Next
+				fast = fast.Next
+			}
+			return slow
+		}
+	}
+	return nil
+}
+
+type TripleInOne struct {
+	datas     map[int]map[int]int
+	stackSize int
+}
+
+func Constructor(stackSize int) TripleInOne {
+	return TripleInOne{
+		datas:     make(map[int]map[int]int),
+		stackSize: stackSize,
+	}
+}
+
+func (this *TripleInOne) Push(stackNum int, value int) {
+	if _, ok := this.datas[stackNum]; !ok {
+		this.datas[stackNum] = make(map[int]int)
+	}
+	if len(this.datas[stackNum]) >= this.stackSize {
+		return
+	}
+	this.datas[stackNum][len(this.datas[stackNum])+1] = value
+}
+
+func (this *TripleInOne) Pop(stackNum int) int {
+	if _, ok := this.datas[stackNum]; !ok {
+		return -1
+	}
+	if len(this.datas[stackNum]) == 0 {
+		return -1
+	}
+	value := this.datas[stackNum][len(this.datas[stackNum])]
+	delete(this.datas[stackNum], len(this.datas[stackNum]))
+	return value
+}
+
+func (this *TripleInOne) Peek(stackNum int) int {
+	if _, ok := this.datas[stackNum]; !ok {
+		return -1
+	}
+	if len(this.datas[stackNum]) == 0 {
+		return -1
+	}
+	return this.datas[stackNum][len(this.datas[stackNum])]
+}
+
+func (this *TripleInOne) IsEmpty(stackNum int) bool {
+	if _, ok := this.datas[stackNum]; !ok {
+		return true
+	}
+	if len(this.datas[stackNum]) == 0 {
+		return true
+	}
+	return false
+}
+
+type TripleInOneV2 struct {
+	// datas 是一整块连续空间，平均切成 3 段，每段代表一个栈。
+	// 第 stackNum 个栈的起始下标是 stackNum * stackSize。
+	datas []int
+	// sizes 分别记录 3 个栈当前已有多少个元素，也可以理解为每个栈的下一个可写位置偏移量。
+	sizes     [3]int
+	stackSize int
+}
+
+// 0 1 2 3 | 4 5 6 7  | 8 9 10 11
+
+func ConstructorV2(stackSize int) TripleInOneV2 {
+	return TripleInOneV2{
+		datas:     make([]int, stackSize*3),
+		stackSize: stackSize,
+	}
+}
+
+func (this *TripleInOneV2) Push(stackNum int, value int) {
+	if !this.validStack(stackNum) || this.sizes[stackNum] >= this.stackSize {
+		return
+	}
+	// 当前栈的实际写入位置 = 当前栈起始位置 + 当前栈已有元素数量。
+	index := stackNum*this.stackSize + this.sizes[stackNum]
+	this.datas[index] = value
+	this.sizes[stackNum]++
+}
+
+func (this *TripleInOneV2) Pop(stackNum int) int {
+	if this.IsEmpty(stackNum) {
+		return -1
+	}
+	// 先把元素数量减 1，减完后的偏移量正好是原栈顶元素的位置。
+	this.sizes[stackNum]--
+	index := stackNum*this.stackSize + this.sizes[stackNum]
+	return this.datas[index]
+}
+
+func (this *TripleInOneV2) Peek(stackNum int) int {
+	if this.IsEmpty(stackNum) {
+		return -1
+	}
+	// Peek 只读栈顶，不修改 sizes；栈顶偏移量是 sizes[stackNum] - 1。
+	index := stackNum*this.stackSize + this.sizes[stackNum] - 1
+	return this.datas[index]
+}
+
+func (this *TripleInOneV2) IsEmpty(stackNum int) bool {
+	return !this.validStack(stackNum) || this.sizes[stackNum] == 0
+}
+
+func (this *TripleInOneV2) validStack(stackNum int) bool {
+	return stackNum >= 0 && stackNum < len(this.sizes)
+}
