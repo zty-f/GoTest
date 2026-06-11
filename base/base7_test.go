@@ -653,3 +653,41 @@ func (this *TripleInOneV2) IsEmpty(stackNum int) bool {
 func (this *TripleInOneV2) validStack(stackNum int) bool {
 	return stackNum >= 0 && stackNum < len(this.sizes)
 }
+
+type MinStack struct {
+	data []int // data 栈底到栈顶依次存储元素
+	min  []int // min 栈底到栈顶依次存储当前栈中的最小值
+	// 也可以使用一个index值来记录栈顶对应的索引值，这样就不需要每次pop都使用切片操作了
+	index int
+}
+
+/** initialize your data structure here. */
+func Constructor1() MinStack {
+	return MinStack{
+		data:  make([]int, 10010), // 就是需要提前初始化好长度的切片，不能直接使用空切片，否则在 push 时会越界
+		min:   make([]int, 10010), // 同理，min 也需要提前初始化好长度，否则在 push 时会越界
+		index: -1,
+	}
+}
+
+func (this *MinStack) Push(x int) {
+	this.data[this.index+1] = x
+	minData := x
+	if this.index >= 0 && this.min[this.index] < x {
+		minData = this.min[this.index]
+	}
+	this.min[this.index+1] = minData
+	this.index++
+}
+
+func (this *MinStack) Pop() {
+	this.index--
+}
+
+func (this *MinStack) Top() int {
+	return this.data[this.index]
+}
+
+func (this *MinStack) GetMin() int {
+	return this.min[this.index]
+}
