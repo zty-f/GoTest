@@ -9678,6 +9678,8 @@ message UserReadRecordLearnInfoRes {
   int64 offset = 7;
   // 单词量
   int64 word_num = 8;
+  // 复习的书
+  repeated LearnLectureItem review_lecture_list = 9;
 }
 
 message LearnLectureItem {
