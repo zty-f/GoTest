@@ -9347,6 +9347,8 @@ message SceneConfig {
   repeated int64 difficulty_choices = 21;
   // 可以重复挑战次数
   int64 redo_num = 22;
+  // 装扮资源列表
+  repeated int64 resource_ids = 23;
 }
 message AdminClockInSceneConfigListRes {
   repeated SceneConfig items = 1;
@@ -9395,6 +9397,8 @@ message AdminClockInSceneConfigEditReq {
   repeated int64 difficulty_choices = 19;
   // 可以重复挑战次数
   int64 redo_num = 20;
+  // 装扮资源列表
+  repeated int64 resource_ids = 21;
 }
 
 message BindOuterOrderReq {
