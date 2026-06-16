@@ -3608,6 +3608,8 @@ message GetUserMedalsToShowResponse {
   repeated UserMedal to_show_medals = 1;
   // 用户获得的勋章总数
   int32 owned_medals_number = 2;
+  // 要展示的新获得装扮列表
+  repeated UserDressupResourceToShow to_show_dressups = 3;
 }
 
 message GetUserMedalsRequest {
@@ -10769,6 +10771,29 @@ message StudyRecordReportProto {
 message GetUserLearningReportResponse {
   // 周报数据（report_type=1时返回）
   StudyRecordReportProto weekly_report = 1;
+}
+
+message UserDressupResourceToShow {
+  // 用户装扮资源记录ID
+  int64 id = 1;
+  // 装扮资源ID
+  int64 resource_id = 2;
+  // 业务线 1:阅读营
+  int64 biz_line = 3;
+  // 装扮类型 1:头像框
+  int64 dressup_type = 4;
+  // 场景类型
+  string scene_type = 5;
+  // 装扮资源名称
+  string name = 6;
+  // 装扮资源描述
+  string description = 7;
+  // 资源配置JSON
+  string resource = 8;
+  // 发放来源
+  string source = 9;
+  // 获得时间，单位：秒
+  int64 ct = 10;
 }
 
 service ReadCampHttpService {
