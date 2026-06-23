@@ -1,6 +1,8 @@
 package base
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"math"
@@ -690,4 +692,12 @@ func (this *MinStack) Top() int {
 
 func (this *MinStack) GetMin() int {
 	return this.min[this.index]
+}
+
+// 把字符串md5加密然后大写
+func TestMd5Upper(t *testing.T) {
+	str := "00000000-0000-0000-0000-000000000000"
+	md5 := md5.New()
+	md5.Write([]byte(str))
+	fmt.Println(strings.ToUpper(hex.EncodeToString(md5.Sum(nil))))
 }
