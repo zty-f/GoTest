@@ -37,6 +37,7 @@ message LectureStudyReportRequest {
   string oaid = 3;
   //场景id，表示课节学习的唯一id
   string scene_id = 4;
+  string caid = 5;
 }
 
 message LectureStudyReportResponse {}
