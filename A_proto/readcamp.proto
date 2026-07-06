@@ -627,6 +627,7 @@ enum LectureModuleType {
   InteractionKTV = 22; // 互动舞台-K歌
   WatchCartoons = 23; // 看动画
   LearnCartoons = 24; // 学动画
+  TaskModule = 25; // 任务模块
 }
 
 message LectureModule {
@@ -647,6 +648,7 @@ message LectureModule {
 message LectureModuleBaseConf {
   string content_conf = 1;
   LectureModuleRouterConf router_conf = 2;
+  AppLectureModule.AppLectureModuleIcon icon_conf = 3;
 }
 
 message LectureModuleRouterConf {

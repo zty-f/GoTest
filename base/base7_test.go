@@ -696,7 +696,7 @@ func (this *MinStack) GetMin() int {
 
 // 把字符串md5加密然后大写
 func TestMd5Upper(t *testing.T) {
-	str := "00000000-0000-0000-0000-000000000000"
+	str := "d2a73c202c1b5bbe44cc1ee03bea5be651d2b90e5972afb9f76b4f7df868fb6f"
 	md5 := md5.New()
 	md5.Write([]byte(str))
 	fmt.Println(strings.ToUpper(hex.EncodeToString(md5.Sum(nil))))
