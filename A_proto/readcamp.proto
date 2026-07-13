@@ -9356,6 +9356,8 @@ message SceneConfig {
   int64 redo_num = 22;
   // 装扮资源列表
   repeated int64 resource_ids = 23;
+  // 证书模板url
+  string certificate_template_url = 24;
 }
 message AdminClockInSceneConfigListRes {
   repeated SceneConfig items = 1;
@@ -9406,6 +9408,8 @@ message AdminClockInSceneConfigEditReq {
   int64 redo_num = 20;
   // 装扮资源列表
   repeated int64 resource_ids = 21;
+  // 证书模板uri
+  string certificate_template_uri = 22;
 }
 
 message BindOuterOrderReq {
