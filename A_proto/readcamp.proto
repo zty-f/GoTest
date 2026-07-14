@@ -488,6 +488,12 @@ message Lecture {
   InteractionConf guide_interaction_conf = 28;
   // wpm 对应的文本信息
   string wpm = 29;
+
+  message WpmConf {
+    // wpm 对应音频
+    MediaResource wpm_audio = 1;
+  }
+
   // 是否存在题目练习
   bool has_questions = 30;
   // 是否展示口语表达
@@ -502,6 +508,8 @@ message Lecture {
   string zp_rule = 35;
   // 听动画资源
   MediaResource learn_cartoons = 36;
+  // wpm 音频&翻译配置
+  WpmConf wpm_conf = 37;
 }
 
 message BookListLectureDetail {
@@ -628,6 +636,7 @@ enum LectureModuleType {
   WatchCartoons = 23; // 看动画
   LearnCartoons = 24; // 学动画
   TaskModule = 25; // 任务模块
+  InteractionVideo = 26; // 互动视频
 }
 
 message LectureModule {
@@ -1205,6 +1214,8 @@ message LectureUptRequest {
   int32 has_creative_write = 32;
   // 自拼规则
   string zp_rule = 33;
+  // wpm 配置
+  Lecture.WpmConf wpm_conf = 34;
 }
 
 message LectureUnlockRequest {
