@@ -9369,6 +9369,8 @@ message SceneConfig {
   repeated int64 resource_ids = 23;
   // 证书模板url
   string certificate_template_url = 24;
+  // 挑战赛联合key
+  string union_key = 25;
 }
 message AdminClockInSceneConfigListRes {
   repeated SceneConfig items = 1;
@@ -9421,6 +9423,8 @@ message AdminClockInSceneConfigEditReq {
   repeated int64 resource_ids = 21;
   // 证书模板uri
   string certificate_template_uri = 22;
+  // 挑战赛联合key
+  string union_key = 23;
 }
 
 message BindOuterOrderReq {
