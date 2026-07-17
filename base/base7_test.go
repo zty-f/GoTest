@@ -701,3 +701,10 @@ func TestMd5Upper(t *testing.T) {
 	md5.Write([]byte(str))
 	fmt.Println(strings.ToUpper(hex.EncodeToString(md5.Sum(nil))))
 }
+
+func TestTime2(t *testing.T) {
+	tt := time.Unix(0, 0)
+	fmt.Println(tt)
+	fmt.Println(tt.IsZero())
+	fmt.Println(tt.Format("2006-01-02 15:04:05"))
+}

@@ -7,11 +7,10 @@
           <value>
             <TabSessionState>
               <option name="provider" value="codex" />
-              <option name="sessionId" value="019efdf9-e73d-7091-bb3c-bc164d3a9d06" />
+              <option name="sessionId" value="019f6efb-5969-7c31-8c07-b012ecab640d" />
               <option name="cwd" value="$PROJECT_DIR$" />
-              <option name="model" value="gpt-5.6-sol" />
+              <option name="model" value="gpt-5.5" />
               <option name="permissionMode" value="bypassPermissions" />
-              <option name="reasoningEffort" value="high" />
             </TabSessionState>
           </value>
         </entry>
