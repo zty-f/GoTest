@@ -707,4 +707,6 @@ func TestTime2(t *testing.T) {
 	fmt.Println(tt)
 	fmt.Println(tt.IsZero())
 	fmt.Println(tt.Format("2006-01-02 15:04:05"))
+	fmt.Println(time.Now().Unix())
+	fmt.Println(time.Unix(time.Now().Unix(), 0).Format("2006-01-02 15:04:05"))
 }
