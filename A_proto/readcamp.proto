@@ -430,7 +430,21 @@ message SizeInfo {
   int64 h = 4;
 }
 
+message LectureUnlockConf {
+  enum LockType {
+    NoLock = 0;
+    Series = 1;
+  }
+  // 解锁配置类型：0 不配置，1 按套系解锁
+  LockType type = 1;
+}
+
 message Lecture {
+  enum CountProgressType {
+    CountProgressBlack = 0;  // 完全不计入统计
+    CountProgressNormal = 1; // 完全正常统计
+  }
+
   int32 id = 1;
   // 课节名称
   string name = 2;
@@ -510,6 +524,10 @@ message Lecture {
   MediaResource learn_cartoons = 36;
   // wpm 音频&翻译配置
   WpmConf wpm_conf = 37;
+  // 是否计入学习进度，0：不计入，1：计入
+  int64 count_in_progress = 38;
+  // 课节解锁配置
+  LectureUnlockConf unlock_conf = 39;
 }
 
 message BookListLectureDetail {
@@ -1091,6 +1109,8 @@ message AdminLectureListRequest {
   LectureStatus status = 7;
   // 课程ID列表
   repeated int64 course_ids = 8;
+  // 课节ID
+  int64 lecture_id = 9;
 }
 
 message AdminLectureListResponse {
@@ -1155,6 +1175,10 @@ message LectureCrtRequest {
   bool has_creative_write = 32;
   // 自拼规则
   string zp_rule = 33;
+  // 是否计入学习进度，0：不计入，1：计入
+  int64 count_in_progress = 34;
+  // 课节解锁配置
+  LectureUnlockConf unlock_conf = 35;
 }
 
 message LectureUptRequest {
@@ -1216,6 +1240,10 @@ message LectureUptRequest {
   string zp_rule = 33;
   // wpm 配置
   Lecture.WpmConf wpm_conf = 34;
+  // 是否计入学习进度: 0：不计入，1：计入
+  int32 count_in_progress = 35;
+  // 课节解锁配置
+  LectureUnlockConf unlock_conf = 36;
 }
 
 message LectureUnlockRequest {
@@ -1516,6 +1544,10 @@ message BPGetUserCoursesResponse {
 }
 
 message UserLecture {
+  enum LockReason {
+    UnknownReason = 0;
+    Series = 1; // 需要完成同套系下的前置课节才能解锁
+  }
   Lecture lecture = 1;
   // 学习进度：0-100
   int32 studyed_rate = 2;
@@ -1537,6 +1569,7 @@ message UserLecture {
   bool liked = 10;
   // 使用哪个版本上课。0：默认版本；1: 22.09.21体验课改版版本
   int32 inclass_version = 11;
+  LockReason lock_reason = 12; //  锁定原因，仅当 status = 3 未解锁时生效
 }
 
 message UserLectureWithCourse {
