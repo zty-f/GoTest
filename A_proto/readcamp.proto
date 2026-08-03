@@ -3632,8 +3632,8 @@ message Medal {
   string description = 6;
   // 资源
   MedalResource resource = 7;
-  // 套餐id
-  string package_id = 8;
+  // 商品id
+  string product_id = 8;
   // 勋章介绍
   string introduction = 9;
   // 勋章鼓励语
@@ -3697,8 +3697,8 @@ message GetAllMedalListRes {
     int64 ct = 8;
     // 更新时间
     int64 ut = 9;
-    // 套餐id
-    string package_id = 10;
+    // 商品id
+    string product_id = 10;
     // 勋章介绍
     string introduction = 11;
     // 勋章鼓励语
