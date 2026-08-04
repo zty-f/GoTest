@@ -174,7 +174,7 @@ CREATE TABLE `rdcsaas_course_user` (
   `ut` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniq_biz_uid_course` (`biz_type`,`uid`,`course_id`),
-  KEY `idx_biz_course` (`biz_type`,`course_id`),
-  KEY `idx_biz_uid` (`biz_type`,`uid`),
+  KEY `idx_biz_course_status` (`biz_type`,`course_id`,`status`),
+  KEY `idx_biz_uid_status` (`biz_type`,`uid`,`status`),
   KEY `idx_biz_order` (`biz_type`,`order_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='用户开课记录表';
