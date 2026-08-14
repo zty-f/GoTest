@@ -709,4 +709,15 @@ func TestTime2(t *testing.T) {
 	fmt.Println(tt.Format("2006-01-02 15:04:05"))
 	fmt.Println(time.Now().Unix())
 	fmt.Println(time.Unix(time.Now().Unix(), 0).Format("2006-01-02 15:04:05"))
+
+	fmt.Println("-----------------------")
+
+	month := 202608
+	monthStr := fmt.Sprintf("%06d", month)
+	monthStart, _ := time.ParseInLocation("200601", monthStr, time.Local)
+	monthEnd := monthStart.AddDate(0, 1, 0).Add(-time.Nanosecond)
+	fmt.Println(monthStart)
+	fmt.Println(monthEnd)
+	fmt.Println(monthStart.Format("20060102"))
+	fmt.Println(monthEnd.Format("20060102"))
 }
