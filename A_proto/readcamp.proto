@@ -131,6 +131,7 @@ message GetUserStudyDurationResponse {
 message ImageResource {
   // 图片链接
   string url = 1;
+  string uri = 2;
 }
 
 message AnimationResource {
@@ -2761,6 +2762,228 @@ message GetUserCourseDetailRequest {
   int64 offset = 4;
 }
 
+enum ModuleCoverIconEffect {
+  module_cover_icon_effect_none = 0;
+  module_cover_icon_effect_hexagon = 1;
+  module_cover_icon_effect_sphere_halo = 2;
+  module_cover_icon_effect_lecture_cover = 3;
+}
+
+message ModuleDisplayStyle {
+  string type_badge = 1;
+  MediaResource cover_icon = 2;
+  string display_name = 4;
+  string display_subtitle = 5;
+  string type_badge_color = 6;
+  ModuleCoverIconEffect cover_icon_effect = 7;
+  MediaResource lecture_cover_icon = 8;
+}
+
+enum CourseModuleStatus {
+  course_module_draft = 0;
+  course_module_active = 1;
+  course_module_inactive = 2;
+}
+
+enum CourseModuleType {
+  parent_container = 0;
+  lecture = 1;
+  stage_container = 2;
+  general_media = 3;
+  interaction_video = 4;
+  interaction_ktv = 5;
+  exercise = 6;
+  follow_read = 7;
+  lecture_evaluation = 8;
+  followme_product = 9;
+  karaoke_product = 10;
+  confirm_level = 11;
+}
+
+message CourseModuleRouterConf {
+  // 路由信息
+  string router = 1;
+  // 动作：play,h5_link,app_link
+  string action = 2;
+}
+
+message CourseModuleContent {
+  string content_conf = 1;
+  CourseModuleRouterConf router_conf = 2;
+}
+
+message CourseModuleUnlockCondition {
+  enum Type {
+    none = 0;
+    prev_completed = 1;
+  }
+
+  Type type = 1;
+}
+
+message CourseModuleProgressRule {
+  enum Type {
+    default_rule = 0;
+    any_child_completed = 1;
+    all_children_completed = 2;
+  }
+
+  Type type = 1;
+}
+
+message CourseModuleData {
+  int64 id = 1;
+  int64 course_id = 2;
+  string name = 3;
+  string series = 4;
+  CourseModuleStatus status = 5;
+  int64 parent_id = 6;
+  int32 depth = 7;
+  int32 sort = 8;
+  string module_type = 10;
+  string module_subtype = 11;
+  ModuleDisplayStyle display_style = 12;
+  string desc = 13;
+  CourseModuleContent content = 14;
+  CourseModuleUnlockCondition unlock_condition = 15;
+  CourseModuleProgressRule progress_rule = 16;
+  bool is_required = 17;
+  bool is_current_candidate = 18;
+  repeated CourseModuleData children = 19;
+  string ref_type = 20;
+  string ref_id = 21;
+  int64 ct = 22;
+  int64 ut = 23;
+}
+
+message CreateCourseModuleReq {
+  CourseModuleData module = 1;
+}
+
+message CreateCourseModuleRes {
+  CourseModuleData module = 1;
+}
+
+message UpdateCourseModuleReq {
+  CourseModuleData module = 1;
+}
+
+message UpdateCourseModuleRes {
+  CourseModuleData module = 1;
+}
+
+message GetCourseModulesReq {
+  int64 course_id = 1;
+  int64 parent_id = 2;
+  string series = 3;
+  repeated int64 course_ids = 4;
+  repeated int64 ids = 5;
+  string key = 6;
+  repeated CourseModuleStatus statuses = 7;
+  int64 offset = 8;
+  int64 limit = 9;
+  repeated string module_types = 10;
+  repeated string module_subtypes = 11;
+}
+
+message GetCourseModulesRes {
+  repeated CourseModuleData modules = 1;
+  int64 offset = 2;
+  int64 total = 3;
+  bool more = 4;
+}
+
+message BatchUpdateCourseModuleStatusReq {
+  repeated int64 module_ids = 1;
+  CourseModuleStatus status = 2;
+}
+
+message BatchUpdateCourseModuleStatusRes {
+}
+
+message GetUserCourseModuleListRequest {
+  int64 course_id = 1;
+  string series = 2;
+  int64 parent_module_id = 3;
+  int64 offset = 4;
+  int64 limit = 5;
+  repeated string module_types = 6;
+}
+
+message CourseModuleSeriesOption {
+  string series = 1;
+  string title = 2;
+}
+
+enum UserCourseModuleDisplayState {
+  user_course_module_display_state_hide = 0;
+  user_course_module_display_state_locked = 1;
+  user_course_module_display_state_available = 2;
+  user_course_module_display_state_completed = 3;
+}
+
+enum UserCourseModuleLockReason {
+  user_course_module_lock_reason_unknown = 0;
+  user_course_module_lock_reason_series = 1;
+  user_course_module_lock_reason_prev_node_completed = 2;
+  user_course_module_lock_reason_stage_nodes_completed = 3;
+  user_course_module_lock_reason_preparing = 4;
+  user_course_module_lock_reason_time_unlock = 5;
+  user_course_module_lock_reason_course_not_owned = 6;
+}
+
+message UserCourseModuleStatus {
+  message Progress {
+    int64 total = 1; // 总需要完成的
+    int64 completed = 2; // 已完成
+  }
+  UserCourseModuleDisplayState display_state = 1;
+  Progress progress = 2;
+  UserCourseModuleLockReason lock_reason = 3;
+  int64 unlock_time = 4;
+}
+
+message UserCourseModule {
+  int64 module_id = 1;
+  int64 parent_id = 2;
+  string name = 3;
+  string series = 4;
+  string module_type = 5;
+  string module_subtype = 6;
+  int64 sort = 7;
+  string desc = 8;
+  ModuleDisplayStyle display_style = 9;
+  UserCourseModuleStatus status = 10;
+  CourseModuleContent content = 11;
+  bool is_required = 12; // 是否必学，用于阶段进度总结节点的进度计算
+}
+
+message CourseModuleStageSummary {
+  int64 current_stage_module_id = 1;
+  string current_stage_name = 2;
+  int64 progress = 3;
+}
+
+message GetUserCourseModuleListResponse {
+  repeated CourseModuleSeriesOption series_options = 1;
+  repeated UserCourseModule list = 2;
+  int64 offset = 4;
+  bool more = 5;
+}
+
+message ReportUserCourseModuleProgressRequest {
+  int64 module_id = 1; // 课程模块ID
+  int64 progress = 2; // 进度百分比 0~100整数
+  int64 duration_s = 3; // 时长变化值，单位秒
+}
+
+message UpdatedUserCourseModuleStatus {
+  int64 module_id = 1;
+  UserCourseModuleStatus status = 2;
+}
+
+message ReportUserCourseModuleProgressResponse {}
+
 message GetUserTeacherRequest {}
 
 message GetUserStudyingLectureRequest {}
@@ -2808,6 +3031,10 @@ message GetAppMainPageConfigResponse {
   int64 show_personal_win_state = 8;
   // 用户反馈配置
   map<string, FeedbackScenarioConfig> user_feedback_config = 9;
+  // 宠物开关配置 0:不展示 1:参加 2:不参加
+  int64 show_pet = 10;
+  // 是否展示全局课程节点 / 是否进入地图模式
+  bool show_global_course_node = 11;
 }
 
 message SetUserSettingsRequest {
@@ -3096,6 +3323,11 @@ message QueryOuterOrderRes {
     // 达人昵称
     string nick_name = 2;
   }
+  message VirtualInfo {
+    // 虚拟手机号-主号
+    string virtual_phone_no_a = 1;
+    string virtual_phone_no_b = 2;
+  }
   message Item {
     // 订单信息
     OuterOrderInfo order_info = 1;
@@ -3121,6 +3353,7 @@ message QueryOuterOrderRes {
     string user_teacher_op_name = 11;
     // 达人信息
     DarenInfo daren_info = 12;
+    VirtualInfo virtual_info =13;
   }
 
   repeated Item items = 1;
@@ -3458,11 +3691,11 @@ message ReportRecordingRequest {
   int32 rank = 5;
   // 评分具体分数。
   int32 score = 6;
-  // 绘本跟读的book_id (source = picbook_followme时生效)
+  // 绘本跟读的book_id (source = picbook_followme 或 course_module时生效)
   int64 book_id = 7;
-  // 绘本跟读的page_id (source = picbook_followme时生效)
+  // 绘本跟读的page_id (source = picbook_followme 或 course_module时生效)
   int64 page_id = 8;
-  // 上报来源：interaction: 改版体验课交互讲解；picbook_followme：绘本跟读
+  // 上报来源：interaction: 改版体验课交互讲解；picbook_followme：绘本跟读；picbook_sing：绘本唱读；course_module：内容模块跟读
   string source = 9;
   // TODO: 待删除。进度0-100：当前页 / 总页数 的计算结果。
   int32 finished_rate = 10;
@@ -3470,6 +3703,8 @@ message ReportRecordingRequest {
   int32 total_pages = 11;
   //场景id，表示课节学习的唯一id
   string scene_id = 12;
+  // 内容模块id，仅 source = course_module 时生效
+  int64 course_module_id = 13;
 }
 
 message LectureFollowMeItem {
@@ -4684,6 +4919,8 @@ message AdminUserSearchResponse {
     int32 avg_daily_duration_s = 8;
     // 是否允许调课
     bool can_change_course = 9;
+    // 开课状态 1=开课 2=冻结
+    int64 course_user_status = 10;
   }
   message Order {
     // 站内订单号
@@ -5821,6 +6058,8 @@ message CreateLectureEvaluationRequest {
 message ListLectureEvaluationRequest {
   int64 limit = 1;
   int64 offset = 2;
+  int32 course_id = 3;
+  string name = 4;
 }
 
 message AdminLectureEvaluation {
@@ -6794,6 +7033,8 @@ message CallUserRequest {
   int32 call_show_type = 2;
   // 外呼业务 1-阅读营 2-小班课
   int64 business_id = 3;
+  // 手机号
+  string phone = 4;
 }
 
 message CallUserResponse {
@@ -8711,6 +8952,8 @@ message ListFormalCourseUserResponse {
 message ListUserRecordInFollowRequest {
   // 课节id
   int32 lecture_id = 1;
+  // 课程模块id，传入后优先按课程模块查询对应绘本学习记录
+  int64 course_module_id = 2;
 }
 
 message ListUserRecordInFollowResponse {
@@ -8729,6 +8972,8 @@ message UserLectureFollowRecordUpdateRequest {
   string follow_record_md5 = 2;
   // 跟读音频
   AudioCrtResource follow_record = 3;
+  // 课程模块id，传入后优先按课程模块查询对应绘本学习记录
+  int64 course_module_id = 4;
 }
 message UserLectureFollowRecordUpdateResponse {}
 
@@ -9336,6 +9581,8 @@ message AdminWorkOrderOrderRefundReq {
   string sale_order_id = 5;
   // 操作类型 (1:退费 2:返现)
   int32 action_type = 6;
+  // 退款方式：original 原路退回；offline 线下打款
+  string refund_method = 7;
 }
 message AdminWorkOrderOuterOrderRefundNotifyReq {
   // 工单id
@@ -11006,6 +11253,44 @@ service ReadCampHttpService {
       post: '/base/readcamp/user_trial_course/status'
     };
   }
+
+  // 管理端-Upsert课程模块
+  rpc UpsertCourseModule(CreateCourseModuleReq) returns (CreateCourseModuleRes) {
+    option (google.api.http) = {
+      post: '/admin/base/readcamp/course_module/upsert'
+    };
+  }
+
+  // 管理端-获取课程模块
+  rpc GetCourseModules(GetCourseModulesReq) returns (GetCourseModulesRes) {
+    option (google.api.http) = {
+      post: '/admin/base/readcamp/course_module/list'
+    };
+  }
+
+  // 管理端-批量修改课程模块状态
+  rpc BatchUpdateCourseModuleStatus(BatchUpdateCourseModuleStatusReq) returns (BatchUpdateCourseModuleStatusRes) {
+    option (google.api.http) = {
+      post: '/admin/base/readcamp/course_module/update/status'
+    };
+  }
+
+  // 用户-获取课程模块列表
+  // `midware:"Auth"`
+  rpc GetUserCourseModuleList(GetUserCourseModuleListRequest) returns (GetUserCourseModuleListResponse) {
+    option (google.api.http) = {
+      post: '/base/readcamp/user_course_module/list'
+    };
+  }
+
+  // 用户-上报课程模块进度
+  // `midware:"Auth"`
+  rpc ReportUserCourseModuleProgress(ReportUserCourseModuleProgressRequest) returns (ReportUserCourseModuleProgressResponse) {
+    option (google.api.http) = {
+      post: '/base/readcamp/user_course_module/progress/report'
+    };
+  }
+
   // 用户-获取课程内部子课程列表
   // `midware:"Auth"`
   rpc LectureList(LectureListRequest) returns (GetUserLecturesResponse) {
